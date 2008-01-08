@@ -1,0 +1,12 @@
+without_slug:
+  name: Without a slug
+  content: Content without a slug
+
+with_one_slug:
+  name: With one slug
+  content: Content with one slug
+
+with_two_slugs:
+  name: With two slugs
+  content: Content with two slugs
+  
