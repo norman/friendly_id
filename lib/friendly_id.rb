@@ -9,15 +9,17 @@ module FriendlyId
   module ClassMethods
     
     # Set up an ActiveRecord model to use a friendly_id.
+    # 
+    # The method argument can be one of your model's columns, or a method you
+    # use to generate the slug.
     #
     # Options:
-    # * <tt>:column</tt> - Defaults to :name. The column you wish to use for making friendly ids.
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters. You must have the unicode gem installed for this to work.
-    def has_friendly_id(options = {})
+    def has_friendly_id(method, options = {})
       
-      options = default_friendly_id_options.merge(options)
+      options = default_friendly_id_options.merge(options).merge(:method => method)
       write_inheritable_attribute(:friendly_id_options, options)
       class_inheritable_reader :friendly_id_options
       
@@ -30,25 +32,12 @@ module FriendlyId
         include NonSluggableInstanceMethods
         extend NonSluggableClassMethods  
       end
-
-      class << self
-        alias old_find find
-        
-        # Extends ActiveRecord::Base::find to allow simple finds by the
-        # friendly id:
-        #   @record = Record.find("record name")
-        def find(*args)
-          find_using_friendly_id(args.first) or old_find(*args)
-        end      
-        
-      end
-      
     end
 
     # Gets the default options for friendly_id.
     def default_friendly_id_options
       {
-        :column => "name",
+        :method => nil,
         :use_slug => false,
         :max_length => 255,
         :strip_diacritics => false
@@ -56,6 +45,16 @@ module FriendlyId
     end
   
   end
+
+  module SingletonMethods
+    # Extends ActiveRecord::Base::find to allow simple finds by the
+    # friendly id:
+    #   @record = Record.find("record name")
+    def find(*args)
+      find_using_friendly_id(args.first) or super(*args)
+    end
+  end
+
   
   module NonSluggableClassMethods
     # Finds the record using only the friendly id. If it can't be found using
@@ -63,7 +62,7 @@ module FriendlyId
     # than an instance of String, then it also returns false.    
     def find_using_friendly_id(slug_text)
       return false unless slug_text.kind_of?(String)
-      finder = "find_by_#{self.friendly_id_options[:column].to_s}".to_sym
+      finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
       record = send(finder, slug_text)
       record.send(:found_using_friendly_id=, true) if record
       return record
@@ -71,6 +70,10 @@ module FriendlyId
   end
 
   module NonSluggableInstanceMethods
+    
+    def self.included(base)
+      base.extend SingletonMethods
+    end
     
     attr :found_using_friendly_id
     
@@ -88,7 +91,7 @@ module FriendlyId
     
     # Returns the friendly_id.
     def friendly_id
-      send(friendly_id_options[:column].to_sym)
+      send(friendly_id_options[:method].to_sym)
     end
     
     alias best_id friendly_id
@@ -122,6 +125,10 @@ module FriendlyId
   end  
   
   module SluggableInstanceMethods
+
+    def self.included(base)
+      base.extend SingletonMethods
+    end
     
     attr :finder_slug
     
@@ -194,9 +201,9 @@ module FriendlyId
     # to remove diacritics from the friendly id's then they will be removed.
     def friendly_id_base
       if self.friendly_id_options[:strip_diacritics]
-        Slug::normalize(strip_diacritics(send(self.friendly_id_options[:column].to_sym)))
+        Slug::normalize(strip_diacritics(send(self.friendly_id_options[:method].to_sym)))
       else
-        Slug::normalize(send(self.friendly_id_options[:column].to_sym))
+        Slug::normalize(send(self.friendly_id_options[:method].to_sym))
       end
     end
     

@@ -1,3 +1,3 @@
 class User < ActiveRecord::Base
-  has_friendly_id :column => :login
+  has_friendly_id :login
 end
