@@ -1,5 +1,5 @@
 namespace :friendly_id do
-  desc "Make slugs for a particular model."
+  desc "Make slugs for a model."
   task :make_slugs => :environment do
     raise 'USAGE: rake friendly_id:make_slugs MODEL=MyModelName' if ENV["MODEL"].nil?
     klass = Object.const_get(ENV["MODEL"])
@@ -12,6 +12,17 @@ namespace :friendly_id do
       r.save!
       puts "#{klass.to_s}(#{r.id}) friendly_id set to \"#{r.slug.name}\""
     end
+  end
+
+  desc "Regenereate slugs for a model."
+  task :redo_slugs => :environment do
+    raise 'USAGE: rake friendly_id:redo_slugs MODEL=MyModelName' if ENV["MODEL"].nil?
+    klass = Object.const_get(ENV["MODEL"])
+    if !klass.respond_to? :find_using_friendly_id
+      raise "Class \"#{klass.to_s}\" doesn't appear to be using slugs"
+    end
+    Slug.destroy_all(["sluggable_type = ?", klass.to_s])
+    Rake::Task["friendly_id:make_slugs"].invoke
   end
   
   desc "Kill obsolete slugs older than 45 days."
