@@ -28,9 +28,7 @@ class Slug < ActiveRecord::Base
     sluggable.slug == self
   end
   
-  # Replace non-word characters with spaces, stip leading/trailing whitespace,
-  # convert to lower case, squeeze multiple spaces into one space, convert
-  # spaces to dashes, and remove any trailing dashes.
+  # Sanitizes and dasherizes string to make it safe for URL's.
   #
   # Example:
   #
@@ -41,6 +39,7 @@ class Slug < ActiveRecord::Base
   # this-is-an-example-string
   #
   def self.normalize(slug_text)
+    slug_text.gsub!(/\?/, '')
     slug_text.gsub!(/\W+/, ' ')
     slug_text.strip!
     slug_text.downcase!

@@ -7,7 +7,7 @@ class SluggableTest < Test::Unit::TestCase
   def setup
     Post.friendly_id_options[:max_length] = Post.default_friendly_id_options[:max_length]  
   end
-
+  
   def test_post_should_generate_friendly_id
     @post = Post.new(:name => "Test post", :content => "Test content")
     assert_equal "test-post", @post.generate_friendly_id
