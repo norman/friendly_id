@@ -118,7 +118,7 @@ module FriendlyId
       return false if !slug.sluggable      
       slug.sluggable.send(:finder_slug=, slug)
       slug.sluggable
-    end    
+    end
   end  
   
   module SluggableInstanceMethods

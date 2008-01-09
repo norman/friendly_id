@@ -12,7 +12,7 @@ class SluggableTest < Test::Unit::TestCase
     @post = Post.new(:name => "Test post", :content => "Test content")
     assert_equal "test-post", @post.generate_friendly_id
   end
-
+  
   def test_post_should_have_friendly_id_options
     assert_not_nil Post.friendly_id_options
   end
@@ -122,6 +122,10 @@ class SluggableTest < Test::Unit::TestCase
     assert_not_equal posts(:with_one_slug).friendly_id, p.friendly_id
     assert_not_equal posts(:with_one_slug).friendly_id, q.friendly_id
     assert_not_equal p.friendly_id, q.friendly_id
+  end
+  
+  def test_slug_should_indicate_if_it_is_the_most_recent
+    assert slugs(:two_new).is_most_recent?
   end
 
 end

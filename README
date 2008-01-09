@@ -117,7 +117,7 @@ http://randomba.org/svn/friendly_id
 - script/generate friendly_id_migration
 - rake db:migrate
 - now add some code to your models: e.g., <tt>has_friendly_id, :column => :title, :use_slugs => true</tt>
-- if you are using slugs, then do rake friendly_id:make_slugs MyModelName
+- if you are using slugs, then do rake friendly_id:make_slugs MODEL=MyModelName
 
 Then every so often, or perhaps every day via cron, you can do:
 
@@ -126,7 +126,7 @@ rake:friendly_id:remove_old_slugs
 This will remove any old slugs for friendly ids that have changed. The default
 is to remove dead slugs older than 45 days, but you can change that by doing:
 
-rake:friendly_id:remove_old_slugs 60
+rake:friendly_id:remove_old_slugs DAYS=60
 
 == Bugs:
 
@@ -136,10 +136,10 @@ leave a comment at our site at: http://randomba.org.
 == Credits:
 
 Friendly_id was created by Norman Clarke
-(norman@addthree.com[mailto:norman@addthree.com]) and Adri·n Mugnolo
+(norman@addthree.com[mailto:norman@addthree.com]) and Adri√°n Mugnolo
 (adrian@giro54.com[mailto:adrian@giro54.com]).
 
 == Legal:
 
-Copyright (c) 2008 Norman Clarke and Adri·n Mugnolo, released under the MIT
+Copyright (c) 2008 Norman Clarke and Adri√°n Mugnolo, released under the MIT
 license.
