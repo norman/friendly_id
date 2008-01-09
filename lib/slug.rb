@@ -1,8 +1,16 @@
+# A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
   validates_uniqueness_of :name, :scope => :sluggable_type
   
+   # Count exact matches for a slug. Matches include slugs with the same name
+   # and an appended numeric suffix, i.e., "an-example-slug" and
+   # "an-example-slug-2"
+   #
+   # The first two arguments are required, after which you may pass in the same
+   # arguments as ActiveRecord::Base::find.
+   #
    def self.count_matches(slug_text, sluggable_type, *args)
     slugs = with_scope({:find => {:conditions => ["slugs.name LIKE '#{slug_text}%' AND sluggable_type = ?", 
         sluggable_type]}}) do
@@ -15,10 +23,23 @@ class Slug < ActiveRecord::Base
     return count
   end
   
+  # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
   end
   
+  # Replace non-word characters with spaces, stip leading/trailing whitespace,
+  # convert to lower case, squeeze multiple spaces into one space, convert
+  # spaces to dashes, and remove any trailing dashes.
+  #
+  # Example:
+  #
+  # This... is an example string!
+  #
+  # Becomes:
+  #
+  # this-is-an-example-string
+  #
   def self.normalize(slug_text)
     slug_text.gsub!(/\W+/, ' ')
     slug_text.strip!

@@ -1,8 +1,15 @@
-ActiveRecord::Schema.define(:version => 2) do
+ActiveRecord::Schema.define(:version => 3) do
 
   create_table "posts", :force => true do |t|
     t.string   "name"
     t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "login"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

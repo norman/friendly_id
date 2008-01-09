@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-class FriendlyIdTest < Test::Unit::TestCase
+class SluggableTest < Test::Unit::TestCase
   
   fixtures :posts, :slugs
   
@@ -8,9 +8,9 @@ class FriendlyIdTest < Test::Unit::TestCase
     Post.friendly_id_options[:max_length] = Post.default_friendly_id_options[:max_length]  
   end
 
-  def test_post_should_generate_slug
+  def test_post_should_generate_friendly_id
     @post = Post.new(:name => "Test post", :content => "Test content")
-    assert_equal "test-post", @post.generate_slug
+    assert_equal "test-post", @post.generate_friendly_id
   end
 
   def test_post_should_have_friendly_id_options
@@ -67,13 +67,13 @@ class FriendlyIdTest < Test::Unit::TestCase
   def test_should_strip_diactics_from_slug
     Post.friendly_id_options[:strip_diacritics] = true
     @post = Post.new(:name => "åêìõüñçø", :content => "Test content")
-    assert_equal "aeiounco", @post.generate_slug
+    assert_equal "aeiounco", @post.generate_friendly_id
   end
 
   def test_should_not_strip_diactics_from_slug
     Post.friendly_id_options[:strip_diacritics] = false
     @post = Post.new(:name => "åêìõüñçø", :content => "Test content")
-    assert_equal "åêìõüñçø", @post.generate_slug
+    assert_equal "åêìõüñçø", @post.generate_friendly_id
   end
 
   def test_post_should_not_make_new_slug_if_name_is_unchanged
@@ -91,12 +91,12 @@ class FriendlyIdTest < Test::Unit::TestCase
   def test_should_not_consider_substrings_as_duplicate_slugs
     @substring = slugs(:one).name[0, slugs(:one).name.length - 1]
     @post = Post.new(:name => @substring, :content => "stuff")
-    assert_equal @substring, @post.generate_slug
+    assert_equal @substring, @post.generate_friendly_id
   end
 
   def test_should_append_extension_to_duplicate_slugs
     @post = Post.new(:name => slugs(:one).name, :content => "stuff")
-    assert_equal slugs(:one).name + "-2", @post.generate_slug
+    assert_equal slugs(:one).name + "-2", @post.generate_friendly_id
   end
 
   def test_should_create_post_with_slug
@@ -105,13 +105,13 @@ class FriendlyIdTest < Test::Unit::TestCase
   end
 
   def test_should_find_post_using_slug
-    assert Post.find_using_slug(slugs(:one).name)
+    assert Post.find_using_friendly_id(slugs(:one).name)
   end
   
   def test_should_truncate_slugs_longer_than_maxlength
     Post.friendly_id_options[:max_length] = 10
     @post = Post.new(:name => "x" * 11, :content => "Test content")
-    assert @post.generate_slug.length <= Post.friendly_id_options[:max_length]
+    assert @post.generate_friendly_id.length <= Post.friendly_id_options[:max_length]
   end
 
   def test_should_ensure_truncate_slugs_are_unique
