@@ -109,11 +109,11 @@ level of access to your data that you may not wish them to have.
 
 == Subversion repository:
 
-http://randomba.org/svn/friendly_id
+http://svn.randomba.org/friendly_id
 
 == Setup:
 
-- script/plugin install http://randomba.org/svn/friendly_id/tags/1_0
+- script/plugin install http://svn.randomba.org/friendly_id/tags/1_0
 - script/generate friendly_id_migration
 - rake db:migrate
 - now add some code to your models: e.g., <tt>has_friendly_id, :column => :title, :use_slugs => true</tt>
