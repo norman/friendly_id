@@ -55,7 +55,6 @@ module FriendlyId
     end
   end
 
-  
   module NonSluggableClassMethods
     # Finds the record using only the friendly id. If it can't be found using
     # the friendly id, then it returns false. If you pass in any argument other
