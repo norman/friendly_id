@@ -136,10 +136,30 @@ leave a comment at our site at: http://randomba.org.
 == Credits:
 
 Friendly_id was created by Norman Clarke
-(norman@addthree.com[mailto:norman@addthree.com]) and Adrián Mugnolo
+(norman@addthree.com[mailto:norman@addthree.com]) and Adrian Mugnolo
 (adrian@giro54.com[mailto:adrian@giro54.com]).
+
+== Similar Plugins:
+
+friendly_identifier - Provides fully textual slugs, but no slug versioning.
+
+http://agilewebdevelopment.com/plugins/friendly_identifier
+
+acts_as_friendly_param - Versions slugs, but uses a to_param override, leaving
+ids in the url.
+
+http://agilewebdevelopment.com/plugins/acts_as_friendly_param
+
+acts_as_sluggable - Provides fully textual slugs, but no slug versioning.
+
+http://agilewebdevelopment.com/plugins/acts_as_slugable
+
+acts_as_sluggable - Uses a to_param override, leaving ids in the url. Doesn't
+do versioning.
+
+http://agilewebdevelopment.com/plugins/acts_as_sluggable
 
 == Legal:
 
-Copyright (c) 2008 Norman Clarke and Adrián Mugnolo, released under the MIT
+Copyright (c) 2008 Norman Clarke and Adrian Mugnolo, released under the MIT
 license.
