@@ -1,2 +1,2 @@
 require 'friendly_id'
-ActiveRecord::Base.send(:include, FriendlyId)
+ActiveRecord::Base.send(:include, Randomba::FriendlyId)

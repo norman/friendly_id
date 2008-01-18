@@ -12,7 +12,7 @@ class Slug < ActiveRecord::Base
    # arguments as ActiveRecord::Base::find.
    #
    def self.count_matches(slug_text, sluggable_type, *args)
-    slugs = with_scope({:find => {:conditions => ["slugs.name LIKE '#{slug_text}%' AND sluggable_type = ?", 
+    slugs = with_scope({:find => {:conditions => ["name LIKE '#{slug_text}%' AND sluggable_type = ?", 
         sluggable_type]}}) do
       find(*args)
     end
