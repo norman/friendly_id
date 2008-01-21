@@ -184,6 +184,7 @@ module Randomba
 
       # Set the slug using the generated friendly id.
       def set_slug
+        return unless self.class.friendly_id_options[:use_slug]
         slug_text = generate_friendly_id
         if slugs.empty? || slugs.first.name != slug_text 
           slugs.build(:name => slug_text)
