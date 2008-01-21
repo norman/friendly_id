@@ -37,7 +37,7 @@ NEW AND HOT: http://www.example.com/members/joe
 This is the usual case if you have a member/user model with a unique
 login/nickname/username column. In this case, all you need to do is add this to your model:
 
-has_friendly_id, :column => :login
+has_friendly_id :login
 
 and you can then write code like this:
 
@@ -54,7 +54,7 @@ http://www.example.com/posts/new-version-released
 
 Here you would include this in your model:
 
-has_friendly_id, :column => :posts, :use_slug => true
+has_friendly_id :posts, :use_slug => true
 
 and you can then write code like this:
 
@@ -113,10 +113,10 @@ http://svn.randomba.org/friendly_id
 
 == Setup:
 
-- script/plugin install http://svn.randomba.org/friendly_id/tags/1_0
+- script/plugin install http://svn.randomba.org/friendly_id/trunk
 - script/generate friendly_id_migration
 - rake db:migrate
-- now add some code to your models: e.g., <tt>has_friendly_id, :column => :title, :use_slugs => true</tt>
+- now add some code to your models: e.g., <tt>has_friendly_id :title, :use_slug => true</tt>
 - if you are using slugs, then do rake friendly_id:make_slugs MODEL=MyModelName
 
 Then every so often, or perhaps every day via cron, you can do:
