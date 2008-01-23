@@ -11,8 +11,8 @@ module Randomba
 
       # Set up an ActiveRecord model to use a friendly_id.
       # 
-      # The method argument can be one of your model's columns, or a method you
-      # use to generate the slug.
+      # The method argument can be one of your model's columns, or a method
+      # you use to generate the slug.
       #
       # Options:
       # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
@@ -48,8 +48,8 @@ module Randomba
     end
 
     module SingletonMethods
-      # Extends ActiveRecord::Base::find to allow simple finds by the
-      # friendly id:
+      # Extends ActiveRecord::Base.find to allow simple finds by friendly id.
+      # 
       #   @record = Record.find("record name")
       def find(*args)
         find_using_friendly_id(args.first) or super(*args)
@@ -57,9 +57,9 @@ module Randomba
     end
 
     module NonSluggableClassMethods
-      # Finds the record using only the friendly id. If it can't be found using
-      # the friendly id, then it returns false. If you pass in any argument other
-      # than an instance of String, then it also returns false.    
+      # Finds the record using only the friendly id. If it can't be found
+      # using the friendly id, then it returns false. If you pass in any
+      # argument other than an instance of String, then it also returns false.
       def find_using_friendly_id(slug_text)
         return false unless slug_text.kind_of?(String)
         finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
@@ -111,9 +111,9 @@ module Randomba
 
     module SluggableClassMethods
 
-      # Finds the record using only the friendly id. If it can't be found using
-      # the friendly id, then it returns false. If you pass in any argument other
-      # than an instance of String, then it also returns false.
+      # Finds the record using only the friendly id. If it can't be found
+      # using the friendly id, then it returns false. If you pass in any
+      # argument other than an instance of String, then it also returns false.
       def find_using_friendly_id(slug_text)
         return false unless slug_text.kind_of?(String)
         slug = Slug.find_by_name_and_sluggable_type(slug_text, self.to_s)      
@@ -159,7 +159,8 @@ module Randomba
 
       alias best_id friendly_id
 
-      # Returns the most recent slug, which is used to determine the friendly id.
+      # Returns the most recent slug, which is used to determine the friendly
+      # id.
       def slug
         slugs.first
       end
@@ -198,8 +199,9 @@ module Randomba
         Iconv.new("ascii//translit//ignore", "utf-8").iconv(Unicode.normalize_KD(string))
       end
 
-      # Get the string used as the basis of the friendly id. If you set the option
-      # to remove diacritics from the friendly id's then they will be removed.
+      # Get the string used as the basis of the friendly id. If you set the
+      # option to remove diacritics from the friendly id's then they will be
+      # removed.
       def friendly_id_base
         if self.friendly_id_options[:strip_diacritics]
           Slug::normalize(strip_diacritics(send(self.friendly_id_options[:method].to_sym)))
@@ -212,7 +214,8 @@ module Randomba
       protected
 
       # Sets the slug that was used to find the record. This can be used to
-      # determine whether the record was found using the most recent friendly id.    
+      # determine whether the record was found using the most recent friendly
+      # id.
       def finder_slug=(val)
         @finder_slug = val
       end

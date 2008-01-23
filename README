@@ -79,7 +79,7 @@ the new URL:
 
 ==== What if the title isn't unique?
 
-Frieldly_id will append a number to the end of the id to keep it unique if
+Friendly_id will append a number to the end of the id to keep it unique if
 necessary:
 
 - /posts/new-version-released
@@ -150,7 +150,7 @@ ids in the url.
 
 http://agilewebdevelopment.com/plugins/acts_as_friendly_param
 
-acts_as_sluggable - Provides fully textual slugs, but no slug versioning.
+acts_as_slugable - Provides fully textual slugs, but no slug versioning.
 
 http://agilewebdevelopment.com/plugins/acts_as_slugable
 

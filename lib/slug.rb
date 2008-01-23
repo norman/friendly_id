@@ -8,9 +8,8 @@ class Slug < ActiveRecord::Base
    # and an appended numeric suffix, i.e., "an-example-slug" and
    # "an-example-slug-2"
    #
-   # The first two arguments are required, after which you may pass in the same
-   # arguments as ActiveRecord::Base::find.
-   #
+   # The first two arguments are required, after which you may pass in the
+   # same arguments as ActiveRecord::Base.find.
    def self.count_matches(slug_text, sluggable_type, *args)
     slugs = with_scope({:find => {:conditions => ["name LIKE '#{slug_text}%' AND sluggable_type = ?", 
         sluggable_type]}}) do
