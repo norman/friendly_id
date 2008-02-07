@@ -125,7 +125,7 @@ class SluggableTest < Test::Unit::TestCase
     assert @post.generate_friendly_id.length <= Post.friendly_id_options[:max_length]
   end
 
-  def test_should_ensure_truncate_slugs_are_unique
+  def test_should_ensure_truncated_slugs_are_unique
     max_length = posts(:with_one_slug).friendly_id.length
     Post.friendly_id_options[:max_length] = max_length
     p = Post.create!(:name => posts(:with_one_slug).friendly_id)
@@ -133,6 +133,11 @@ class SluggableTest < Test::Unit::TestCase
     assert_not_equal posts(:with_one_slug).friendly_id, p.friendly_id
     assert_not_equal posts(:with_one_slug).friendly_id, q.friendly_id
     assert_not_equal p.friendly_id, q.friendly_id
+  end
+  
+  def test_should_not_give_up_damnit
+    p = Post.create!(:name => "Post 2/4")
+    q = Post.create!(:name => "Post")
   end
   
   def test_slug_should_indicate_if_it_is_the_most_recent
