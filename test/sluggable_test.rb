@@ -136,8 +136,8 @@ class SluggableTest < Test::Unit::TestCase
   end
   
   def test_should_not_give_up_damnit
-    p = Post.create!(:name => "Post 2/4")
-    q = Post.create!(:name => "Post")
+    Post.create!(:name => "Post 2/4")
+    assert Post.create!(:name => "Post")
   end
   
   def test_slug_should_indicate_if_it_is_the_most_recent
