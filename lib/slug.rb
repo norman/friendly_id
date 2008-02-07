@@ -18,7 +18,6 @@ class Slug < ActiveRecord::Base
     end
     count = 0
     slugs.each do |slug|
-      puts slug.name
       count = count + 1 if slug.name =~ /\A#{slug_text}(-[\d]+)*\Z/
     end
     return count
