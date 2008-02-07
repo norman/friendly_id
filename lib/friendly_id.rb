@@ -19,7 +19,7 @@ module Randomba
       # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
       # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters. You must have the unicode gem installed for this to work.
       def has_friendly_id(method, options = {})
-
+        options.assert_valid_keys(:use_slug, :max_length, :strip_diacritics)
         options = default_friendly_id_options.merge(options).merge(:method => method)
         write_inheritable_attribute(:friendly_id_options, options)
         class_inheritable_reader :friendly_id_options
@@ -52,7 +52,7 @@ module Randomba
       # 
       #   @record = Record.find("record name")
       def find(*args)
-        find_using_friendly_id(args.first) or super(*args)
+        find_using_friendly_id(*args) or super(*args)
       end
     end
 
@@ -60,13 +60,22 @@ module Randomba
       # Finds the record using only the friendly id. If it can't be found
       # using the friendly id, then it returns false. If you pass in any
       # argument other than an instance of String, then it also returns false.
-      def find_using_friendly_id(slug_text)
+      # def find_using_friendly_id()
+      #   return false unless slug_text.kind_of?(String)
+      #   finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
+      #   record = send(finder, slug_text)
+      #   record.send(:found_using_friendly_id=, true) if record
+      #   return record
+      # end
+
+      def find_using_friendly_id(slug_text, options = {})
         return false unless slug_text.kind_of?(String)
         finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
-        record = send(finder, slug_text)
+        record = send(finder, slug_text, options)
         record.send(:found_using_friendly_id=, true) if record
         return record
       end    
+
     end
 
     module NonSluggableInstanceMethods
@@ -114,9 +123,9 @@ module Randomba
       # Finds the record using only the friendly id. If it can't be found
       # using the friendly id, then it returns false. If you pass in any
       # argument other than an instance of String, then it also returns false.
-      def find_using_friendly_id(slug_text)
-        return false unless slug_text.kind_of?(String)
-        slug = Slug.find_by_name_and_sluggable_type(slug_text, self.to_s)      
+      def find_using_friendly_id(*args)
+        return false unless args.first.kind_of?(String)
+        slug = Slug.find_by_name_and_sluggable_type(args.first, self.to_s)      
         return false if !slug
         return false if !slug.sluggable      
         slug.sluggable.send(:finder_slug=, slug)
@@ -149,7 +158,7 @@ module Randomba
 
       # Was the record found using an old friendly id, or its numeric id?
       def has_better_id?
-        found_using_numeric_id? || found_using_outdated_friendly_id?
+        !slug.nil? && (found_using_numeric_id? || found_using_outdated_friendly_id?)
       end
 
       # Returns the friendly id.
@@ -235,7 +244,7 @@ module Randomba
         end
         slug_text = slug_text + extension
         count = Slug.count_matches(slug_text, self.class.to_s, :all,
-        :conditions => "id <> #{self.id or 0}")
+          :conditions => "sluggable_id <> #{self.id or 0}")
         if count != 0
           raise FriendlyId::SlugGenerationError.new("I give up, damnit!")
         else

@@ -1,0 +1,19 @@
+Feb 7, 2008
+
+* Applied patches from blog commenter "suntzu" to fix problem with model
+	values were being overwritten. See:
+  http://randomba.org/articles/2008/01/18/friendly_id
+
+* Applied patch from Dan Blue to make friendly_id no longer ignore options on 
+	ActiveRecordBase#find. Before, this code did not work:
+
+	Person.find(id, :conditions => "administrator = 1", :order => "created_on DESC")
+
+* This was because the conditions were silently dropped. Dan's patch fixes
+  this for friendly_id when you're using it in "non-slugging" mode. I still
+  have not fixed this for find when using slugs because this is a bit more
+  complicated and I haven't had time yet. For now a commented-out failing test
+  has been added as a reminder for me to FIX THIS SOON.
+
+* Added call to options.assert_valid_keys in has_friendly_id. Thanks to
+	W. Andrew Loe III for pointing out that this was missing.

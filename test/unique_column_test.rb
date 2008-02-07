@@ -6,9 +6,15 @@ class UniqueColumnTest < Test::Unit::TestCase
   
   def setup
   end
-
+  
   def test_should_find_user_using_friendly_id
     assert User.find(users(:joe).friendly_id)
+  end
+  
+  def test_finder_options_are_not_ignored
+    assert_raises ActiveRecord::RecordNotFound do
+       User.find(users(:joe).friendly_id, :conditions => "1 = 2")
+    end
   end
 
   def test_user_should_have_friendly_id_options
