@@ -25,7 +25,8 @@ module Randomba
         class_inheritable_reader :friendly_id_options
 
         if options[:use_slug]
-          has_many :slugs, :order => "id DESC", :as => :sluggable
+          has_many :slugs, :order => "id DESC", :as => :sluggable,
+            :dependent => :destroy
           before_save :set_slug
           include SluggableInstanceMethods
           extend SluggableClassMethods  
