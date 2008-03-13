@@ -1,3 +1,11 @@
+March 13, 2008
+
+* Added :dependent => :destroy to slug relation, as suggested by Emilio Tagua.
+* Added code to avoid an error when renaming a slugged item back to a previously
+  used name. In some cases this could cause your model to fail validation with
+	an "invalid slug" error.
+* Incorporated documentation changes suggested by Jesse Crouch and Chris Nolan.
+
 Feb 7, 2008
 
 * Applied patches from blog commenter "suntzu" to fix problem with model

@@ -198,11 +198,13 @@ module Randomba
         return unless self.class.friendly_id_options[:use_slug]
         slug_text = generate_friendly_id
         if slugs.empty? || slugs.first.name != slug_text 
+          previous_slug = slugs.find_by_name(slug_text)
+          previous_slug.destroy if previous_slug
           slugs.build(:name => slug_text)
         end
       end
 
-      # Remove diacritis from the string.
+      # Remove diacritics from the string.
       def strip_diacritics(string)
         require 'iconv'
         require 'unicode'

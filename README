@@ -54,13 +54,29 @@ http://www.example.com/posts/new-version-released
 
 Here you would include this in your model:
 
-has_friendly_id :posts, :use_slug => true
+has_friendly_id :title, :use_slug => true
 
 and you can then write code like this:
 
 	@post = Post.find("new-version-released")  # Post.find(1) still works, too
 	@post.to_param                             # returns "new-version-released"
 	redirect_to @post                          # The URL would be /posts/new-version-released
+
+Now in your controllers, if you want to prevent people from accessing your
+models by numeric id, you can detect whether they were found by the
+friendly_id:
+
+  @post.find(params[:id])
+  raise "some error" if !@post.found_using_friendly_id?
+
+or, you can 301 redirect if the model was found by the numeric id if you don't
+care about numeric access, but want the SEO value of the friendly_id:
+
+  @post.find(params[:id])
+  redirect_to @post, :status => 301 if @post.has_better_id?
+
+The "has_better_id?" method returns true if the model was found with the
+numeric id, or with an outdated slug.
 
 ==== What if I change the title?
 
@@ -106,6 +122,16 @@ content if you have more than one URL pointing to the same content.
 Also, any person can still simply increment the id part of the url, and gain a
 level of access to your data that you may not wish them to have.
 
+==== What about non-ascii characters?
+
+Just do this:
+
+has_friendly_id :title, :use_slug => true, :strip_diacritics => true
+
+If you are not using slugs, you'll have to do this manually for whatever value
+you're using as the friendly_id.
+
+Also note, for this to work, you must install the "unicode" and "iconv" gems.
 
 == Subversion repository:
 
@@ -130,8 +156,19 @@ rake:friendly_id:remove_old_slugs DAYS=60
 
 == Bugs:
 
-There probably are some. If you find any, please contact the developers, or
-leave a comment at our site at: http://randomba.org.
+At the moment, Model.exists? fails when using the slug (reported by Chris Nolan).
+
+Finder options are ignored when using slugs; this code returns results when it should not:
+
+  Post.find_using_friendly_id(slugs(:one).name, :conditions => "1 = 2")
+
+This bug was reported by Dan Blue.
+
+These bugs part of a general pattern of not acting enough like
+ActiveRecord::Base, something I will address when I have a little more time.
+
+There probably are more bugs. If you find any, please contact the developers,
+or leave a comment at our site at: http://randomba.org.
 
 == Credits:
 

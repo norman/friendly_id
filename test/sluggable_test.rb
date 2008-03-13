@@ -135,6 +135,19 @@ class SluggableTest < Test::Unit::TestCase
     assert_not_equal p.friendly_id, q.friendly_id
   end
   
+  def test_should_be_able_to_rename_back_to_old_friendly_id
+    p = Post.create!(:name => "value")
+    assert_equal "value", p.friendly_id
+    p.name = "different value"
+    p.save!
+    p.reload
+    assert_equal "different-value", p.friendly_id
+    p.name = "value"
+    assert p.save!
+    p.reload
+    assert_equal "value", p.friendly_id
+  end
+  
   def test_should_not_give_up_damnit
     Post.create!(:name => "Post 2/4")
     assert Post.create!(:name => "Post")
