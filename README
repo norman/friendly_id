@@ -137,6 +137,15 @@ Also note, for this to work, you must install the "unicode" and "iconv" gems.
 
 http://svn.randomba.org/friendly_id
 
+A month of so after Rails 2.1 is released with support for plugins tracked via
+git, the subversion repository will be taken offline, and the git repository
+will be the way to go. For now, development is done using git but all changes
+are backported to the svn repository to support current users.
+
+== Git repository:
+
+git@github.com:norman/friendly_id.git
+
 == Setup:
 
 - script/plugin install http://svn.randomba.org/friendly_id/trunk
