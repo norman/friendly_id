@@ -1,3 +1,11 @@
+April 18, 2008
+
+* Improved code that adds an extension to the friendly_id when attempting to
+  avoid name collisions. Previously identically named items in some cases
+  would cause friendly_id to die a painful death, raigin an "I give up damnit!"
+  error. Seriously. Sorry about that people... it should a little more
+  "friendly" now.
+
 March 13, 2008
 
 * Added :dependent => :destroy to slug relation, as suggested by Emilio Tagua.

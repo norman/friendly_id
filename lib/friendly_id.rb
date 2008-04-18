@@ -182,8 +182,7 @@ module Randomba
 
       # Generate the text for the friendly id, ensuring no duplication.
       def generate_friendly_id
-        max_length = friendly_id_options[:max_length]
-        slug_text = friendly_id_base[0, max_length - NUM_CHARS_RESERVED_FOR_EXTENSION]
+        slug_text = truncated_friendly_id_base
         count = Slug.count_matches(slug_text, self.class.to_s, :all,
         :conditions => "sluggable_id <> #{self.id or 0}")
         if count == 0
@@ -233,6 +232,11 @@ module Randomba
       end
 
       private
+      
+      def truncated_friendly_id_base
+        max_length = friendly_id_options[:max_length]
+        slug_text = friendly_id_base[0, max_length - NUM_CHARS_RESERVED_FOR_EXTENSION]        
+      end
 
       # Reserve a few spaces at the end of the slug for the counter extension.
       # This is to avoid generating slugs longer than the maxlength when an
@@ -245,15 +249,14 @@ module Randomba
           raise FriendlyId::SlugGenerationError.new("slug text #{slug_text} " +
             "goes over limit for similarly named slugs")
         end
-        slug_text = slug_text + extension
+        slug_text = truncated_friendly_id_base + extension
         count = Slug.count_matches(slug_text, self.class.to_s, :all,
           :conditions => "sluggable_id <> #{self.id or 0}")
         if count != 0
-          raise FriendlyId::SlugGenerationError.new("I give up, damnit!")
+          slug_text = truncated_friendly_id_base + "-" + (count + 1).to_s
         else
           return slug_text
         end
-
       end
     end
 

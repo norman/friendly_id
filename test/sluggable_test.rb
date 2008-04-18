@@ -77,14 +77,14 @@ class SluggableTest < Test::Unit::TestCase
 
   def test_should_strip_diactics_from_slug
     Post.friendly_id_options[:strip_diacritics] = true
-    @post = Post.new(:name => "åêìõüñçø", :content => "Test content")
-    assert_equal "aeiounco", @post.generate_friendly_id
+    @post = Post.new(:name => "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", :content => "Test content")
+    assert_equal "aaaaaaaeceeeiiiidnoooooouuuuythssaaaaaaaeceeeeiiiidnoooooouuuuythy", @post.generate_friendly_id
   end
 
   def test_should_not_strip_diactics_from_slug
     Post.friendly_id_options[:strip_diacritics] = false
-    @post = Post.new(:name => "åêìõüñçø", :content => "Test content")
-    assert_equal "åêìõüñçø", @post.generate_friendly_id
+    @post = Post.new(:name => "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", :content => "Test content")
+    assert_equal "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", @post.generate_friendly_id
   end
 
   def test_post_should_not_make_new_slug_if_name_is_unchanged
@@ -148,10 +148,16 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal "value", p.friendly_id
   end
   
-  def test_should_not_give_up_damnit
+  def test_should_avoid_extention_collisions
     Post.create!(:name => "Post 2/4")
     assert Post.create!(:name => "Post")
+    assert Post.create!(:name => "Post-2")
+    assert Post.create!(:name => "Post-2")
+    assert Post.create!(:name => "Post")
+    assert Post.create!(:name => "Post-2-2")
+    assert Post.create!(:name => "Post 2/4")
   end
+
   
   def test_slug_should_indicate_if_it_is_the_most_recent
     assert slugs(:two_new).is_most_recent?
