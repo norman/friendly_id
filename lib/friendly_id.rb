@@ -207,7 +207,7 @@ module Randomba
       def strip_diacritics(string)
         require 'iconv'
         require 'unicode'
-        Iconv.new("ascii//translit//ignore", "utf-8").iconv(Unicode.normalize_KD(string))
+        Iconv.new("ascii//ignore//translit", "utf-8").iconv(Unicode.normalize_KD(string))
       end
 
       # Get the string used as the basis of the friendly id. If you set the
