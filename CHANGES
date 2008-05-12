@@ -1,3 +1,11 @@
+May 12 2008
+
+* Added gemspec. Installing friendly_id as a gem doesn't really get you
+  anything at this point, since it won't work. But I'm adding this since
+  Github offers gems for free. I'll make friendly_id work when installed as a
+  gem soon.
+
+
 April 18, 2008
 
 * Improved code that adds an extension to the friendly_id when attempting to
