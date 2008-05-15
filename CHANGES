@@ -1,3 +1,10 @@
+May 15 2008
+
+* Made friendly_id raise an error with an informative message if the method
+  used to get the text for the slug returns a blank value. Previously
+  friendy_id would end up raising a TypeError with a less understandable error
+  message in these cases.
+
 May 12 2008
 
 * Added gemspec. Installing friendly_id as a gem doesn't really get you

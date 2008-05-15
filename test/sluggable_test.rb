@@ -157,10 +157,15 @@ class SluggableTest < Test::Unit::TestCase
     assert Post.create!(:name => "Post-2-2")
     assert Post.create!(:name => "Post 2/4")
   end
-
   
   def test_slug_should_indicate_if_it_is_the_most_recent
     assert slugs(:two_new).is_most_recent?
+  end
+  
+  def test_should_raise_error_if_friendly_is_base_is_blank
+    assert_raises(Randomba::FriendlyId::SlugGenerationError) do
+      Post.create(:name => nil)
+    end
   end
 
 end

@@ -214,13 +214,16 @@ module Randomba
       # option to remove diacritics from the friendly id's then they will be
       # removed.
       def friendly_id_base
+        base = self.send(friendly_id_options[:method].to_sym)
+        if base.blank?
+          raise SlugGenerationError.new("The method or column used as the base of friendly_id's slug text returned a blank value")
+        end
         if self.friendly_id_options[:strip_diacritics]
-          Slug::normalize(strip_diacritics(send(self.friendly_id_options[:method].to_sym)))
+          Slug::normalize(strip_diacritics(base))
         else
-          Slug::normalize(send(self.friendly_id_options[:method].to_sym))
+          Slug::normalize(base)
         end
       end
-
 
       protected
 
