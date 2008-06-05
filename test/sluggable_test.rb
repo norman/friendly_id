@@ -39,6 +39,17 @@ class SluggableTest < Test::Unit::TestCase
     assert !@post.found_using_friendly_id?
   end
   
+  def test_posts_should_be_using_friendly_id_when_given_as_array
+    @posts = Post.find([posts(:with_one_slug).slug.name, posts(:with_two_slugs).slug.name])
+    assert @posts.all? { |post| post.found_using_friendly_id? }
+  end
+  
+  def test_posts_should_return_any_record_if_exists_as_slug
+    @posts = Post.find([posts(:with_one_slug).slug.name, 'non-existant-slug-record'])
+    assert        @posts.all? { |post| post.found_using_friendly_id? }
+    assert_equal  1, @posts.length
+  end
+  
   def test_post_should_be_considered_found_by_numeric_id_as_default
     @post = Post.new
     assert @post.found_using_numeric_id?  

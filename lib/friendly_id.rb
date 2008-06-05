@@ -60,7 +60,8 @@ module Randomba
     module NonSluggableClassMethods
       # Finds the record using only the friendly id. If it can't be found
       # using the friendly id, then it returns false. If you pass in any
-      # argument other than an instance of String, then it also returns false.
+      # argument other than an instance of String or Array, then it also 
+      # returns false.
       # def find_using_friendly_id()
       #   return false unless slug_text.kind_of?(String)
       #   finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
@@ -70,11 +71,17 @@ module Randomba
       # end
 
       def find_using_friendly_id(slug_text, options = {})
-        return false unless slug_text.kind_of?(String)
-        finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
-        record = send(finder, slug_text, options)
-        record.send(:found_using_friendly_id=, true) if record
-        return record
+        case slug_text
+          when String
+            finder = "find_by_#{self.friendly_id_options[:method].to_s}".to_sym
+          when Array
+            finder = "find_all_by_#{self.friendly_id_options[:method].to_s}".to_sym
+          else
+            return false
+        end
+        records = send(finder, slug_text, options)
+        [*records].each { |record| record.send(:found_using_friendly_id=, true) } unless records.blank?
+        return records
       end    
 
     end
@@ -123,14 +130,22 @@ module Randomba
 
       # Finds the record using only the friendly id. If it can't be found
       # using the friendly id, then it returns false. If you pass in any
-      # argument other than an instance of String, then it also returns false.
+      # argument other than an instance of String or Array, then it also 
+      # returns false. When given as an array will try to find any of the
+      # records and return those that can be found.
       def find_using_friendly_id(*args)
-        return false unless args.first.kind_of?(String)
-        slug = Slug.find_by_name_and_sluggable_type(args.first, self.to_s)      
-        return false if !slug
-        return false if !slug.sluggable      
-        slug.sluggable.send(:finder_slug=, slug)
-        slug.sluggable
+        case args.first
+          when String
+            slugs = Slug.find_by_name_and_sluggable_type(args.first, self.to_s)
+          when Array
+            slugs = Slug.find_all_by_name_and_sluggable_type(args.first, self.to_s)
+          else
+            return false
+        end
+        
+        return false if slugs.blank? || ![*slugs].all?(&:sluggable)
+        [*slugs].each { |slug| slug.sluggable.send(:finder_slug=, slug) }
+        (slugs.kind_of?(Array)) ? slugs.collect(&:sluggable) : slugs.sluggable
       end
     end  
 

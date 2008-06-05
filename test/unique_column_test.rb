@@ -11,6 +11,14 @@ class UniqueColumnTest < Test::Unit::TestCase
     assert User.find(users(:joe).friendly_id)
   end
   
+  def test_should_find_users_using_friendly_ids
+    assert_equal 2, User.find([users(:joe).friendly_id, users(:jane).friendly_id]).length
+  end
+  
+  def test_should_not_find_users_using_non_existent_friendly_ids
+    assert_equal [], User.find(['non-existen-slug', 'yet-another-non-existent-slug'])
+  end
+  
   def test_finder_options_are_not_ignored
     assert_raises ActiveRecord::RecordNotFound do
        User.find(users(:joe).friendly_id, :conditions => "1 = 2")
