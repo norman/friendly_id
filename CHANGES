@@ -1,3 +1,11 @@
+June 10 2008
+
+* Added ability to find friendly_ids by array:
+
+Post.find(["first-post", "second-post"])
+
+Many thanks to Emilio Tagua (miloops) for implementing this feature.
+
 May 15 2008
 
 * Made friendly_id raise an error with an informative message if the method

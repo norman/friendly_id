@@ -16,7 +16,7 @@ class UniqueColumnTest < Test::Unit::TestCase
   end
   
   def test_should_not_find_users_using_non_existent_friendly_ids
-    assert_equal [], User.find(['non-existen-slug', 'yet-another-non-existent-slug'])
+    assert_equal [], User.find(['non-existe nt-slug', 'yet-another-non-existent-slug'])
   end
   
   def test_finder_options_are_not_ignored
