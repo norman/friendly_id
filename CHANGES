@@ -1,6 +1,7 @@
 June 23 2008
 
 * Cached most recent slug to improve performance (Emilio Tagua).
+* Allow friendly_id to accept conditions when using slugs (Emilio Tagua, Robert Woodward).
 
 June 10 2008
 
