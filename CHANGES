@@ -1,3 +1,7 @@
+June 23 2008
+
+* Cached most recent slug to improve performance (Emilio Tagua).
+
 June 10 2008
 
 * Added ability to find friendly_ids by array:
