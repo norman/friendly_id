@@ -134,12 +134,11 @@ module Randomba
       # returns false. When given as an array will try to find any of the
       # records and return those that can be found.
       def find_using_friendly_id(*args)
-        kind = args.shift
-        case kind
+        case args.first
           when String
-            slugs = Slug.find_by_name_and_sluggable_type(kind, self.to_s, args.first)
+            slugs = Slug.find_by_name_and_sluggable_type(args.first, self.to_s)
           when Array
-            slugs = Slug.find_all_by_name_and_sluggable_type(kind, self.to_s, args.first)
+            slugs = Slug.find_all_by_name_and_sluggable_type(args.first, self.to_s)
           else
             return false
         end
