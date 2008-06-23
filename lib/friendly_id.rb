@@ -186,8 +186,9 @@ module Randomba
 
       # Returns the most recent slug, which is used to determine the friendly
       # id.
-      def slug
-        slugs.first
+      def slug(reload = false)
+        @most_recent_slug = nil if reload
+        @most_recent_slug ||= slugs.first
       end
 
       # Returns the friendly id, or if none is available, the numeric id.
@@ -210,6 +211,7 @@ module Randomba
       # Set the slug using the generated friendly id.
       def set_slug
         return unless self.class.friendly_id_options[:use_slug]
+        @most_recent_slug = nil
         slug_text = generate_friendly_id
         if slugs.empty? || slugs.first.name != slug_text 
           previous_slug = slugs.find_by_name(slug_text)
