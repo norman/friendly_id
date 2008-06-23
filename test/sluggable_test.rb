@@ -179,4 +179,11 @@ class SluggableTest < Test::Unit::TestCase
     end
   end
 
+  def test_should_not_find_post_using_slugs_with_invalid_conditions
+    assert !Post.find_using_friendly_id(slugs(:one).name, :conditions => "1 = 2")
+  end
+
+  def test_should_find_post_using_slugs_with_conditions
+    assert_equal posts(:with_one_slug), Post.find_using_friendly_id(slugs(:one).name, :conditions => "1 = 1")
+  end
 end
