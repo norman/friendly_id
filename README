@@ -167,23 +167,15 @@ rake:friendly_id:remove_old_slugs DAYS=60
 
 At the moment, Model.exists? fails when using the slug (reported by Chris Nolan).
 
-Finder options are ignored when using slugs; this code returns results when it should not:
-
-  Post.find_using_friendly_id(slugs(:one).name, :conditions => "1 = 2")
-
-This bug was reported by Dan Blue.
-
-These bugs part of a general pattern of not acting enough like
-ActiveRecord::Base, something I will address when I have a little more time.
-
 There probably are more bugs. If you find any, please contact the developers,
 or leave a comment at our site at: http://randomba.org.
 
 == Credits:
 
 Friendly_id was created by Norman Clarke
-(norman@addthree.com[mailto:norman@addthree.com]) and Adrian Mugnolo
-(adrian@giro54.com[mailto:adrian@giro54.com]).
+(norman@randomba.org[mailto:norman@randomba.org]) and Adrian Mugnolo
+(adrian@randomba.org[mailto:adrian@randomba.org]), with significant contributions
+from Emilio Tagua (miloops@gmail.com[mailto:miloops@gmail.com]).
 
 == Similar Plugins:
 
