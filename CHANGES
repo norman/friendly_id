@@ -1,5 +1,6 @@
 July 14 2008
 
+* Improved slug generation for friendly id's with apostrophes. (alistairholt)
 * Added support for namespaced models in Rakefile. (David Ramalho)
 
 June 23 2008
