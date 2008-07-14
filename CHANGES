@@ -1,3 +1,7 @@
+July 14 2008
+
+* Added support for namespaced models in Rakefile. (David Ramalho)
+
 June 23 2008
 
 * Cached most recent slug to improve performance (Emilio Tagua).
