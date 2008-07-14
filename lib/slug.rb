@@ -40,7 +40,7 @@ class Slug < ActiveRecord::Base
   #
   def self.normalize(slug_text)
   	s = slug_text.clone
-  	s.gsub!(/[\?’",.;:]/, '')
+  	s.gsub!(/[\?‘’'“”",.;:]/, '')
   	s.gsub!(/\W+/, ' ')
   	s.strip!
   	s.downcase!
