@@ -1,3 +1,7 @@
+July 25 2008
+
+* Small change to allow friendly_id to work better with STI. (David Ramalho)
+
 July 14 2008
 
 * Improved slug generation for friendly id's with apostrophes. (alistairholt)

@@ -136,9 +136,9 @@ module Randomba
       def find_using_friendly_id(*args)
         case args.first
           when String
-            slugs = Slug.find_by_name_and_sluggable_type(args.first, self.to_s)
+            slugs = Slug.find_by_name_and_sluggable_type(args.first, self.base_class.to_s)
           when Array
-            slugs = Slug.find_all_by_name_and_sluggable_type(args.first, self.to_s)
+            slugs = Slug.find_all_by_name_and_sluggable_type(args.first, self.base_class.to_s)
           else
             return false
         end
