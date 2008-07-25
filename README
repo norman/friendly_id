@@ -135,11 +135,11 @@ Also note, for this to work, you must install the "unicode" and "iconv" gems.
 
 == Git repository:
 
-git@github.com:norman/friendly_id.git
+git://github.com/norman/friendly_id.git
 
 == Setup:
 
-- script/plugin install git@github.com:norman/friendly_id.git
+- script/plugin install git://github.com/norman/friendly_id.git
 - script/generate friendly_id_migration
 - rake db:migrate
 - now add some code to your models: e.g., <tt>has_friendly_id :title, :use_slug => true</tt>
@@ -153,6 +153,11 @@ This will remove any old slugs for friendly ids that have changed. The default
 is to remove dead slugs older than 45 days, but you can change that by doing:
 
 rake:friendly_id:remove_old_slugs DAYS=60
+
+If you're using an older version of Rails that does not support installing
+plugins via Git, you can {download a tarball of the
+plugin}[http://github.com/norman/friendly_id/tarball/master] and unarchive it
+in your vendor/plugins directory.
 
 == Bugs:
 
