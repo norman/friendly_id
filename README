@@ -133,22 +133,13 @@ you're using as the friendly_id.
 
 Also note, for this to work, you must install the "unicode" and "iconv" gems.
 
-== Subversion repository:
-
-http://svn.randomba.org/friendly_id
-
-A month of so after Rails 2.1 is released with support for plugins tracked via
-git, the subversion repository will be taken offline, and the git repository
-will be the way to go. For now, development is done using git but all changes
-are backported to the svn repository to support current users.
-
 == Git repository:
 
 git@github.com:norman/friendly_id.git
 
 == Setup:
 
-- script/plugin install http://svn.randomba.org/friendly_id/trunk
+- script/plugin install git@github.com:norman/friendly_id.git
 - script/generate friendly_id_migration
 - rake db:migrate
 - now add some code to your models: e.g., <tt>has_friendly_id :title, :use_slug => true</tt>
@@ -164,6 +155,8 @@ is to remove dead slugs older than 45 days, but you can change that by doing:
 rake:friendly_id:remove_old_slugs DAYS=60
 
 == Bugs:
+
+Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/14675-friendly_id].
 
 At the moment, Model.exists? fails when using the slug (reported by Chris Nolan).
 
