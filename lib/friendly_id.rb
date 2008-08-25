@@ -220,13 +220,6 @@ module Randomba
         end
       end
 
-      # Remove diacritics from the string.
-      def strip_diacritics(string)
-        require 'iconv'
-        require 'unicode'
-        Iconv.new("ascii//ignore//translit", "utf-8").iconv(Unicode.normalize_KD(string))
-      end
-
       # Get the string used as the basis of the friendly id. If you set the
       # option to remove diacritics from the friendly id's then they will be
       # removed.
@@ -236,7 +229,7 @@ module Randomba
           raise SlugGenerationError.new("The method or column used as the base of friendly_id's slug text returned a blank value")
         end
         if self.friendly_id_options[:strip_diacritics]
-          Slug::normalize(strip_diacritics(base))
+          Slug::normalize(Slug::strip_diacritics(base))
         else
           Slug::normalize(base)
         end

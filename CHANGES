@@ -1,5 +1,10 @@
 July 25 2008
 
+* Moved strip_diacritics into Slug for easier reuse/better organization.
+  Put class methods inside class << self block. (Norman Clarke)
+
+July 25 2008
+
 * Small change to allow friendly_id to work better with STI. (David Ramalho)
 
 July 14 2008
