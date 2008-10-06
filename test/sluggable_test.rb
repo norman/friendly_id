@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/test_helper'
 
 class SluggableTest < Test::Unit::TestCase
-  
+
   fixtures :posts, :slugs
-    
+
   def setup
-    Post.friendly_id_options[:max_length] = Post.default_friendly_id_options[:max_length]  
+    Post.friendly_id_options[:max_length] = Randomba::FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
-  
+
   # This test fails right now because this fix has not been implemented
   # for sluggable models, only non-sluggable models. The failing test is here
   # as a reminder to FIX THE CODE, but I don't have time to do it right now.
@@ -22,8 +22,8 @@ class SluggableTest < Test::Unit::TestCase
    @post = Post.new(:name => "Test post", :content => "Test content")
    assert_equal "test-post", @post.generate_friendly_id
    assert_equal "Test post", @post.name
-  end  
-  
+  end
+
   def test_post_should_have_friendly_id_options
     assert_not_nil Post.friendly_id_options
   end
@@ -33,26 +33,26 @@ class SluggableTest < Test::Unit::TestCase
       Slug.friendly_id_options
     end
   end
-  
+
   def test_post_should_not_be_found_using_friendly_id_unless_it_really_was
     @post = Post.new
     assert !@post.found_using_friendly_id?
   end
-  
+
   def test_posts_should_be_using_friendly_id_when_given_as_array
     @posts = Post.find([posts(:with_one_slug).slug.name, posts(:with_two_slugs).slug.name])
     assert @posts.all? { |post| post.found_using_friendly_id? }
   end
-  
-  def test_posts_should_return_any_record_if_exists_as_slug
-    @posts = Post.find([posts(:with_one_slug).slug.name, 'non-existant-slug-record'])
-    assert        @posts.all? { |post| post.found_using_friendly_id? }
-    assert_equal  1, @posts.length
+
+  def test_posts_raises_active_record_not_found_when_not_all_records_found
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Post.find([posts(:with_one_slug).slug.name, 'non-existant-slug-record'])
+    end
   end
-  
+
   def test_post_should_be_considered_found_by_numeric_id_as_default
     @post = Post.new
-    assert @post.found_using_numeric_id?  
+    assert @post.found_using_numeric_id?
   end
 
   def test_post_should_indicate_if_it_was_found_using_numeric_id
@@ -69,12 +69,12 @@ class SluggableTest < Test::Unit::TestCase
     @post = Post.find(posts(:with_two_slugs).slugs.last.name)
     assert @post.found_using_outdated_friendly_id?
   end
-  
+
   def test_should_indicate_there_is_a_better_id_if_found_by_numeric_id
     @post = Post.find(posts(:with_one_slug).id)
     assert @post.has_better_id?
   end
-  
+
   def test_should_indicate_there_is_a_better_id_if_found_by_outdated_friendly_id
     @post = Post.find(posts(:with_two_slugs).slugs.last.name)
     assert @post.has_better_id?
@@ -126,10 +126,6 @@ class SluggableTest < Test::Unit::TestCase
     assert_not_nil @post.slug
   end
 
-  def test_should_find_post_using_slug
-    assert Post.find_using_friendly_id(slugs(:one).name)
-  end
-  
   def test_should_truncate_slugs_longer_than_maxlength
     Post.friendly_id_options[:max_length] = 10
     @post = Post.new(:name => "x" * 11, :content => "Test content")
@@ -145,7 +141,7 @@ class SluggableTest < Test::Unit::TestCase
     assert_not_equal posts(:with_one_slug).friendly_id, q.friendly_id
     assert_not_equal p.friendly_id, q.friendly_id
   end
-  
+
   def test_should_be_able_to_rename_back_to_old_friendly_id
     p = Post.create!(:name => "value")
     assert_equal "value", p.friendly_id
@@ -158,7 +154,7 @@ class SluggableTest < Test::Unit::TestCase
     p.reload
     assert_equal "value", p.friendly_id
   end
-  
+
   def test_should_avoid_extention_collisions
     Post.create!(:name => "Post 2/4")
     assert Post.create!(:name => "Post")
@@ -168,11 +164,11 @@ class SluggableTest < Test::Unit::TestCase
     assert Post.create!(:name => "Post-2-2")
     assert Post.create!(:name => "Post 2/4")
   end
-  
+
   def test_slug_should_indicate_if_it_is_the_most_recent
     assert slugs(:two_new).is_most_recent?
   end
-  
+
   def test_should_raise_error_if_friendly_is_base_is_blank
     assert_raises(Randomba::FriendlyId::SlugGenerationError) do
       Post.create(:name => nil)

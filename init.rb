@@ -1,2 +1,4 @@
+require 'iconv'
 require 'friendly_id'
-ActiveRecord::Base.send(:include, Randomba::FriendlyId)
+
+ActiveRecord::Base.extend Randomba::FriendlyId::ClassMethods
