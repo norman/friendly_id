@@ -43,6 +43,8 @@ class Slug < ActiveRecord::Base
     # Example:
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     def normalize(slug_text)
+      # As of Oct 9 2008, this is in Edge Rails (http://github.com/rails/rails/commit/90366a1521659d07a3b75936b3231adeb376f1a4)
+      return slug_text.parameterize if slug_text.respond_to?(:parameterize)
       s = slug_text.clone
       s.gsub!(/[\?`^~‘’'“”",.;:]/, '')
       s.gsub!(/&/, 'and')

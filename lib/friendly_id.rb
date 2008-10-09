@@ -13,7 +13,7 @@ module FriendlyId
 
     # Set up an ActiveRecord model to use a friendly_id.
     #
-    # The method argument can be one of your model's columns, or a method
+    # The column argument can be one of your model's columns, or a method
     # you use to generate the slug.
     #
     # Options:
@@ -258,9 +258,9 @@ module FriendlyId
       if base.blank?
         raise SlugGenerationError.new('The method or column used as the base of friendly_id\'s slug text returned a blank value')
       elsif self.friendly_id_options[:strip_diacritics]
-        Slug::normalize Slug::strip_diacritics(base)
+        Slug::normalize(Slug::strip_diacritics(base))
       else
-        Slug::normalize base
+        Slug::normalize(base)
       end
     end
 
@@ -268,7 +268,7 @@ module FriendlyId
     # determine whether the record was found using the most recent friendly
     # id.
     def init_finder_slug(finder_slug)
-      raise RuntimeError, 'slug already introduced' if @finder_slug
+      raise RuntimeError, 'Slug already introduced' if @finder_slug
       @finder_slug = finder_slug
       @finder_slug.sluggable = self
     end
