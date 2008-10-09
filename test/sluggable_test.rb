@@ -5,7 +5,7 @@ class SluggableTest < Test::Unit::TestCase
   fixtures :posts, :slugs
 
   def setup
-    Post.friendly_id_options[:max_length] = Randomba::FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
+    Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
 
   # This test fails right now because this fix has not been implemented
@@ -170,7 +170,7 @@ class SluggableTest < Test::Unit::TestCase
   end
 
   def test_should_raise_error_if_friendly_is_base_is_blank
-    assert_raises(Randomba::FriendlyId::SlugGenerationError) do
+    assert_raises(FriendlyId::SlugGenerationError) do
       Post.create(:name => nil)
     end
   end

@@ -5,9 +5,6 @@ class Slug < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :sluggable_type
 
   class << self
-    def with_sluggable_type(sluggable_type)
-      "#{ quoted_table_name }.sluggable_type = #{ quote_value sluggable_type, columns_hash['sluggable_type'] }"
-    end
     def with_name(name)
       "#{ quoted_table_name }.name = #{ quote_value name, columns_hash['name'] }"
     end
@@ -16,6 +13,12 @@ class Slug < ActiveRecord::Base
       names = names.map { |n| "#{ quote_value n, name_column }" }.join ','
 
       "#{ quoted_table_name }.name IN (#{ names })"
+    end
+    def find_all_by_names_and_sluggable_type(names, type)
+      names = with_names names
+      type  = "#{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
+
+      all :conditions => "#{ names } AND #{ type }"
     end
 
     # Count exact matches for a slug. Matches include slugs with the same name
