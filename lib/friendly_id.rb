@@ -151,10 +151,12 @@ module Randomba
         end
 
         if result
-          result.finder_slug = result.slugs.find_by_name id_or_name
+          result.init_finder_slug result.slugs.find_by_name(id_or_name)
         else
-          find_one_without_friendly id_or_name, options
+          result = find_one_without_friendly id_or_name, options
         end
+
+        result
       end
       def find_some_with_friendly(ids_and_names, options)
         # search in slugs and own table
@@ -179,7 +181,7 @@ module Randomba
         all(:conditions => "#{ with_names } AND #{ with_sluggable_type }").
         each do |slug|
           result = results.find { |r| r.id == slug.sluggable_id } and
-          result.finder_slug = slug
+          result.init_finder_slug slug
         end
 
         results
@@ -265,13 +267,12 @@ module Randomba
         end
       end
 
-      protected
       # Sets the slug that was used to find the record. This can be used to
       # determine whether the record was found using the most recent friendly
       # id.
-      def finder_slug=(slug)
-        slug.sluggable = self
-        @finder_slug = slug
+      def init_finder_slug(slug)
+        raise RuntimeError, 'slug already introduced' if @finder_slug
+        (@finder_slug = slug).sluggable = self
       end
 
       private
