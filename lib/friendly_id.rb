@@ -143,56 +143,46 @@ module Randomba
       # argument other than an instance of String or Array, then it also
       # returns false. When given as an array will try to find any of the
       # records and return those that can be found.
-      def find_one_with_friendly(id, options)
-        if "#{ id }" =~ /^\d+$/
-          find_one_without_friendly id, options
+      def find_one_with_friendly(id_or_name, options)
+        conditions = Slug.with_name id_or_name
+
+        result = with_scope :find => {:joins => :slugs, :conditions => conditions} do
+          find_every(options).first
+        end
+
+        if result
+          result.finder_slug = result.slugs.find_by_name id_or_name
         else
-          sluggable_type = name
-          Slug.instance_eval do
-            conditions = " AND (#{ sanitize_sql options[:conditions] })" if options[:conditions]
-            options.update :conditions => "#{ quoted_table_name }.#{ connection.quote_column_name 'name' } = #{ quote_value id, columns_hash['name'] } AND #{ quoted_table_name }.#{ connection.quote_column_name 'sluggable_type' } = #{ quote_value sluggable_type, columns_hash['type'] }#{ conditions }"
-
-            options[:include] = include_sluggable options[:include]
-
-            slug = find_every(options).first and result = slug.sluggable or
-            raise ActiveRecord::RecordNotFound, "Couldn't find #{ name } with SLUG=#{ id }#{ conditions }"
-
-            result.finder_slug = slug
-            result
-          end
+          find_one_without_friendly id_or_name, options
         end
       end
-      def find_some_with_friendly(ids_and_slugs, options)
-        conditions  = " AND (#{ sanitize_sql options[:conditions] })" if options[:conditions]
-
-        ids, slugs  = [], []
-        ids_and_slugs.each { |x| ("#{ x }" =~ /^\d+$/ ? ids : slugs) << x }
-        column      = columns_hash[:sluggable_id]
-        ids         = ids.map { |id| quote_value id, column }.join ','
-        column      = columns_hash[:name]
-        slugs       = slugs.map { |slug| quote_value slug, column }.join ','
-
-        sluggable_type = name
-        Slug.instance_eval do
-          options[:conditions] = "(#{ quoted_table_name }.#{ connection.quote_column_name 'sluggable_id' } IN (#{ ids }) OR #{ quoted_table_name }.#{ connection.quote_column_name 'name' } IN (#{ slugs })) AND #{ quoted_table_name }.#{ connection.quote_column_name 'sluggable_type' } = #{ quote_value sluggable_type, columns_hash['type'] }#{ conditions }"
-          options[:include] = include_sluggable options[:include]
-
-          result = find_every(options).inject([]) do |m, s|
-            unless s.sluggable then m
-            else
-              s.sluggable.finder_slug = s
-              m << s.sluggable
-            end
-          end
-
-          expected_size = options[:offset] ? ids_and_slugs.size - options[:offset] : ids_and_slugs.size
-          expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
-
-          result.size == expected_size or
-          raise ActiveRecord::RecordNotFound, "Couldn't find all #{name.pluralize} with SLUG/IDs (#{ids_and_slugs * ', '})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
-
-          result
+      def find_some_with_friendly(ids_and_names, options)
+        # search in slugs and own table
+        id_column = columns_hash[primary_key]
+        ids = ids_and_names.map { |id| "#{ quote_value id, id_column }" }.join ','
+        conditions  = "#{ Slug.with_names ids_and_names } OR #{ quoted_table_name }.#{ primary_key } IN (#{ ids })"
+        results = with_scope :find => {:joins => :slugs, :conditions => conditions} do
+          find_every options
         end
+
+        # calculate expected size, taken from active_record/base.rb.
+        expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
+        expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
+
+        results.size == expected_size or
+        raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with SLUG/IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })"
+
+        # assign finder slugs
+        with_names          = Slug.with_names ids_and_names
+        with_sluggable_type = Slug.with_sluggable_type base_class.name
+        Slug.
+        all(:conditions => "#{ with_names } AND #{ with_sluggable_type }").
+        each do |slug|
+          result = results.find { |r| r.id == slug.sluggable_id } and
+          result.finder_slug = slug
+        end
+
+        results
       end
     end
 
@@ -279,8 +269,9 @@ module Randomba
       # Sets the slug that was used to find the record. This can be used to
       # determine whether the record was found using the most recent friendly
       # id.
-      def finder_slug=(val)
-        @finder_slug = val
+      def finder_slug=(slug)
+        slug.sluggable = self
+        @finder_slug = slug
       end
 
       private

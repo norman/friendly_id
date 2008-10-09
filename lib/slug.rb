@@ -5,6 +5,19 @@ class Slug < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :sluggable_type
 
   class << self
+    def with_sluggable_type(sluggable_type)
+      "#{ quoted_table_name }.sluggable_type = #{ quote_value sluggable_type, columns_hash['sluggable_type'] }"
+    end
+    def with_name(name)
+      "#{ quoted_table_name }.name = #{ quote_value name, columns_hash['name'] }"
+    end
+    def with_names(names)
+      name_column = columns_hash['name']
+      names = names.map { |n| "#{ quote_value n, name_column }" }.join ','
+
+      "#{ quoted_table_name }.name IN (#{ names })"
+    end
+
     # Count exact matches for a slug. Matches include slugs with the same name
     # and an appended numeric suffix, i.e., "an-example-slug" and
     # "an-example-slug-2"
@@ -48,17 +61,6 @@ class Slug < ActiveRecord::Base
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
-  end
-
-  def self.include_sluggable(includes, includable = :sluggable)
-    case includes
-    when nil;   includable
-    when Array; includes | includable
-    else
-      "#{ includes }" != "#{ includable }" ?
-      [ includes, includable ] :
-      includable
-    end
   end
 
 end
