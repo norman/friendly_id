@@ -6,7 +6,7 @@ class CreateSlugs < ActiveRecord::Migration
       t.integer :sluggable_id
       t.timestamps
     end
-    add_index :slugs, [:name, :sluggable_type], :unique
+    add_index :slugs, [:name, :sluggable_type], :unique => true
     add_index :slugs, :sluggable_id
   end
 
