@@ -60,9 +60,7 @@ module FriendlyId
     #   return record
     # end
     def find_one_with_friendly(id, options)
-      result = send "find_by_#{ friendly_id_options[:column] }", id, options
-
-      if result
+      if id.is_a?(String) and result = send("find_by_#{ friendly_id_options[:column] }", id, options)
         result.found_using_friendly_id = true
       else
         result = find_one_without_friendly id, options
