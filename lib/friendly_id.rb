@@ -8,8 +8,8 @@ module FriendlyId
   module ClassMethods
 
     # Default options for friendly_id.
-    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :strip_diacritics => false}.freeze
-    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :strip_diacritics].freeze
+    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :reserved => [], :strip_diacritics => false}.freeze
+    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :reserved, :strip_diacritics].freeze
 
     # Set up an ActiveRecord model to use a friendly_id.
     #
@@ -20,6 +20,7 @@ module FriendlyId
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters. You must have the unicode gem installed for this to work.
+    # * <tt>:reseved</tt> - Array of words that are reserved and can't be used as slugs. If such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to [].
     def has_friendly_id(column, options = {})
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
       options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
@@ -228,8 +229,8 @@ module FriendlyId
     # Generate the text for the friendly id, ensuring no duplication.
     def generate_friendly_id
       slug_text = truncated_friendly_id_base
-
       count = Slug.count_matches slug_text, self.class.name, :all, :conditions => "sluggable_id <> #{ id.to_i }"
+      count += 1 if self.class.friendly_id_options[:reserved].include?(slug_text)
       count == 0 ? slug_text : generate_friendly_id_with_extension(slug_text, count)
     end
 

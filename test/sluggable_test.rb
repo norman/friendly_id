@@ -175,4 +175,14 @@ class SluggableTest < Test::Unit::TestCase
     end
   end
 
+  def test_should_not_use_reserved_slugs
+    post = Post.create!(:name => 'new')
+    assert_not_equal 'new', post.friendly_id
+  end
+  
+  def test_should_append_extension_to_reseved_slugs
+    post = Post.create!(:name => 'new')
+    assert_equal 'new-2', post.friendly_id
+  end
+
 end
