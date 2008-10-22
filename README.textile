@@ -20,7 +20,7 @@ h2. Why?
 * They give no hint about the number of records in your database.
 * They are better for search engine optimization.
 
-However, text-based ids in URL's present some problems too:
+h3. But...
 
 * They can change, breaking your URL's.
 * They can have invalid URL characters, breaking your links in some browsers.
@@ -88,7 +88,7 @@ h2. Extra Features
 
 h3. Slug Versioning
 
-Friendly_id will record changes to slugs so that you can tell when the model
+FriendlyId will record changes to slugs so that you can tell when the model
 is found with an older slug. This can be useful if you want to do a 301
 redirect to your updated URL.
 
@@ -99,7 +99,7 @@ redirect to your updated URL.
 	
 h3. Unique Slug Names
 
-Friendly_id will append a number to the end of the id to keep it unique if
+FriendlyId will append a number to the end of the id to keep it unique if
 necessary:
 
   /posts/new-version-released
@@ -189,7 +189,7 @@ Please report them on "Lighthouse":http://randomba.lighthouseapp.com/projects/14
 
 h2. Credits:
 
-Friendly_id was created by "Norman Clarke":mailto:norman@randomba.org and 
+FriendlyId was created by "Norman Clarke":mailto:norman@randomba.org and 
 "Adrian Mugnolo":mailto:adrian@randomba.org.
 
 Copyright (c) 2008 Norman Clarke and Adrian Mugnolo, released under the MIT
