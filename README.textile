@@ -123,6 +123,35 @@ only for languages that use some variant of the Roman alphabet.
 
 You must install the "unicode" and "iconv" to use this feature.
 
+h3. This is all too complicated. Why not just override to_param to return the
+id followed by a dasherized string?
+
+This creates URL's like the following:
+
+  http://www.example.org/profiles/12-joe
+
+Which works great. But at times you may prefer not having the id in the URL.
+
+  http://www.example.org/profiles/joe
+  
+Note that if you are using the to_param trick for URL's, you should check to
+make sure your URL's are being accessed with the most up-to-date slug, because
+the following two URL's will point to the same content:
+
+  http://www.example.org/posts/12-i-love-friend-id
+  http://www.example.org/profiles/12-friendly-id-sucks
+
+In these cases it's convenient to have a before_filter in your controller
+that does something like this:
+
+  def ensure_current_url
+    if request.headers['REQUEST_URI'] != post_path(@post)
+      redirect_to @post, :status => :moved_permanently
+    end  
+  end
+
+
+
 h2. Getting it
 
 Git repository: git://github.com/norman/friendly_id.git
@@ -155,33 +184,6 @@ rake:friendly_id:remove_old_slugs
 The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
-
-h2. This is all too complicated. Why not just override to_param to return the
-id followed by a dasherized string?
-
-This create URL's like the following:
-
-  http://www.example.org/profiles/12-joe
-
-Which works great. But at times you may prefer not having the id in the URL.
-
-  http://www.example.org/profiles/joe
-  
-Note that if you are using the to_param trick for URL's, you should check to
-make sure your URL's are being accessed with the most up-to-date slug, because
-the following two URL's will point to the same content:
-
-  http://www.example.org/posts/12-i-love-friend-id
-  http://www.example.org/profiles/12-friendly-id-sucks
-
-In these cases it's convenient to have a before_filter in your controller
-that does something like this:
-
-  def ensure_current_url
-    if request.headers['REQUEST_URI'] != post_path(@post)
-      redirect_to @post, :status => :moved_permanently
-    end  
-  end
 
 h2. Bugs:
 
