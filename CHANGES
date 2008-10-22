@@ -1,10 +1,14 @@
+Oct 22 2008
+
+* Reverted use of UTF8Handler - was causing errors for some people (Bence Nagy)
+* Corrected find in case if a friendly_id begins with number (Bence Nagy)
+
 Oct 9 2008
 
 * Moved "require"" for iconv to init.rb (Florian Aßmann)
 * Removed "require" for Unicode, use Rails' handler instead (Florian Aßmann)
 * Replaced some magic numbers with constants (Florian Aßmann)
 * Don't overwrite find, alias_method_chain find_one and find_some instead (Florian Aßmann)
-* Include polymorphic assoc when find_some and use_slug=true (Florian Aßmann)
 * Slugs behave more like ids now (Florian Aßmann)
 * Can find by mixture of ids and slugs (Florian Aßmann)
 * Reformatted code and comments (Florian Aßmann)
