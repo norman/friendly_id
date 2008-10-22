@@ -2,6 +2,7 @@ Oct 22 2008
 
 * Reverted use of UTF8Handler - was causing errors for some people (Bence Nagy)
 * Corrected find in case if a friendly_id begins with number (Bence Nagy)
+* Added ability to reserve words from slugs (Adam Cigánek)
 
 Oct 9 2008
 
