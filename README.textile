@@ -1,0 +1,196 @@
+h1. FriendlyId
+
+FriendlyId is a plugin for Ruby on Rails which allows you to work with
+human-friendly strings as well as numeric ids for ActiveRecord models.
+
+There are a number of reasons you might want to use textual id's in your
+models. The main use we intend friendly_id for is in URL's, so your application
+can have URL's like:
+
+http://example.com/states/washington
+
+rather than
+
+http://example.com/states/4323454
+
+h2. Why?
+
+* Text-based id's look better
+* They make URL's easier to remember.
+* They give no hint about the number of records in your database.
+* They are better for search engine optimization.
+
+However, text-based ids in URL's present some problems too:
+
+* They can change, breaking your URL's.
+* They can have invalid URL characters, breaking your links in some browsers.
+* It can be tricky to ensure they're always unique.
+
+FriendlyId tries to offer you the all the advantages, and avoid or soften the
+potential impact of the disadvantages.
+
+h2. Typical Uses
+
+h3. User names ("non-slugged" models)
+
+Usually users have unique user names stored in a column with a unique
+constraint or index. In this case, all you need to do is add this to your
+model:
+
+  has_friendly_id :login
+
+and you can then write code like this:
+
+<pre>
+	@member = Member.find("joe")   # the old Member.find(1) still works, too.
+	@member.to_param               # returns "joe"
+	redirect_to @member            # The URL would be /members/joe
+</pre>
+
+h3. Blog posts ("slugged" models)
+
+Blog posts generally have title which are *usually* unique, but don't
+necessarily have to be.
+
+In this and similar cases, FriendlyId provides a Slug model separate from your
+Post model. The Slug model handles duplicate friendly_ids, as well as
+versioning.
+
+Your model code would look something like this:
+
+  has_friendly_id :title, :use_slug => true
+
+and you can then write code like this:
+
+<pre>
+	@post = Post.find("new-version-released")  # Post.find(1) still works, too
+	@post.to_param                             # returns "new-version-released"
+	redirect_to @post                          # The URL would be /posts/new-version-released
+</pre>
+
+Now in your controllers, if you want to prevent people from accessing your
+models by numeric id, you can detect whether they were found by the
+friendly_id:
+
+  @post.find(params[:id])
+  raise "some error" if !@post.found_using_friendly_id?
+
+or, you can 301 redirect if the model was found by the numeric id if you don't
+care about numeric access, but want the SEO value of the friendly_id:
+
+  @post.find(params[:id])
+  redirect_to @post, :status => 301 if @post.has_better_id?
+
+The "has_better_id?" method returns true if the model was found with the
+numeric id, or with an outdated slug.
+
+h2. Extra Features
+
+h3. Slug Versioning
+
+Friendly_id will record changes to slugs so that you can tell when the model
+is found with an older slug. This can be useful if you want to do a 301
+redirect to your updated URL.
+
+	def find_record_using_friendly_id
+	  @post = Post.find(params[:id])
+	  redirect_to @post, :status => :moved_permanently if @post.has_better_id?
+	end
+	
+h3. Unique Slug Names
+
+Friendly_id will append a number to the end of the id to keep it unique if
+necessary:
+
+  /posts/new-version-released
+  /posts/new-version-released-2
+  /posts/new-version-released-3
+  etc.
+
+h3. Text Normalization
+
+FriendlyId's slugging can strip diacritics from Western European characters,
+for example conveting "ñøîéçü" to "noiecu."
+
+  has_friendly_id :title, :use_slug => true, :strip_diacritics => true
+
+If you are not using slugs, you'll have to do this manually for whatever value
+you're using as the friendly_id.
+
+Note that this ovbiously won't work for Chinese, Arabic, Russian, Hebrew,
+Thai, etc. because it will pretty much blow away all the chracters... it's
+only for languages that use some variant of the Roman alphabet.
+
+You must install the "unicode" and "iconv" to use this feature.
+
+h2. Getting it
+
+Git repository: git://github.com/norman/friendly_id.git
+
+h2. Setting it up
+  
+  cd my_app
+  script/plugin install git://github.com/norman/friendly_id.git
+  script/generate friendly_id_migration
+  rake db:migrate
+  
+Now add some code to your models:
+
+<pre>
+  class Post < ActiveRecord::Base
+    has_friendly_id :title, :use_slug => true
+  end
+</pre>
+  
+If you are using slugs, you can use a Rake task to generate slugs for your existing
+records:
+
+friendly_id:make_slugs MODEL=MyModelName
+
+If you eventually want to expire old slugs every so often, or perhaps every
+day via cron, you can do:
+
+rake:friendly_id:remove_old_slugs
+
+The default is to remove dead slugs older than 45 days, but is configurable:
+
+rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+
+h2. This is all too complicated. Why not just override to_param to return the
+id followed by a dasherized string?
+
+This create URL's like the following:
+
+  http://www.example.org/profiles/12-joe
+
+Which works great. But at times you may prefer not having the id in the URL.
+
+  http://www.example.org/profiles/joe
+  
+Note that if you are using the to_param trick for URL's, you should check to
+make sure your URL's are being accessed with the most up-to-date slug, because
+the following two URL's will point to the same content:
+
+  http://www.example.org/posts/12-i-love-friend-id
+  http://www.example.org/profiles/12-friendly-id-sucks
+
+In these cases it's convenient to have a before_filter in your controller
+that does something like this:
+
+  def ensure_current_url
+    if request.headers['REQUEST_URI'] != post_path(@post)
+      redirect_to @post, :status => :moved_permanently
+    end  
+  end
+
+h2. Bugs:
+
+Please report them on "Lighthouse":http://randomba.lighthouseapp.com/projects/14675-friendly_id.
+
+h2. Credits:
+
+Friendly_id was created by "Norman Clarke":mailto:norman@randomba.org and 
+"Adrian Mugnolo":mailto:adrian@randomba.org.
+
+Copyright (c) 2008 Norman Clarke and Adrian Mugnolo, released under the MIT
+license.
