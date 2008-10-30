@@ -136,26 +136,23 @@ module FriendlyId
       end
     end
 
-    # Finds the record using only the friendly id. If it can't be found
-    # using the friendly id, then it returns false. If you pass in any
-    # argument other than an instance of String or Array, then it also
-    # returns false. When given as an array will try to find any of the
-    # records and return those that can be found.
+    # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
       conditions = Slug.with_name id_or_name
 
-      result = with_scope :find => {:joins => :slugs, :conditions => conditions} do
-        find_every(options).first
+      result = with_scope :find => {:select => "#{self.table_name}.*", :joins => :slugs, :conditions => conditions} do
+        find_initial(options)
       end
-
+      
       if result
-        result.init_finder_slug result.slugs.find_by_name(id_or_name)
+        result.finder_slug_name = id_or_name
       else
         result = find_one_without_friendly id_or_name, options
       end
-
       result
     end
+
+    # Finds multiple records using the friendly_ids, or the records' ids.
     def find_some_with_friendly(ids_and_names, options)
       slugs = Slug.find_all_by_names_and_sluggable_type ids_and_names, base_class.name
 
@@ -165,8 +162,8 @@ module FriendlyId
 
       # search in slugs and own table
       results = []
-      results += with_scope(:find => {:joins => :slugs, :conditions => Slug.with_names(names)}) { find_every options } unless names.empty?
-      results += with_scope(:find => {:conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
+      results += with_scope(:find => {:select => "#{self.table_name}.*", :joins => :slugs, :conditions => Slug.with_names(names)}) { find_every options } unless names.empty?
+      results += with_scope(:find => {:select => "#{self.table_name}.*", :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
 
       # calculate expected size, taken from active_record/base.rb
       expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
@@ -177,7 +174,7 @@ module FriendlyId
       # assign finder slugs
       slugs.each do |slug|
         result = results.find { |r| r.id == slug.sluggable_id } and
-        result.init_finder_slug slug
+        result.finder_slug_name = slug.name
       end
 
       results
@@ -186,11 +183,16 @@ module FriendlyId
 
   module SluggableInstanceMethods
 
-    attr :finder_slug
+    attr :finder_slug 
+    attr_accessor :finder_slug_name
 
+    def finder_slug
+      @finder_slug ||= init_finder_slug
+    end
+    
     # Was the record found using one of its friendly ids?
     def found_using_friendly_id?
-      !!@finder_slug
+      @finder_slug_name
     end
 
     # Was the record found using its numeric id?
@@ -200,7 +202,7 @@ module FriendlyId
 
     # Was the record found using an old friendly id?
     def found_using_outdated_friendly_id?
-      @finder_slug.id != slug.id
+      finder_slug.id != slug.id
     end
 
     # Was the record found using an old friendly id, or its numeric id?
@@ -210,7 +212,7 @@ module FriendlyId
 
     # Returns the friendly id.
     def friendly_id
-      slug.name
+      finder_slug_name or slug.name
     end
     alias best_id friendly_id
 
@@ -263,17 +265,17 @@ module FriendlyId
       end
     end
 
-    # Sets the slug that was used to find the record. This can be used to
-    # determine whether the record was found using the most recent friendly
-    # id.
-    def init_finder_slug(finder_slug)
-      raise RuntimeError, 'Slug already introduced' if @finder_slug
-      @finder_slug = finder_slug
-      @finder_slug.sluggable = self
+    private
+
+    NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
+
+    def init_finder_slug
+      raise RuntimeError, 'No slug name is set' if !@finder_slug_name
+      slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => @finder_slug_name})
+      slug.sluggable = self
+      return slug
     end
 
-    private
-    NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
     def truncated_friendly_id_base
       max_length = friendly_id_options[:max_length]
       slug_text = friendly_id_base[0, max_length - NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION]

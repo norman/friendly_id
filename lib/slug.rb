@@ -17,8 +17,7 @@ class Slug < ActiveRecord::Base
     def find_all_by_names_and_sluggable_type(names, type)
       names = with_names names
       type  = "#{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
-
-      all :conditions => "#{ names } AND #{ type }"
+      find :all, :conditions => "#{ names } AND #{ type }"
     end
 
     # Count exact matches for a slug. Matches include slugs with the same name
@@ -42,9 +41,17 @@ class Slug < ActiveRecord::Base
     #
     # Example:
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
+    #
+    # Note that Rails 2.2.x offers a parameterize method for stripping
+    # diacritics. This is not used here because at the time of writing, it
+    # handles several characters incorrectly, for instance replacing
+    # Icelandic's "thorn" character with "y" rather than "d." This might be
+    # pedantic, but I don't want to piss off the Vikings. The last time anyone
+    # pissed them off, they uleashed a wave of terror in Europe unlike
+    # anything ever seen before or after. I'm not taking any chances.
     def normalize(slug_text)
-      # As of Oct 9 2008, this is in Edge Rails (http://github.com/rails/rails/commit/90366a1521659d07a3b75936b3231adeb376f1a4)
-      return slug_text.parameterize if slug_text.respond_to?(:parameterize)
+      # Use this onces it starts working reliably
+      # return slug_text.parameterize.to_s if slug_text.respond_to?(:parameterize)
       s = slug_text.clone
       s.gsub!(/[\?`^~‘’'“”",.;:]/, '')
       s.gsub!(/&/, 'and')
@@ -64,6 +71,7 @@ class Slug < ActiveRecord::Base
 
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
+    debugger
     sluggable.slug == self
   end
 
