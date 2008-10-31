@@ -5,11 +5,13 @@ namespace :friendly_id do
     if !sluggable_class.friendly_id_options[:use_slug]
       raise "Class \"#{sluggable_class.to_s}\" doesn't appear to be using slugs"
     end
-    records = sluggable_class.find(:all, :include => :slugs, :conditions => "slugs.id IS NULL")
-    records.each do |r|
-      r.set_slug
-      r.save!
-      puts "#{sluggable_class.to_s}(#{r.id}) friendly_id set to \"#{r.slug.name}\""
+    while records = sluggable_class.find(:all, :include => :slugs, :conditions => "slugs.id IS NULL", :limit => 1000) do
+      break if records.size == 0
+      records.each do |r|
+        r.set_slug
+        r.save!
+        puts "#{sluggable_class.to_s}(#{r.id}) friendly_id set to \"#{r.slug.name}\""  
+      end
     end
   end
 
