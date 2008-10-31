@@ -49,12 +49,10 @@ and you can then write code like this:
 
 h3. Blog posts ("slugged" models)
 
-Blog posts generally have title which are *usually* unique, but don't
-necessarily have to be.
-
-In this and similar cases, FriendlyId provides a Slug model separate from your
-Post model. The Slug model handles duplicate friendly_ids, as well as
-versioning.
+Blog posts generally have titles which are distinctive but not necessarily
+unique. In this and similar cases, FriendlyId provides a Slug model separate
+from your Post model. The Slug model handles duplicate friendly_ids, as well
+as versioning.
 
 Your model code would look something like this:
 
@@ -119,9 +117,10 @@ you're using as the friendly_id.
 
 Note that this ovbiously won't work for Chinese, Arabic, Russian, Hebrew,
 Thai, etc. because it will pretty much blow away all the chracters... it's
-only for languages that use some variant of the Roman alphabet.
+only for languages that use some variant of the Roman alphabet, like English
+or Polish.
 
-You must install the "unicode" and "iconv" to use this feature.
+You must install the "unicode" and "iconv" gems to use this feature.
 
 h3. This is all too complicated. Why not just override to_param to return the
 id followed by a dasherized string?
@@ -150,18 +149,25 @@ that does something like this:
     end  
   end
 
-
-
 h2. Getting it
 
 Git repository: git://github.com/norman/friendly_id.git
 
 h2. Setting it up
+
+FriendlyId is supported with Rails 2.0.0 and higher.
+
+If you're using Rails 2.1 or higher, you can do the following:
   
   cd my_app
   script/plugin install git://github.com/norman/friendly_id.git
   script/generate friendly_id_migration
   rake db:migrate
+
+If you're using Rails 2.0.x, you should either download the tarball from
+Github, or use <code>git clone</code> to check out the repo in your
+vendor/plugins directory, because Rails 2.0 does not support installing
+plugins with git.
   
 Now add some code to your models:
 
