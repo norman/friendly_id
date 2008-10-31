@@ -172,6 +172,7 @@ module FriendlyId
       raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })" if results.size != expected_size
 
       # assign finder slugs
+      # FIXME set the actual slugs, not the name to "lazy load" later, because that's not lazy!
       slugs.each do |slug|
         result = results.find { |r| r.id == slug.sluggable_id } and
         result.finder_slug_name = slug.name
@@ -183,6 +184,8 @@ module FriendlyId
 
   module SluggableInstanceMethods
 
+    NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
+
     attr :finder_slug 
     attr_accessor :finder_slug_name
 
@@ -192,7 +195,7 @@ module FriendlyId
     
     # Was the record found using one of its friendly ids?
     def found_using_friendly_id?
-      @finder_slug_name
+      finder_slug
     end
 
     # Was the record found using its numeric id?
@@ -212,7 +215,7 @@ module FriendlyId
 
     # Returns the friendly id.
     def friendly_id
-      finder_slug_name or slug.name
+      slug(true).name
     end
     alias best_id friendly_id
 
@@ -230,10 +233,15 @@ module FriendlyId
 
     # Generate the text for the friendly id, ensuring no duplication.
     def generate_friendly_id
-      slug_text = truncated_friendly_id_base
-      count = Slug.count_matches slug_text, self.class.name, :all, :conditions => "sluggable_id <> #{ id.to_i }"
-      count += 1 if self.class.friendly_id_options[:reserved].include?(slug_text)
-      count == 0 ? slug_text : generate_friendly_id_with_extension(slug_text, count)
+      base = friendly_id_base
+      opts = self.class.friendly_id_options
+      if base.length > opts[:max_length]
+        base = base[0...opts[:max_length] - NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION]
+      end
+      if opts[:reserved].include?(base)
+        base = "#{base}-2"
+      end
+      Slug.get_best_name(base, self.class)
     end
 
     # Set the slug using the generated friendly id.
@@ -241,12 +249,13 @@ module FriendlyId
       if self.class.friendly_id_options[:use_slug]
         @most_recent_slug = nil
         slug_text = generate_friendly_id
-
+        # Avoids regenerating slug over and over again.
+        # FIXME This could perform pretty badly if a model has tons of similarly-named slugs
+        return if slug && slug.succ == slug_text
         if slugs.empty? || slugs.first.name != slug_text
-          previous_slug = slugs.find_by_name slug_text
+          previous_slug = slugs.find_by_name friendly_id_base
           previous_slug.destroy if previous_slug
-
-          slugs.build :name => slug_text
+          slugs.build :name => generate_friendly_id
         end
       end
     end
@@ -267,33 +276,13 @@ module FriendlyId
 
     private
 
-    NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
-
     def init_finder_slug
-      raise RuntimeError, 'No slug name is set' if !@finder_slug_name
+      return false if !@finder_slug_name
       slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => @finder_slug_name})
       slug.sluggable = self
       return slug
     end
 
-    def truncated_friendly_id_base
-      max_length = friendly_id_options[:max_length]
-      slug_text = friendly_id_base[0, max_length - NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION]
-    end
-
-    # Reserve a few spaces at the end of the slug for the counter extension.
-    # This is to avoid generating slugs longer than the maxlength when an
-    # extension is added.
-    POSSIBILITIES = 10 ** NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION - 1
-    def generate_friendly_id_with_extension(slug_text, count)
-      count <= POSSIBILITIES or
-      raise FriendlyId::SlugGenerationError.new("slug text #{slug_text} goes over limit for similarly named slugs")
-
-      slug_text = "#{ truncated_friendly_id_base }-#{ count + 1 }"
-
-      count = Slug.count_matches slug_text, self.class.name, :all, :conditions => "sluggable_id <> #{ id.to_i }"
-      count > 0 ? "#{ truncated_friendly_id_base }-#{ count + 1 }" : slug_text
-    end
   end
 
 end

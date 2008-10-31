@@ -5,50 +5,46 @@ class Slug < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :sluggable_type
 
   class << self
+    
     def with_name(name)
       "#{ quoted_table_name }.name = #{ quote_value name, columns_hash['name'] }"
     end
+    
     def with_names(names)
       name_column = columns_hash['name']
       names = names.map { |n| "#{ quote_value n, name_column }" }.join ','
 
       "#{ quoted_table_name }.name IN (#{ names })"
     end
+    
     def find_all_by_names_and_sluggable_type(names, type)
       names = with_names names
       type  = "#{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
       find :all, :conditions => "#{ names } AND #{ type }"
     end
 
-    # Count exact matches for a slug. Matches include slugs with the same name
-    # and an appended numeric suffix, i.e., "an-example-slug" and
-    # "an-example-slug-2"
-    #
-    # The first two arguments are required, after which you may pass in the
-    # same arguments as ActiveRecord::Base.find.
-    COND = 'name LIKE ? AND sluggable_type = ?'.freeze
-    def count_matches(name, type, *args)
-      name_esc = Regexp.escape name
-
-      with_scope(:find => {:conditions => [COND, "#{name}%", type]}) {
-        find(*args)
-      }.inject(0) do |count, slug|
-        slug.name =~ /\A#{name_esc}(-[\d]+)*\Z/ ? count + 1 : count
-      end
+    # Checks a slug name for collisions
+    def get_best_name(name, type)
+      slugs = find :all, :conditions => ['name LIKE ? AND sluggable_type = ?', "#{name}%", type.to_s]
+      return name if slugs.size == 0
+      slugs.map { |x| slugs.delete(x) unless x.base == name }
+      slugs.sort! { |x, y| x.extension <=> y.extension }
+      slugs.empty? ? name : slugs.last.succ
     end
 
     # Sanitizes and dasherizes string to make it safe for URL's.
     #
     # Example:
+    #
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     #
-    # Note that Rails 2.2.x offers a parameterize method for stripping
-    # diacritics. This is not used here because at the time of writing, it
-    # handles several characters incorrectly, for instance replacing
-    # Icelandic's "thorn" character with "y" rather than "d." This might be
-    # pedantic, but I don't want to piss off the Vikings. The last time anyone
-    # pissed them off, they uleashed a wave of terror in Europe unlike
-    # anything ever seen before or after. I'm not taking any chances.
+    # Note that Rails 2.2.x offers a parameterize method for this. It's not
+    # used here because at the time of writing, it handles several characters
+    # incorrectly, for instance replacing Icelandic's "thorn" character with
+    # "y" rather than "d." This might be pedantic, but I don't want to piss
+    # off the Vikings. The last time anyone pissed them off, they uleashed a
+    # wave of terror in Europe unlike anything ever seen before or after. I'm
+    # not taking any chances.
     def normalize(slug_text)
       # Use this onces it starts working reliably
       # return slug_text.parameterize.to_s if slug_text.respond_to?(:parameterize)
@@ -68,7 +64,19 @@ class Slug < ActiveRecord::Base
     end
 
   end
-
+  
+  def succ
+    extension == 0 ? "#{base}-2" : name.succ
+  end
+  
+  def base
+    name.gsub(/-?\d*\z/, '')
+  end
+  
+  def extension
+    /\d*\z/.match(name).to_s.to_i
+  end
+  
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     debugger

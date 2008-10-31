@@ -7,7 +7,7 @@ class SluggableTest < Test::Unit::TestCase
   def setup
     Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
-
+  
   def test_finder_options_are_not_ignored
     assert_raises ActiveRecord::RecordNotFound do
       Post.find(slugs(:one).name, :conditions => "1 = 2")
@@ -179,6 +179,27 @@ class SluggableTest < Test::Unit::TestCase
   def test_should_append_extension_to_reseved_slugs
     post = Post.create!(:name => 'new')
     assert_equal 'new-2', post.friendly_id
+  end
+  
+  def test_slug_sequence_is_based_on_highest_extension_rather_than_slug_count
+    assert_equal "test", Slug.get_best_name("test", Post)
+    @post = Post.create!(:name => "test", :content => "stuff")
+    assert_equal "test", @post.slug.name
+    
+    assert_equal "test-2", Slug.get_best_name("test", Post)
+    @post2 = Post.create!(:name => "test", :content => "stuff") # slug should be "test-2"
+    assert_equal "test-2", @post2.slug.name
+  
+    assert_equal "test-3", Slug.get_best_name("test", Post)
+    @post3 = Post.create!(:name => "test", :content => "stuff")
+    assert_equal "test-3", @post3.slug.name
+    
+    assert_equal "test-4", Slug.get_best_name("test", Post)
+    @post.destroy # will destroy slug named "test" along with it
+    # Make sure the next slug is still test-4 and not test-3
+    assert_equal "test-4", Slug.get_best_name("test", Post)    
+    @post4 = Post.create!(:name => "test", :content => "stuff")
+    assert_equal "test-4", @post4.slug.name
   end
 
 end
