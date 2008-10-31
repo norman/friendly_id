@@ -1,3 +1,11 @@
+Oct 31 2008
+
+* Fixed compatibility with Rails 2.0.x. (Norman Clarke)
+* friendly_id::make_slugs update records in chunks of 1000 to avoid running
+  out of memory with large datasets. (Tim Kadom)
+* Fixed logic error with slug name collisions. Thanks to Tim Kadom for reporting
+  this bug.
+
 Oct 22 2008
 
 * Reverted use of UTF8Handler - was causing errors for some people (Bence Nagy)
