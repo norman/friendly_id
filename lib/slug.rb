@@ -79,7 +79,6 @@ class Slug < ActiveRecord::Base
   
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
-    debugger
     sluggable.slug == self
   end
 
