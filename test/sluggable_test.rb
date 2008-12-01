@@ -202,4 +202,9 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal "test-4", @post4.slug.name
   end
 
+  def test_should_return_record_by_id
+    post = Post.create!(:name => "New post")
+    Post.create!(:name => "#{post.id.to_s} and some text")
+    assert_equal post, Post.find(post.id)
+  end
 end

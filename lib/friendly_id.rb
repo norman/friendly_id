@@ -138,6 +138,7 @@ module FriendlyId
 
     # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
+      return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
       conditions = Slug.with_name id_or_name
 
       result = with_scope :find => {:select => "#{self.table_name}.*", :joins => :slugs, :conditions => conditions} do
@@ -147,7 +148,7 @@ module FriendlyId
       if result
         result.finder_slug_name = id_or_name
       else
-        result = find_one_without_friendly id_or_name, options
+        result = find_one_without_friendly id_or_name, options        
       end
       result
     end
