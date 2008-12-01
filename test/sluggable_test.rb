@@ -207,4 +207,12 @@ class SluggableTest < Test::Unit::TestCase
     Post.create!(:name => "#{post.id.to_s} and some text")
     assert_equal post, Post.find(post.id)
   end
+  
+  def test_should_not_repeat_slug_names
+    Post.create!(:name => "test")
+    2.upto(10) do |i|
+      post = Post.create!(:name => "test")
+      assert_equal "test-#{i}", post.slug.name
+    end
+  end
 end

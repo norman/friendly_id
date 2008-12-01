@@ -5,18 +5,18 @@ class Slug < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :sluggable_type
 
   class << self
-    
+
     def with_name(name)
       "#{ quoted_table_name }.name = #{ quote_value name, columns_hash['name'] }"
     end
-    
+
     def with_names(names)
       name_column = columns_hash['name']
       names = names.map { |n| "#{ quote_value n, name_column }" }.join ','
 
       "#{ quoted_table_name }.name IN (#{ names })"
     end
-    
+
     def find_all_by_names_and_sluggable_type(names, type)
       names = with_names names
       type  = "#{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
@@ -25,9 +25,9 @@ class Slug < ActiveRecord::Base
 
     # Checks a slug name for collisions
     def get_best_name(name, type)
-      slugs = find :all, :conditions => ['name LIKE ? AND sluggable_type = ?', "#{name}%", type.to_s]
+      slugs = find :all, :conditions => ['name LIKE ? AND sluggable_type = ?', "#{name}%", type.to_s], :select => "name"
       return name if slugs.size == 0
-      slugs.map { |x| slugs.delete(x) unless x.base == name }
+      slugs.reject! { |x| x.base != name }
       slugs.sort! { |x, y| x.extension <=> y.extension }
       slugs.empty? ? name : slugs.last.succ
     end
@@ -64,22 +64,21 @@ class Slug < ActiveRecord::Base
     end
 
   end
-  
+
   def succ
-    extension == 0 ? "#{base}-2" : name.succ
+    "#{base}-#{extension == 0 ? 2 : extension.succ}"
   end
-  
+
   def base
     name.gsub(/-?\d*\z/, '')
   end
-  
+
   def extension
     /\d*\z/.match(name).to_s.to_i
   end
-  
+
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
   end
-
 end
