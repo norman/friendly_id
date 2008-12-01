@@ -1,6 +1,7 @@
 Dec 1 2009
 
-* Fixed bug that may return invalid records having similar id/names and using MySQL.
+* Fixed bug that may return invalid records having similar id/names and using MySQL. (Emilio Tagua)
+* Fixed slug generation to increment only numeric extension without modifying the name on duplicated slugs. (Emilio Tagua)
 
 Oct 31 2008
 
