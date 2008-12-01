@@ -1,3 +1,7 @@
+Dec 1 2009
+
+* Fixed bug that may return invalid records having similar id/names and using MySQL.
+
 Oct 31 2008
 
 * Fixed compatibility with Rails 2.0.x. (Norman Clarke)
