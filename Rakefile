@@ -17,6 +17,6 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'FriendlyId'
   rdoc.options << '--line-numbers' << '--inline-source' << '--charset=utf8'
-  rdoc.rdoc_files.include('README.textile')
+  rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
