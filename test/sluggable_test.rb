@@ -215,4 +215,10 @@ class SluggableTest < Test::Unit::TestCase
       assert_equal "test-#{i}", post.slug.name
     end
   end
+
+  def test_should_allow_eager_loading_slugs
+    assert_nothing_raised do
+      Post.find(slugs(:one).name, :include => :slugs)
+    end
+  end
 end
