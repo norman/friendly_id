@@ -220,5 +220,9 @@ class SluggableTest < Test::Unit::TestCase
     assert_nothing_raised do
       Post.find(slugs(:one).name, :include => :slugs)
     end
+    
+    assert_nothing_raised do
+      Post.find([slugs(:one).name, slugs(:two_new).name], :include => :slugs)
+    end
   end
 end

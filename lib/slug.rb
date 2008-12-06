@@ -11,16 +11,12 @@ class Slug < ActiveRecord::Base
     end
 
     def with_names(names)
-      name_column = columns_hash['name']
-      names = names.map { |n| "#{ quote_value n, name_column }" }.join ','
-
+      names = names.map { |n| "#{ quote_value n, columns_hash['name'] }" }.join ','
       "#{ quoted_table_name }.name IN (#{ names })"
     end
 
     def find_all_by_names_and_sluggable_type(names, type)
-      names = with_names names
-      type  = "#{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
-      find :all, :conditions => "#{ names } AND #{ type }"
+      find :all, :conditions => "#{ with_names(names) } AND #{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
     end
 
     # Checks a slug name for collisions

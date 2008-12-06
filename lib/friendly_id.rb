@@ -61,27 +61,25 @@ module FriendlyId
     #   return record
     # end
     def find_one_with_friendly(id, options)
-      if id.is_a?(String) and result = send("find_by_#{ friendly_id_options[:column] }", id, options)
+      if id.is_a?(String) && result = send("find_by_#{ friendly_id_options[:column] }", id, options)
         result.found_using_friendly_id = true
       else
         result = find_one_without_friendly id, options
       end
-
       result
     end
+
     def find_some_with_friendly(ids_and_names, options)
       results_by_name = with_scope :find => options do
         find :all, :conditions => ["#{ quoted_table_name }.#{ friendly_id_options[:column] } IN (?)", ids_and_names]
       end
 
-      names = results_by_name.map { |r| r[ friendly_id_options[:column] ] }
-      ids   = ids_and_names - names
+      ids     = ids_and_names - results_by_name.map { |r| r[ friendly_id_options[:column] ] }
+      results = results_by_name
 
-      results_by_id = with_scope :find => options do
+      results += with_scope :find => options do
         find :all, :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]
       end unless ids.empty?
-
-      results = results_by_name + ( results_by_id || [] )
 
       expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
       expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
@@ -91,7 +89,6 @@ module FriendlyId
       results_by_name.each { |r| r.found_using_friendly_id = true }
       results
     end
-
   end
 
   module NonSluggableInstanceMethods
@@ -139,13 +136,11 @@ module FriendlyId
     # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
       return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
-      conditions = Slug.with_name id_or_name
+      conditions = Slug.with_name(id_or_name)
 
-      scope_options = {:select => "#{self.table_name}.*",
-                      :conditions => conditions,
-                      :include => options[:include]}
+      scope_options = {:select => "#{self.table_name}.*", :conditions => conditions}
 
-      scope_options.merge!(:joins => :slugs) unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
 
       result = with_scope :find => scope_options do
         find_initial(options)
@@ -169,7 +164,12 @@ module FriendlyId
 
       # search in slugs and own table
       results = []
-      results += with_scope(:find => {:select => "#{self.table_name}.*", :joins => :slugs, :conditions => Slug.with_names(names)}) { find_every options } unless names.empty?
+
+      scope_options = {:select => "#{self.table_name}.*", :conditions => Slug.with_names(names)}
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+
+      results += with_scope(:find => scope_options) { find_every options } unless names.empty?
+
       results += with_scope(:find => {:select => "#{self.table_name}.*", :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
 
       # calculate expected size, taken from active_record/base.rb
@@ -181,8 +181,9 @@ module FriendlyId
       # assign finder slugs
       # FIXME set the actual slugs, not the name to "lazy load" later, because that's not lazy!
       slugs.each do |slug|
-        result = results.find { |r| r.id == slug.sluggable_id } and
-        result.finder_slug_name = slug.name
+        results.select { |r| r.id == slug.sluggable_id }.each do |result|
+          result.finder_slug_name = slug.name
+        end
       end
 
       results
@@ -287,7 +288,7 @@ module FriendlyId
       return false if !@finder_slug_name
       slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => @finder_slug_name})
       slug.sluggable = self
-      return slug
+      slug
     end
 
   end
