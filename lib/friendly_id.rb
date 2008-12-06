@@ -141,11 +141,9 @@ module FriendlyId
       return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
       conditions = Slug.with_name id_or_name
 
-      scope_options = {:select => "#{self.table_name}.*",
-                      :conditions => conditions,
-                      :include => options[:include]}
+      scope_options = {:select => "#{self.table_name}.*", :conditions => conditions}
 
-      scope_options.merge!(:joins => :slugs) unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
 
       result = with_scope :find => scope_options do
         find_initial(options)
