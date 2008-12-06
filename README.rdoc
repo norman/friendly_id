@@ -193,7 +193,7 @@ Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/1467
 == Credits:
 
 FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org] and
-{Adrian Mugnolo}[mailto:adrian@randomba.org].
+{Adrian Mugnolo}[mailto:adrian@randomba.org], and Emilio Tagua.
 
-Copyright (c) 2008 Norman Clarke and Adrian Mugnolo, released under the MIT
-license.
+Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
+under the MIT license.
