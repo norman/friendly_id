@@ -167,7 +167,12 @@ module FriendlyId
 
       # search in slugs and own table
       results = []
-      results += with_scope(:find => {:select => "#{self.table_name}.*", :joins => :slugs, :conditions => Slug.with_names(names)}) { find_every options } unless names.empty?
+
+      scope_options = {:select => "#{self.table_name}.*", :conditions => Slug.with_names(names)}
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+
+      results += with_scope(:find => scope_options) { find_every options } unless names.empty?
+
       results += with_scope(:find => {:select => "#{self.table_name}.*", :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
 
       # calculate expected size, taken from active_record/base.rb
