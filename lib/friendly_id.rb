@@ -140,16 +140,16 @@ module FriendlyId
 
       scope_options = {:select => "#{self.table_name}.*", :conditions => conditions}
 
-      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
       result = with_scope :find => scope_options do
         find_initial(options)
       end
-      
+
       if result
         result.finder_slug_name = id_or_name
       else
-        result = find_one_without_friendly id_or_name, options        
+        result = find_one_without_friendly id_or_name, options
       end
       result
     end
@@ -166,7 +166,7 @@ module FriendlyId
       results = []
 
       scope_options = {:select => "#{self.table_name}.*", :conditions => Slug.with_names(names)}
-      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs) 
+      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
       results += with_scope(:find => scope_options) { find_every options } unless names.empty?
 
@@ -194,13 +194,13 @@ module FriendlyId
 
     NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
 
-    attr :finder_slug 
+    attr :finder_slug
     attr_accessor :finder_slug_name
 
     def finder_slug
       @finder_slug ||= init_finder_slug
     end
-    
+
     # Was the record found using one of its friendly ids?
     def found_using_friendly_id?
       finder_slug
@@ -236,7 +236,7 @@ module FriendlyId
 
     # Returns the friendly id, or if none is available, the numeric id.
     def to_param
-      slug ? slug.name : id
+      (slug && !slug.name.blank?) ? slug.name : id
     end
 
     # Generate the text for the friendly id, ensuring no duplication.
@@ -263,7 +263,9 @@ module FriendlyId
         if slugs.empty? || slugs.first.name != slug_text
           previous_slug = slugs.find_by_name friendly_id_base
           previous_slug.destroy if previous_slug
-          slugs.build :name => generate_friendly_id
+          name = generate_friendly_id
+          # If all name characters are removed, don't create a useless slug
+          slugs.build :name => name unless name.blank?
         end
       end
     end
