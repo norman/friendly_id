@@ -10,14 +10,18 @@ class UniqueColumnTest < Test::Unit::TestCase
   def test_should_find_user_using_friendly_id
     assert User.find(users(:joe).friendly_id)
   end
-  
+
+  def test_to_param_should_return_a_string
+    assert_equal String, users(:joe).to_param.class
+  end
+
   def test_should_find_users_using_friendly_ids
     assert_equal 2, User.find([users(:joe).friendly_id, users(:jane).friendly_id]).length
   end
   
   def test_should_not_find_users_using_non_existent_friendly_ids
     assert_raises ActiveRecord::RecordNotFound do
-      User.find(['non-existe nt-slug', 'yet-another-non-existent-slug'])
+      User.find(['non-existent-slug', 'yet-another-non-existent-slug'])
     end
   end
   

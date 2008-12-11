@@ -14,6 +14,14 @@ class SluggableTest < Test::Unit::TestCase
     end
   end
   
+  def test_to_param_for_unslugged_objects_should_return_a_string
+    assert_equal String, posts(:without_slug).to_param.class
+  end
+  
+  def test_to_param_for_slugged_objects_should_return_a_string
+    assert_equal String, posts(:with_one_slug).to_param.class
+  end
+
   def test_post_should_generate_friendly_id
    @post = Post.new(:name => "Test post", :content => "Test content")
    assert_equal "test-post", @post.generate_friendly_id
