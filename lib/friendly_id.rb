@@ -115,7 +115,7 @@ module FriendlyId
 
     # Returns the friendly id, or if none is available, the numeric id.
     def to_param
-      friendly_id || id
+      friendly_id.to_s || id.to_s
     end
 
     def found_using_friendly_id=(value)
@@ -236,7 +236,7 @@ module FriendlyId
 
     # Returns the friendly id, or if none is available, the numeric id.
     def to_param
-      slug ? slug.name : id
+      slug ? slug.name : id.to_s
     end
 
     # Generate the text for the friendly id, ensuring no duplication.
