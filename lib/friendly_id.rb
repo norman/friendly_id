@@ -1,6 +1,13 @@
 # FriendlyId is a Rails plugin which lets you use text-based ids in addition
 # to numeric ones.
 module FriendlyId
+  
+  # Load the view helpers if the gem is included in a Rails app.
+  def self.enable
+    return if ActiveRecord::Base.methods.include? 'has_friendly_id'
+    ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
+  end
+
 
   # This error is raised when it's not possible to generate a unique slug.
   SlugGenerationError = Class.new StandardError
@@ -19,7 +26,7 @@ module FriendlyId
     # Options:
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
-    # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters. You must have the unicode gem installed for this to work.
+    # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
     # * <tt>:reseved</tt> - Array of words that are reserved and can't be used as slugs. If such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to [].
     def has_friendly_id(column, options = {})
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
@@ -304,4 +311,8 @@ module FriendlyId
 
   end
 
+end
+
+if defined?(ActiveRecord)
+  FriendlyId::enable
 end

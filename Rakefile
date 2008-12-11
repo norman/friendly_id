@@ -1,22 +1,18 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rubygems'
+require 'active_support'
+require 'hoe'
+require File.join(File.dirname(__FILE__), 'lib', 'friendly_id', 'version')
 
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the friendly_id plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
-
-desc 'Generate documentation for the friendly_id plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'FriendlyId'
-  rdoc.options << '--line-numbers' << '--inline-source' << '--charset=utf8'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
+  p.rubyforge_name = "friendly-id"
+  p.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
+  p.email = ['norman@randomba.org', 'adrian@randomba.org', 'miloops@gmail.com']
+  p.summary = "A comprehensive slugging and pretty-URL plugin for Ruby on Rails."
+  p.description = 'A comprehensive slugging and pretty-URL plugin for Ruby on Rails.'
+  p.url = 'http://randomba.org'
+  p.need_tar = true
+  p.need_zip = true
+  p.test_globs = ['test/**/*_test.rb']
+  p.extra_deps << ['unicode', '>= 0.1']
+  p.rdoc_pattern = '*.rdoc'
 end
