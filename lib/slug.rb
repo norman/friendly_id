@@ -45,8 +45,7 @@ class Slug < ActiveRecord::Base
       # Use this onces it starts working reliably
       # return slug_text.parameterize.to_s if slug_text.respond_to?(:parameterize)
       s = slug_text.clone
-      s.gsub!(/[\?`^~‘’'“”",.;:]/, '')
-      s.gsub!(/&/, 'and')
+      s.gsub!(/[\?`^~‘’'“”",.;:&]/, '')
       s.gsub!(/\W+/, ' ')
       s.strip!
       s.downcase!
