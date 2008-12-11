@@ -9,4 +9,11 @@ with_one_slug:
 with_two_slugs:
   name: With two slugs
   content: Content with two slugs
-  
+
+common_title:
+  name: Common Title
+  content: A post with a very common title
+
+common_title2:
+  name: Common Title
+  content: A second post with a very common title

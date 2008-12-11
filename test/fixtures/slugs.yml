@@ -2,14 +2,24 @@ one:
   name: with-one-slug
   sluggable: with_one_slug
   sluggable_type: Post
+  sequence: 1
 
+two_old:
+  name: with-two-slugs
+  sluggable: with_two_slugs (Post)
+  sequence: 1
+  
 two_new:
   name: with-two-slugs-new
-  sluggable: with_two_slugs
-  sluggable_type: Post
-  
-two_old:
-  name: with-two-slugs-old
-  sluggable: with_two_slugs
-  sluggable_type: Post
-  created_at: <%= DateTime.now - 1.day %>
+  sluggable: with_two_slugs (Post)
+  sequence: 1
+
+common_title:
+  name: common-title
+  sluggable: common_title (Post)
+  sequence: 1
+
+common_title2:
+  name: common-title
+  sluggable: common_title2 (Post)
+  sequence: 2

@@ -127,23 +127,28 @@ module FriendlyId
   module SluggableClassMethods
 
     def self.extended(base)
+
       class << base
         alias_method_chain :find_one, :friendly
         alias_method_chain :find_some, :friendly
       end
+
+      base.named_scope :with_slug_name, lambda {|slug_names| {
+        :conditions => {"#{Slug.table_name}.name" => slug_names.to_a}
+      }}
+
     end
 
     # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
+      
       return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
-      conditions = Slug.with_name(id_or_name)
+      
+      find_options = {:select => "#{self.table_name}.*"}
+      find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
-      scope_options = {:select => "#{self.table_name}.*", :conditions => conditions}
-
-      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
-
-      result = with_scope :find => scope_options do
-        find_initial(options)
+      result = with_scope :find => find_options do
+        with_slug_name(id_or_name).find_initial(options)
       end
 
       if result
@@ -151,7 +156,9 @@ module FriendlyId
       else
         result = find_one_without_friendly id_or_name, options
       end
+
       result
+
     end
 
     # Finds multiple records using the friendly_ids, or the records' ids.
@@ -165,10 +172,10 @@ module FriendlyId
       # search in slugs and own table
       results = []
 
-      scope_options = {:select => "#{self.table_name}.*", :conditions => Slug.with_names(names)}
-      scope_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
+      find_options = {:select => "#{self.table_name}.*"}
+      find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
-      results += with_scope(:find => scope_options) { find_every options } unless names.empty?
+      results += with_scope(:find => find_options) { with_slug_name(ids_and_names).find_every options } unless names.empty?
 
       results += with_scope(:find => {:select => "#{self.table_name}.*", :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
 
@@ -176,7 +183,9 @@ module FriendlyId
       expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
       expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
 
-      raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })" if results.size != expected_size
+      if results.size != expected_size
+        raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })"
+      end
 
       # assign finder slugs
       # FIXME set the actual slugs, not the name to "lazy load" later, because that's not lazy!

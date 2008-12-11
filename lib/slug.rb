@@ -6,17 +6,8 @@ class Slug < ActiveRecord::Base
 
   class << self
 
-    def with_name(name)
-      "#{ quoted_table_name }.name = #{ quote_value name, columns_hash['name'] }"
-    end
-
-    def with_names(names)
-      names = names.map { |n| "#{ quote_value n, columns_hash['name'] }" }.join ','
-      "#{ quoted_table_name }.name IN (#{ names })"
-    end
-
     def find_all_by_names_and_sluggable_type(names, type)
-      find :all, :conditions => "#{ with_names(names) } AND #{ quoted_table_name }.sluggable_type = #{ quote_value type, columns_hash['sluggable_type'] }"
+      find :all, :conditions => {:name => names.to_a, :sluggable_type => type.to_s}
     end
 
     # Checks a slug name for collisions
