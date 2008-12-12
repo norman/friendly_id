@@ -1,7 +1,8 @@
 = FriendlyId
 
-FriendlyId is a plugin for Ruby on Rails which allows you to work with
-human-friendly strings as well as numeric ids for ActiveRecord models.
+FriendlyId is a comprehensive slugging and permalink plugin for Ruby on Rails.
+It allows you to work with human-friendly strings as well as numeric ids for
+ActiveRecord models.
 
 There are a number of reasons you might want to use textual id's in your
 models. The main use we intend friendly_id for is in URL's, so your application

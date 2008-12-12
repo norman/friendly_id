@@ -1,0 +1,71 @@
+== 2008-12-01
+
+* Fixed bug that may return invalid records having similar id/names and using MySQL. (Emilio Tagua)
+* Fixed slug generation to increment only numeric extension without modifying the name on duplicated slugs. (Emilio Tagua)
+
+== 2008-10-31
+
+* Fixed compatibility with Rails 2.0.x. (Norman Clarke)
+* friendly_id::make_slugs update records in chunks of 1000 to avoid running out of memory with large datasets. (Tim Kadom)
+* Fixed logic error with slug name collisions. Thanks to Tim Kadom for reporting this bug.
+
+== 2008-10-22
+
+* Reverted use of UTF8Handler - was causing errors for some people (Bence Nagy)
+* Corrected find in case if a friendly_id begins with number (Bence Nagy)
+* Added ability to reserve words from slugs (Adam Cigánek)
+
+== 2008-10-09
+
+* Moved "require"" for iconv to init.rb (Florian Aßmann)
+* Removed "require" for Unicode, use Rails' handler instead (Florian Aßmann)
+* Replaced some magic numbers with constants (Florian Aßmann)
+* Don't overwrite find, alias_method_chain find_one and find_some instead (Florian Aßmann)
+* Slugs behave more like ids now (Florian Aßmann)
+* Can find by mixture of ids and slugs (Florian Aßmann)
+* Reformatted code and comments (Florian Aßmann)
+* Added support for Edge Rails' Inflector::parameterize (Norman Clarke)
+
+== 2008-08-25
+
+* Moved strip_diacritics into Slug for easier reuse/better organization.
+* Put class methods inside class << self block. (Norman Clarke)
+
+* Small change to allow friendly_id to work better with STI. (David Ramalho)
+
+== 2008-07-14
+
+* Improved slug generation for friendly id's with apostrophes. (alistairholt)
+* Added support for namespaced models in Rakefile. (David Ramalho)
+
+== 2008-06-23
+
+* Cached most recent slug to improve performance (Emilio Tagua).
+
+== 2008-06-10
+
+* Added ability to find friendly_ids by array (Emilio Tagua)
+
+== 2008-05-15
+
+* Made friendly_id raise an error if slug method returns a blank value.
+
+== 2008-05-12
+
+* Added experimental Github gemspec.
+
+== 2008-04-18
+
+* Improved slug name collision avoidance.
+
+== 2008-03-13
+
+* Added :dependent => :destroy to slug relation, as suggested by Emilio Tagua.
+* Fixed error when renaming a slugged item back to a previously used name.
+* Incorporated documentation changes suggested by Jesse Crouch and Chris Nolan.
+
+== 2008-02-07
+
+* Applied patches from blog commenter "suntzu" to fix problem with model values were being overwritten.
+* Applied patch from Dan Blue to make friendly_id no longer ignore options on ActiveRecordBase#find.
+* Added call to options.assert_valid_keys in has_friendly_id. Thanks to W. Andrew Loe III for pointing out that this was missing.

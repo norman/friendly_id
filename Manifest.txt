@@ -1,11 +1,10 @@
-CHANGES
+History.txt
 MIT-LICENSE
 Manifest.txt
 README.rdoc
 Rakefile
 generators/friendly_id_migration/friendly_id_migration_generator.rb
 generators/friendly_id_migration/templates/create_slugs.rb
-install.rb
 lib/friendly_id.rb
 lib/friendly_id/version.rb
 lib/slug.rb

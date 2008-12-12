@@ -1,15 +1,18 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
+$VERBOSE = false
 
 ENV['RAILS_ENV'] = 'test'
 require File.dirname(__FILE__) + '/rails/2.x/config/environment.rb'
+ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
 
 require 'test/unit'
 require 'active_record/fixtures'
 require 'action_controller/test_process'
 require 'sqlite3'
 
+
+
 config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
-ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
 ActiveRecord::Base.establish_connection
 
 silence_stream(STDOUT) do
