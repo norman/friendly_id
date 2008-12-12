@@ -143,6 +143,9 @@ module FriendlyId
       base.named_scope :with_slug_name, lambda {|slug_names| {
         :conditions => {"#{Slug.table_name}.name" => slug_names.to_a}
       }}
+      base.named_scope :with_slug_scope, lambda {|slug_scope| {
+        :conditions => {"#{Slug.table_name}.scope" => slug_scope}
+      }}
 
     end
 
@@ -150,12 +153,13 @@ module FriendlyId
     def find_one_with_friendly(id_or_name, options)
       
       return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
-      
       find_options = {:select => "#{self.table_name}.*"}
       find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
+      scope = options.delete(:scope)
+
       result = with_scope :find => find_options do
-        with_slug_name(id_or_name).find_initial(options)
+        with_slug_name(id_or_name).with_slug_scope(scope).find_initial(options)
       end
 
       if result
@@ -172,19 +176,30 @@ module FriendlyId
     def find_some_with_friendly(ids_and_names, options)
       slugs = Slug.find_all_by_names_and_sluggable_type ids_and_names, base_class.name
 
-      # seperate ids and slug names
+      # separate ids and slug names
       names = slugs.map { |s| s[:name] }
       ids   = ids_and_names - names
 
       # search in slugs and own table
       results = []
 
+      scope = options.delete(:scope)
+
       find_options = {:select => "#{self.table_name}.*"}
       find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
-      results += with_scope(:find => find_options) { with_slug_name(ids_and_names).find_every options } unless names.empty?
+      unless names.empty?
+        results += with_scope(:find => find_options) do
+          with_slug_name(ids_and_names).with_slug_scope(scope).find_every options
+        end
+      end
 
-      results += with_scope(:find => {:select => "#{self.table_name}.*", :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]}) { find_every options } unless ids.empty?
+      unless ids.empty?
+        find_options[:conditions] = {"#{table_name}.#{primary_key}" => ids}
+        results += with_scope(:find => find_options) do
+           find_every options
+        end
+      end
 
       # calculate expected size, taken from active_record/base.rb
       expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
@@ -195,10 +210,9 @@ module FriendlyId
       end
 
       # assign finder slugs
-      # FIXME set the actual slugs, not the name to "lazy load" later, because that's not lazy!
       slugs.each do |slug|
         results.select { |r| r.id == slug.sluggable_id }.each do |result|
-          result.finder_slug_name = slug.name
+          result.send(:finder_slug=, slug)
         end
       end
 
@@ -301,12 +315,18 @@ module FriendlyId
     end
 
     private
+    
+    def finder_slug=(finder_slug)
+      @finder_slug_name = finder_slug.name
+      slug = finder_slug
+      slug.sluggable = self
+      slug
+    end
 
     def init_finder_slug
       return false if !@finder_slug_name
       slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => @finder_slug_name})
-      slug.sluggable = self
-      slug
+      finder_slug = slug
     end
 
   end
