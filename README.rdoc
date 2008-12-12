@@ -1,12 +1,11 @@
 = FriendlyId
 
 FriendlyId is a comprehensive slugging and permalink plugin for Ruby on Rails.
-It allows you to work with human-friendly strings as well as numeric ids for
-ActiveRecord models.
+It allows you to create pretty URL's, and work with human-friendly strings as
+if they were numeric ids for ActiveRecord models.
 
-There are a number of reasons you might want to use textual id's in your
-models. The main use we intend friendly_id for is in URL's, so your application
-can have URL's like:
+The main use we intend friendly_id for is in URL's, so your application can
+have URL's like:
 
   http://example.com/states/washington
 
@@ -119,62 +118,43 @@ Thai, etc. because it will pretty much blow away all the chracters... it's
 only for languages that use some variant of the Roman alphabet, like English
 or Polish.
 
-You must install the "unicode" and "iconv" gems to use this feature.
-
-=== This is all too complicated. Why not just override to_param to return the id followed by a dasherized string?
-
-This creates URL's like the following:
-
-  http://www.example.org/profiles/12-joe
-
-Which works great. But at times you may prefer not having the id in the URL.
-
-  http://www.example.org/profiles/joe
-  
-Note that if you are using the to_param trick for URL's, you should check to
-make sure your URL's are being accessed with the most up-to-date slug, because
-the following two URL's will point to the same content:
-
-  http://www.example.org/posts/12-i-love-friend-id
-  http://www.example.org/profiles/12-friendly-id-sucks
-
-In these cases it's convenient to have a before_filter in your controller
-that does something like this:
-
-  def ensure_current_url
-    if request.headers['REQUEST_URI'] != post_path(@post)
-      redirect_to @post, :status => :moved_permanently
-    end  
-  end
-
 == Getting it
 
-Git repository: git://github.com/norman/friendly_id.git
+FriendlyId is installed as a Ruby Gem:
+
+  gem install friendly-id
+
+Alternatively, you can install it as a Rails plugin, though this is
+discouraged:
+
+./script/plugin install git://github.com/norman/friendly_id.git
 
 == Setting it up
 
-FriendlyId is supported with Rails 2.0.0 and higher.
+FriendlyId currently works with Rails 2.1.0 and higher. Older versions of
+FriendlyId that work with Rails 1.2.x and Rails 2.0.x are available as tags on
+Github.
 
-If you're using Rails 2.1 or higher, you can do the following:
+Here's how to set it up:
   
+  sudo gem install friendly-id
   cd my_app
-  script/plugin install git://github.com/norman/friendly_id.git
-  script/generate friendly_id_migration
+  script/generate friendly_id
   rake db:migrate
-
-If you're using Rails 2.0.x, you should either download the tarball from
-Github, or use <code>git clone</code> to check out the repo in your
-vendor/plugins directory, because Rails 2.0 does not support installing
-plugins with git.
   
+Now add the following 2 lines to bottom of your Rakefile:
+
+  require 'friendly_id'
+  require 'tasks/friendly_id'
+
 Now add some code to your models:
 
   class Post < ActiveRecord::Base
     has_friendly_id :title, :use_slug => true
   end
   
-If you are using slugs, you can use a Rake task to generate slugs for your existing
-records:
+If you are using slugs, you can use a Rake task to generate slugs for your
+existing records:
 
 friendly_id:make_slugs MODEL=MyModelName
 
@@ -187,14 +167,19 @@ The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
+== Hacking FriendlyId:
+
+FriendlyId is {hosted on Github}[git://github.com/norman/friendly_id.git], and
+we love pull requests. :-)
+
 == Bugs:
 
 Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/14675-friendly_id].
 
 == Credits:
 
-FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org] and
-{Adrian Mugnolo}[mailto:adrian@randomba.org], and Emilio Tagua.
+FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org],
+{Adrian Mugnolo}[mailto:adrian@randomba.org], and {Emilio Tagua}[mailto:miloops@gmail.com].
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
 under the MIT license.
