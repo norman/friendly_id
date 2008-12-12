@@ -1,4 +1,4 @@
-module NonSluggableClassMethods
+module FriendlyId::NonSluggableClassMethods
 
   def self.extended(base)
     class << base

@@ -3,24 +3,12 @@ class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
   validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
+  before_create :set_sequence
 
   class << self
 
     def find_all_by_names_and_sluggable_type(names, type)
       find :all, :conditions => {:name => names.to_a, :sluggable_type => type.to_s}
-    end
-    
-    def parse(slug_text)
-      slug_text.split(/--/)
-    end
-
-    # Checks a slug name for collisions
-    def get_best_name(name, type)
-      slugs = find :all, :conditions => ['name LIKE ? AND sluggable_type = ?', "#{name}%", type.to_s], :select => "name"
-      return name if slugs.size == 0
-      slugs.reject! { |x| x.base != name }
-      slugs.sort! { |x, y| x.extension <=> y.extension }
-      slugs.empty? ? name : slugs.last.succ
     end
 
     # Sanitizes and dasherizes string to make it safe for URL's.
@@ -37,13 +25,16 @@ class Slug < ActiveRecord::Base
     # wave of terror in Europe unlike anything ever seen before or after. I'm
     # not taking any chances.
     def normalize(slug_text)
+      raise FriendlyId::SlugGenerationError.new("The slug text is blank.") if slug_text.blank?
       s = slug_text.clone
       s.gsub!(/[\?`^~‘’'“”",.;:&]/, '')
       s.gsub!(/\W+/, ' ')
       s.strip!
       s.downcase!
       s.gsub!(/\s+/, '-')
-      s.gsub(/-\z/, '')
+      s.gsub!(/-\z/, '')
+      raise FriendlyId::SlugGenerationError.new("The normalized slug text is blank.") if s.blank?
+      return s
     end
 
     # Remove diacritics from the string, converting Western European strings
@@ -59,20 +50,18 @@ class Slug < ActiveRecord::Base
 
   end
 
-  def succ
-    "#{base}-#{extension == 0 ? 2 : extension.succ}"
-  end
-
-  def base
-    name.gsub(/-?\d*\z/, '')
-  end
-
-  def extension
-    /\d*\z/.match(name).to_s.to_i
-  end
-
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
   end
+
+  private
+
+  def set_sequence
+    last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
+      :sluggable_type => sluggable_type}, :order => "sequence DESC")
+    self.sequence = last.sequence + 1 if last
+  end
+
+
 end

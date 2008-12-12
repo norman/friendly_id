@@ -6,8 +6,7 @@ module FriendlyId
     return if ActiveRecord::Base.methods.include? 'has_friendly_id'
     ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
   end
-
-
+  
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
 

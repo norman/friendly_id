@@ -1,4 +1,4 @@
-module SluggableClassMethods
+module FriendlyId::SluggableClassMethods
 
   def self.extended(base)
 

@@ -1,4 +1,4 @@
-module SluggableInstanceMethods
+module FriendlyId::SluggableInstanceMethods
 
   NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
 
@@ -34,6 +34,12 @@ module SluggableInstanceMethods
     slug(true).name
   end
   alias best_id friendly_id
+  
+  # Has the basis of our friendly_id changed, requiring the generation of a
+  # new slug?
+  def need_new_slug?
+    !slug || slug_text != slug.name
+  end
 
   # Returns the most recent slug, which is used to determine the friendly
   # id.
@@ -47,57 +53,47 @@ module SluggableInstanceMethods
     (slug && !slug.name.blank?) ? slug.name : id.to_s
   end
 
-  # Generate the text for the friendly id, ensuring no duplication.
-  def generate_friendly_id
-    base = friendly_id_base
-    opts = self.class.friendly_id_options
-    if base.length > opts[:max_length]
-      base = base[0...opts[:max_length] - NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION]
-    end
-    if opts[:reserved].include?(base)
-      base = "#{base}-2"
-    end
-    Slug.get_best_name(base, self.class)
-  end
-
   # Set the slug using the generated friendly id.
   def set_slug
     if self.class.friendly_id_options[:use_slug]
+      return unless need_new_slug?
       @most_recent_slug = nil
-      slug_text = generate_friendly_id
-      # Avoids regenerating slug over and over again.
-      # FIXME This could perform pretty badly if a model has tons of similarly-named slugs
-      return if slug && slug.succ == slug_text
-      if slugs.empty? || slugs.first.name != slug_text
-        previous_slug = slugs.find_by_name friendly_id_base
-        previous_slug.destroy if previous_slug
-        name = generate_friendly_id
-
-        slug_attributes = {:name => name}
-        if friendly_id_options[:scope]
-          scope = send(friendly_id_options[:scope])
-          slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
-        end
-
-        # If all name characters are removed, don't create a useless slug
-        slugs.build slug_attributes unless slug_attributes[:name].blank?
-
+      
+      slug_attributes = {:name => slug_text}
+      if friendly_id_options[:scope]
+        scope = send(friendly_id_options[:scope])
+        slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
       end
+
+      # If we're renaming back to a previously used slug, delete the
+      # previously used slug so that we can recycle the name without having to
+      # use a sequence.
+      slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
+
+      # If all name characters are removed, don't create a useless slug
+      s = slugs.build slug_attributes
+      s.send(:set_sequence)
+    
     end
   end
 
   # Get the string used as the basis of the friendly id. If you set the
   # option to remove diacritics from the friendly id's then they will be
   # removed.
-  def friendly_id_base
+  def slug_text
     base = send friendly_id_options[:column]
-    if base.blank?
-      raise FriendlyId::SlugGenerationError.new('The method or column used as the base of friendly_id\'s slug text returned a blank value')
-    elsif self.friendly_id_options[:strip_diacritics]
-      Slug::normalize(Slug::strip_diacritics(base))
+    if self.friendly_id_options[:strip_diacritics]
+      base = Slug::normalize(Slug::strip_diacritics(base))
     else
-      Slug::normalize(base)
+      base = Slug::normalize(base)
     end
+    if base.length > friendly_id_options[:max_length]
+      base = base[0...friendly_id_options[:max_length]]
+    end
+    if friendly_id_options[:reserved].include?(base)
+      raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
+    end
+    return base
   end
 
   private
