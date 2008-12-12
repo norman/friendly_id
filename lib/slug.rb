@@ -9,6 +9,10 @@ class Slug < ActiveRecord::Base
     def find_all_by_names_and_sluggable_type(names, type)
       find :all, :conditions => {:name => names.to_a, :sluggable_type => type.to_s}
     end
+    
+    def parse(slug_text)
+      slug_text.split(/--/)
+    end
 
     # Checks a slug name for collisions
     def get_best_name(name, type)

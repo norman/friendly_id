@@ -93,15 +93,25 @@ redirect to your updated URL.
     redirect_to @post, :status => :moved_permanently if @post.has_better_id?
   end
   
-=== Unique Slug Names
+=== Non-unique Slug Names
 
-FriendlyId will append a number to the end of the id to keep it unique if
-necessary:
+FriendlyId will append a arbitrary number to the end of the id to keep it
+unique if necessary:
 
   /posts/new-version-released
   /posts/new-version-released--2
   /posts/new-version-released--3
+  ...
   etc.
+  
+Note that the number is preceeded by two dashes to distinguish it from the
+rest of the slug. This is important to enable having slugs like:
+
+  /cars/peugeot-206
+  /cars/peugeot-206--2
+  
+This is somewhat ugly, but you can change the "--" for another character or
+sequence of characters if you wish.
   
 === Scoped Slugs
 
