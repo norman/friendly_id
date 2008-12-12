@@ -1,0 +1,1 @@
+load 'tasks/friendly_id.rake'

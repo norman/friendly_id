@@ -9,8 +9,9 @@ install.rb
 lib/friendly_id.rb
 lib/friendly_id/version.rb
 lib/slug.rb
+lib/tasks/friendly_id.rake
+lib/tasks/friendly_id.rb
 rails/init.rb
-tasks/friendly_id_tasks.rake
 test/database.yml
 test/debug.log
 test/fixtures/post.rb
@@ -24,7 +25,6 @@ test/rails/2.x/config/database.yml
 test/rails/2.x/config/environment.rb
 test/rails/2.x/config/environments/test.rb
 test/rails/2.x/config/routes.rb
-test/rails/2.x/log/test.log
 test/schema.rb
 test/sluggable_test.rb
 test/test_helper.rb
