@@ -33,18 +33,22 @@ class Slug < ActiveRecord::Base
     # wave of terror in Europe unlike anything ever seen before or after. I'm
     # not taking any chances.
     def normalize(slug_text)
-      # Use this onces it starts working reliably
-      # return slug_text.parameterize.to_s if slug_text.respond_to?(:parameterize)
       s = slug_text.clone
       s.gsub!(/[\?`^~‘’'“”",.;:&]/, '')
       s.gsub!(/\W+/, ' ')
       s.strip!
       s.downcase!
       s.gsub!(/\s+/, '-')
-      s.gsub(/-\Z/, '')
+      s.gsub(/-\z/, '')
     end
 
-    # Remove diacritics from the string.
+    # Remove diacritics from the string, converting Western European strings
+    # to ASCII. For example:
+    #
+    #   Slug::strip_diacritics("lingüística") # returns "linguistica"
+    #
+    # Don't bother trying this with strings in Russian, Hebrew, Japanese, etc.
+    # It only works for strings that use some variation of the Roman alphabet.
     def strip_diacritics(string)
       Iconv.new('ascii//ignore//translit', 'utf-8').iconv normalize(string)
     end
