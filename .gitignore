@@ -1,1 +1,2 @@
-test/debug.log
+*.log
+.DS_Store
