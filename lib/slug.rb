@@ -2,7 +2,7 @@
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
-  validates_uniqueness_of :name, :scope => :sluggable_type
+  validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
 
   class << self
 

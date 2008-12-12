@@ -23,3 +23,23 @@ common_title2:
   name: common-title
   sluggable: common_title2 (Post)
   sequence: 2
+
+john_smith:
+  name: john-smith
+  sluggable: john_smith (Person)
+  sequence: 1
+  scope: argentina
+
+john_smith2:
+  name: john-smith
+  sluggable: john_smith2 (Person)
+  sequence: 1
+  scope: usa
+
+argentina:
+  name: argentina
+  sluggable: argentina (Country)
+    
+usa:
+  name: usa
+  sluggable: usa (Country)

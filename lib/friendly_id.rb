@@ -15,8 +15,8 @@ module FriendlyId
   module ClassMethods
 
     # Default options for friendly_id.
-    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :reserved => [], :strip_diacritics => false}.freeze
-    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :reserved, :strip_diacritics].freeze
+    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :reserved => [], :strip_diacritics => false, :scope => nil}.freeze
+    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :reserved, :strip_diacritics, :scope].freeze
 
     # Set up an ActiveRecord model to use a friendly_id.
     #
@@ -138,6 +138,7 @@ module FriendlyId
       class << base
         alias_method_chain :find_one, :friendly
         alias_method_chain :find_some, :friendly
+        alias_method_chain :validate_find_options, :friendly
       end
 
       base.named_scope :with_slug_name, lambda {|slug_names| {
@@ -146,17 +147,17 @@ module FriendlyId
       base.named_scope :with_slug_scope, lambda {|slug_scope| {
         :conditions => {"#{Slug.table_name}.scope" => slug_scope}
       }}
-
+      
     end
-
+    
     # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
-      
+
+      scope = options.delete(:scope)
+
       return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
       find_options = {:select => "#{self.table_name}.*"}
       find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
-
-      scope = options.delete(:scope)
 
       result = with_scope :find => find_options do
         with_slug_name(id_or_name).with_slug_scope(scope).find_initial(options)
@@ -215,9 +216,14 @@ module FriendlyId
           result.send(:finder_slug=, slug)
         end
       end
-
       results
     end
+
+    def validate_find_options_with_friendly(options) #:nodoc:
+      options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
+        :order, :select, :readonly, :group, :from, :lock, :having, :scope])
+    end
+
   end
 
   module SluggableInstanceMethods
@@ -294,8 +300,16 @@ module FriendlyId
           previous_slug = slugs.find_by_name friendly_id_base
           previous_slug.destroy if previous_slug
           name = generate_friendly_id
+          
+          slug_attributes = {:name => name}
+          if friendly_id_options[:scope]
+            scope = send(friendly_id_options[:scope])
+            slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
+          end
+          
           # If all name characters are removed, don't create a useless slug
-          slugs.build :name => name unless name.blank?
+          slugs.build slug_attributes unless slug_attributes[:name].blank?
+        
         end
       end
     end

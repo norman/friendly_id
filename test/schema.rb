@@ -13,6 +13,15 @@ ActiveRecord::Schema.define(:version => 3) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  
+  create_table "people", :force => true do |t|
+    t.string "name"
+    t.integer "country_id"
+  end
+  
+  create_table "countries", :force => true do |t|
+    t.string "name"
+  end
 
   create_table "slugs", :force => true do |t|
     t.string "name"
