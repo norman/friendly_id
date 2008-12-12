@@ -99,9 +99,41 @@ FriendlyId will append a number to the end of the id to keep it unique if
 necessary:
 
   /posts/new-version-released
-  /posts/new-version-released-2
-  /posts/new-version-released-3
+  /posts/new-version-released--2
+  /posts/new-version-released--3
   etc.
+  
+=== Scoped Slugs
+
+FriendlyId can generate unique slugs within a given scope. For example:
+
+  class Restaurant < ActiveRecord::Base
+    belongs_to :city
+    has_friendly_id :name, :use_slug => true, :scope => :city
+  end
+  
+  class City < ActiveRecord::Base
+    has_many :restaurants
+    has_friendly_id :name, :use_slug => true
+  end
+
+  http://example.org/cities/seattle/restaurants/joes-diner
+  http://example.org/cities/chicago/restaurants/joes-diner
+  
+  Restaurant.find("joes-diner", :scope => "seattle") # returns 1 record
+  Restaurant.find("joes-diner", :scope => "chicago") # returns 1 record
+  Restaurant.find("joes-diner") # returns both records
+  
+
+The value for the :scope key in your model can be a custom method you define,
+or the name of a relation. If it's the name of a relation, then the scope's
+text value will be the result of calling <code>to_param</code> on the related
+model record. In the example above, the city model also uses FriendlyId and so
+its <code>to_param</code> method returns its friendly_id: chicago or seattle.
+
+This feature is new in FriendlyId 2 and should be considered of experimental
+quality. Please don't use this for code that needs to run on the Space
+Shuttle.
 
 === Text Normalization
 
@@ -166,6 +198,15 @@ rake:friendly_id:remove_old_slugs
 The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+
+Note that having to explicitly add the friendly_id rake tasks to the Rakefile
+is a pain in the ass. This is because Rails does not have any provisions for
+accessing rake tasks from Gem plugins - even though it can do this for
+generators. There is {a ticket sitting waiting on
+Lighthouse}[http://rails.lighthouseapp.com/projects/8994/tickets/59] since
+April of 2008 asking the Rails team to fix this, but it appears no agreement
+can be reached on how to proceed and so we still don't have this functionality
+as of December 2008.
 
 == Hacking FriendlyId:
 
