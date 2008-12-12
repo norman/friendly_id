@@ -1,7 +1,7 @@
 # FriendlyId is a Rails plugin which lets you use text-based ids in addition
 # to numeric ones.
 module FriendlyId
-  
+
   # Load the view helpers if the gem is included in a Rails app.
   def self.enable
     return if ActiveRecord::Base.methods.include? 'has_friendly_id'
@@ -147,9 +147,9 @@ module FriendlyId
       base.named_scope :with_slug_scope, lambda {|slug_scope| {
         :conditions => {"#{Slug.table_name}.scope" => slug_scope}
       }}
-      
+
     end
-    
+
     # Finds a single record using the friendly_id, or the record's id.
     def find_one_with_friendly(id_or_name, options)
 
@@ -300,16 +300,16 @@ module FriendlyId
           previous_slug = slugs.find_by_name friendly_id_base
           previous_slug.destroy if previous_slug
           name = generate_friendly_id
-          
+
           slug_attributes = {:name => name}
           if friendly_id_options[:scope]
             scope = send(friendly_id_options[:scope])
             slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
           end
-          
+
           # If all name characters are removed, don't create a useless slug
           slugs.build slug_attributes unless slug_attributes[:name].blank?
-        
+
         end
       end
     end
@@ -329,7 +329,7 @@ module FriendlyId
     end
 
     private
-    
+
     def finder_slug=(finder_slug)
       @finder_slug_name = finder_slug.name
       slug = finder_slug
