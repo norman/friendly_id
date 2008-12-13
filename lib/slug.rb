@@ -4,7 +4,7 @@ class Slug < ActiveRecord::Base
   belongs_to :sluggable, :polymorphic => true
   validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
   before_create :set_sequence
-
+  
   class << self
 
     def find_all_by_names_and_sluggable_type(names, type)
@@ -25,16 +25,20 @@ class Slug < ActiveRecord::Base
     # wave of terror in Europe unlike anything ever seen before or after. I'm
     # not taking any chances.
     def normalize(slug_text)
-      raise FriendlyId::SlugGenerationError.new("The slug text is blank.") if slug_text.blank?
+      return "" if slug_text.blank?
       s = slug_text.clone
       s.gsub!(/[\?`^~‘’'“”",.;:&]/, '')
       s.gsub!(/\W+/, ' ')
       s.strip!
       s.downcase!
       s.gsub!(/\s+/, '-')
-      s.gsub!(/-\z/, '')
-      raise FriendlyId::SlugGenerationError.new("The normalized slug text is blank.") if s.blank?
-      return s
+      s.gsub(/-\z/, '')
+    end
+    
+    def parse(friendly_id)
+      name, sequence = friendly_id.split(/--/)
+      sequence ||= 1
+      return name, sequence
     end
 
     # Remove diacritics from the string, converting Western European strings
@@ -53,6 +57,19 @@ class Slug < ActiveRecord::Base
   # Whether or not this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
+  end
+  
+  def to_friendly_id
+    sequence > 1 ? "#{name}--#{sequence}" : name
+  end
+  
+  protected
+
+  # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
+  def validate
+    if name.blank?
+      raise FriendlyId::SlugGenerationError.new("The slug text is blank.")
+    end
   end
 
   private

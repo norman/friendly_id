@@ -7,17 +7,8 @@ module FriendlyId::NonSluggableClassMethods
     end
   end
 
-  # Finds the record using only the friendly id. If it can't be found
-  # using the friendly id, then it returns false. If you pass in any
-  # argument other than an instance of String or Array, then it also
-  # returns false.
-  # def find_using_friendly_id()
-  #   return false unless slug_text.kind_of?(String)
-  #   finder = "find_by_#{self.friendly_id_options[:column].to_s}".to_sym
-  #   record = send(finder, slug_text)
-  #   record.send(:found_using_friendly_id=, true) if record
-  #   return record
-  # end
+  protected
+
   def find_one_with_friendly(id, options)
     if id.is_a?(String) && result = send("find_by_#{ friendly_id_options[:column] }", id, options)
       result.found_using_friendly_id = true

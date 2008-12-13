@@ -8,6 +8,11 @@ class SluggableTest < Test::Unit::TestCase
     Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
 
+  def test_post_should_generate_slug_text
+   @post = Post.new(:name => "Test post", :content => "Test content")
+   assert_equal "test-post", @post.slug_text
+  end
+
   def test_should_create_post_with_slug
     @post = Post.create(:name => "Test post", :content => "Test content")
     assert_not_nil @post.slug
@@ -27,12 +32,6 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal String, posts(:with_one_slug).to_param.class
   end
 
-  def test_post_should_generate_friendly_id
-   @post = Post.new(:name => "Test post", :content => "Test content")
-   assert_equal "test-post", @post.slug_text
-   assert_equal "Test post", @post.name
-  end
-
   def test_post_should_have_friendly_id_options
     assert_not_nil Post.friendly_id_options
   end
@@ -49,7 +48,7 @@ class SluggableTest < Test::Unit::TestCase
   end
 
   def test_posts_should_be_using_friendly_id_when_given_as_array
-    @posts = Post.find([posts(:with_one_slug).slug.name, posts(:with_two_slugs).slug.name])
+    @posts = Post.find([posts(:with_one_slug).friendly_id, posts(:with_two_slugs).friendly_id])
     assert @posts.all? { |post| post.found_using_friendly_id? }
   end
 
@@ -130,6 +129,12 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal 2, @post.slug.sequence
   end
 
+  def test_friendly_id_should_contain_sequence_unless_its_1
+    @post = Post.create!(:name => slugs(:one).name, :content => "stuff")
+    assert_equal "#{slugs(:one).name}--2", @post.friendly_id
+  end
+
+
   def test_should_truncate_slugs_longer_than_maxlength
     Post.friendly_id_options[:max_length] = 10
     @post = Post.new(:name => "x" * 11, :content => "Test content")
@@ -140,7 +145,8 @@ class SluggableTest < Test::Unit::TestCase
     Post.friendly_id_options[:max_length] = 2
     p = Post.create!(:name => "aaa")
     q = Post.create!(:name => "aaab")
-    assert_equal p.friendly_id, q.friendly_id
+    assert_not_equal p.friendly_id, q.friendly_id
+    assert_equal p.slug.name, q.slug.name
     assert_not_equal p.slug.sequence, q.slug.sequence
   end
 
