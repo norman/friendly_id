@@ -4,7 +4,7 @@ class Slug < ActiveRecord::Base
   belongs_to :sluggable, :polymorphic => true
   validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
   before_create :set_sequence
-  
+
   class << self
 
     def find_all_by_names_and_sluggable_type(names, type)
@@ -34,7 +34,7 @@ class Slug < ActiveRecord::Base
       s.gsub!(/\s+/, '-')
       s.gsub(/-\z/, '')
     end
-    
+
     def parse(friendly_id)
       name, sequence = friendly_id.split(/--/)
       sequence ||= 1
@@ -58,11 +58,11 @@ class Slug < ActiveRecord::Base
   def is_most_recent?
     sluggable.slug == self
   end
-  
+
   def to_friendly_id
     sequence > 1 ? "#{name}--#{sequence}" : name
   end
-  
+
   protected
 
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
@@ -76,7 +76,8 @@ class Slug < ActiveRecord::Base
 
   def set_sequence
     last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
-      :sluggable_type => sluggable_type}, :order => "sequence DESC")
+      :sluggable_type => sluggable_type}, :order => "sequence DESC",
+      :select => 'sequence')
     self.sequence = last.sequence + 1 if last
   end
 

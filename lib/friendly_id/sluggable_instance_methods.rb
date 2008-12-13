@@ -34,7 +34,7 @@ module FriendlyId::SluggableInstanceMethods
     slug(true).to_friendly_id
   end
   alias best_id friendly_id
-  
+
   # Has the basis of our friendly_id changed, requiring the generation of a
   # new slug?
   def new_slug_needed?
@@ -55,8 +55,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Set the slug using the generated friendly id.
   def set_slug
-    if self.class.friendly_id_options[:use_slug]
-      return unless new_slug_needed?
+    if self.class.friendly_id_options[:use_slug] && new_slug_needed?
       @most_recent_slug = nil
       slug_attributes = {:name => slug_text}
       if friendly_id_options[:scope]
