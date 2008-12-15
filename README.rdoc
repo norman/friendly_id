@@ -148,17 +148,39 @@ Shuttle.
 === Text Normalization
 
 FriendlyId's slugging can strip diacritics from Western European characters,
-for example conveting "ñøîéçü" to "noiecu."
+so that you can have ASCII-only URL's; for example, conveting "ñøîéçü" to
+"noiecu."
 
   has_friendly_id :title, :use_slug => true, :strip_diacritics => true
 
 If you are not using slugs, you'll have to do this manually for whatever value
 you're using as the friendly_id.
 
-Note that this ovbiously won't work for Chinese, Arabic, Russian, Hebrew,
-Thai, etc. because it will pretty much blow away all the chracters... it's
-only for languages that use some variant of the Roman alphabet, like English
-or Polish.
+=== Diacritic-sensitive normalization
+
+FriendlyId can also normalize slug text while preserving accented characters, if
+you prefer to leave them in your URL's:
+
+  has_friendly_id :title, :use_slug => true
+  ...
+  @post = Post.create(:title => "¡Feliz Año!")
+  @post.friendly_id # "feliz-año"
+
+=== Unicode URL's
+
+FriendlyId can generate slugs in any language that can be written with
+Unicode. It does its best to strip away punctuation regardless of the language
+being used. Since the authors only speak English, Spanish, Portuguese and
+German, this has not been extensively tested with anything like Chinese,
+Russian, Greek, etc, but it "should work." If you're a speaker of a language
+that uses a non-Roman writing system, your feedback would be most welcome.
+
+  has_friendly_id :title, :use_slug => true
+  ...
+  @post = Post.create(:title => "友好编号在中国")
+  @post.friendly_id # "友好编号在中国"
+  @post2 = Post.create(:title => "友好编号在中国")
+  @post2.friendly_id # "友好编号在中国--2"
 
 == Getting it
 
@@ -222,6 +244,45 @@ as of December 2008.
 
 FriendlyId is {hosted on Github}[git://github.com/norman/friendly_id.git], and
 we love pull requests. :-)
+
+== Using an older version of FriendlyId
+
+=== 1.0 (for Rails 2.1.0 or higher)
+
+If you're on Rails 2.1.0, you may wish to use a previous version of
+FriendlyId. The current FriendlyId works with 2.1. but if for some reason you
+don't want to upgrade, you don't have to.
+
+To install the older version, you can {download the 1.0
+tarball}[http://github.com/norman/friendly_id/tree/1.0] from Github and unpack
+it into your vendor/plugins directory.
+
+Alternatively, you can perform the following steps:
+
+  cd vendor/plugins
+  git clone git://github.com/norman/friendly_id.git
+  cd friendly_id
+  git branch 1.0
+  git pull origin 1.0
+  rm -rf .git
+
+=== Even older versions (Rails 2.0.x or lower)
+
+If you're on Rails 2.0.x or lower, there's an older version of FriendlyId
+tagged on Github for you. You should use this version because the last several
+months of FriendlyId have introduced changes that are incompatible with 2.0.
+
+To install it, please {download the
+tarball}[http://github.com/norman/friendly_id/tree/Rails-2.0.x] and unpack it
+in your vendor/gems directory.
+
+Alternatively, you can perform the following steps:
+
+  cd vendor/plugins
+  git clone git://github.com/norman/friendly_id.git
+  cd friendly_id
+  git checkout Rails-2.0.x
+  rm -rf .git
 
 == Bugs:
 
