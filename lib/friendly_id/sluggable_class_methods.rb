@@ -42,6 +42,52 @@ module FriendlyId::SluggableClassMethods
   # Finds multiple records using the friendly_ids, or the records' ids.
   def find_some_with_friendly(ids_and_names, options)
 
+    slugs, ids = get_slugs_and_ids(ids_and_names, scope)
+    results = []
+
+    find_options = {:select => "#{self.table_name}.*"}
+    find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
+    find_options[:conditions] = "#{quoted_table_name}.#{primary_key} IN (#{ids.empty? ? 'NULL' : ids.join(',')}) "
+    find_options[:conditions] << "OR #{Slug.quoted_table_name}.#{Slug.primary_key} IN (#{slugs.to_s(:db)})"
+
+    results = with_scope(:find => find_options) { find_every(options) }
+
+    # calculate expected size, taken from active_record/base.rb
+    expected = expected_size(ids_and_names, options)
+    if results.size != expected
+      raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected })"
+    end
+
+    assign_finder_slugs(slugs, results)
+
+    results
+  end
+
+  def validate_find_options_with_friendly(options) #:nodoc:
+    options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
+      :order, :select, :readonly, :group, :from, :lock, :having, :scope])
+  end
+
+  private
+
+  # Assign finder slugs for the results found in find_some_with_friendly
+  def assign_finder_slugs(slugs, results)
+    slugs.each do |slug|
+      results.select { |r| r.id == slug.sluggable_id }.each do |result|
+        result.send(:finder_slug=, slug)
+      end
+    end
+  end
+
+  # Calculate expected result size for find_some_with_friendly
+  def expected_size(ids_and_names, options)
+    size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
+    size = options[:limit] if options[:limit] && size > options[:limit]
+    size
+  end
+
+  # Build arrays of slugs and ids, for the find_some_with_friendly method.
+  def get_slugs_and_ids(ids_and_names, options)
     scope = options.delete(:scope)
     slugs = []
     ids = []
@@ -57,36 +103,7 @@ module FriendlyId::SluggableClassMethods
       # the id_or_name is a number, assume that it is a regular record id.
       slug ? slugs << slug : (ids << id_or_name if id_or_name =~ /\A\d*\z/)
     end
-
-    results = []
-
-    find_options = {:select => "#{self.table_name}.*"}
-    find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
-    find_options[:conditions] = "#{quoted_table_name}.#{primary_key} IN (#{ids.empty? ? 'NULL' : ids.join(',')}) "
-    find_options[:conditions] << "OR #{Slug.quoted_table_name}.#{Slug.primary_key} IN (#{slugs.to_s(:db)})"
-
-    results = with_scope(:find => find_options) { find_every(options) }
-
-    # calculate expected size, taken from active_record/base.rb
-    expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
-    expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
-
-    if results.size != expected_size
-      raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })"
-    end
-
-    # assign finder slugs
-    slugs.each do |slug|
-      results.select { |r| r.id == slug.sluggable_id }.each do |result|
-        result.send(:finder_slug=, slug)
-      end
-    end
-    results
-  end
-
-  def validate_find_options_with_friendly(options) #:nodoc:
-    options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
-      :order, :select, :readonly, :group, :from, :lock, :having, :scope])
+    return slugs, ids
   end
 
 end
