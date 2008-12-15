@@ -20,7 +20,8 @@ module FriendlyId
       replace Unicode.normalize_KC(Unicode::downcase(self))
     end
 
-    # Strips punctuation and some other "weird" characters.
+    # Strips punctuation and some other "weird" characters. The numbers were
+    # taken from here[http://www1.tip.nl/~t876506/UnicodeDisplay.html].
     def strip_special_chars
       Unicode.normalize_KD(self).unpack('U*').reject { |cp|
         # Control chars and some punctuation

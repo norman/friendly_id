@@ -17,7 +17,6 @@ module FriendlyId::NonSluggableInstanceMethods
   def friendly_id
     send friendly_id_options[:column]
   end
-
   alias best_id friendly_id
 
   # Returns the friendly id, or if none is available, the numeric id.

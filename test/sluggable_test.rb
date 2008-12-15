@@ -8,14 +8,23 @@ class SluggableTest < Test::Unit::TestCase
     Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
 
-  def test_post_should_generate_slug_text
+  def test_class_should_have_friendly_id_options
+    assert_not_nil Post.friendly_id_options
+  end
+
+  def test_should_generate_slug_text
    @post = Post.new(:name => "Test post", :content => "Test content")
    assert_equal "test-post", @post.slug_text
   end
 
-  def test_should_create_post_with_slug
+  def test_should_save_slug_when_creating
+    Slug.any_instance.expects(:save).returns(true)
     @post = Post.create(:name => "Test post", :content => "Test content")
-    assert_not_nil @post.slug
+  end
+
+  def test_to_param_should_always_return_a_string
+    assert_equal String, posts(:without_slug).to_param.class
+    assert_equal String, posts(:with_one_slug).to_param.class
   end
 
   def test_finder_options_are_not_ignored
@@ -23,47 +32,32 @@ class SluggableTest < Test::Unit::TestCase
       Post.find(slugs(:one).name, :conditions => "1 = 2")
     end
   end
-  
-  def test_to_param_for_unslugged_objects_should_return_a_string
-    assert_equal String, posts(:without_slug).to_param.class
-  end
-  
-  def test_to_param_for_slugged_objects_should_return_a_string
-    assert_equal String, posts(:with_one_slug).to_param.class
+
+  def test_should_still_be_able_to_find_record_by_id
+    post = Post.create!(:name => "New post")
+    Post.create!(:name => "#{post.id.to_s} and some text")
+    assert_equal post, Post.find(post.id)
   end
 
-  def test_post_should_have_friendly_id_options
-    assert_not_nil Post.friendly_id_options
-  end
 
-  def test_slug_should_not_have_friendly_id_options
-    assert_raises NoMethodError do
-      Slug.friendly_id_options
-    end
-  end
-
-  def test_post_should_not_be_found_using_friendly_id_unless_it_really_was
+  def test_should_not_be_found_using_friendly_id_by_default
     @post = Post.new
     assert !@post.found_using_friendly_id?
+    assert @post.found_using_numeric_id?
   end
 
-  def test_posts_should_be_using_friendly_id_when_given_as_array
+  def test_should_be_using_friendly_id_when_find_arg_is_an_array
     @posts = Post.find([posts(:with_one_slug).friendly_id, posts(:with_two_slugs).friendly_id])
     assert @posts.all? { |post| post.found_using_friendly_id? }
   end
 
-  def test_post_raises_active_record_not_found_when_not_all_records_found
+  def test_raises_active_record_not_found_when_not_all_records_found
     assert_raises(ActiveRecord::RecordNotFound) do
       Post.find([posts(:with_one_slug).slug.name, 'non-existant-slug-record'])
     end
   end
 
-  def test_post_should_be_considered_found_by_numeric_id_as_default
-    @post = Post.new
-    assert @post.found_using_numeric_id?
-  end
-
-  def test_post_should_indicate_if_it_was_found_using_numeric_id
+  def test_should_indicate_if_it_was_found_using_numeric_id
     @post = Post.find(posts(:with_two_slugs).id)
     assert @post.found_using_numeric_id?
   end
@@ -88,7 +82,7 @@ class SluggableTest < Test::Unit::TestCase
     assert @post.has_better_id?
   end
 
-  def test_should_indicate_correct_best_id
+  def test_slug_should_always_be_the_most_recent
     @post = Post.find(posts(:with_two_slugs).slug.name)
     assert !@post.has_better_id?
     assert slugs(:two_new).name, @post.slug.name
@@ -107,22 +101,16 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal "feliz-año", @post.slug_text
   end
 
-  def test_post_should_not_make_new_slug_if_name_is_unchanged
+  def test_should_not_make_new_slug_unless_friendly_id_method_has_changed
     posts(:with_one_slug).content = "Edited content"
     posts(:with_one_slug).save!
     assert_equal 1, posts(:with_one_slug).slugs.size
   end
 
-  def test_post_should_make_new_slug_if_name_is_changed
+  def test_post_should_make_new_slug_if_friendly_id_method_is_changed
     posts(:with_one_slug).name = "Edited name"
     posts(:with_one_slug).save!
     assert_equal 2, posts(:with_one_slug).slugs.size
-  end
-
-  def test_should_not_consider_substrings_as_duplicate_slugs
-    @substring = slugs(:one).name[0, slugs(:one).name.length - 1]
-    @post = Post.new(:name => @substring, :content => "stuff")
-    assert_equal @substring, @post.slug_text
   end
 
   def test_should_increment_sequence_for_duplicate_slugs
@@ -134,7 +122,6 @@ class SluggableTest < Test::Unit::TestCase
     @post = Post.create!(:name => slugs(:one).name, :content => "stuff")
     assert_equal "#{slugs(:one).name}--2", @post.friendly_id
   end
-
 
   def test_should_truncate_slugs_longer_than_maxlength
     Post.friendly_id_options[:max_length] = 10
@@ -164,20 +151,6 @@ class SluggableTest < Test::Unit::TestCase
     assert_equal "value", p.friendly_id
   end
 
-  def test_should_avoid_extention_collisions
-    Post.create!(:name => "Post 2/4")
-    assert Post.create!(:name => "Post")
-    assert Post.create!(:name => "Post-2")
-    assert Post.create!(:name => "Post-2")
-    assert Post.create!(:name => "Post")
-    assert Post.create!(:name => "Post-2-2")
-    assert Post.create!(:name => "Post 2/4")
-  end
-
-  def test_slug_should_indicate_if_it_is_the_most_recent
-    assert slugs(:two_new).is_most_recent?
-  end
-
   def test_should_raise_error_if_friendly_id_is_blank
     assert_raises(FriendlyId::SlugGenerationError) do
       Post.create(:name => nil)
@@ -190,23 +163,16 @@ class SluggableTest < Test::Unit::TestCase
     end
   end
 
-  def test_raise_error_on_reseved_slugs
+  def test_should_raise_error_if_slug_text_is_reserved
     assert_raises(FriendlyId::SlugGenerationError) do
       Post.create(:name => "new")
     end
   end
 
-  def test_should_return_record_by_id
-    post = Post.create!(:name => "New post")
-    Post.create!(:name => "#{post.id.to_s} and some text")
-    assert_equal post, Post.find(post.id)
-  end
-
-  def test_should_allow_eager_loading_slugs
+  def test_should_allow_eager_loading_of_slugs
     assert_nothing_raised do
       Post.find(slugs(:one).name, :include => :slugs)
     end
-
     assert_nothing_raised do
       Post.find([slugs(:one).name, slugs(:two_new).name], :include => :slugs)
     end

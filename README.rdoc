@@ -12,7 +12,7 @@ have URL's like:
 rather than
 
   http://example.com/states/4323454
-  
+
 You can find a {FriendlyId tutorial here}[http://randomba.org/posts/friendly_id-tutorial].
 
 == Why?
@@ -92,7 +92,7 @@ redirect to your updated URL.
     @post = Post.find(params[:id])
     redirect_to @post, :status => :moved_permanently if @post.has_better_id?
   end
-  
+
 === Non-unique Slug Names
 
 FriendlyId will append a arbitrary number to the end of the id to keep it
@@ -103,16 +103,16 @@ unique if necessary:
   /posts/new-version-released--3
   ...
   etc.
-  
+
 Note that the number is preceeded by two dashes to distinguish it from the
 rest of the slug. This is important to enable having slugs like:
 
   /cars/peugeot-206
   /cars/peugeot-206--2
-  
+
 This is somewhat ugly, but you can change the "--" for another character or
 sequence of characters if you wish.
-  
+
 === Scoped Slugs
 
 FriendlyId can generate unique slugs within a given scope. For example:
@@ -121,7 +121,7 @@ FriendlyId can generate unique slugs within a given scope. For example:
     belongs_to :city
     has_friendly_id :name, :use_slug => true, :scope => :city
   end
-  
+
   class City < ActiveRecord::Base
     has_many :restaurants
     has_friendly_id :name, :use_slug => true
@@ -129,11 +129,11 @@ FriendlyId can generate unique slugs within a given scope. For example:
 
   http://example.org/cities/seattle/restaurants/joes-diner
   http://example.org/cities/chicago/restaurants/joes-diner
-  
+
   Restaurant.find("joes-diner", :scope => "seattle") # returns 1 record
   Restaurant.find("joes-diner", :scope => "chicago") # returns 1 record
   Restaurant.find("joes-diner") # returns both records
-  
+
 
 The value for the :scope key in your model can be a custom method you define,
 or the name of a relation. If it's the name of a relation, then the scope's
@@ -178,12 +178,12 @@ FriendlyId that work with Rails 1.2.x and Rails 2.0.x are available as tags on
 Github.
 
 Here's how to set it up:
-  
+
   sudo gem install friendly-id
   cd my_app
   script/generate friendly_id
   rake db:migrate
-  
+
 Now add the following 2 lines to bottom of your Rakefile:
 
   require 'friendly_id'
@@ -194,7 +194,7 @@ Now add some code to your models:
   class Post < ActiveRecord::Base
     has_friendly_id :title, :use_slug => true
   end
-  
+
 If you are using slugs, you can use a Rake task to generate slugs for your
 existing records:
 

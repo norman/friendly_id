@@ -26,7 +26,7 @@ class Slug < ActiveRecord::Base
 
     def parse(friendly_id)
       name, sequence = friendly_id.split(/--/)
-      sequence ||= 1
+      sequence ||= "1"
       return name, sequence
     end
 
@@ -49,7 +49,7 @@ class Slug < ActiveRecord::Base
   end
 
   protected
-  
+
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
   def validate
     if name.blank?

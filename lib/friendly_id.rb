@@ -9,7 +9,7 @@ module FriendlyId
     ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
     String.class_eval { include FriendlyId::StringHelpers }
   end
-  
+
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
 
