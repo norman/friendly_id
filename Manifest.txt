@@ -3,6 +3,15 @@ MIT-LICENSE
 Manifest.txt
 README.rdoc
 Rakefile
+coverage/index.html
+coverage/lib-friendly_id-non_sluggable_class_methods_rb.html
+coverage/lib-friendly_id-non_sluggable_instance_methods_rb.html
+coverage/lib-friendly_id-sluggable_class_methods_rb.html
+coverage/lib-friendly_id-sluggable_instance_methods_rb.html
+coverage/lib-friendly_id-string_helpers_rb.html
+coverage/lib-friendly_id_rb.html
+coverage/lib-slug_rb.html
+coverage/rails-init_rb.html
 generators/friendly_id_migration/friendly_id_migration_generator.rb
 generators/friendly_id_migration/templates/create_slugs.rb
 lib/friendly_id.rb
@@ -17,7 +26,6 @@ lib/tasks/friendly_id.rake
 lib/tasks/friendly_id.rb
 rails/init.rb
 test/database.yml
-test/debug.log
 test/fixtures/countries.yml
 test/fixtures/country.rb
 test/fixtures/people.yml
@@ -27,6 +35,7 @@ test/fixtures/posts.yml
 test/fixtures/slugs.yml
 test/fixtures/user.rb
 test/fixtures/users.yml
+test/non_slugged_test.rb
 test/rails/2.x/app/controllers/application.rb
 test/rails/2.x/config/boot.rb
 test/rails/2.x/config/database.yml
@@ -35,7 +44,7 @@ test/rails/2.x/config/environments/test.rb
 test/rails/2.x/config/routes.rb
 test/schema.rb
 test/scoped_model_test.rb
+test/slug_test.rb
 test/sluggable_test.rb
 test/string_helpers_test.rb
 test/test_helper.rb
-test/unique_column_test.rb
