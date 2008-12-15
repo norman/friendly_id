@@ -94,16 +94,17 @@ class SluggableTest < Test::Unit::TestCase
     assert slugs(:two_new).name, @post.slug.name
   end
 
-  def test_should_strip_diactics_from_slug
+  def test_should_strip_diactics_from_slug_if_configured_to_do_so
     Post.friendly_id_options[:strip_diacritics] = true
-    @post = Post.new(:name => "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", :content => "Test content")
-    assert_equal "aaaaaaaeceeeiiiidnoooooouuuuythssaaaaaaaeceeeeiiiidnoooooouuuuythy", @post.slug_text
+    @post = Post.new(:name => "¡FELIZ AÑO!")
+    # Happy anus to you too
+    assert_equal "feliz-ano", @post.slug_text
   end
 
-  def test_should_not_strip_diactics_from_slug
+  def test_should_not_strip_diactics_from_slug_unless_configured_to_do_so
     Post.friendly_id_options[:strip_diacritics] = false
-    @post = Post.new(:name => "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", :content => "Test content")
-    assert_equal "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", @post.slug_text
+    @post = Post.new(:name => "¡FELIZ AÑO!")
+    assert_equal "feliz-año", @post.slug_text
   end
 
   def test_post_should_not_make_new_slug_if_name_is_unchanged

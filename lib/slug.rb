@@ -7,10 +7,6 @@ class Slug < ActiveRecord::Base
 
   class << self
 
-    def find_all_by_names_and_sluggable_type(names, type)
-      find :all, :conditions => {:name => names.to_a, :sluggable_type => type.to_s}
-    end
-
     # Sanitizes and dasherizes string to make it safe for URL's.
     #
     # Example:
@@ -25,14 +21,7 @@ class Slug < ActiveRecord::Base
     # wave of terror in Europe unlike anything ever seen before or after. I'm
     # not taking any chances.
     def normalize(slug_text)
-      return "" if slug_text.blank?
-      s = slug_text.clone
-      s.gsub!(/[\?`^~‘’'“”",.;:&]/, '')
-      s.gsub!(/\W+/, ' ')
-      s.strip!
-      s.downcase!
-      s.gsub!(/\s+/, '-')
-      s.gsub(/-\z/, '')
+      slug_text.nil? ? "" : slug_text.to_friendly_id
     end
 
     def parse(friendly_id)
@@ -41,15 +30,11 @@ class Slug < ActiveRecord::Base
       return name, sequence
     end
 
+
     # Remove diacritics from the string, converting Western European strings
-    # to ASCII. For example:
-    #
-    #   Slug::strip_diacritics("lingüística") # returns "linguistica"
-    #
-    # Don't bother trying this with strings in Russian, Hebrew, Japanese, etc.
-    # It only works for strings that use some variation of the Roman alphabet.
+    # to ASCII.
     def strip_diacritics(string)
-      Iconv.new('ascii//ignore//translit', 'utf-8').iconv normalize(string)
+      string.strip_diacritics
     end
 
   end
@@ -64,7 +49,7 @@ class Slug < ActiveRecord::Base
   end
 
   protected
-
+  
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
   def validate
     if name.blank?

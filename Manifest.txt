@@ -6,6 +6,11 @@ Rakefile
 generators/friendly_id_migration/friendly_id_migration_generator.rb
 generators/friendly_id_migration/templates/create_slugs.rb
 lib/friendly_id.rb
+lib/friendly_id/non_sluggable_class_methods.rb
+lib/friendly_id/non_sluggable_instance_methods.rb
+lib/friendly_id/sluggable_class_methods.rb
+lib/friendly_id/sluggable_instance_methods.rb
+lib/friendly_id/string_helpers.rb
 lib/friendly_id/version.rb
 lib/slug.rb
 lib/tasks/friendly_id.rake
@@ -13,6 +18,10 @@ lib/tasks/friendly_id.rb
 rails/init.rb
 test/database.yml
 test/debug.log
+test/fixtures/countries.yml
+test/fixtures/country.rb
+test/fixtures/people.yml
+test/fixtures/person.rb
 test/fixtures/post.rb
 test/fixtures/posts.yml
 test/fixtures/slugs.yml
@@ -25,6 +34,8 @@ test/rails/2.x/config/environment.rb
 test/rails/2.x/config/environments/test.rb
 test/rails/2.x/config/routes.rb
 test/schema.rb
+test/scoped_model_test.rb
 test/sluggable_test.rb
+test/string_helpers_test.rb
 test/test_helper.rb
 test/unique_column_test.rb
