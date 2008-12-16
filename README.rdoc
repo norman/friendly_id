@@ -197,27 +197,30 @@ discouraged:
 
 == Setting it up
 
-FriendlyId currently works with Rails 2.0.0 and higher.
+FriendlyId currently works with Rails 2.0.0 and higher. Here's how to set it up.
 
-Here's how to set it up:
+1) Install the Gem:
 
   sudo gem install friendly-id
   cd my_app
   script/generate friendly_id
   rake db:migrate
 
-Now add the following 2 lines to bottom of your Rakefile:
+2) Load FriendlyId in your app:
 
+  # Rails 2.1 and higher; add this to the gem section of environment.rb:
+  config.gem "friendly_id"
+
+  # Rails 2.0; this goes at the bottom of environment.rb
   require 'friendly_id'
-  require 'tasks/friendly_id'
 
-Now add some code to your models:
+3) Add some code to your models:
 
   class Post < ActiveRecord::Base
     has_friendly_id :title, :use_slug => true
   end
 
-If you are using slugs, you can use a Rake task to generate slugs for your
+4) If you are using slugs, you can use a Rake task to generate slugs for your
 existing records:
 
 friendly_id:make_slugs MODEL=MyModelName
@@ -231,14 +234,6 @@ The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
-Note that having to explicitly add the friendly_id rake tasks to the Rakefile
-is a pain in the ass. This is because Rails does not have any provisions for
-accessing rake tasks from Gem plugins - even though it can do this for
-generators. There is {a ticket sitting waiting on
-Lighthouse}[http://rails.lighthouseapp.com/projects/8994/tickets/59] since
-April of 2008 asking the Rails team to fix this, but it appears no agreement
-can be reached on how to proceed and so we still don't have this functionality
-as of December 2008.
 
 == Hacking FriendlyId:
 

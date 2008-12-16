@@ -1,4 +1,5 @@
 require 'unicode'
+require 'friendly_id/slug'
 require 'friendly_id/shoulda_macros'
 
 # FriendlyId is a comprehensize Rails plugin/gem for slugging and permalinks.

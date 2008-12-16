@@ -9,7 +9,7 @@ require 'test/unit'
 require 'active_record/fixtures'
 require 'action_controller/test_process'
 require 'sqlite3'
-require 'slug'
+require 'friendly_id/slug'
 
 config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
 ActiveRecord::Base.establish_connection

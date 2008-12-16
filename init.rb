@@ -1,0 +1,1 @@
+require 'friendly_id'
