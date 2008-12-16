@@ -1,4 +1,6 @@
+require 'unicode'
 require 'friendly_id/string_helpers'
+require 'friendly_id/shoulda_macros'
 
 # FriendlyId is a comprehensize Rails plugin/gem for slugging and permalinks.
 module FriendlyId
@@ -8,6 +10,7 @@ module FriendlyId
     return if ActiveRecord::Base.methods.include? 'has_friendly_id'
     ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
     String.class_eval { include FriendlyId::StringHelpers }
+    Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
   end
 
   # This error is raised when it's not possible to generate a unique slug.

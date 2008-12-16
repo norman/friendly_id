@@ -42,7 +42,7 @@ module FriendlyId::SluggableClassMethods
   # Finds multiple records using the friendly_ids, or the records' ids.
   def find_some_with_friendly(ids_and_names, options)
 
-    slugs, ids = get_slugs_and_ids(ids_and_names, scope)
+    slugs, ids = get_slugs_and_ids(ids_and_names, options)
     results = []
 
     find_options = {:select => "#{self.table_name}.*"}
