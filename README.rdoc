@@ -1,23 +1,22 @@
 = FriendlyId
 
-FriendlyId is a comprehensive slugging and permalink plugin for Ruby on Rails.
-It allows you to create pretty URL's, and work with human-friendly strings as
-if they were numeric ids for ActiveRecord models.
+FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
+Ruby on Rails. It allows you to create pretty URL's and work with
+human-friendly strings as if they were numeric ids for ActiveRecord models.
 
-The main use we intend friendly_id for is in URL's, so your application can
-have URL's like:
+Using FriendlyId, it's easy to make your application use URL's like:
 
   http://example.com/states/washington
 
-rather than
+instead of:
 
   http://example.com/states/4323454
 
-The {most recent version of the FriendlyId
+Want to find out more? Read on. The {most recent version of the FriendlyId
 RDocs}[http://friendly-id.rubyforge.org] can always be found on
 Rubyforge[http://www.rubyforge.org].
 
-== Why?
+=== Why?
 
 * Text-based id's look better
 * They make URL's easier to remember.
@@ -26,9 +25,10 @@ Rubyforge[http://www.rubyforge.org].
 
 === But...
 
-* They can change, breaking your URL's.
-* They can have invalid URL characters, breaking your links in some browsers.
+* They can change, breaking your URL's and your SEO.
 * It can be tricky to ensure they're always unique.
+* They can become a pain to manage in large Rails applications.
+* They can conflict with your application's namespace.
 
 FriendlyId tries to offer you the all the advantages, and avoid or soften the
 potential impact of the disadvantages.
@@ -114,6 +114,22 @@ rest of the slug. This is important to enable having slugs like:
 
 This is somewhat ugly, but you can change the "--" for another character or
 sequence of characters if you wish.
+
+=== Reserved Names
+
+You can mark off some strings as reserved so that, for example, you don't end
+up with this problem:
+
+  /users/joe-schmoe # A user chose "joe schmoe" as his user name - no worries.
+  /users/new # A user chose "new" as his user name, and now no one can sign up.
+
+Here's how to do it:
+
+  class Restaurant < ActiveRecord::Base
+    belongs_to :city
+    has_friendly_id :name, :use_slug => true, :reserved => ["new", "index"]
+  end
+
 
 === Scoped Slugs
 
