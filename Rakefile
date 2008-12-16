@@ -1,7 +1,5 @@
-require 'hoe'
 require 'newgem'
-require 'hanna'
-require 'hanna/rdoctask'
+
 require File.join(File.dirname(__FILE__), 'lib', 'friendly_id', 'version')
 
 Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|

@@ -1,6 +1,6 @@
 module FriendlyId::SluggableClassMethods
 
-  def self.extended(base)
+  def self.extended(base) #:nodoc:#
 
     class << base
       alias_method_chain :find_one, :friendly
@@ -10,8 +10,8 @@ module FriendlyId::SluggableClassMethods
 
   end
 
-  # Finds a single record using the friendly_id, or the record's id.
-  def find_one_with_friendly(id_or_name, options)
+  # Finds a single record using the friendly id, or the record's id.
+  def find_one_with_friendly(id_or_name, options) #:nodoc:#
 
     scope = options.delete(:scope)
     return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
@@ -39,8 +39,8 @@ module FriendlyId::SluggableClassMethods
 
   end
 
-  # Finds multiple records using the friendly_ids, or the records' ids.
-  def find_some_with_friendly(ids_and_names, options)
+  # Finds multiple records using the friendly ids, or the records' ids.
+  def find_some_with_friendly(ids_and_names, options) #:nodoc:#
 
     slugs, ids = get_slugs_and_ids(ids_and_names, options)
     results = []
@@ -63,7 +63,7 @@ module FriendlyId::SluggableClassMethods
     results
   end
 
-  def validate_find_options_with_friendly(options) #:nodoc:
+  def validate_find_options_with_friendly(options) #:nodoc:#
     options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
       :order, :select, :readonly, :group, :from, :lock, :having, :scope])
   end
@@ -71,7 +71,7 @@ module FriendlyId::SluggableClassMethods
   private
 
   # Assign finder slugs for the results found in find_some_with_friendly
-  def assign_finder_slugs(slugs, results)
+  def assign_finder_slugs(slugs, results) #:nodoc:#
     slugs.each do |slug|
       results.select { |r| r.id == slug.sluggable_id }.each do |result|
         result.send(:finder_slug=, slug)
@@ -80,14 +80,14 @@ module FriendlyId::SluggableClassMethods
   end
 
   # Calculate expected result size for find_some_with_friendly
-  def expected_size(ids_and_names, options)
+  def expected_size(ids_and_names, options) #:nodoc:#
     size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
     size = options[:limit] if options[:limit] && size > options[:limit]
     size
   end
 
   # Build arrays of slugs and ids, for the find_some_with_friendly method.
-  def get_slugs_and_ids(ids_and_names, options)
+  def get_slugs_and_ids(ids_and_names, options) #:nodoc:#
     scope = options.delete(:scope)
     slugs = []
     ids = []

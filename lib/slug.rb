@@ -4,6 +4,7 @@ class Slug < ActiveRecord::Base
   belongs_to :sluggable, :polymorphic => true
   validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
   before_create :set_sequence
+  before_save :check_for_blank_name
 
   class << self
 
@@ -14,14 +15,27 @@ class Slug < ActiveRecord::Base
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     #
     # Note that Rails 2.2.x offers a parameterize method for this. It's not
-    # used here because at the time of writing, it handles several characters
-    # incorrectly, for instance replacing Icelandic's "thorn" character with
-    # "y" rather than "d." This might be pedantic, but I don't want to piss
-    # off the Vikings. The last time anyone pissed them off, they uleashed a
-    # wave of terror in Europe unlike anything ever seen before or after. I'm
-    # not taking any chances.
+    # used here because it assumes you want to strip away accented characters,
+    # and this may not always be your desire.
+    #
+    # At the time of writing, it also handles several characters incorrectly,
+    # for instance replacing Icelandic's "thorn" character with "y" rather
+    # than "d." This might be pedantic, but I don't want to piss off the
+    # Vikings. The last time anyone pissed them off, they uleashed a wave of
+    # terror in Europe unlike anything ever seen before or after. I'm not
+    # taking any chances.
     def normalize(slug_text)
-      slug_text.nil? ? "" : slug_text.to_friendly_id
+      return "" if slug_text.blank?
+      slug_text.
+        send(chars_func).
+        # For some reason Spanish ¡ and ¿ are not detected as non-word
+        # characters. Bug in Ruby?
+        normalize.gsub(/[\W|¡|¿]/u, ' ').
+        strip.
+        gsub(/\s+/u, '-').
+        gsub(/-\z/u, '').
+        downcase.
+        to_s
     end
 
     def parse(friendly_id)
@@ -30,11 +44,20 @@ class Slug < ActiveRecord::Base
       return name, sequence
     end
 
-
-    # Remove diacritics from the string, converting Western European strings
-    # to ASCII.
+    # Remove diacritics (accents, umlauts, etc.) from the string.
     def strip_diacritics(string)
-      string.strip_diacritics
+      require 'unicode'
+      Unicode::normalize_KD(string).unpack('U*').select { |cp|
+        cp < 0x300 || cp > 0x036F
+      }.pack('U*')
+    end
+
+    private
+
+    def chars_func
+      Rails.version =~ /2.2.[\d]*/ ? :mb_chars : :chars
+    rescue NoMethodError
+      :chars
     end
 
   end
@@ -51,13 +74,11 @@ class Slug < ActiveRecord::Base
   protected
 
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
-  def validate
+  def check_for_blank_name #:nodoc:#
     if name.blank?
       raise FriendlyId::SlugGenerationError.new("The slug text is blank.")
     end
   end
-
-  private
 
   def set_sequence
     last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
@@ -65,6 +86,5 @@ class Slug < ActiveRecord::Base
       :select => 'sequence')
     self.sequence = last.sequence + 1 if last
   end
-
 
 end

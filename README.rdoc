@@ -13,7 +13,9 @@ rather than
 
   http://example.com/states/4323454
 
-You can find a {FriendlyId tutorial here}[http://randomba.org/posts/friendly_id-tutorial].
+The {most recent version of the FriendlyId
+RDocs}[http://friendly-id.rubyforge.org] can always be found on
+Rubyforge[http://www.rubyforge.org].
 
 == Why?
 
@@ -195,9 +197,7 @@ discouraged:
 
 == Setting it up
 
-FriendlyId currently works with Rails 2.1.0 and higher. Older versions of
-FriendlyId that work with Rails 1.2.x and Rails 2.0.x are available as tags on
-Github.
+FriendlyId currently works with Rails 2.0.0 and higher.
 
 Here's how to set it up:
 
@@ -244,45 +244,6 @@ as of December 2008.
 
 FriendlyId is {hosted on Github}[git://github.com/norman/friendly_id.git], and
 we love pull requests. :-)
-
-== Using an older version of FriendlyId
-
-=== 1.0 (for Rails 2.1.0 or higher)
-
-If you're on Rails 2.1.0, you may wish to use a previous version of
-FriendlyId. The current FriendlyId works with 2.1. but if for some reason you
-don't want to upgrade, you don't have to.
-
-To install the older version, you can {download the 1.0
-tarball}[http://github.com/norman/friendly_id/tree/1.0] from Github and unpack
-it into your vendor/plugins directory.
-
-Alternatively, you can perform the following steps:
-
-  cd vendor/plugins
-  git clone git://github.com/norman/friendly_id.git
-  cd friendly_id
-  git branch 1.0
-  git pull origin 1.0
-  rm -rf .git
-
-=== Even older versions (Rails 2.0.x or lower)
-
-If you're on Rails 2.0.x or lower, there's an older version of FriendlyId
-tagged on Github for you. You should use this version because the last several
-months of FriendlyId have introduced changes that are incompatible with 2.0.
-
-To install it, please {download the
-tarball}[http://github.com/norman/friendly_id/tree/Rails-2.0.x] and unpack it
-in your vendor/gems directory.
-
-Alternatively, you can perform the following steps:
-
-  cd vendor/plugins
-  git clone git://github.com/norman/friendly_id.git
-  cd friendly_id
-  git checkout Rails-2.0.x
-  rm -rf .git
 
 == Bugs:
 

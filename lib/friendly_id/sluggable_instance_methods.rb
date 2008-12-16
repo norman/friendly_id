@@ -35,7 +35,7 @@ module FriendlyId::SluggableInstanceMethods
   end
   alias best_id friendly_id
 
-  # Has the basis of our friendly_id changed, requiring the generation of a
+  # Has the basis of our friendly id changed, requiring the generation of a
   # new slug?
   def new_slug_needed?
     !slug || slug_text != slug.name

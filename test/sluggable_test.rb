@@ -18,8 +18,8 @@ class SluggableTest < Test::Unit::TestCase
   end
 
   def test_should_save_slug_when_creating
-    Slug.any_instance.expects(:save).returns(true)
     @post = Post.create(:name => "Test post", :content => "Test content")
+    assert @post.slug
   end
 
   def test_to_param_should_always_return_a_string

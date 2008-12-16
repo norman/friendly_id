@@ -31,11 +31,57 @@ class SlugTest < Test::Unit::TestCase
     assert_equal "test", slug.to_friendly_id
   end
 
-  # See FriendlyId::StringHelper for more specific normalize tests.
-  def test_normalize_should_invoke_strings_to_friendly_id_method
-    string = "any string"
-    string.expects(:to_friendly_id)
-    Slug::normalize(string)
+  def test_normalize_should_lowercase_strings
+    assert_match /abc/, Slug::normalize("ABC")
   end
 
+  def test_normalize_should_replace_whitespace_with_dashes
+    assert_match /a-b/, Slug::normalize("a b")
+  end
+
+  def test_normalize_should_replace_2spaces_with_1dash
+    assert_match /a-b/, Slug::normalize("a  b")
+  end
+
+  def test_normalize_should_remove_punctuation
+    assert_match /abc/, Slug::normalize('abc!@#$%^&*•¶§∞¢££¡¿()><?"":;][]\.,/')
+  end
+
+  def test_normalize_should_strip_trailing_space
+    assert_match /ab/, Slug::normalize("ab ")
+  end
+
+  def test_normalize_should_strip_leading_space
+    assert_match /ab/, Slug::normalize(" ab")
+  end
+
+  def test_normalize_should_strip_trailing_slashes
+    assert_match /ab/, Slug::normalize("ab-")
+  end
+
+  def test_normalize_should_strip_leading_slashes
+    assert_match /ab/, Slug::normalize("-ab")
+  end
+
+  def test_normalize_should_not_modify_valid_name_strings
+    assert_match /a-b-c-d/, Slug::normalize("a-b-c-d")
+  end
+
+  # These strings are taken from various international Google homepages. I
+  # would be most grateful if a fluent speaker of any language that uses a
+  # writing system other than the Roman alphabet could help me make some
+  # better tests to ensure this is working correctly.
+  def test_normalize_works_with_non_roman_chars
+    assert_equal "検-索", Slug::normalize("検 索")
+  end
+
+  def test_strip_diactics_correctly_strips_diacritics
+    input  = "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"
+    output = Slug::strip_diacritics(input).split(//)
+    expected = "AAAAAAAECEEEIIIIDNOOOOOOUUUUYThssaaaaaaaeceeeeiiiidnoooooouuuuythy".split(//)
+    output.split.each_index do |i|
+      assert_equal output[i], expected[i]
+    end
+  end
+  
 end

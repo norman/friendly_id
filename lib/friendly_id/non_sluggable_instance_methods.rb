@@ -24,7 +24,9 @@ module FriendlyId::NonSluggableInstanceMethods
     friendly_id.to_s || id.to_s
   end
 
-  def found_using_friendly_id=(value)
+  private
+
+  def found_using_friendly_id=(value) #:nodoc#
     @found_using_friendly_id = value
   end
 
