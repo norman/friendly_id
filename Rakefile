@@ -1,4 +1,4 @@
-require 'newgem'
+require 'hoe'
 
 require File.join(File.dirname(__FILE__), 'lib', 'friendly_id', 'version')
 
