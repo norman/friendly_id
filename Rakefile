@@ -15,6 +15,7 @@ Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.extra_deps << ['unicode', '>= 0.1']
   p.rdoc_pattern = /^(lib|bin|ext)|txt|rdoc$/
   changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
+  p.remote_rdoc_dir = ""
 end
 
 desc "Run RCov"
