@@ -39,7 +39,7 @@ class Slug < ActiveRecord::Base
     end
 
     def parse(friendly_id)
-      name, sequence = friendly_id.split(/--/)
+      name, sequence = friendly_id.split('--')
       sequence ||= "1"
       return name, sequence
     end

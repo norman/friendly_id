@@ -70,13 +70,13 @@ Now in your controllers, if you want to prevent people from accessing your
 models by numeric id, you can detect whether they were found by the
 friendly_id:
 
-  @post.find(params[:id])
+  @post = Post.find(params[:id])
   raise "some error" if !@post.found_using_friendly_id?
 
 or, you can 301 redirect if the model was found by the numeric id if you don't
 care about numeric access, but want the SEO value of the friendly_id:
 
-  @post.find(params[:id])
+  @post = Post.find(params[:id])
   redirect_to @post, :status => 301 if @post.has_better_id?
 
 The "has_better_id?" method returns true if the model was found with the
