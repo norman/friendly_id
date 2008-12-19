@@ -16,6 +16,8 @@ coverage/rails-init_rb.html
 friendly_id.gemspec
 generators/friendly_id/friendly_id_generator.rb
 generators/friendly_id/templates/create_slugs.rb
+generators/friendly_id_20_upgrade/friendly_id_20_upgrade_generator.rb
+generators/friendly_id_20_upgrade/templates/upgrade_friendly_id_to_20.rb
 init.rb
 lib/friendly_id.rb
 lib/friendly_id/non_sluggable_class_methods.rb

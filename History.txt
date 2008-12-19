@@ -1,6 +1,7 @@
 == RELEASE DATE COMING SOON
 
 * FriendlyId 2.0 Released
+
   * Support for scoped slugs (Norman Clarke)
   * Support for UTF-8 friendly_ids (Norman Clarke)
   * Can now be installed via Ruby Gems, or as a Rails plugin (Norman Clarke)

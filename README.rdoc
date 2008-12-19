@@ -86,14 +86,26 @@ numeric id, or with an outdated slug.
 
 === Slug Versioning
 
-FriendlyId will record changes to slugs so that you can tell when the model
-is found with an older slug. This can be useful if you want to do a 301
-redirect to your updated URL.
+FriendlyId will record changes to slugs so that you can tell when the model is
+found with an older slug, or by the numeric id. This can be useful if you want
+to do a 301 redirect to your updated URL.
 
-  def find_record_using_friendly_id
-    @post = Post.find(params[:id])
-    redirect_to @post, :status => :moved_permanently if @post.has_better_id?
+  class PostsController < ApplicationController
+
+    before_filter ensure_current_post_url, :only => :show
+
+    ...
+
+    def ensure_current_post_url
+      redirect_to @post, :status => :moved_permanently if @post.has_better_id?
+    end
+
   end
+
+This is particularly useful when implementing FrindlyId on an existing
+website that already has many URL's with the old numeric id listed on search
+engines. When the search engine spiders crawl your site, they will
+eventually pick up the new, more SEO-friendly URL's.
 
 === Non-unique Slug Names
 
@@ -111,9 +123,6 @@ rest of the slug. This is important to enable having slugs like:
 
   /cars/peugeot-206
   /cars/peugeot-206--2
-
-This is somewhat ugly, but you can change the "--" for another character or
-sequence of characters if you wish.
 
 === Reserved Names
 
@@ -204,7 +213,7 @@ that uses a non-Roman writing system, your feedback would be most welcome.
 
 FriendlyId is installed as a Ruby Gem:
 
-  gem install friendly-id
+  gem install friendly_id
 
 Alternatively, you can install it as a Rails plugin, though this is
 discouraged:
@@ -217,7 +226,7 @@ FriendlyId currently works with Rails 2.0.0 and higher. Here's how to set it up.
 
 1) Install the Gem:
 
-  sudo gem install friendly-id
+  sudo gem install friendly_id
   cd my_app
   script/generate friendly_id
   rake db:migrate
@@ -250,6 +259,39 @@ The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
+== Upgrading from an older version
+
+If you installed an older version of FriendlyId and want to upgrade to 2.0,
+follow these steps:
+
+==== Install the friendly_id Gem:
+
+  sudo gem install friendly_id
+
+==== Add FriendlyId to environment.rb:
+
+===== For Rails 2.1 and higher:
+
+  config.gem "friendly_id", :version => ">= 2.0.0"
+
+===== For Rails 2.0:
+
+Add this to the bottom of environment.rb:
+
+  require 'friendly_id'
+
+==== Remove the older version of FriendlyId:
+
+  git rm -rf vendor/plugins/friendly_id
+  svn delete vendor/plugins/friendly_id
+  # or whatever
+
+====  Generate the upgrade migration and run it
+
+  ./script generate friendly_id_20_upgrade
+  rake db:migrate
+
+That's it!
 
 == Hacking FriendlyId:
 
@@ -259,6 +301,7 @@ we love pull requests. :-)
 == Bugs:
 
 Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/14675-friendly_id].
+
 
 == Credits:
 
