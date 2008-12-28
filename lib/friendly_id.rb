@@ -1,4 +1,3 @@
-require 'unicode'
 require 'friendly_id/slug'
 require 'friendly_id/shoulda_macros'
 
