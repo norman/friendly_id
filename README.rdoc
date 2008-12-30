@@ -272,7 +272,7 @@ follow these steps:
 
 ===== For Rails 2.1 and higher:
 
-  config.gem "friendly_id", :version => ">= 2.0.0"
+  config.gem "friendly_id"
 
 ===== For Rails 2.0:
 
