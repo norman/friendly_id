@@ -2,9 +2,7 @@
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
-  validates_uniqueness_of :name, :scope => [:sluggable_type, :scope, :sequence]
-  before_create :set_sequence
-  before_save :check_for_blank_name
+  before_save :check_for_blank_name, :set_sequence
 
   class << self
 
@@ -81,6 +79,7 @@ class Slug < ActiveRecord::Base
   end
 
   def set_sequence
+    return unless new_record?
     last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
       :sluggable_type => sluggable_type}, :order => "sequence DESC",
       :select => 'sequence')

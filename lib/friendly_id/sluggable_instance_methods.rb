@@ -53,23 +53,6 @@ module FriendlyId::SluggableInstanceMethods
     slug ? slug.to_friendly_id : id.to_s
   end
 
-  # Set the slug using the generated friendly id.
-  def set_slug
-    if self.class.friendly_id_options[:use_slug] && new_slug_needed?
-      @most_recent_slug = nil
-      slug_attributes = {:name => slug_text}
-      if friendly_id_options[:scope]
-        scope = send(friendly_id_options[:scope])
-        slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
-      end
-      # If we're renaming back to a previously used friendly_id, delete the
-      # slug so that we can recycle the name without having to use a sequence.
-      slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
-      s = slugs.build slug_attributes
-      s.send(:set_sequence)
-    end
-  end
-
   # Get the processed string used as the basis of the friendly id.
   def slug_text
     base = send friendly_id_options[:column]
@@ -100,6 +83,23 @@ module FriendlyId::SluggableInstanceMethods
     return false if !@finder_slug_name
     slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => @finder_slug_name})
     finder_slug = slug
+  end
+
+  # Set the slug using the generated friendly id.
+  def set_slug
+    if self.class.friendly_id_options[:use_slug] && new_slug_needed?
+      @most_recent_slug = nil
+      slug_attributes = {:name => slug_text}
+      if friendly_id_options[:scope]
+        scope = send(friendly_id_options[:scope])
+        slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
+      end
+      # If we're renaming back to a previously used friendly_id, delete the
+      # slug so that we can recycle the name without having to use a sequence.
+      slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
+      slug = slugs.build slug_attributes
+      slug
+    end
   end
 
 end
