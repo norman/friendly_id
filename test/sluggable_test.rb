@@ -8,6 +8,10 @@ class SluggableTest < Test::Unit::TestCase
     Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
   end
 
+  def test_should_allow_for_identical_slug_names_between_sluggable_types
+    assert !Post.find(slugs(:post_with_same_friendly_id_as_person).name).has_better_id?
+  end
+
   def test_class_should_have_friendly_id_options
     assert_not_nil Post.friendly_id_options
   end
