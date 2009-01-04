@@ -1,13 +1,13 @@
-== RELEASE DATE COMING SOON
+== 2.0.0 2009-01-03
 
-* FriendlyId 2.0 Released
-
+* 5 major enhancements:
   * Support for scoped slugs (Norman Clarke)
   * Support for UTF-8 friendly_ids (Norman Clarke)
   * Can now be installed via Ruby Gems, or as a Rails plugin (Norman Clarke)
-  * Shoulda macro ({Josh Nichols}[http://github.com/technicalpickles])
   * Improved handling of non-unique slugs (Norman Clarke and Adrian Mugnolo)
-  * Various small bugfixes, cleanups and refactorings (Norman Clarke and Emilio Tagua)
+* 2 minor enhancements: 
+  * Shoulda macro (Josh Nichols - http://github.com/technicalpickles)
+  * Various small bugfixes, cleanups and refactorings
 
 == 2008-12-01
 

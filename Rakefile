@@ -1,6 +1,5 @@
-require 'hoe'
-
-require File.join(File.dirname(__FILE__), 'lib', 'friendly_id', 'version')
+require 'newgem'
+require 'lib/friendly_id/version'
 
 Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.rubyforge_name = "friendly-id"
@@ -13,6 +12,9 @@ Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.need_zip = true
   p.test_globs = ['test/**/*_test.rb']
   p.extra_deps << ['unicode', '>= 0.1']
+  p.extra_dev_deps = [
+    ['newgem', ">= #{::Newgem::VERSION}"]
+  ]
   p.rdoc_pattern = /^(lib|bin|ext)|txt|rdoc$/
   changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
   p.remote_rdoc_dir = ""

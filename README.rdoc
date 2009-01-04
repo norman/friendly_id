@@ -218,7 +218,13 @@ FriendlyId is installed as a Ruby Gem:
 Alternatively, you can install it as a Rails plugin, though this is
 discouraged:
 
-./script/plugin install git://github.com/norman/friendly_id.git
+  ./script/plugin install git://github.com/norman/friendly_id.git
+
+If you are installing as a plugin, make sure you have installed the unicode gem,
+which FriendlyId depends on:
+
+  gem install unicode
+
 
 == Setting it up
 
