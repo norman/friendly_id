@@ -60,7 +60,6 @@ module FriendlyId
 
   end
 
-
 end
 
 if defined?(ActiveRecord)

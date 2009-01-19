@@ -1,11 +1,12 @@
+# -*- encoding: utf-8 -*-
+
 Gem::Specification.new do |s|
   s.name = %q{friendly_id}
-  s.version = "2.0.0"
+  s.version = "2.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
-  s.cert_chain = ["/Users/norman/.gem/gem-public_cert.pem"]
-  s.date = %q{2009-01-04}
+  s.date = %q{2009-01-19}
   s.description = %q{A comprehensive slugging and pretty-URL plugin for Ruby on Rails.}
   s.email = ["norman@randomba.org", "adrian@randomba.org", "miloops@gmail.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.rdoc"]
@@ -19,7 +20,23 @@ Gem::Specification.new do |s|
   s.signing_key = %q{/Users/norman/.gem/gem-private_key.pem}
   s.summary = %q{A comprehensive slugging and pretty-URL plugin for Ruby on Rails.}
   s.test_files = ["test/non_slugged_test.rb", "test/scoped_model_test.rb", "test/slug_test.rb", "test/sluggable_test.rb"]
-  s.add_dependency(%q<unicode>, [">= 0.1"])
-  s.add_dependency(%q<newgem>, [">= 1.2.3"])
-  s.add_dependency(%q<hoe>, [">= 1.8.0"])
+
+  if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
+    s.specification_version = 2
+
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<unicode>, [">= 0.1"])
+      s.add_development_dependency(%q<newgem>, [">= 1.2.3"])
+      s.add_development_dependency(%q<hoe>, [">= 1.8.0"])
+    else
+      s.add_dependency(%q<unicode>, [">= 0.1"])
+      s.add_dependency(%q<newgem>, [">= 1.2.3"])
+      s.add_dependency(%q<hoe>, [">= 1.8.0"])
+    end
+  else
+    s.add_dependency(%q<unicode>, [">= 0.1"])
+    s.add_dependency(%q<newgem>, [">= 1.2.3"])
+    s.add_dependency(%q<hoe>, [">= 1.8.0"])
+  end
 end
