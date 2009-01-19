@@ -1,7 +1,7 @@
 require 'newgem'
 require 'lib/friendly_id/version'
 
-Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
+$hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.rubyforge_name = "friendly-id"
   p.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
   p.email = ['norman@randomba.org', 'adrian@randomba.org', 'miloops@gmail.com']
@@ -19,6 +19,8 @@ Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
   p.remote_rdoc_dir = ""
 end
+
+require 'newgem/tasks'
 
 desc "Run RCov"
 task :rcov do

@@ -1,3 +1,9 @@
+== 2.0.1 2009-01-19
+
+* 1 minor enhancements:
+  * Fix infinite redirect bug when using .has_better_id? in your controllers (Sean Abrahams)
+
+
 == 2.0.0 2009-01-03
 
 * 5 major enhancements:
@@ -5,8 +11,8 @@
   * Support for UTF-8 friendly_ids (Norman Clarke)
   * Can now be installed via Ruby Gems, or as a Rails plugin (Norman Clarke)
   * Improved handling of non-unique slugs (Norman Clarke and Adrian Mugnolo)
-* 2 minor enhancements: 
-  * Shoulda macro (Josh Nichols - http://github.com/technicalpickles)
+* 2 minor enhancements:
+  * Shoulda macro (Josh Nichols)
   * Various small bugfixes, cleanups and refactorings
 
 == 2008-12-01

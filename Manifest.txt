@@ -3,6 +3,7 @@ MIT-LICENSE
 Manifest.txt
 README.rdoc
 Rakefile
+config/website.yml
 friendly_id.gemspec
 generators/friendly_id/friendly_id_generator.rb
 generators/friendly_id/templates/create_slugs.rb
