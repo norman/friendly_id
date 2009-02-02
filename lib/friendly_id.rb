@@ -1,15 +1,10 @@
+require 'friendly_id/helpers'
 require 'friendly_id/slug'
 require 'friendly_id/shoulda_macros'
 
+
 # FriendlyId is a comprehensize Rails plugin/gem for slugging and permalinks.
 module FriendlyId
-
-  # Load FriendlyId if the gem is included in a Rails app.
-  def self.enable
-    return if ActiveRecord::Base.methods.include? 'has_friendly_id'
-    ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
-    Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
-  end
 
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
@@ -37,7 +32,7 @@ module FriendlyId
       class_inheritable_reader :friendly_id_options
 
       if options[:use_slug]
-        has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+        has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy, :readonly => true
         require 'friendly_id/sluggable_class_methods'
         require 'friendly_id/sluggable_instance_methods'
         extend SluggableClassMethods
@@ -49,6 +44,17 @@ module FriendlyId
         extend NonSluggableClassMethods
         include NonSluggableInstanceMethods
       end
+    end
+
+  end
+
+  class << self
+
+    # Load FriendlyId if the gem is included in a Rails app.
+    def enable
+      return if ActiveRecord::Base.methods.include? 'has_friendly_id'
+      ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
+      Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
     end
 
   end

@@ -1,3 +1,11 @@
+post_with_same_friendly_id_as_person:
+  name: john-smith
+  sluggable: john_smith (Post)
+
+person_with_same_friendly_id_as_post:
+  name: john-smith
+  sluggable: john_smith (Person)
+
 one:
   name: with-one-slug
   sluggable: with_one_slug

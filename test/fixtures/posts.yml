@@ -17,3 +17,7 @@ common_title:
 common_title2:
   name: Common Title
   content: A second post with a very common title
+
+john_smith:
+  name: John Smith
+  content: Should allow for identical slug names between sluggable types

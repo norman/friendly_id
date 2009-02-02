@@ -1,5 +1,7 @@
 module FriendlyId::NonSluggableClassMethods
 
+  include FriendlyId::Helpers
+
   def self.extended(base) #:nodoc:#
     class << base
       alias_method_chain :find_one, :friendly
@@ -19,23 +21,20 @@ module FriendlyId::NonSluggableClassMethods
   end
 
   def find_some_with_friendly(ids_and_names, options) #:nodoc:#
-    results_by_name = with_scope :find => options do
-      find :all, :conditions => ["#{ quoted_table_name }.#{ friendly_id_options[:column] } IN (?)", ids_and_names]
+    
+    results = with_scope :find => options do
+      find :all, :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?) OR #{friendly_id_options[:column].to_s} IN (?)",
+        ids_and_names, ids_and_names]
     end
+    
+    expected = expected_size(ids_and_names, options)
+    if results.size != expected
+      raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected })"
+    end
+    
+    results.each {|r| r.send(:found_using_friendly_id=, true) if ids_and_names.include?(r.friendly_id)}
 
-    ids     = ids_and_names - results_by_name.map { |r| r[ friendly_id_options[:column] ] }
-    results = results_by_name
-
-    results += with_scope :find => options do
-      find :all, :conditions => ["#{ quoted_table_name }.#{ primary_key } IN (?)", ids]
-    end unless ids.empty?
-
-    expected_size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
-    expected_size = options[:limit] if options[:limit] && expected_size > options[:limit]
-
-    raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected_size })" if results.size != expected_size
-
-    results_by_name.each { |r| r.send(:found_using_friendly_id=, true) }
     results
+
   end
 end

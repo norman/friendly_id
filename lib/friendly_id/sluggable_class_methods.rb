@@ -1,4 +1,6 @@
 module FriendlyId::SluggableClassMethods
+  
+  include FriendlyId::Helpers
 
   def self.extended(base) #:nodoc:#
 
@@ -48,11 +50,10 @@ module FriendlyId::SluggableClassMethods
     find_options = {:select => "#{self.table_name}.*"}
     find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
     find_options[:conditions] = "#{quoted_table_name}.#{primary_key} IN (#{ids.empty? ? 'NULL' : ids.join(',')}) "
-    find_options[:conditions] << "OR #{Slug.quoted_table_name}.#{Slug.primary_key} IN (#{slugs.to_s(:db)})"
+    find_options[:conditions] << "OR slugs.id IN (#{slugs.to_s(:db)})"
 
     results = with_scope(:find => find_options) { find_every(options) }
 
-    # calculate expected size, taken from active_record/base.rb
     expected = expected_size(ids_and_names, options)
     if results.size != expected
       raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected })"
@@ -77,13 +78,6 @@ module FriendlyId::SluggableClassMethods
         result.send(:finder_slug=, slug)
       end
     end
-  end
-
-  # Calculate expected result size for find_some_with_friendly
-  def expected_size(ids_and_names, options) #:nodoc:#
-    size = options[:offset] ? ids_and_names.size - options[:offset] : ids_and_names.size
-    size = options[:limit] if options[:limit] && size > options[:limit]
-    size
   end
 
   # Build arrays of slugs and ids, for the find_some_with_friendly method.
