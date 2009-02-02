@@ -49,6 +49,11 @@ class Slug < ActiveRecord::Base
         cp < 0x300 || cp > 0x036F
       }.pack('U*')
     end
+    
+    # Remove non-ascii characters from the string.
+    def strip_non_ascii(string)
+      string.gsub(/[^a-z0-9]+/i, ' ')
+    end
 
     private
 
