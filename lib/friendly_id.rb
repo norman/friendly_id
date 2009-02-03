@@ -55,7 +55,12 @@ module FriendlyId
     def enable
       return if ActiveRecord::Base.methods.include? 'has_friendly_id'
       ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
-      Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
+
+      if Rails.version >= "2.3" 
+        ActiveSupport::TestCase.class_eval { include FriendlyId::ShouldaMacros }
+      else
+        Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
+      end
     end
 
   end
