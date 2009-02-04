@@ -1,4 +1,3 @@
-require 'unicode'
 require 'friendly_id/helpers'
 require 'friendly_id/slug'
 require 'friendly_id/shoulda_macros'
@@ -13,8 +12,8 @@ module FriendlyId
   module ClassMethods
 
     # Default options for friendly_id.
-    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :reserved => [], :strip_diacritics => false, :scope => nil}.freeze
-    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :reserved, :strip_diacritics, :scope].freeze
+    DEFAULT_FRIENDLY_ID_OPTIONS = {:method => nil, :use_slug => false, :max_length => 255, :reserved => [], :strip_diacritics => false, :strip_non_ascii => false, :scope => nil}.freeze
+    VALID_FRIENDLY_ID_KEYS = [:use_slug, :max_length, :reserved, :strip_diacritics, :strip_non_ascii, :scope].freeze
 
     # Set up an ActiveRecord model to use a friendly_id.
     #
@@ -25,6 +24,7 @@ module FriendlyId
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
+    # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
     # * <tt>:reseved</tt> - Array of words that are reserved and can't be used as slugs. If such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to [].
     def has_friendly_id(column, options = {})
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS

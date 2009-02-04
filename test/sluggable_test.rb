@@ -104,6 +104,12 @@ class SluggableTest < Test::Unit::TestCase
     @post = Post.new(:name => "¡FELIZ AÑO!")
     assert_equal "feliz-año", @post.slug_text
   end
+  
+  def test_should_strip_symbols
+    Post.friendly_id_options[:strip_non_ascii] = true
+    @post = Post.new(:name => "►►17” computer monitor ◄◄")
+    assert_equal '17-computer-monitor', @post.slug_text
+  end
 
   def test_should_not_make_new_slug_unless_friendly_id_method_has_changed
     posts(:with_one_slug).content = "Edited content"

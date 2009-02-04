@@ -57,10 +57,13 @@ module FriendlyId::SluggableInstanceMethods
   def slug_text
     base = send friendly_id_options[:column]
     if self.friendly_id_options[:strip_diacritics]
-      base = Slug::normalize(Slug::strip_diacritics(base))
-    else
-      base = Slug::normalize(base)
+      base = Slug::strip_diacritics(base)
     end
+    if self.friendly_id_options[:strip_non_ascii]
+      base = Slug::strip_non_ascii(base)
+    end
+    base = Slug::normalize(base)
+    
     if base.length > friendly_id_options[:max_length]
       base = base[0...friendly_id_options[:max_length]]
     end
