@@ -87,7 +87,7 @@ module FriendlyId::SluggableClassMethods
     ids = []
     ids_and_names.each do |id_or_name|
       name, sequence = Slug.parse id_or_name
-      slug = Slug.find(:first, :readonly => true, :conditions => {
+      slug = Slug.find(:first, :conditions => {
         :name           => name,
         :scope          => scope,
         :sequence       => sequence,

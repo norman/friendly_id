@@ -33,7 +33,7 @@ module FriendlyId
       class_inheritable_reader :friendly_id_options
 
       if options[:use_slug]
-        has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy, :readonly => true
+        has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
         require 'friendly_id/sluggable_class_methods'
         require 'friendly_id/sluggable_instance_methods'
         extend SluggableClassMethods
@@ -55,10 +55,13 @@ module FriendlyId
     def enable
       return if ActiveRecord::Base.methods.include? 'has_friendly_id'
       ActiveRecord::Base.class_eval { extend FriendlyId::ClassMethods }
-
-      if Rails.version >= "2.3" 
-        ActiveSupport::TestCase.class_eval { include FriendlyId::ShouldaMacros }
-      else
+      begin
+        if Rails.version >= "2.3"
+          ActiveSupport::TestCase.class_eval { include FriendlyId::ShouldaMacros }
+        else
+          Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
+        end
+      rescue NoMethodError
         Test::Unit::TestCase.class_eval { include FriendlyId::ShouldaMacros }
       end
     end

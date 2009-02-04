@@ -53,7 +53,7 @@ class Slug < ActiveRecord::Base
     private
 
     def chars_func
-      Rails.version =~ /2.2.[\d]*/ ? :mb_chars : :chars
+      Rails.version >= "2.2" ? :mb_chars : :chars
     rescue NoMethodError
       :chars
     end
