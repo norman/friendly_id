@@ -6,6 +6,8 @@ class SluggableTest < Test::Unit::TestCase
 
   def setup
     Post.friendly_id_options[:max_length] = FriendlyId::ClassMethods::DEFAULT_FRIENDLY_ID_OPTIONS[:max_length]
+    Post.friendly_id_options[:strip_non_ascii] = false
+    Post.friendly_id_options[:strip_diacritics] = false
   end
 
   def test_should_allow_for_identical_slug_names_between_sluggable_types
@@ -100,14 +102,13 @@ class SluggableTest < Test::Unit::TestCase
   end
 
   def test_should_not_strip_diactics_from_slug_unless_configured_to_do_so
-    Post.friendly_id_options[:strip_diacritics] = false
     @post = Post.new(:name => "¡FELIZ AÑO!")
     assert_equal "feliz-año", @post.slug_text
   end
-  
-  def test_should_strip_symbols
+
+  def test_should_convert_to_ascii
     Post.friendly_id_options[:strip_non_ascii] = true
-    @post = Post.new(:name => "►►17” computer monitor ◄◄")
+    @post = Post.new(:name => "17” cômpütér mõnitor")
     assert_equal '17-computer-monitor', @post.slug_text
   end
 
