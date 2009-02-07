@@ -85,7 +85,7 @@ module FriendlyId::SluggableInstanceMethods
   def init_finder_slug
     return false if !@finder_slug_name
     name, sequence = Slug.parse(@finder_slug_name)
-    slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => name, :sequence => sequence, :sluggable_type => self.class.name })
+    slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => name, :sequence => sequence, :sluggable_type => self.class.base_class.name })
     finder_slug = slug
   end
 
