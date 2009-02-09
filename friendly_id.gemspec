@@ -6,7 +6,6 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
-  s.cert_chain = ["/Users/norman/.gem/gem-public_cert.pem"]
   s.date = %q{2009-02-09}
   s.description = %q{A comprehensive slugging and pretty-URL plugin for ActiveRecord.}
   s.email = ["norman@randomba.org", "adrian@randomba.org", "miloops@gmail.com"]
@@ -27,14 +26,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<unicode>, [">= 0.1"])
-      s.add_runtime_dependency(%q<active_record>, [">= 2.0.0"])
+      s.add_runtime_dependency(%q<activerecord>, [">= 2.0.0"])
       s.add_development_dependency(%q<newgem>, [">= 1.2.3"])
       s.add_development_dependency(%q<Shoulda>, [">= 1.2.0"])
       s.add_development_dependency(%q<sqlite3-ruby>, [">= 0"])
       s.add_development_dependency(%q<hoe>, [">= 1.8.0"])
     else
       s.add_dependency(%q<unicode>, [">= 0.1"])
-      s.add_dependency(%q<active_record>, [">= 2.0.0"])
+      s.add_dependency(%q<activerecord>, [">= 2.0.0"])
       s.add_dependency(%q<newgem>, [">= 1.2.3"])
       s.add_dependency(%q<Shoulda>, [">= 1.2.0"])
       s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
@@ -42,7 +41,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<unicode>, [">= 0.1"])
-    s.add_dependency(%q<active_record>, [">= 2.0.0"])
+    s.add_dependency(%q<activerecord>, [">= 2.0.0"])
     s.add_dependency(%q<newgem>, [">= 1.2.3"])
     s.add_dependency(%q<Shoulda>, [">= 1.2.0"])
     s.add_dependency(%q<sqlite3-ruby>, [">= 0"])
