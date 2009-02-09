@@ -1,3 +1,4 @@
+require 'unicode'
 # A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ActiveRecord::Base
 
@@ -23,12 +24,12 @@ class Slug < ActiveRecord::Base
     # terror in Europe unlike anything ever seen before or after. I'm not
     # taking any chances.
     def normalize(slug_text)
-      return "" if slug_text.blank?
-      slug_text.
+      return "" if slug_text.nil? || slug_text == ""
+      Unicode::normalize_KC(slug_text).
         send(chars_func).
         # For some reason Spanish ¡ and ¿ are not detected as non-word
         # characters. Bug in Ruby?
-        normalize.gsub(/[\W|¡|¿]/u, ' ').
+        gsub(/[\W|¡|¿]/u, ' ').
         strip.
         gsub(/\s+/u, '-').
         gsub(/-\z/u, '').
@@ -42,12 +43,10 @@ class Slug < ActiveRecord::Base
       return name, sequence
     end
 
-    # Remove diacritics (accents, umlauts, etc.) from the string.
+    # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
+    # from "The Ruby Way."
     def strip_diacritics(string)
-      require 'unicode'
-      Unicode::normalize_KD(string).unpack('U*').select { |cp|
-        cp < 0x300 || cp > 0x036F
-      }.pack('U*')
+      Unicode::normalize_KD(string).unpack('U*').select { |u| u < 0x300 || u > 0x036F }.pack('U*')
     end
     
     # Remove non-ascii characters from the string.
@@ -58,9 +57,7 @@ class Slug < ActiveRecord::Base
     private
 
     def chars_func
-      Rails.version >= "2.2" ? :mb_chars : :chars
-    rescue NoMethodError
-      :chars
+      "".respond_to?(:mb_chars) ? :mb_chars : :chars
     end
 
   end
@@ -78,7 +75,7 @@ class Slug < ActiveRecord::Base
 
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
   def check_for_blank_name #:nodoc:#
-    if name.blank?
+    if name == "" || name.nil?
       raise FriendlyId::SlugGenerationError.new("The slug text is blank.")
     end
   end

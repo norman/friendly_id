@@ -1,3 +1,13 @@
+== 2.0.2 2009-02-09
+
+* 2 major enhancements:
+  * Made FriendlyId depend only on ActiveRecord. It should now be possible to
+    use FriendlyId with Camping or any other codebase that uses AR.
+  * Overhauled creaky testing setup and switched to Shoulda.
+
+* 1 minor enhancment:
+  * Made reserved words work for non-slugged models.
+
 == 2.0.1 2009-01-19
 
 * 1 minor enhancements:

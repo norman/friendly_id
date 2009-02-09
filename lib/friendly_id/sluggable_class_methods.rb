@@ -1,5 +1,5 @@
 module FriendlyId::SluggableClassMethods
-  
+
   include FriendlyId::Helpers
 
   def self.extended(base) #:nodoc:#
@@ -38,6 +38,17 @@ module FriendlyId::SluggableClassMethods
     end
 
     result
+  rescue ActiveRecord::RecordNotFound => e
+
+    if friendly_id_options[:scope]
+      if !scope
+        e.message << "; expected scope but got none"
+      else
+        e.message << " and scope=#{scope}"
+      end
+    end
+
+    raise e
 
   end
 

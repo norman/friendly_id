@@ -1,35 +1,35 @@
-ActiveRecord::Schema.define(:version => 3) do
+ActiveRecord::Schema.define(:version => 1) do
 
   create_table "posts", :force => true do |t|
-    t.string   "name"
-    t.text     "content"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "title", "string"
+    t.column "content", "text"
+    t.column "created_at", "datetime"
+    t.column "updated_at", "datetime"
   end
 
   create_table "users", :force => true do |t|
-    t.string   "login"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "login", "string"
+    t.column "email", "string"
+    t.column "created_at", "datetime"
+    t.column "updated_at", "datetime"
   end
   
   create_table "people", :force => true do |t|
-    t.string "name"
-    t.integer "country_id"
+    t.column "name", "string"
+    t.column "country_id", "integer"
   end
   
   create_table "countries", :force => true do |t|
-    t.string "name"
+    t.column "name", "string"
   end
 
   create_table "slugs", :force => true do |t|
-    t.string "name"
-    t.integer "sluggable_id"
-    t.integer "sequence", :null       => false, :default => 1
-    t.string "sluggable_type", :limit => 40
-    t.string "scope", :limit          => 40
-    t.datetime "created_at"
+    t.column "name", "string"
+    t.column "sluggable_id", "integer"
+    t.column "sequence", "integer", :null       => false, :default => 1
+    t.column "sluggable_type", "string", :limit => 40
+    t.column "scope", "string", :limit          => 40
+    t.column "created_at", "datetime"
   end
 
   add_index "slugs", ["sluggable_id"], :name           => "index_slugs_on_sluggable_id"

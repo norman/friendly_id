@@ -6,7 +6,7 @@ module FriendlyId::SluggableInstanceMethods
   attr_accessor :finder_slug_name
 
   def finder_slug
-    @finder_slug ||= init_finder_slug
+    @finder_slug ||= init_finder_slug or nil
   end
 
   # Was the record found using one of its friendly ids?

@@ -5,18 +5,15 @@ $hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.rubyforge_name = "friendly-id"
   p.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
   p.email = ['norman@randomba.org', 'adrian@randomba.org', 'miloops@gmail.com']
-  p.summary = "A comprehensive slugging and pretty-URL plugin for Ruby on Rails."
-  p.description = 'A comprehensive slugging and pretty-URL plugin for Ruby on Rails.'
-  p.url = 'http://randomba.org'
-  p.need_tar = true
-  p.need_zip = true
+  p.summary = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
+  p.description = 'A comprehensive slugging and pretty-URL plugin for ActiveRecord.'
+  p.url = 'http://friendly-id.rubyforge.org/'
   p.test_globs = ['test/**/*_test.rb']
   p.extra_deps << ['unicode', '>= 0.1']
-  p.extra_dev_deps = [
-    ['newgem', ">= #{::Newgem::VERSION}"]
-  ]
-  p.rdoc_pattern = /^(lib|bin|ext)|txt|rdoc$/
-  changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
+  p.extra_deps << ['activerecord', '>= 2.0.0']
+  p.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
+  p.extra_dev_deps << ['Shoulda', ">= 1.2.0"]
+  p.extra_dev_deps << ['sqlite3-ruby']
   p.remote_rdoc_dir = ""
 end
 

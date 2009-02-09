@@ -2,84 +2,89 @@ require File.dirname(__FILE__) + '/test_helper'
 
 class NonSluggedTest < Test::Unit::TestCase
 
-  fixtures :users
+  context "A non-slugged model with default FriendlyId options" do
 
-  def setup
-  end
-
-  def test_should_find_user_using_friendly_id
-    assert User.find(users(:joe).friendly_id)
-  end
-
-  def test_should_find_users_using_friendly_id
-    assert User.find([users(:joe).friendly_id])
-  end
-
-  def test_to_param_should_return_a_string
-    assert_equal String, users(:joe).to_param.class
-  end
-
-  def test_should_not_find_users_using_non_existent_friendly_ids
-    assert_raises ActiveRecord::RecordNotFound do
-      User.find(['bad', 'bad2'])
+    setup do
+      User.delete_all
+      @user = User.create!(:login => "joe", :email => "joe@example.org")
     end
-  end
-  
-  def test_finding_by_array_with_friendly_and_non_friendly_id_for_same_record_raises_error
-    assert_raises ActiveRecord::RecordNotFound do
-      User.find([users(:joe).id, "joe"]).size
+
+    should "have friendly_id options" do
+      assert_not_nil User.friendly_id_options
     end
-  end
 
-  def test_finding_with_mixed_array_should_indicate_whether_found_by_numeric_or_friendly
-    @users = User.find([users(:jane).id, "joe"], :order => "login ASC")
-    assert @users[0].found_using_numeric_id?
-    assert @users[1].found_using_friendly_id?
-  end
-
-  def test_finder_options_are_not_ignored
-    assert_raises ActiveRecord::RecordNotFound do
-       User.find(users(:joe).friendly_id, :conditions => "1 = 2")
+    should "not have a slug" do
+      assert !@user.respond_to?(:slug)
     end
-    assert_raises ActiveRecord::RecordNotFound do
-       User.find([users(:joe).friendly_id], :conditions => "1 = 2")
+
+    should "be findable by its friendly_id" do
+      assert User.find(@user.friendly_id)
     end
-  end
 
-  def test_user_should_have_friendly_id_options
-    assert_not_nil User.friendly_id_options
-  end
+    should "be findable by its regular id" do
+      assert User.find(@user.id)
+    end
 
-  def test_user_should_not_be_found_using_friendly_id_unless_it_really_was
-    assert !User.find(users(:joe).id).found_using_friendly_id?
-  end
+    should "respect finder conditions" do
+      assert_raises ActiveRecord::RecordNotFound do
+        User.find(@user.friendly_id, :conditions => "1 = 2")
+      end
+    end
 
-  def test_users_should_not_be_found_using_friendly_id_unless_they_really_were
-    @users = User.find([users(:jane).id])
-    assert @users[0].found_using_numeric_id?
-  end
+    should "indicate if it was found by its friendly id" do
+      @user = User.find(@user.friendly_id)
+      assert @user.found_using_friendly_id?
+    end
 
-  def test_user_should_be_considered_found_by_numeric_id_as_default
-    @user = User.new
-    assert @user.found_using_numeric_id?
-  end
+    should "indicate if it was found by its numeric id" do
+      @user = User.find(@user.id)
+      assert @user.found_using_numeric_id?
+    end
 
-  def test_user_should_indicate_if_it_was_found_using_numeric_id
-    @user = User.find(users(:joe).id)
-    assert @user.found_using_numeric_id?
-    assert !@user.found_using_friendly_id?
-  end
+    should "indicate if it has a better id" do
+      @user = User.find(@user.id)
+      assert @user.has_better_id?
+    end
 
-  def test_user_should_indicate_if_it_was_found_using_friendly_id
-    @user = User.find(users(:joe).friendly_id)
-    assert !@user.found_using_numeric_id?
-    assert @user.found_using_friendly_id?
-  end
+    should "not validate if the friendly_id text is reserved" do
+      @user = User.new(:login => "new", :email => "test@example.org")
+      assert !@user.valid?
+    end
 
-  def test_should_indicate_there_is_a_better_id_if_found_by_numeric_id
-    @user = User.find(users(:joe).id)
-    assert @user.found_using_numeric_id?
-    assert @user.has_better_id?
+    should "have always string for a friendly_id" do
+      assert_equal String, @user.to_param.class
+    end
+
+    context "when using an array as the find argument" do
+
+      setup do
+        @user2 = User.create(:login => "jane", :email => "jane@example.org")
+      end
+
+      should "return results" do
+        assert_equal 2, User.find([@user.friendly_id, @user2.friendly_id]).size
+      end
+
+      should "not allow mixed friendly and non-friendly ids for the same record" do
+        assert_raises ActiveRecord::RecordNotFound do
+          User.find([@user.id, @user.friendly_id]).size
+        end
+      end
+
+      should "raise an error when all records are not found" do
+        assert_raises ActiveRecord::RecordNotFound do
+          User.find(['bad', 'bad2'])
+        end
+      end
+
+      should "indicate if the results were found using a friendly_id" do
+        @users = User.find([@user.id, @user2.friendly_id], :order => "login ASC")
+        assert @users[0].found_using_friendly_id?
+        assert @users[1].found_using_numeric_id?
+      end
+
+    end
+
   end
 
 end
