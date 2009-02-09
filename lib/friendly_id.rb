@@ -40,8 +40,8 @@ module FriendlyId
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
-    # * <tt>:reseved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to ["new", "index"].
-    # * <tt>:reseved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
+    # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to ["new", "index"].
+    # * <tt>:reserved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
     def has_friendly_id(column, options = {})
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
       options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
