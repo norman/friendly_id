@@ -1,4 +1,9 @@
 ActiveRecord::Schema.define(:version => 1) do
+  
+  create_table "books", :force => true do |t|
+    t.column "title", "string"
+    t.column "type", "text"
+  end
 
   create_table "posts", :force => true do |t|
     t.column "title", "string"
