@@ -21,7 +21,7 @@ module FriendlyId::NonSluggableInstanceMethods
 
   # Returns the friendly id, or if none is available, the numeric id.
   def to_param
-    friendly_id.to_s || id.to_s
+    (friendly_id || id).to_s
   end
 
   private

@@ -55,6 +55,12 @@ class NonSluggedTest < Test::Unit::TestCase
       assert_equal String, @user.to_param.class
     end
 
+    should "return its id if the friendly_id is null" do
+      @user.login = nil
+      assert_equal @user.id.to_s, @user.to_param
+    end
+
+
     context "when using an array as the find argument" do
 
       setup do

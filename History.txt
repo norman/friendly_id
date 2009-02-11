@@ -1,3 +1,8 @@
+== 2.0.3 2009-02-11
+
+* 1 minor enhancment:
+  * Fixed to_param returning an empty string for non-slugged models with a null friendly_id.
+
 == 2.0.2 2009-02-09
 
 * 2 major enhancements:
