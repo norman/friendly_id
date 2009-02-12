@@ -18,6 +18,7 @@ require 'models/user'
 require 'models/country'
 require 'models/book'
 require 'models/novel'
+require 'models/thing'
 
 # Borrowed from ActiveSupport
 def silence_stream(stream)

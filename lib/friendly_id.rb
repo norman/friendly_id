@@ -14,7 +14,7 @@ module FriendlyId
     :strip_diacritics => false,
     :strip_non_ascii => false,
     :use_slug => false }.freeze
-  
+
   # Valid keys for has_friendly_id options.
   VALID_FRIENDLY_ID_KEYS = [
     :max_length,
@@ -24,7 +24,7 @@ module FriendlyId
     :strip_diacritics,
     :strip_non_ascii,
     :use_slug ].freeze
-    
+
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
 
@@ -42,11 +42,12 @@ module FriendlyId
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
     # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to ["new", "index"].
     # * <tt>:reserved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
-    def has_friendly_id(column, options = {})
+    def has_friendly_id(column, options = {}, &block)
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
       options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
       write_inheritable_attribute :friendly_id_options, options
       class_inheritable_accessor :friendly_id_options
+      class_inheritable_reader :slug_normalizer_block
 
       if options[:use_slug]
         has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
@@ -55,6 +56,9 @@ module FriendlyId
         extend SluggableClassMethods
         include SluggableInstanceMethods
         before_save :set_slug
+        if block_given?
+          write_inheritable_attribute :slug_normalizer_block, block
+        end
       else
         require 'friendly_id/non_sluggable_class_methods'
         require 'friendly_id/non_sluggable_instance_methods'
@@ -63,7 +67,7 @@ module FriendlyId
         validate_on_create :validate_friendly_id
       end
     end
-    
+
   end
 
   class << self

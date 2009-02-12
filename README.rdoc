@@ -136,8 +136,12 @@ Here's how to do it:
 
   class Restaurant < ActiveRecord::Base
     belongs_to :city
-    has_friendly_id :name, :use_slug => true, :reserved => ["new", "index"]
+    has_friendly_id :name, :use_slug => true, :reserved => ["my", "values"]
   end
+
+As of FriendlyId version 2.0.2, "new" and "index" are reseved by default. When
+you attempt to store a reserved value, FriendlyId raises a
+FriendlyId::SlugGenerationError.
 
 
 === Scoped Slugs
@@ -208,6 +212,33 @@ that uses a non-Roman writing system, your feedback would be most welcome.
   @post.friendly_id # "友好编号在中国"
   @post2 = Post.create(:title => "友好编号在中国")
   @post2.friendly_id # "友好编号在中国--2"
+  
+=== Custom Slug Generation
+
+While FriendlyId's slug generation options work for most people, you may need
+something else. As of version 2.0.4 you can pass in your own custom slug
+generation block:
+
+  require 'stringex'
+  class Post < ActiveRecord::Base
+    has_friendly_id :title, :use_slug => true do |text|
+      # User stringex to generate the friendly_id rather than the baked-in methods
+      text.to_url
+    end
+  end
+  
+  ...
+  
+  @post = Post.create(:title => "tell your readers 你好")
+  @post.friendly_id # "tell-your-readers-ni-hao"
+
+FriendlyId will still respect your settings for max length and reserved words,
+but will use your block rather than the baked-in methods to normalize the
+friendly_id text.
+
+(As an aside, the stringex[http://github.com/rsl/stringex/tree/master] library
+provides some very cool slugging functionality and is a great option for
+apps using FriendlyId in either English or Chinese. Definitely check it out.)
 
 == Getting it
 
@@ -228,7 +259,7 @@ which FriendlyId depends on:
 
 == Setting it up
 
-FriendlyId currently works with Rails 2.0.0 and higher. Here's how to set it up.
+FriendlyId currently works with Rails 2.0.0 - 2.3.0. Here's how to set it up.
 
 1) Install the Gem:
 
@@ -267,7 +298,7 @@ rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
 == Upgrading from an older version
 
-If you installed an older version of FriendlyId and want to upgrade to 2.0,
+If you installed an older version of FriendlyId and want to upgrade to 2.0.x,
 follow these steps:
 
 ==== Install the friendly_id Gem:
@@ -296,8 +327,6 @@ Add this to the bottom of environment.rb:
 
   ./script generate friendly_id_20_upgrade
   rake db:migrate
-
-That's it!
 
 == Hacking FriendlyId:
 

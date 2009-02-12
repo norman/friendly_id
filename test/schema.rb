@@ -1,8 +1,12 @@
 ActiveRecord::Schema.define(:version => 1) do
-  
+
   create_table "books", :force => true do |t|
     t.column "title", "string"
     t.column "type", "text"
+  end
+
+  create_table "things", :force => true do |t|
+    t.column "name", "string"
   end
 
   create_table "posts", :force => true do |t|
@@ -18,12 +22,12 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column "created_at", "datetime"
     t.column "updated_at", "datetime"
   end
-  
+
   create_table "people", :force => true do |t|
     t.column "name", "string"
     t.column "country_id", "integer"
   end
-  
+
   create_table "countries", :force => true do |t|
     t.column "name", "string"
   end

@@ -1,7 +1,7 @@
 module FriendlyId::SluggableClassMethods
 
   include FriendlyId::Helpers
-
+  
   def self.extended(base) #:nodoc:#
 
     class << base

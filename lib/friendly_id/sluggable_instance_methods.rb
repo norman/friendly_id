@@ -56,13 +56,17 @@ module FriendlyId::SluggableInstanceMethods
   # Get the processed string used as the basis of the friendly id.
   def slug_text
     base = send friendly_id_options[:column]
-    if self.friendly_id_options[:strip_diacritics]
-      base = Slug::strip_diacritics(base)
+    if self.slug_normalizer_block
+      base = self.slug_normalizer_block.call(base)
+    else
+      if self.friendly_id_options[:strip_diacritics]
+        base = Slug::strip_diacritics(base)
+      end
+      if self.friendly_id_options[:strip_non_ascii]
+        base = Slug::strip_non_ascii(base)
+      end
+      base = Slug::normalize(base)
     end
-    if self.friendly_id_options[:strip_non_ascii]
-      base = Slug::strip_non_ascii(base)
-    end
-    base = Slug::normalize(base)
     
     if base.length > friendly_id_options[:max_length]
       base = base[0...friendly_id_options[:max_length]]

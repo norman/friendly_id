@@ -42,3 +42,11 @@ def run_coverage(files)
   puts cmd
   sh cmd
 end
+
+desc 'Publish RDoc to RubyForge.'
+task :publish_docs => [:clean, :docs] do
+  host = "compay@rubyforge.org"
+  remote_dir = "/var/www/gforge-projects/friendly-id"
+  local_dir = 'doc'
+  sh %{rsync -av --delete #{local_dir}/ #{host}:#{remote_dir}}
+end
