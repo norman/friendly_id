@@ -219,30 +219,19 @@ While FriendlyId's slug generation options work for most people, you may need
 something else. As of version 2.0.4 you can pass in your own custom slug
 generation block:
 
-  require 'stringex'
   class Post < ActiveRecord::Base
     has_friendly_id :title, :use_slug => true do |text|
-      # User stringex to generate the friendly_id rather than the baked-in methods
-      text.to_url
+      MySlugGeneratorClass::my_slug_method(text)
     end
   end
   
-  ...
-  
-  @post = Post.create(:title => "tell your readers 你好")
-  @post.friendly_id # "tell-your-readers-ni-hao"
-
 FriendlyId will still respect your settings for max length and reserved words,
 but will use your block rather than the baked-in methods to normalize the
 friendly_id text.
 
-(As an aside, the stringex[http://github.com/rsl/stringex/tree/master] library
-provides some very cool slugging functionality and is a great option for
-apps using FriendlyId in either English or Chinese. Definitely check it out.)
-
 == Getting it
 
-FriendlyId is installed as a Ruby Gem:
+FriendlyId is best installed as a Ruby Gem:
 
   gem install friendly_id
 

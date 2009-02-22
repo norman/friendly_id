@@ -42,6 +42,18 @@ module FriendlyId
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
     # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to ["new", "index"].
     # * <tt>:reserved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
+    #
+    # You can also optionally pass a block if you want to use your own custom
+    # slugnormalization routines rather than the default ones that come with
+    # friendly_id:
+    #
+    #   require 'stringex'
+    #   class Post < ActiveRecord::Base
+    #     has_friendly_id :title, :use_slug => true do |text|
+    #       # Use stringex to generate the friendly_id rather than the baked-in methods
+    #       text.to_url
+    #     end
+    #   end    
     def has_friendly_id(column, options = {}, &block)
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
       options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
