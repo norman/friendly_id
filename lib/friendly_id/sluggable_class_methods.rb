@@ -63,7 +63,7 @@ module FriendlyId::SluggableClassMethods
     find_options[:conditions] = "#{quoted_table_name}.#{primary_key} IN (#{ids.empty? ? 'NULL' : ids.join(',')}) "
     find_options[:conditions] << "OR slugs.id IN (#{slugs.to_s(:db)})"
 
-    results = with_scope(:find => find_options) { find_every(options) }
+    results = with_scope(:find => find_options) { find_every(options) }.uniq
 
     expected = expected_size(ids_and_names, options)
     if results.size != expected
