@@ -235,10 +235,18 @@ class SluggedModelTest < Test::Unit::TestCase
         @post2 = Post.create!(:title => "another post", :content => "more content")
       end
 
-      should "return results" do
+      should "return results when passed an array of non-friendly ids" do
+        assert_equal 2, Post.find([@post.id, @post2.id]).size
+      end
+            
+      should "return results when passed an array of friendly ids" do
         assert_equal 2, Post.find([@post.friendly_id, @post2.friendly_id]).size
       end
 
+      should "return results when passed a mixed array of friendly and non-friendly ids" do
+        assert_equal 2, Post.find([@post.friendly_id, @post2.id]).size
+      end
+      
       should "indicate that the results were found using a friendly_id" do
         @posts = Post.find [@post.friendly_id, @post2.friendly_id]
         @posts.each { |p| assert p.found_using_friendly_id? }

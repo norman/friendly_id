@@ -97,7 +97,7 @@ module FriendlyId::SluggableClassMethods
     slugs = []
     ids = []
     ids_and_names.each do |id_or_name|
-      name, sequence = Slug.parse id_or_name
+      name, sequence = Slug.parse id_or_name.to_s
       slug = Slug.find(:first, :conditions => {
         :name           => name,
         :scope          => scope,
@@ -106,7 +106,7 @@ module FriendlyId::SluggableClassMethods
       })
       # If the slug was found, add it to the array for later use. If not, and
       # the id_or_name is a number, assume that it is a regular record id.
-      slug ? slugs << slug : (ids << id_or_name if id_or_name =~ /\A\d*\z/)
+      slug ? slugs << slug : (ids << id_or_name if id_or_name.to_s =~ /\A\d*\z/)
     end
     return slugs, ids
   end
