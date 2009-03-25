@@ -242,7 +242,9 @@ discouraged:
 
 == Setting it up
 
-FriendlyId currently works with Rails 2.0.0 - 2.3.0. Here's how to set it up.
+The current release works with Rails 2.2 and above, and is compatible with
+Ruby 1.8 and 1.9. If you need support for Rails 2.0 - 2.1, you need to install
+an older version of FriendlyId. Here's how to set it up.
 
 1) Install the Gem:
 
@@ -278,6 +280,17 @@ rake:friendly_id:remove_old_slugs
 The default is to remove dead slugs older than 45 days, but is configurable:
 
 rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+
+== Installing an older version
+
+If you are still on Rails 2.1 or lower, please install version 2.0.4:
+
+gem install friendly_id --version 2.0.4
+
+Note that this version depends on the Unicode gem, which doesn't compile on
+Windows and is incompatible with Ruby 1.9. It also can't be installed on
+Heroku. If these are problems, you'll need to update your application to Rails
+2.2 or higher and use the current release of FriendlyId.
 
 == Upgrading from an older version
 
