@@ -1,6 +1,14 @@
+== 2.1.1 2009-03-25
+
+* 2 minor enhancements:
+  * Fixed bug with find_some; if a record has old slugs, find_some will no longer return 
+multiple copies of that record when finding by numerical ID. (Steve Luscher)
+  * Fixed bug with find_some: you can now find_some with an array of numerical IDs without 
+an error being thrown. (Steve Luscher)
+
 == 2.1.0 2009-03-25
 
-2 major enhancements:
+* 2 major enhancements:
   * Ruby 1.9 compatibility.
   * Removed dependency on ancient Unicode gem.
 
