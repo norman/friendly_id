@@ -9,8 +9,8 @@ $hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.description = 'A comprehensive slugging and pretty-URL plugin for ActiveRecord.'
   p.url = 'http://friendly-id.rubyforge.org/'
   p.test_globs = ['test/**/*_test.rb']
-  p.extra_deps << ['unicode', '>= 0.1']
   p.extra_deps << ['activerecord', '>= 2.0.0']
+  p.extra_deps << ['activesupport', '>= 2.0.0']
   p.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
   p.extra_dev_deps << ['Shoulda', ">= 1.2.0"]
   p.extra_dev_deps << ['sqlite3-ruby']

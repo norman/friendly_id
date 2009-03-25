@@ -1,9 +1,23 @@
-require 'unicode'
+#encoding: utf-8
+
 # A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
   before_save :check_for_blank_name, :set_sequence
+  
+  
+  ASCII_APPROXIMATIONS = {
+    198 => "AE",
+    208 => "D",
+    216 => "O",
+    222 => "Th",
+    223 => "ss",
+    230 => "ae",
+    240 => "d",
+    248 => "o",
+    254 => "th"
+  }.freeze
 
   class << self
 
@@ -13,20 +27,14 @@ class Slug < ActiveRecord::Base
     #
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     #
-    # Note that Rails 2.2.x offers a parameterize method for this. It's not
-    # used here because it assumes you want to strip away accented characters,
-    # and this may not always be your desire.
-    #
-    # At the time of writing, it also handles several characters incorrectly,
-    # for instance replacing Icelandic's "thorn" character with "y" rather
-    # than "d." This might be pedantic, but I don't want to piss off the
-    # Vikings. The last time anyone pissed them off, they uleashed a wave of
-    # terror in Europe unlike anything ever seen before or after. I'm not
-    # taking any chances.
+    # Note that the Unicode handling in ActiveSupport may fail to process some
+    # characters from Polish, Icelandic and other languages. If your
+    # application uses these languages, check {out this
+    # article}[http://link-coming-soon.com] for information on how to get
+    # better urls in your application.
     def normalize(slug_text)
       return "" if slug_text.nil? || slug_text == ""
-      Unicode::normalize_KC(slug_text).
-        send(chars_func).
+      ActiveSupport::Multibyte.proxy_class.new(slug_text).normalize(:kc).
         # For some reason Spanish ¡ and ¿ are not detected as non-word
         # characters. Bug in Ruby?
         gsub(/[\W|¡|¿]/u, ' ').
@@ -35,6 +43,10 @@ class Slug < ActiveRecord::Base
         gsub(/-\z/u, '').
         downcase.
         to_s
+    end
+    
+    def postnormalize(string)
+      string.gs
     end
 
     def parse(friendly_id)
@@ -46,8 +58,17 @@ class Slug < ActiveRecord::Base
     # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
     # from "The Ruby Way."
     def strip_diacritics(string)
-      Unicode::normalize_KD(string).unpack('U*').select { |u| u < 0x300 || u > 0x036F }.pack('U*')
+      ActiveSupport::Multibyte.proxy_class.new(string).normalize(:kd).unpack('U*').inject([]) { |a, u| 
+        if ASCII_APPROXIMATIONS[u]
+          a += ASCII_APPROXIMATIONS[u].unpack('U*')
+        elsif (u < 0x300 || u > 0x036F)
+          a << u
+        end
+        a
+      }.pack('U*')
     end
+
+
     
     # Remove non-ascii characters from the string.
     def strip_non_ascii(string)
@@ -75,7 +96,7 @@ class Slug < ActiveRecord::Base
 
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
   def check_for_blank_name #:nodoc:#
-    if name == "" || name.nil?
+    if name.blank?
       raise FriendlyId::SlugGenerationError.new("The slug text is blank.")
     end
   end

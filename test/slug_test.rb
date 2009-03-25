@@ -39,8 +39,8 @@ class SlugTest < Test::Unit::TestCase
       input  = "ÀÁÂÃÄÅÆÇÈÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"
       output = Slug::strip_diacritics(input).split(//)
       expected = "AAAAAAAECEEEIIIIDNOOOOOOUUUUYThssaaaaaaaeceeeeiiiidnoooooouuuuythy".split(//)
-      output.split.each_index do |i|
-        assert_equal output[i], expected[i]
+      output.each_index do |i|
+        assert_equal expected[i], output[i]
       end
     end
   

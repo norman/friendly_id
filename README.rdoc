@@ -240,12 +240,6 @@ discouraged:
 
   ./script/plugin install git://github.com/norman/friendly_id.git
 
-If you are installing as a plugin, make sure you have installed the unicode gem,
-which FriendlyId depends on:
-
-  gem install unicode
-
-
 == Setting it up
 
 FriendlyId currently works with Rails 2.0.0 - 2.3.0. Here's how to set it up.

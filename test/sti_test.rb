@@ -17,9 +17,9 @@ class SluggedModelTest < Test::Unit::TestCase
     should "have a slug" do
       assert_not_nil @novel.slug
     end
-    
+
     context "found by its friendly id" do
-      
+
       setup do
         @novel = Novel.find(@novel.friendly_id)
       end
@@ -29,10 +29,10 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
     end
-    
+
 
     context "found by its numeric id" do
-      
+
       setup do
         @novel = Novel.find(@novel.id)
       end

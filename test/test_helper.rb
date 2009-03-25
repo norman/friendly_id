@@ -1,6 +1,7 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 $:.unshift(File.dirname(__FILE__))
-$VERBOSE=false
+$KCODE = 'UTF8' if RUBY_VERSION < '1.9'
+$VERBOSE = false
 require 'rubygems'
 require 'test/unit'
 require 'shoulda'
@@ -8,8 +9,10 @@ require 'shoulda'
 # The default is to use the latest installed ActiveRecord.
 if ENV["AR_VERSION"]
   gem 'activerecord', "#{ENV["AR_VERSION"]}"
+  gem 'activesupport', "#{ENV["AR_VERSION"]}"
 end
 require 'active_record'
+require 'active_support'
 
 require 'friendly_id'
 require 'models/post'
