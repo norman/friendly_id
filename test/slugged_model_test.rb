@@ -95,7 +95,7 @@ class SluggedModelTest < Test::Unit::TestCase
       @post = Post.new(:title => "katakana: ゲコゴサザシジ")
       assert_equal "katakana-ゲコゴサザシジ", @post.slug_text
     end
-    
+
     should "allow the same friendly_id across models" do
       @person = Person.create!(:name => @post.title)
       assert_equal @person.friendly_id, @post.friendly_id
@@ -238,7 +238,7 @@ class SluggedModelTest < Test::Unit::TestCase
       should "return results when passed an array of non-friendly ids" do
         assert_equal 2, Post.find([@post.id, @post2.id]).size
       end
-            
+
       should "return results when passed an array of friendly ids" do
         assert_equal 2, Post.find([@post.friendly_id, @post2.friendly_id]).size
       end
@@ -246,12 +246,12 @@ class SluggedModelTest < Test::Unit::TestCase
       should "return results when passed a mixed array of friendly and non-friendly ids" do
         assert_equal 2, Post.find([@post.friendly_id, @post2.id]).size
       end
-      
+
       should "return results when passed an array of non-friendly ids, of which one represents a record with multiple slugs" do
         @post2.update_attributes(:title => 'another post [updated]')
         assert_equal 2, Post.find([@post.id, @post2.id]).size
       end
-      
+
       should "indicate that the results were found using a friendly_id" do
         @posts = Post.find [@post.friendly_id, @post2.friendly_id]
         @posts.each { |p| assert p.found_using_friendly_id? }
