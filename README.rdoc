@@ -270,16 +270,16 @@ an older version of FriendlyId. Here's how to set it up.
 4) If you are using slugs, you can use a Rake task to generate slugs for your
 existing records:
 
-friendly_id:make_slugs MODEL=MyModelName
+rake friendly_id:make_slugs MODEL=MyModelName
 
 If you eventually want to expire old slugs every so often, or perhaps every
 day via cron, you can do:
 
-rake:friendly_id:remove_old_slugs
+rake friendly_id:remove_old_slugs
 
 The default is to remove dead slugs older than 45 days, but is configurable:
 
-rake:friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
+rake friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
 == Installing an older version
 
@@ -321,7 +321,7 @@ Add this to the bottom of environment.rb:
 
 ====  Generate the upgrade migration and run it
 
-  ./script generate friendly_id_20_upgrade
+  ./script/generate friendly_id_20_upgrade
   rake db:migrate
 
 == Hacking FriendlyId:
