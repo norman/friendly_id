@@ -4,7 +4,7 @@ $KCODE = 'UTF8' if RUBY_VERSION < '1.9'
 $VERBOSE = false
 require 'rubygems'
 require 'test/unit'
-require 'shoulda'
+require 'contest'
 # You can use "rake test AR_VERSION=2.0.5" to test against 2.0.5, for example.
 # The default is to use the latest installed ActiveRecord.
 if ENV["AR_VERSION"]

@@ -1,3 +1,9 @@
+== 2.1.2 2009-05-21
+
+* 2 minor enhancements:
+  * Non-slugged models now validate the friendly_id on save as well as create (Joe Van Dyk).
+  * Replaced Shoulda with Contest.
+
 == 2.1.1 2009-03-25
 
 * 2 minor enhancements:

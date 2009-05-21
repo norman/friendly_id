@@ -4,7 +4,7 @@ require 'lib/friendly_id/version'
 $hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.rubyforge_name = "friendly-id"
   p.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
-  p.email = ['norman@randomba.org', 'adrian@randomba.org', 'miloops@gmail.com']
+  p.email = ['norman@rubysouth.com', 'adrian@rubysouth.com', 'miloops@gmail.com']
   p.summary = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
   p.description = 'A comprehensive slugging and pretty-URL plugin for ActiveRecord.'
   p.url = 'http://friendly-id.rubyforge.org/'
@@ -12,7 +12,6 @@ $hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.extra_deps << ['activerecord', '>= 2.0.0']
   p.extra_deps << ['activesupport', '>= 2.0.0']
   p.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
-  p.extra_dev_deps << ['Shoulda', ">= 1.2.0"]
   p.extra_dev_deps << ['sqlite3-ruby']
   p.remote_rdoc_dir = ""
 end

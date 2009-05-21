@@ -20,6 +20,7 @@ lib/friendly_id/sluggable_instance_methods.rb
 lib/friendly_id/version.rb
 lib/tasks/friendly_id.rake
 lib/tasks/friendly_id.rb
+test/contest.rb
 test/custom_slug_normalizer_test.rb
 test/models/book.rb
 test/models/country.rb
