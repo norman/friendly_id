@@ -76,7 +76,7 @@ module FriendlyId
         require 'friendly_id/non_sluggable_instance_methods'
         extend NonSluggableClassMethods
         include NonSluggableInstanceMethods
-        validate_on_create :validate_friendly_id
+        validate :validate_friendly_id
       end
     end
 
