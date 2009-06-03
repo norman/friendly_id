@@ -24,6 +24,7 @@ test/contest.rb
 test/custom_slug_normalizer_test.rb
 test/models/book.rb
 test/models/country.rb
+test/models/event.rb
 test/models/novel.rb
 test/models/person.rb
 test/models/post.rb

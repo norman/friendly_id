@@ -32,6 +32,11 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column "name", "string"
   end
 
+  create_table "events", :force => true do |t|
+    t.column "name", "string"
+    t.column "event_date", "datetime"
+  end
+
   create_table "slugs", :force => true do |t|
     t.column "name", "string"
     t.column "sluggable_id", "integer"

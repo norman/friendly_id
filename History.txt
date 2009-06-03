@@ -1,3 +1,8 @@
+== 2.1.3 2009-06-03
+
+* 1 minor enhancement:
+  * Always call #to_s on slug_text to allow objects such as DateTimes to be used for the friendly_id text. (reported by Jon Ng)
+
 == 2.1.2 2009-05-21
 
 * 2 minor enhancements:

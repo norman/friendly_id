@@ -34,7 +34,7 @@ class Slug < ActiveRecord::Base
     # better urls in your application.
     def normalize(slug_text)
       return "" if slug_text.nil? || slug_text == ""
-      ActiveSupport::Multibyte.proxy_class.new(slug_text).normalize(:kc).
+      ActiveSupport::Multibyte.proxy_class.new(slug_text.to_s).normalize(:kc).
         # For some reason Spanish ¡ and ¿ are not detected as non-word
         # characters. Bug in Ruby?
         gsub(/[\W|¡|¿]/u, ' ').

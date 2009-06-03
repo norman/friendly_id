@@ -86,6 +86,10 @@ class SluggedModelTest < Test::Unit::TestCase
       assert_match(/--2\z/, @post2.friendly_id)
     end
 
+    should "allow datetime columns to be used as slugs" do
+      assert Event.create(:name => "Test", :event_date => DateTime.now)
+    end
+
     should "not strip diacritics" do
       @post = Post.new(:title => "¡Feliz año!")
       assert_match(/#{'ñ'}/, @post.slug_text)

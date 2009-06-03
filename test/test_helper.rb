@@ -22,6 +22,7 @@ require 'models/country'
 require 'models/book'
 require 'models/novel'
 require 'models/thing'
+require 'models/event'
 
 # Borrowed from ActiveSupport
 def silence_stream(stream)
