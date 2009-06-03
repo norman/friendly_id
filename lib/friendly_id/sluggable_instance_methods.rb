@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module FriendlyId::SluggableInstanceMethods
 
   NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2

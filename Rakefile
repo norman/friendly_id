@@ -31,15 +31,13 @@ def run_coverage(files)
     return
   end
   files = files.join(" ")
-  if PLATFORM =~ /darwin/
-    exclude = '--exclude "gems/"'
-  else
-    exclude = '--exclude "rubygems"'
-  end
-  rcov = "rcov -Ilib:test --sort coverage --text-report #{exclude} --no-validator-links"
-  cmd = "#{rcov} #{files}"
-  puts cmd
-  sh cmd
+  # if RUBY_PLATFORM =~ /darwin/
+  #   exclude = '--exclude "gems/"'
+  # else
+  #   exclude = '--exclude "rubygems"'
+  # end
+  rcov = ENV["RCOV"] ? ENV["RCOV"] : "rcov"
+  sh "#{rcov} -Ilib:test --sort coverage --text-report #{files}"
 end
 
 desc 'Publish RDoc to RubyForge.'

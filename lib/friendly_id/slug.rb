@@ -35,9 +35,7 @@ class Slug < ActiveRecord::Base
     def normalize(slug_text)
       return "" if slug_text.nil? || slug_text == ""
       ActiveSupport::Multibyte.proxy_class.new(slug_text.to_s).normalize(:kc).
-        # For some reason Spanish ¡ and ¿ are not detected as non-word
-        # characters. Bug in Ruby?
-        gsub(/[\W|¡|¿]/u, ' ').
+        gsub(/[\W]/u, ' ').
         strip.
         gsub(/\s+/u, '-').
         gsub(/-\z/u, '').
@@ -45,10 +43,6 @@ class Slug < ActiveRecord::Base
         to_s
     end
     
-    def postnormalize(string)
-      string.gs
-    end
-
     def parse(friendly_id)
       name, sequence = friendly_id.split('--')
       sequence ||= "1"
@@ -76,10 +70,6 @@ class Slug < ActiveRecord::Base
     end
 
     private
-
-    def chars_func
-      "".respond_to?(:mb_chars) ? :mb_chars : :chars
-    end
 
   end
 

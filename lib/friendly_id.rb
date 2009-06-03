@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'friendly_id/helpers'
 require 'friendly_id/slug'
 

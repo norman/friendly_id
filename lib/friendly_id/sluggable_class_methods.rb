@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module FriendlyId::SluggableClassMethods
 
   include FriendlyId::Helpers
