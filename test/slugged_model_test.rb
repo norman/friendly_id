@@ -11,7 +11,7 @@ class SluggedModelTest < Test::Unit::TestCase
       Post.delete_all
       Person.delete_all
       Slug.delete_all
-      @post = Post.new :title => "Test post", :content => "Test content"
+      @post = Post.new :title => "Test post", :content => "Test content", :published => true
       @post.save!
     end
 
@@ -236,7 +236,7 @@ class SluggedModelTest < Test::Unit::TestCase
     context "when using an array as the find argument" do
 
       setup do
-        @post2 = Post.create!(:title => "another post", :content => "more content")
+        @post2 = Post.create!(:title => "another post", :content => "more content", :published => true)
       end
 
       should "return results when passed an array of non-friendly ids" do
@@ -245,6 +245,10 @@ class SluggedModelTest < Test::Unit::TestCase
 
       should "return results when passed an array of friendly ids" do
         assert_equal 2, Post.find([@post.friendly_id, @post2.friendly_id]).size
+      end
+      
+      should "return results when searching using a named scope" do
+        assert_equal 2, Post.published.find([@post.id, @post2.id]).size
       end
 
       should "return results when passed a mixed array of friendly and non-friendly ids" do

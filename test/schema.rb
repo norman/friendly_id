@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table "posts", :force => true do |t|
     t.column "title", "string"
     t.column "content", "text"
+    t.column "published", "boolean", :default => false
     t.column "created_at", "datetime"
     t.column "updated_at", "datetime"
   end
