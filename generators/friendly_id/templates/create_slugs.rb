@@ -8,7 +8,7 @@ class CreateSlugs < ActiveRecord::Migration
       t.string :scope, :limit => 40
       t.datetime :created_at
     end
-    add_index :slugs, [:name, :sluggable_type, :scope, :sequence], :unique => true
+    add_index :slugs, [:name, :sluggable_type, :scope, :sequence], :name => "index_slugs_on_n_s_s_and_s", :unique => true
     add_index :slugs, :sluggable_id
   end
 
