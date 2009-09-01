@@ -1,9 +1,9 @@
 == 2.1.4 2009-09-01
 
-* 1 minor enhancement:
+* 3 minor enhancements:
   * Fixed upgrade generator not installing rake tasks (Harry Love)
   * Fixed handling of very large id's (Nathan Phelps)
-  * Fixed long index name on migration (Ron Ingram)
+  * Fixed long index name on migration (Rob Ingram)
 
 == 2.1.3 2009-06-03
 
