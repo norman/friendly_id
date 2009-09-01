@@ -3,7 +3,7 @@
 module FriendlyId::SluggableClassMethods
 
   include FriendlyId::Helpers
-  
+
   def self.extended(base) #:nodoc:#
 
     class << base
@@ -18,7 +18,7 @@ module FriendlyId::SluggableClassMethods
   def find_one_with_friendly(id_or_name, options) #:nodoc:#
 
     scope = options.delete(:scope)
-    return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Fixnum)
+    return find_one_without_friendly(id_or_name, options) if id_or_name.is_a?(Integer)
 
     find_options = {:select => "#{self.table_name}.*"}
     find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
