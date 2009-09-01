@@ -1,3 +1,10 @@
+== 2.1.4 2009-09-01
+
+* 1 minor enhancement:
+  * Fixed upgrade generator not installing rake tasks (Harry Love)
+  * Fixed handling of very large id's (Nathan Phelps)
+  * Fixed long index name on migration (Ron Ingram)
+
 == 2.1.3 2009-06-03
 
 * 1 minor enhancement:
@@ -12,9 +19,9 @@
 == 2.1.1 2009-03-25
 
 * 2 minor enhancements:
-  * Fixed bug with find_some; if a record has old slugs, find_some will no longer return 
+  * Fixed bug with find_some; if a record has old slugs, find_some will no longer return
 multiple copies of that record when finding by numerical ID. (Steve Luscher)
-  * Fixed bug with find_some: you can now find_some with an array of numerical IDs without 
+  * Fixed bug with find_some: you can now find_some with an array of numerical IDs without
 an error being thrown. (Steve Luscher)
 
 == 2.1.0 2009-03-25
