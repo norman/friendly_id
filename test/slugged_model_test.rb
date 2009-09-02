@@ -32,6 +32,12 @@ class SluggedModelTest < Test::Unit::TestCase
       assert Post.find(@post.id)
     end
 
+    should "not be findable by its id if looking for something else" do
+      assert_raises ActiveRecord::RecordNotFound do
+        Post.find("#{@post.id}-i-dont-exists")
+      end
+    end
+
     should "generate slug text" do
       post = Post.new :title => "Test post", :content => "Test content"
       assert_not_nil @post.slug_text
