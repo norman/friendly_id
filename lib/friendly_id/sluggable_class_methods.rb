@@ -35,6 +35,8 @@ module FriendlyId::SluggableClassMethods
 
     if result
       result.finder_slug_name = id_or_name
+    elsif id_or_name.to_i.to_s != id_or_name
+      raise ActiveRecord::RecordNotFound
     else
       result = find_one_without_friendly id_or_name, options
     end
