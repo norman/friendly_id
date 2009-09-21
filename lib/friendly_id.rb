@@ -12,6 +12,7 @@ module FriendlyId
     :method => nil,
     :reserved => ["new", "index"],
     :reserved_message => 'can not be "%s"',
+    :cache_column => nil,
     :scope => nil,
     :strip_diacritics => false,
     :strip_non_ascii => false,
@@ -22,6 +23,7 @@ module FriendlyId
     :max_length,
     :reserved,
     :reserved_message,
+    :cache_column,
     :scope,
     :strip_diacritics,
     :strip_non_ascii,
@@ -40,6 +42,7 @@ module FriendlyId
     # Options:
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
+    # * <tt>:cache_column</tt> - Defaults to nil. Use this column as a cache for generating to_param (experimental).
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
     # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will be treated the same as if that slug was already taken (numeric extension will be appended). Defaults to ["new", "index"].

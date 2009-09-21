@@ -52,6 +52,9 @@ module FriendlyId::SluggableInstanceMethods
 
   # Returns the friendly id, or if none is available, the numeric id.
   def to_param
+    if cache = friendly_id_options[:cache_column]
+      return read_attribute(cache) || id.to_s
+    end
     slug ? slug.to_friendly_id : id.to_s
   end
 
@@ -108,6 +111,9 @@ module FriendlyId::SluggableInstanceMethods
       # slug so that we can recycle the name without having to use a sequence.
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
       slug = slugs.build slug_attributes
+      if cache = friendly_id_options[:cache_column]
+        update_attribute(cache, slug.to_friendly_id)
+      end
       slug
     end
   end
