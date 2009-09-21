@@ -212,7 +212,7 @@ that uses a non-Roman writing system, your feedback would be most welcome.
   @post.friendly_id # "友好编号在中国"
   @post2 = Post.create(:title => "友好编号在中国")
   @post2.friendly_id # "友好编号在中国--2"
-  
+
 === Custom Slug Generation
 
 While FriendlyId's slug generation options work for most people, you may need
@@ -224,7 +224,7 @@ generation block:
       MySlugGeneratorClass::my_slug_method(text)
     end
   end
-  
+
 FriendlyId will still respect your settings for max length and reserved words,
 but will use your block rather than the baked-in methods to normalize the
 friendly_id text.
@@ -331,8 +331,8 @@ we love pull requests. :-)
 
 == Bugs:
 
-Please report them on Lighthouse[http://randomba.lighthouseapp.com/projects/14675-friendly_id].
-
+Please report them on the {Github issue tracker}[http://github.com/norman/friendly_id/issues]
+for this project.
 
 == Credits:
 
