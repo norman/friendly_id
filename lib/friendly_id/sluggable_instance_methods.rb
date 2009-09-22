@@ -23,6 +23,9 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using an old friendly id?
   def found_using_outdated_friendly_id?
+    if cache = friendly_id_options[:cache_column]
+      return false if send(cache) == @finder_slug_name
+    end
     finder_slug.id != slug.id
   end
 
@@ -112,7 +115,7 @@ module FriendlyId::SluggableInstanceMethods
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
       slug = slugs.build slug_attributes
       if cache = friendly_id_options[:cache_column]
-        update_attribute(cache, slug.to_friendly_id)
+        update_attribute(cache, slug.to_friendly_id) unless send(cache) == slug.to_friendly_id
       end
       slug
     end
