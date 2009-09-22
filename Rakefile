@@ -1,5 +1,6 @@
 require 'newgem'
 require 'lib/friendly_id/version'
+require 'hoe'
 
 $hoe = Hoe.new("friendly_id", FriendlyId::Version::STRING) do |p|
   p.rubyforge_name = "friendly-id"

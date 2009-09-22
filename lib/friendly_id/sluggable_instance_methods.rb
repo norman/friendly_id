@@ -13,7 +13,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using one of its friendly ids?
   def found_using_friendly_id?
-    finder_slug
+    !!@finder_slug_name
   end
 
   # Was the record found using its numeric id?
@@ -31,7 +31,12 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using an old friendly id, or its numeric id?
   def has_better_id?
-    slug and found_using_numeric_id? || found_using_outdated_friendly_id?
+    has_a_slug? and found_using_numeric_id? || found_using_outdated_friendly_id?
+  end
+
+  # Has the record (at least) one slug?
+  def has_a_slug?
+    @finder_slug_name || slug
   end
 
   # Returns the friendly id.
@@ -85,7 +90,7 @@ module FriendlyId::SluggableInstanceMethods
     return base
   end
 
-  private
+private
 
   def finder_slug=(finder_slug)
     @finder_slug_name = finder_slug.name
