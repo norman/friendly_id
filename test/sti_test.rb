@@ -2,7 +2,7 @@
 
 require File.dirname(__FILE__) + '/test_helper'
 
-class SluggedModelTest < Test::Unit::TestCase
+class STIModelTest < Test::Unit::TestCase
 
   context "A slugged model using single table inheritance" do
 
