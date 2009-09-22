@@ -55,7 +55,7 @@ module FriendlyId::SluggableInstanceMethods
   # id.
   def slug(reload = false)
     @most_recent_slug = nil if reload
-    @most_recent_slug ||= slugs.first
+    @most_recent_slug ||= slugs.first(:order => "id DESC")
   end
 
   # Returns the friendly id, or if none is available, the numeric id.
@@ -120,7 +120,8 @@ private
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
       slug = slugs.build slug_attributes
       if cache = friendly_id_options[:cache_column]
-        update_attribute(cache, slug.to_friendly_id) unless send(cache) == slug.to_friendly_id
+        new_slug = slug.to_friendly_id
+        send("#{cache}=", new_slug) unless send(cache) == new_slug
       end
       slug
     end

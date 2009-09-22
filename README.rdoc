@@ -161,7 +161,7 @@ generating URLs. For that, you need a column on your model:
 Then, you can enable cached slugs:
 
   class User < ActiveRecord::Base
-    has_friendly_id :name, :use_slug => true, :cached_column => 'cached_slug'
+    has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
   end
 
 Important: if you activate this option on a table with already existing slugs,
