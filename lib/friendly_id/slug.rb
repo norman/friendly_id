@@ -5,8 +5,8 @@ class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
   before_save :check_for_blank_name, :set_sequence
-  
-  
+
+
   ASCII_APPROXIMATIONS = {
     198 => "AE",
     208 => "D",
@@ -42,7 +42,7 @@ class Slug < ActiveRecord::Base
         downcase.
         to_s
     end
-    
+
     def parse(friendly_id)
       name, sequence = friendly_id.split('--')
       sequence ||= "1"
@@ -52,7 +52,8 @@ class Slug < ActiveRecord::Base
     # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
     # from "The Ruby Way."
     def strip_diacritics(string)
-      ActiveSupport::Multibyte.proxy_class.new(string).normalize(:kd).unpack('U*').inject([]) { |a, u| 
+      a = ActiveSupport::Multibyte.proxy_class.new(string).normalize(:kd) || ""
+      a.unpack('U*').inject([]) { |a, u|
         if ASCII_APPROXIMATIONS[u]
           a += ASCII_APPROXIMATIONS[u].unpack('U*')
         elsif (u < 0x300 || u > 0x036F)
@@ -63,7 +64,7 @@ class Slug < ActiveRecord::Base
     end
 
 
-    
+
     # Remove non-ascii characters from the string.
     def strip_non_ascii(string)
       strip_diacritics(string).gsub(/[^a-z0-9]+/i, ' ')
