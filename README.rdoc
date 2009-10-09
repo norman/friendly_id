@@ -143,6 +143,31 @@ As of FriendlyId version 2.0.2, "new" and "index" are reseved by default. When
 you attempt to store a reserved value, FriendlyId raises a
 FriendlyId::SlugGenerationError.
 
+=== Cached slugs
+
+You can cache slugs in the models to avoid querying the slugs table for
+generating URLs. For that, you need a column on your model:
+
+  class AddCachedSlugToUsers < ActiveRecord::Migration
+    def self.up
+      add_column :users, :cached_slug, :string
+    end
+
+    def self.down
+      remove_column :users, :cached_slug
+    end
+  end
+
+Then, you can enable cached slugs:
+
+  class User < ActiveRecord::Base
+    has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
+  end
+
+Important: if you activate this option on a table with already existing slugs,
+do not forget to redo the slugs:
+
+  rake friendly_id:redo_slugs MODEL=User
 
 === Scoped Slugs
 

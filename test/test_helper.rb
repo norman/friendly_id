@@ -23,6 +23,7 @@ require 'models/book'
 require 'models/novel'
 require 'models/thing'
 require 'models/event'
+require 'models/city'
 
 ActiveRecord::Base.establish_connection :adapter => "sqlite3", :database => ":memory:"
 silence_stream(STDOUT) do

@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{friendly_id}
-  s.version = "2.1.4"
+  s.version = "2.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
-  s.date = %q{2009-09-01}
+  s.date = %q{2009-09-21}
   s.description = %q{A comprehensive slugging and pretty-URL plugin for ActiveRecord.}
   s.email = ["norman@rubysouth.com", "adrian@rubysouth.com", "miloops@gmail.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.rdoc"]

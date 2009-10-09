@@ -13,7 +13,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using one of its friendly ids?
   def found_using_friendly_id?
-    finder_slug
+    !!@finder_slug_name
   end
 
   # Was the record found using its numeric id?
@@ -23,12 +23,20 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using an old friendly id?
   def found_using_outdated_friendly_id?
+    if cache = friendly_id_options[:cache_column]
+      return false if send(cache) == @finder_slug_name
+    end
     finder_slug.id != slug.id
   end
 
   # Was the record found using an old friendly id, or its numeric id?
   def has_better_id?
-    slug and found_using_numeric_id? || found_using_outdated_friendly_id?
+    has_a_slug? and found_using_numeric_id? || found_using_outdated_friendly_id?
+  end
+
+  # Has the record (at least) one slug?
+  def has_a_slug?
+    @finder_slug_name || slug
   end
 
   # Returns the friendly id.
@@ -47,11 +55,14 @@ module FriendlyId::SluggableInstanceMethods
   # id.
   def slug(reload = false)
     @most_recent_slug = nil if reload
-    @most_recent_slug ||= slugs.first
+    @most_recent_slug ||= slugs.first(:order => "id DESC")
   end
 
   # Returns the friendly id, or if none is available, the numeric id.
   def to_param
+    if cache = friendly_id_options[:cache_column]
+      return read_attribute(cache) || id.to_s
+    end
     slug ? slug.to_friendly_id : id.to_s
   end
 
@@ -79,7 +90,7 @@ module FriendlyId::SluggableInstanceMethods
     return base
   end
 
-  private
+private
 
   def finder_slug=(finder_slug)
     @finder_slug_name = finder_slug.name
@@ -108,6 +119,10 @@ module FriendlyId::SluggableInstanceMethods
       # slug so that we can recycle the name without having to use a sequence.
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
       slug = slugs.build slug_attributes
+      if cache = friendly_id_options[:cache_column]
+        new_slug = slug.to_friendly_id
+        send("#{cache}=", new_slug) unless send(cache) == new_slug
+      end
       slug
     end
   end

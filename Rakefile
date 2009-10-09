@@ -1,6 +1,7 @@
 require 'newgem'
 require 'hoe'
 require 'lib/friendly_id/version'
+require 'hoe'
 
 Hoe.spec "friendly_id", do
   self.version = FriendlyId::Version::STRING
