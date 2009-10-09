@@ -164,6 +164,15 @@ Then, you can enable cached slugs:
     has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
   end
 
+In fact, friendly_id is smarter than that. If it detects a 'cached_slug'
+column, it will automatically activate the use_slug and cache_column options.
+So, the User model, with its cached_slug column, can be simplified in:
+
+  class User
+    has_friendly_id :name
+	# This implies :use_slug => true, :cache_column => 'cached_slug'
+  end
+
 Important: if you activate this option on a table with already existing slugs,
 do not forget to redo the slugs:
 

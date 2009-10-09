@@ -14,6 +14,12 @@ if ENV["AR_VERSION"]
 end
 require 'active_record'
 require 'active_support'
+
+ActiveRecord::Base.establish_connection :adapter => "sqlite3", :database => ":memory:"
+silence_stream(STDOUT) do
+  load(File.dirname(__FILE__) + "/schema.rb")
+end
+
 require 'friendly_id'
 require 'models/post'
 require 'models/person'
@@ -24,8 +30,4 @@ require 'models/novel'
 require 'models/thing'
 require 'models/event'
 require 'models/city'
-
-ActiveRecord::Base.establish_connection :adapter => "sqlite3", :database => ":memory:"
-silence_stream(STDOUT) do
-  load(File.dirname(__FILE__) + "/schema.rb")
-end
+require 'models/district'

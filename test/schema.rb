@@ -42,6 +42,11 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table "cities", :force => true do |t|
     t.column "name", "string"
+    t.column "my_slug", "string"
+  end
+
+  create_table "districts", :force => true do |t|
+    t.column "name", "string"
     t.column "cached_slug", "string"
   end
 

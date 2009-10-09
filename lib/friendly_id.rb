@@ -61,6 +61,12 @@ module FriendlyId
     #   end    
     def has_friendly_id(column, options = {}, &block)
       options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
+      unless options.has_key?(:cache_column)
+        if columns.any? { |c| c.name == 'cached_slug' }
+          options[:use_slug] = true
+          options[:cache_column] = :cached_slug
+        end
+      end
       options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
       write_inheritable_attribute :friendly_id_options, options
       class_inheritable_accessor :friendly_id_options

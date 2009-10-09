@@ -18,7 +18,7 @@ class CachedSlugModelTest < Test::Unit::TestCase
     end
 
     should "have a cached slug" do
-      assert_not_nil @paris.cached_slug
+      assert_not_nil @paris.my_slug
     end
 
     should "have a to_param method that returns the cached slug" do
@@ -58,12 +58,27 @@ class CachedSlugModelTest < Test::Unit::TestCase
         @paris.save
       end
 
-      should "have its cached_slug updated" do
-        assert_equal "paris-france", @paris.cached_slug
+      should "have its cached slug updated" do
+        assert_equal "paris-france", @paris.my_slug
       end
 
-      should "have its cached_slug synchronized with its friendly_id" do
-        assert_equal @paris.cached_slug, @paris.friendly_id
+      should "have its cached slug synchronized with its friendly_id" do
+        assert_equal @paris.my_slug, @paris.friendly_id
+      end
+
+    end
+
+
+    context "with a cached_slug column" do
+
+      setup do
+        District.delete_all
+        @district = District.new(:name => "Latin Quarter")
+        @district.save!
+      end
+
+      should "have its cached_slug filled automatically" do
+        assert_equal @district.cached_slug, "latin-quarter"
       end
 
     end
