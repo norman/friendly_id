@@ -3,7 +3,7 @@ require 'hoe'
 require 'lib/friendly_id/version'
 require 'hoe'
 
-Hoe.spec "friendly_id", do
+Hoe.spec "friendly_id" do
   self.version = FriendlyId::Version::STRING
   self.rubyforge_name = "friendly-id"
   self.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
