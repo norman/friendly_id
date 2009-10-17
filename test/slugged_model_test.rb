@@ -116,6 +116,11 @@ class SluggedModelTest < Test::Unit::TestCase
       @post = Post.new(:title => "a" * (Post.friendly_id_options[:max_length] + 1))
       assert_equal @post.slug_text.length, Post.friendly_id_options[:max_length]
     end
+    
+    should "truncate slug in 'right way' when slug is unicode" do
+      @post = Post.new(:title => "ё" * 100 + 'ю' *(Post.friendly_id_options[:max_length] - 100 + 1))
+      assert_equal @post.slug_text.mb_chars[-1], 'ю'
+    end
 
     should "be able to reuse an old friendly_id without incrementing the sequence" do
       old_title = @post.title

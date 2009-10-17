@@ -70,8 +70,8 @@ module FriendlyId::SluggableInstanceMethods
       base = Slug::normalize(base)
     end
     
-    if base.length > friendly_id_options[:max_length]
-      base = base[0...friendly_id_options[:max_length]]
+    if base.mb_chars.length > friendly_id_options[:max_length]
+      base = base.mb_chars[0...friendly_id_options[:max_length]]
     end
     if friendly_id_options[:reserved].include?(base)
       raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
