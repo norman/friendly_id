@@ -32,6 +32,10 @@ class SluggedModelTest < Test::Unit::TestCase
       assert Post.find(@post.id)
     end
 
+    should "be findable by its regular id as a string" do
+      assert Post.find(@post.id.to_s)
+    end
+
     should "not be findable by its id if looking for something else" do
       assert_raises ActiveRecord::RecordNotFound do
         Post.find("#{@post.id}-i-dont-exists")
@@ -116,7 +120,7 @@ class SluggedModelTest < Test::Unit::TestCase
       @post = Post.new(:title => "a" * (Post.friendly_id_options[:max_length] + 1))
       assert_equal @post.slug_text.length, Post.friendly_id_options[:max_length]
     end
-    
+
     should "truncate slug in 'right way' when slug is unicode" do
       @post = Post.new(:title => "ё" * 100 + 'ю' *(Post.friendly_id_options[:max_length] - 100 + 1))
       assert_equal @post.slug_text.mb_chars[-1], 'ю'
