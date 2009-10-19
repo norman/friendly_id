@@ -7,16 +7,17 @@ Hoe.spec "friendly_id" do
   self.version = FriendlyId::Version::STRING
   self.rubyforge_name = "friendly-id"
   self.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
-  self.email = ['norman@rubysouth.com', 'adrian@rubysouth.com', 'miloops@gmail.com']
+  self.email = ['norman@njclarke.com', 'adrian@mugnolo.com', 'miloops@gmail.com']
   self.summary = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
   self.description = 'A comprehensive slugging and pretty-URL plugin for ActiveRecord.'
   self.url = 'http://friendly-id.rubyforge.org/'
   self.test_globs = ['test/**/*_test.rb']
-  self.extra_deps << ['activerecord', '>= 2.0.0']
-  self.extra_deps << ['activesupport', '>= 2.0.0']
+  self.extra_deps << ['activerecord', '>= 2.2.3']
+  self.extra_deps << ['activesupport', '>= 2.2.3']
   self.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
   self.extra_dev_deps << ['sqlite3-ruby']
   self.remote_rdoc_dir = ""
+  self.extra_rdoc_files = ["README.rdoc"]
 end
 
 require 'newgem/tasks'
@@ -34,11 +35,6 @@ def run_coverage(files)
     return
   end
   files = files.join(" ")
-  # if RUBY_PLATFORM =~ /darwin/
-  #   exclude = '--exclude "gems/"'
-  # else
-  #   exclude = '--exclude "rubygems"'
-  # end
   rcov = ENV["RCOV"] ? ENV["RCOV"] : "rcov"
   sh "#{rcov} -Ilib:test --sort coverage --text-report #{files}"
 end
