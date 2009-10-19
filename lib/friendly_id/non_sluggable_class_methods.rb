@@ -4,25 +4,18 @@ module FriendlyId::NonSluggableClassMethods
 
   include FriendlyId::Helpers
 
-  def self.extended(base) #:nodoc:#
-    class << base
-      alias_method_chain :find_one, :friendly
-      alias_method_chain :find_some, :friendly
-    end
-  end
-
   protected
 
-  def find_one_with_friendly(id, options) #:nodoc:#
+  def find_one(id, options) #:nodoc:#
     if id.is_a?(String) && result = send("find_by_#{ friendly_id_options[:column] }", id, options)
       result.send(:found_using_friendly_id=, true)
     else
-      result = find_one_without_friendly id, options
+      result = super id, options
     end
     result
   end
 
-  def find_some_with_friendly(ids_and_names, options) #:nodoc:#
+  def find_some(ids_and_names, options) #:nodoc:#
 
     results = with_scope :find => options do
       find :all, :conditions => ["#{quoted_table_name}.#{primary_key} IN (?) OR #{friendly_id_options[:column].to_s} IN (?)",
