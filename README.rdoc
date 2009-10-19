@@ -145,8 +145,13 @@ FriendlyId::SlugGenerationError.
 
 === Cached slugs
 
-You can cache slugs in the models to avoid querying the slugs table for
-generating URLs. For that, you need a column on your model:
+Checking the slugs table all the time can be a big performance drain, so as of
+2.3.0, FriendlyId offers slug caching to improve performance.
+
+
+==== Automagic setup
+
+To enable slug caching, simply add a column named "cached_slug" to your model:
 
   class AddCachedSlugToUsers < ActiveRecord::Migration
     def self.up
@@ -158,25 +163,21 @@ generating URLs. For that, you need a column on your model:
     end
   end
 
-Then, you can enable cached slugs:
-
-  class User < ActiveRecord::Base
-    has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
-  end
-
-In fact, friendly_id is smarter than that. If it detects a 'cached_slug'
-column, it will automatically activate the use_slug and cache_column options.
-So, the User model, with its cached_slug column, can be simplified in:
-
-  class User
-    has_friendly_id :name
-	# This implies :use_slug => true, :cache_column => 'cached_slug'
-  end
+FriendlyId will automagically use this column if it detects it.
 
 Important: if you activate this option on a table with already existing slugs,
 do not forget to redo the slugs:
 
   rake friendly_id:redo_slugs MODEL=User
+
+==== Using a custom column name
+
+You can also use a different name for the column if you choose, via the
+:cache_column config option:
+
+  class User < ActiveRecord::Base
+    has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
+  end
 
 === Scoped Slugs
 
@@ -287,13 +288,9 @@ an older version of FriendlyId. Here's how to set it up.
   script/generate friendly_id
   rake db:migrate
 
-2) Load FriendlyId in your app:
+2) Add the gem to config/environment.rb:
 
-  # Rails 2.1 and higher; add this to the gem section of environment.rb:
   config.gem "friendly_id"
-
-  # Rails 2.0; this goes at the bottom of environment.rb
-  require 'friendly_id'
 
 3) Add some code to your models:
 
@@ -317,46 +314,8 @@ rake friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
 
 == Installing an older version
 
-If you are still on Rails 2.1 or lower, please install version 2.0.4:
-
-gem install friendly_id --version 2.0.4
-
-Note that this version depends on the Unicode gem, which doesn't compile on
-Windows and is incompatible with Ruby 1.9. It also can't be installed on
-Heroku. If these are problems, you'll need to update your application to Rails
-2.2 or higher and use the current release of FriendlyId.
-
-== Upgrading from an older version
-
-If you installed an older version of FriendlyId and want to upgrade to 2.0.x,
-follow these steps:
-
-==== Install the friendly_id Gem:
-
-  sudo gem install friendly_id
-
-==== Add FriendlyId to environment.rb:
-
-===== For Rails 2.1 and higher:
-
-  config.gem "friendly_id"
-
-===== For Rails 2.0:
-
-Add this to the bottom of environment.rb:
-
-  require 'friendly_id'
-
-==== Remove the older version of FriendlyId:
-
-  git rm -rf vendor/plugins/friendly_id
-  svn delete vendor/plugins/friendly_id
-  # or whatever
-
-====  Generate the upgrade migration and run it
-
-  ./script/generate friendly_id_20_upgrade
-  rake db:migrate
+You can download older versions of FriendlyId from Github that work with Rails <
+2.2. These versions are, however, no longer maintained or supported.
 
 == Hacking FriendlyId:
 
@@ -372,6 +331,8 @@ for this project.
 
 FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org],
 {Adrian Mugnolo}[mailto:adrian@randomba.org], and {Emilio Tagua}[mailto:miloops@gmail.com].
+
+We are grateful for many contributions from the Ruby and Rails community.
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
 under the MIT license.
