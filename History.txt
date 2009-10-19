@@ -1,7 +1,9 @@
-== 2.2.0 2009-09-21
+== 2.2.0 NOT RELEASED YET
 
-* 3 major enhancement:
-  *  You can now cache slugs, so generating to_param do not need to query the slugs table.
+* 1 major enhancement:
+  *  Added slug caching, offers huge performance boost (Bruno Michel)
+* 1 minor enhancelemt:
+  * Handle Unicode string length correctly (Mikhail Shirkov)
 
 == 2.1.4 2009-09-01
 
