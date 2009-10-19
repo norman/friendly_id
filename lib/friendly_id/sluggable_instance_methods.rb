@@ -34,7 +34,7 @@ module FriendlyId::SluggableInstanceMethods
     has_a_slug? and found_using_numeric_id? || found_using_outdated_friendly_id?
   end
 
-  # Has the record (at least) one slug?
+  # Does the record have (at least) one slug?
   def has_a_slug?
     @finder_slug_name || slug
   end
@@ -80,7 +80,7 @@ module FriendlyId::SluggableInstanceMethods
       end
       base = Slug::normalize(base)
     end
-    
+
     if base.mb_chars.length > friendly_id_options[:max_length]
       base = base.mb_chars[0...friendly_id_options[:max_length]]
     end
