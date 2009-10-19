@@ -22,23 +22,6 @@ end
 
 require 'newgem/tasks'
 
-desc "Run RCov"
-task :rcov do
-  run_coverage Dir["test/**/*_test.rb"]
-end
-
-def run_coverage(files)
-  rm_f "coverage"
-  rm_f "coverage.data"
-  if files.length == 0
-    puts "No files were specified for testing"
-    return
-  end
-  files = files.join(" ")
-  rcov = ENV["RCOV"] ? ENV["RCOV"] : "rcov"
-  sh "#{rcov} -Ilib:test --sort coverage --text-report #{files}"
-end
-
 desc 'Publish RDoc to RubyForge.'
 task :publish_docs => [:clean, :docs] do
   host = "compay@rubyforge.org"
