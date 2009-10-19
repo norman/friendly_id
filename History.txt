@@ -1,4 +1,4 @@
-== 2.2.0 NOT RELEASED YET
+== 2.2.0 2009-10-19
 
 * 1 major enhancement:
   *  Added slug caching, offers huge performance boost (Bruno Michel)
