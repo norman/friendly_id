@@ -20,6 +20,10 @@ silence_stream(STDOUT) do
   load(File.dirname(__FILE__) + "/schema.rb")
 end
 
+class ActiveRecord::Base
+  def log_protected_attribute_removal(*args) end
+end
+
 require 'friendly_id'
 require 'models/post'
 require 'models/person'

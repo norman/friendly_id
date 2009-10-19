@@ -28,10 +28,7 @@ class Slug < ActiveRecord::Base
     #   slug.normalize('This... is an example!') # => "this-is-an-example"
     #
     # Note that the Unicode handling in ActiveSupport may fail to process some
-    # characters from Polish, Icelandic and other languages. If your
-    # application uses these languages, check {out this
-    # article}[http://link-coming-soon.com] for information on how to get
-    # better urls in your application.
+    # characters from Polish, Icelandic and other languages.
     def normalize(slug_text)
       return "" if slug_text.nil? || slug_text == ""
       ActiveSupport::Multibyte.proxy_class.new(slug_text.to_s).normalize(:kc).

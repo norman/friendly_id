@@ -1,4 +1,5 @@
-# encoding: utf-8
+# encoding: utf-8!
+# @paris.reload
 
 require File.dirname(__FILE__) + '/test_helper'
 
@@ -25,6 +26,12 @@ class CachedSlugModelTest < Test::Unit::TestCase
       assert_equal "paris", @paris.to_param
     end
 
+    should "protect the cached slug value" do
+      @paris.update_attributes(:my_slug => "Madrid")
+      @paris.reload
+      assert_equal("paris", @paris.my_slug)
+    end
+
     context "found by its friendly id" do
 
       setup do
@@ -36,7 +43,6 @@ class CachedSlugModelTest < Test::Unit::TestCase
       end
 
     end
-
 
     context "found by its numeric id" do
 
@@ -55,7 +61,8 @@ class CachedSlugModelTest < Test::Unit::TestCase
 
       setup do
         @paris.name = "Paris, France"
-        @paris.save
+        @paris.save!
+        @paris.reload
       end
 
       should "have its cached slug updated" do

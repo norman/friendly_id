@@ -82,6 +82,9 @@ module FriendlyId
         if block_given?
           write_inheritable_attribute :slug_normalizer_block, block
         end
+        if options[:cache_column]
+          attr_protected options[:cache_column].to_sym
+        end
       else
         require 'friendly_id/non_sluggable_class_methods'
         require 'friendly_id/non_sluggable_instance_methods'

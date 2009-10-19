@@ -145,13 +145,18 @@ FriendlyId::SlugGenerationError.
 
 === Cached slugs
 
-Checking the slugs table all the time can be a big performance drain, so as of
-2.3.0, FriendlyId offers slug caching to improve performance.
+Checking the slugs table all the time has an impact on performance, so as of
+2.3.0, FriendlyId offers slug caching.
 
+This feature can improve the performance of some views by about 25%, and reduce
+memory consumption by about 40% as compared to the same view without cached
+slugs. The biggest improvement will be for "index" type views with many links
+that depend on slugs to generate the URL.
 
-==== Automagic setup
+==== Automagic setup:
 
-To enable slug caching, simply add a column named "cached_slug" to your model:
+To enable slug caching, simply add a column named "cached_slug" to your model.
+FriendlyId will automagically use this column if it detects it:
 
   class AddCachedSlugToUsers < ActiveRecord::Migration
     def self.up
@@ -163,20 +168,24 @@ To enable slug caching, simply add a column named "cached_slug" to your model:
     end
   end
 
-FriendlyId will automagically use this column if it detects it.
-
-Important: if you activate this option on a table with already existing slugs,
-do not forget to redo the slugs:
+Then, redo the slugs:
 
   rake friendly_id:redo_slugs MODEL=User
 
-==== Using a custom column name
+*DO NOT* forget to redo the slugs, or else this feature will not work!
+
+Also note that this feature exists largely to improve the performance of URL
+generation, the part of Rails where FriendlyId has the biggest performance
+impact. FriendlyId never queries against this column, so it's not necessary to
+add an index on it unless your application does.
+
+==== Using a custom column name:
 
 You can also use a different name for the column if you choose, via the
 :cache_column config option:
 
   class User < ActiveRecord::Base
-    has_friendly_id :name, :use_slug => true, :cache_column => 'cached_slug'
+    has_friendly_id :name, :use_slug => true, :cache_column => 'my_cached_slug'
   end
 
 === Scoped Slugs
