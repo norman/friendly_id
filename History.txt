@@ -2,8 +2,10 @@
 
 * 1 major enhancement:
   *  Added slug caching, offers huge performance boost (Bruno Michel)
-* 1 minor enhancelemt:
+
+* 2 minor enhancements:
   * Handle Unicode string length correctly (Mikhail Shirkov)
+  * Remove alias_method_chain in favor of super (Diego Carrion)
 
 == 2.1.4 2009-09-01
 
