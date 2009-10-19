@@ -341,7 +341,28 @@ for this project.
 FriendlyId was created by {Norman Clarke}[mailto:norman@randomba.org],
 {Adrian Mugnolo}[mailto:adrian@randomba.org], and {Emilio Tagua}[mailto:miloops@gmail.com].
 
-We are grateful for many contributions from the Ruby and Rails community.
+We are grateful for many contributions from the Ruby and Rails community, in
+particular from the following people:
+
+* Adam Cigánek
+* Alistair Holt
+* Andrew Loe III
+* Bence Nagy
+* Bruno Michel
+* Chris Nolan
+* David Ramalho
+* Diego Carrion
+* Florian Aßmann
+* Harry Love
+* Jesse Crouch
+* Joe Van Dyk
+* Josh Nichols
+* Mikhail Shirkov
+* Nathan Phelps
+* Rob Ingram
+* Sean Abrahams
+* Steve Luscher
+* Tim Kadom
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
 under the MIT license.

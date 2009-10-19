@@ -113,7 +113,7 @@ an error being thrown. (Steve Luscher)
 
 == 2008-07-14
 
-* Improved slug generation for friendly id's with apostrophes. (alistairholt)
+* Improved slug generation for friendly id's with apostrophes. (Alistair Holt)
 * Added support for namespaced models in Rakefile. (David Ramalho)
 
 == 2008-06-23
