@@ -32,15 +32,14 @@ module FriendlyId::SluggableClassMethods
     end
 
     result
+
   rescue ActiveRecord::RecordNotFound => e
 
     if friendly_id_options[:scope]
       if !scope
         raise ActiveRecord::RecordNotFound.new("%s; expected scope but got none" % e.message)
-        # e.message << "; expected scope but got none"
       else
         raise ActiveRecord::RecordNotFound.new("%s and scope=#{scope}" % e.message)
-        # e.message << " and scope=#{scope}"
       end
     end
 
