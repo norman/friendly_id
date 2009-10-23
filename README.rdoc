@@ -172,12 +172,19 @@ Then, redo the slugs:
 
   rake friendly_id:redo_slugs MODEL=User
 
+This feature exists largely to improve the performance of URL
+generation, the part of Rails where FriendlyId has the biggest
+performance impact. FriendlyId never queries against this column, so
+it's not necessary to add an index on it unless your application does.
+
+Two warnings when using this feature:
+
 *DO NOT* forget to redo the slugs, or else this feature will not work!
 
-Also note that this feature exists largely to improve the performance of URL
-generation, the part of Rails where FriendlyId has the biggest performance
-impact. FriendlyId never queries against this column, so it's not necessary to
-add an index on it unless your application does.
+Also, this feature uses +attr_protected+ to protect the cached_slug
+column, unless you have already invoked +attr_accessible+. So if you
+wish to use +attr_accessible+, you must invoke it BEFORE you invoke
++has_friendly_id+ in your class.
 
 ==== Using a custom column name:
 

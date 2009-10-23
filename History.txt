@@ -1,3 +1,9 @@
+== 2.2.1 2009-10-23
+
+* 2 minor enhancements:
+  * slug cache now properly caches the slug sequence (closes GH issue #10)
+  * attr_protected is now only invoked on the cached_slug column if attr_accessible has not already been invoked. (closes GH issue #11)
+
 == 2.2.0 2009-10-19
 
 * 1 major enhancement:

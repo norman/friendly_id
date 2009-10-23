@@ -118,12 +118,14 @@ private
       # If we're renaming back to a previously used friendly_id, delete the
       # slug so that we can recycle the name without having to use a sequence.
       slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
-      slug = slugs.build slug_attributes
-      if cache = friendly_id_options[:cache_column]
-        new_slug = slug.to_friendly_id
-        send("#{cache}=", new_slug) unless send(cache) == new_slug
-      end
-      slug
+      slugs.build slug_attributes
+    end
+  end
+
+  def set_slug_cache
+    if friendly_id_options[:cache_column] && send(friendly_id_options[:cache_column]) != slug.to_friendly_id
+      send "#{friendly_id_options[:cache_column]}=", slug.to_friendly_id
+      send :update_without_callbacks
     end
   end
 

@@ -42,7 +42,7 @@ module FriendlyId
     # Options:
     # * <tt>:use_slug</tt> - Defaults to false. Use slugs when you want to use a non-unique text field for friendly ids.
     # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
-    # * <tt>:cache_column</tt> - Defaults to nil. Use this column as a cache for generating to_param (experimental).
+    # * <tt>:cache_column</tt> - Defaults to nil. Use this column as a cache for generating to_param (experimental) Note that if you use this option, any calls to +attr_accessible+ must be made BEFORE any calls to has_friendly_id in your class.
     # * <tt>:strip_diacritics</tt> - Defaults to false. If true, it will remove accents, umlauts, etc. from western characters.
     # * <tt>:strip_non_ascii</tt> - Defaults to false. If true, it will all non-ascii ([^a-z0-9]) characters.
     # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will raise a FriendlyId::SlugGenerationError. Defaults to ["new", "index"].
@@ -79,11 +79,13 @@ module FriendlyId
         extend SluggableClassMethods
         include SluggableInstanceMethods
         before_save :set_slug
+        after_save :set_slug_cache
         if block_given?
           write_inheritable_attribute :slug_normalizer_block, block
         end
         if options[:cache_column]
-          attr_protected options[:cache_column].to_sym
+          # only protect the column if the class is not already using attributes_accessible
+          attr_protected options[:cache_column].to_sym unless accessible_attributes
         end
       else
         require 'friendly_id/non_sluggable_class_methods'

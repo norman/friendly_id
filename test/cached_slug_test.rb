@@ -1,5 +1,5 @@
 # encoding: utf-8!
-# @paris.reload
+require "mocha"
 
 require File.dirname(__FILE__) + '/test_helper'
 
@@ -29,8 +29,21 @@ class CachedSlugModelTest < Test::Unit::TestCase
     should "protect the cached slug value" do
       @paris.update_attributes(:my_slug => "Madrid")
       @paris.reload
-      assert_equal("paris", @paris.my_slug)
+      assert_equal "paris", @paris.my_slug
     end
+
+    should "cache the incremented sequence for duplicate slug names" do
+      @paris2 = City.create!(:name => "Paris")
+      assert_equal 2, @paris2.slug.sequence
+      assert_equal "paris--2", @paris2.my_slug
+    end
+
+    should "not update the cached slug column if it has not changed" do
+      @paris.population = 10_000_000
+      @paris.expects(:my_slug=).never
+      @paris.save
+    end
+
 
     context "found by its friendly id" do
 
