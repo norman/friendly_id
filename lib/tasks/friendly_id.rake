@@ -1,5 +1,3 @@
-require "friendly_id/tasks"
-
 namespace :friendly_id do
   desc "Make slugs for a model."
   task :make_slugs => :environment do
