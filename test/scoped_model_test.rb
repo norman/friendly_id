@@ -7,13 +7,16 @@ class ScopedModelTest < Test::Unit::TestCase
   context "A slugged model that uses a scope" do
 
     setup do
-      Person.delete_all
-      Country.delete_all
-      Slug.delete_all
       @usa = Country.create!(:name => "USA")
       @canada = Country.create!(:name => "Canada")
       @person = Person.create!(:name => "John Smith", :country => @usa)
       @person2 = Person.create!(:name => "John Smith", :country => @canada)
+    end
+
+    teardown do
+      Person.delete_all
+      Country.delete_all
+      Slug.delete_all
     end
 
     should "find all scoped records without scope" do

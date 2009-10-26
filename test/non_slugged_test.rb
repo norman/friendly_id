@@ -7,8 +7,11 @@ class NonSluggedTest < Test::Unit::TestCase
   context "A non-slugged model with default FriendlyId options" do
 
     setup do
-      User.delete_all
       @user = User.create!(:login => "joe", :email => "joe@example.org")
+    end
+
+    teardown do
+      User.delete_all
     end
 
     should "have friendly_id options" do

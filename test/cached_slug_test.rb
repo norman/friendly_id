@@ -8,10 +8,13 @@ class CachedSlugModelTest < Test::Unit::TestCase
   context "A slugged model with a cached_slugs column" do
 
     setup do
-      City.delete_all
-      Slug.delete_all
       @paris = City.new(:name => "Paris")
       @paris.save!
+    end
+
+    teardown do
+      City.delete_all
+      Slug.delete_all
     end
 
     should "have a slug" do

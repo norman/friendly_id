@@ -8,12 +8,15 @@ class SluggedModelTest < Test::Unit::TestCase
 
     setup do
       Post.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :title, :use_slug => true)
+      @post = Post.new :title => "Test post", :content => "Test content", :published => true
+      @post.save!
+    end
+
+    teardown do
       Post.delete_all
       Person.delete_all
       Slug.delete_all
       Thing.delete_all
-      @post = Post.new :title => "Test post", :content => "Test content", :published => true
-      @post.save!
     end
 
     should "have friendly_id options" do

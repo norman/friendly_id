@@ -8,10 +8,13 @@ class STIModelTest < Test::Unit::TestCase
 
     setup do
       Novel.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :title, :use_slug => true)
-      Novel.delete_all
-      Slug.delete_all
       @novel = Novel.new :title => "Test novel"
       @novel.save!
+    end
+
+    teardown do
+      Novel.delete_all
+      Slug.delete_all
     end
 
     should "have a slug" do

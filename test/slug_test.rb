@@ -6,7 +6,7 @@ class SlugTest < Test::Unit::TestCase
 
   context "a slug" do
 
-    setup do
+    teardown do
       Slug.delete_all
       Post.delete_all
     end

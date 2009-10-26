@@ -8,6 +8,9 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
 
     setup do
       Thing.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :name, :use_slug => true)
+    end
+
+    teardown do
       Thing.delete_all
       Slug.delete_all
     end
@@ -29,7 +32,7 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
         Thing.create!(:name => "test")
       end
     end
-  
+
   end
 
 end
