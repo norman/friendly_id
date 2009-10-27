@@ -8,7 +8,10 @@ module FriendlyId::SluggableClassMethods
   def find_one(id_or_name, options) #:nodoc:#
 
     scope = options.delete(:scope)
-    return super(id_or_name, options) if id_or_name.is_a?(Integer)
+
+    if id_or_name.is_a?(Integer) || id_or_name.kind_of?(ActiveRecord::Base)
+      return super(id_or_name, options)
+    end
 
     find_options = {:select => "#{self.table_name}.*"}
     find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)

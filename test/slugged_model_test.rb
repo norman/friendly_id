@@ -39,6 +39,10 @@ class SluggedModelTest < Test::Unit::TestCase
       assert Post.find(@post.id.to_s)
     end
 
+    should "be findable by its instance" do
+      assert Post.find(@post)
+    end
+
     should "not be findable by its id if looking for something else" do
       assert_raises ActiveRecord::RecordNotFound do
         Post.find("#{@post.id}-i-dont-exists")
