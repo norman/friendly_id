@@ -5,8 +5,7 @@ module FriendlyId
       def make_slugs(klass, options = {})
         klass = parse_class_name(klass)
         validate_uses_slugs(klass)
-        options = {:limit => 100, :include => :slugs, :order => "#{klass.table_name}.id ASC",
-          :conditions => "slugs.id IS NULL"}.merge(options)
+        options = {:limit => 100, :include => :slugs, :conditions => "slugs.id IS NULL"}.merge(options)
         while records = klass.find(:all, options) do
           break if records.size == 0
           records.each do |r|
