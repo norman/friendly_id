@@ -66,9 +66,15 @@ class SluggedModelTest < Test::Unit::TestCase
       end
     end
 
-    should "raise an error if the friendly_id text is blank" do
+    should "raise an error if the friendly_id text is an empty string" do
       assert_raises(FriendlyId::SlugGenerationError) do
         Post.create(:title => "")
+      end
+    end
+
+    should "raise an error if the friendly_id text is nil" do
+      assert_raises(FriendlyId::SlugGenerationError) do
+        Post.create(:title => nil)
       end
     end
 
@@ -164,6 +170,19 @@ class SluggedModelTest < Test::Unit::TestCase
         @post = Post.new(:title => "¡Feliz año!")
         assert_no_match(/#{'ñ'}/, @post.slug_text)
       end
+
+      should "raise an error if the friendly_id text is an empty string" do
+        assert_raises(FriendlyId::SlugGenerationError) do
+          Post.create(:title => "")
+        end
+      end
+
+      should "raise an error if the friendly_id text is nil" do
+        assert_raises(FriendlyId::SlugGenerationError) do
+          Post.create(:title => nil)
+        end
+      end
+
     end
 
     context "and configured to convert to ASCII" do

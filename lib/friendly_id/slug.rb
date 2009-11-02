@@ -49,7 +49,7 @@ class Slug < ActiveRecord::Base
     # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
     # from "The Ruby Way."
     def strip_diacritics(string)
-      a = ActiveSupport::Multibyte.proxy_class.new(string).normalize(:kd) || ""
+      a = ActiveSupport::Multibyte.proxy_class.new(string || "").normalize(:kd)
       a.unpack('U*').inject([]) { |a, u|
         if ASCII_APPROXIMATIONS[u]
           a += ASCII_APPROXIMATIONS[u].unpack('U*')
