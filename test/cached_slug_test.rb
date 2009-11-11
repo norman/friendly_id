@@ -36,9 +36,9 @@ class CachedSlugModelTest < Test::Unit::TestCase
     end
 
     should "cache the incremented sequence for duplicate slug names" do
-      @paris2 = City.create!(:name => "Paris")
-      assert_equal 2, @paris2.slug.sequence
-      assert_equal "paris--2", @paris2.my_slug
+      paris2 = City.create!(:name => "Paris")
+      assert_equal 2, paris2.slug.sequence
+      assert_equal "paris--2", paris2.my_slug
     end
 
     should "not update the cached slug column if it has not changed" do

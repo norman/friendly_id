@@ -16,14 +16,14 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
     end
 
     should "invoke the block code" do
-      @thing = Thing.create!(:name => "test")
-      assert_equal "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3", @thing.friendly_id
+      thing = Thing.create!(:name => "test")
+      assert_equal "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3", thing.friendly_id
     end
 
     should "respect the max_length option" do
       Thing.friendly_id_options = Thing.friendly_id_options.merge(:max_length => 10)
-      @thing = Thing.create!(:name => "test")
-      assert_equal "a94a8fe5cc", @thing.friendly_id
+      thing = Thing.create!(:name => "test")
+      assert_equal "a94a8fe5cc", thing.friendly_id
     end
 
     should "respect the reserved option" do

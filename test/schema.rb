@@ -2,6 +2,10 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
+  create_table "legacy_table", :force => true do |t|
+    t.column "name", :string
+  end
+
   create_table "books", :force => true do |t|
     t.column "title", "string"
     t.column "type", "text"

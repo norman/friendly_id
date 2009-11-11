@@ -12,11 +12,11 @@ class SlugTest < Test::Unit::TestCase
     end
 
     should "indicate if it is the most recent slug" do
-      @post = Post.create!(:title => "test title", :content => "test content")
-      @post.title = "a new title"
-      @post.save!
-      assert @post.slugs.last.is_most_recent?
-      assert !@post.slugs.first.is_most_recent?
+      post = Post.create!(:title => "test title", :content => "test content")
+      post.title = "a new title"
+      post.save!
+      assert post.slugs.last.is_most_recent?
+      assert !post.slugs.first.is_most_recent?
     end
 
   end
