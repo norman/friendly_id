@@ -9,25 +9,14 @@ module FriendlyId
   # Default options for has_friendly_id.
   DEFAULT_FRIENDLY_ID_OPTIONS = {
     :max_length => 255,
-    :method => nil,
     :reserved => ["new", "index"],
     :reserved_message => 'can not be "%s"',
     :cache_column => nil,
     :scope => nil,
     :strip_diacritics => false,
     :strip_non_ascii => false,
-    :use_slug => false }.freeze
-
-  # Valid keys for has_friendly_id options.
-  VALID_FRIENDLY_ID_KEYS = [
-    :max_length,
-    :reserved,
-    :reserved_message,
-    :cache_column,
-    :scope,
-    :strip_diacritics,
-    :strip_non_ascii,
-    :use_slug ].freeze
+    :use_slug => false
+  }.freeze
 
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
@@ -59,43 +48,48 @@ module FriendlyId
     #       text.to_url
     #     end
     #   end
-    def has_friendly_id(column, options = {}, &block)
-      options.assert_valid_keys VALID_FRIENDLY_ID_KEYS
-      unless options.has_key?(:cache_column)
-        if columns.any? { |c| c.name == 'cached_slug' }
-          options[:use_slug] = true
-          options[:cache_column] = :cached_slug
-        end
-      end
-      options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:column => column)
+    def has_friendly_id(method, options = {}, &block)
+      options.assert_valid_keys DEFAULT_FRIENDLY_ID_OPTIONS.keys
+      options = DEFAULT_FRIENDLY_ID_OPTIONS.merge(options).merge(:method => method)
       write_inheritable_attribute :friendly_id_options, options
       class_inheritable_accessor :friendly_id_options
       class_inheritable_reader :slug_normalizer_block
-
-      if options[:use_slug]
-        has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
-        require 'friendly_id/sluggable_class_methods'
-        require 'friendly_id/sluggable_instance_methods'
-        extend SluggableClassMethods
-        include SluggableInstanceMethods
-        before_save :set_slug
-        after_save :set_slug_cache
-        if block_given?
-          write_inheritable_attribute :slug_normalizer_block, block
-        end
-        if options[:cache_column]
-          # only protect the column if the class is not already using attributes_accessible
-          attr_protected options[:cache_column].to_sym unless accessible_attributes
-        end
-      else
-        require 'friendly_id/non_sluggable_class_methods'
-        require 'friendly_id/non_sluggable_instance_methods'
-        extend NonSluggableClassMethods
-        include NonSluggableInstanceMethods
-        validate :validate_friendly_id
-      end
+      friendly_id_options[:use_slug] ? set_up_with_slugs(&block) : set_up_without_slugs
     end
 
+    private
+
+    def set_up_with_slugs(&block)
+      write_inheritable_attribute(:slug_normalizer_block, block) if block_given?
+      configure_cached_slugs
+      require 'friendly_id/sluggable_class_methods'
+      require 'friendly_id/sluggable_instance_methods'
+      extend SluggableClassMethods
+      include SluggableInstanceMethods
+      has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+      before_save :set_slug
+      after_save :set_slug_cache
+    end
+
+    def set_up_without_slugs
+      require 'friendly_id/non_sluggable_class_methods'
+      require 'friendly_id/non_sluggable_instance_methods'
+      extend NonSluggableClassMethods
+      include NonSluggableInstanceMethods
+      validate :validate_friendly_id
+    end
+
+    def configure_cached_slugs
+      unless friendly_id_options[:cache_column]
+        if columns.any? { |c| c.name == 'cached_slug' }
+          friendly_id_options[:cache_column] = :cached_slug
+        end
+      end
+      if friendly_id_options[:cache_column]
+        # only protect the column if the class is not already using attributes_accessible
+        attr_protected friendly_id_options[:cache_column].to_sym unless accessible_attributes
+      end
+    end
   end
 
   class << self

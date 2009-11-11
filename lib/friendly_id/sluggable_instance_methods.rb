@@ -68,7 +68,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Get the processed string used as the basis of the friendly id.
   def slug_text
-    base = send friendly_id_options[:column]
+    base = send friendly_id_options[:method]
     if self.slug_normalizer_block
       base = self.slug_normalizer_block.call(base)
     else

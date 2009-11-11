@@ -7,7 +7,7 @@ module FriendlyId::NonSluggableClassMethods
   protected
 
   def find_one(id, options) #:nodoc:#
-    if id.is_a?(String) && result = send("find_by_#{ friendly_id_options[:column] }", id, options)
+    if id.is_a?(String) && result = send("find_by_#{ friendly_id_options[:method] }", id, options)
       result.send(:found_using_friendly_id=, true)
     else
       result = super id, options
@@ -18,7 +18,7 @@ module FriendlyId::NonSluggableClassMethods
   def find_some(ids_and_names, options) #:nodoc:#
 
     results = with_scope :find => options do
-      find :all, :conditions => ["#{quoted_table_name}.#{primary_key} IN (?) OR #{friendly_id_options[:column].to_s} IN (?)",
+      find :all, :conditions => ["#{quoted_table_name}.#{primary_key} IN (?) OR #{friendly_id_options[:method].to_s} IN (?)",
         ids_and_names, ids_and_names]
     end
 

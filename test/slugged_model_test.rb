@@ -7,7 +7,7 @@ class SluggedModelTest < Test::Unit::TestCase
   context "A slugged model with default FriendlyId options" do
 
     setup do
-      Post.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:column => :title, :use_slug => true)
+      Post.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:method => :title, :use_slug => true)
       @post = Post.new :title => "Test post", :content => "Test content", :published => true
       @post.save!
     end
