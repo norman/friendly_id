@@ -25,7 +25,7 @@ Hoe.spec "friendly_id" do
 
       If you are upgrading friendly_id, please run
 
-          ./script generate friendly_id --skip-migration
+          ./script/generate friendly_id --skip-migration
 
       in your Rails application to ensure that you have the
       latest friendly_id Rake tasks.

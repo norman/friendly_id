@@ -1,4 +1,8 @@
 == 2.2.3 2009-11-12
+* 1 minor fix
+  * Fixed typo in post-install message.
+
+== 2.2.3 2009-11-12
 
 * 4 minor enhancements:
   * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
