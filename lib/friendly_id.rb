@@ -5,7 +5,8 @@ require "friendly_id/sluggable_instance_methods"
 require "friendly_id/non_sluggable_class_methods"
 require "friendly_id/non_sluggable_instance_methods"
 
-# FriendlyId is a comprehensize Rails plugin/gem for slugging and permalinks.
+# FriendlyId is a comprehensive Ruby library for slugging and permalinks with
+# ActiveRecord.
 module FriendlyId
 
   # Default options for has_friendly_id.
@@ -15,6 +16,7 @@ module FriendlyId
     :reserved_message => 'can not be "%s"'
   }.freeze
 
+  # The names of all valid configuration options.
   VALID_OPTIONS = (DEFAULT_OPTIONS.keys + [
     :cache_column,
     :scope,
