@@ -1,9 +1,7 @@
 History.txt
 MIT-LICENSE
-Manifest.txt
 README.rdoc
 Rakefile
-config/website.yml
 generators/friendly_id/friendly_id_generator.rb
 generators/friendly_id/templates/create_slugs.rb
 generators/friendly_id_20_upgrade/friendly_id_20_upgrade_generator.rb

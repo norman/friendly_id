@@ -9,7 +9,7 @@ Hoe.spec "friendly_id" do
   self.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
   self.email = ['norman@njclarke.com', 'adrian@mugnolo.com', 'miloops@gmail.com']
   self.summary = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
-  self.description = 'A comprehensive slugging and pretty-URL plugin for ActiveRecord.'
+  self.description = 'A comprehensive slugging and pretty-URL plugin for Rails apps using ActiveRecord.'
   self.url = 'http://friendly-id.rubyforge.org/'
   self.test_globs = ['test/**/*_test.rb']
   self.extra_deps << ['activerecord', '>= 2.2.3']
