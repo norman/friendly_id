@@ -7,7 +7,7 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
   context "A slugged model using a custom slug generator" do
 
     setup do
-      Thing.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:method => :name, :use_slug => true)
+      Thing.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :name, :use_slug => true)
     end
 
     teardown do

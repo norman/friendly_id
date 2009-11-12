@@ -17,6 +17,7 @@ Hoe.spec "friendly_id" do
   self.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
   self.extra_dev_deps << ['sqlite3-ruby']
   self.remote_rdoc_dir = ""
+	self.readme_file = "README.rdoc"
   self.extra_rdoc_files = ["README.rdoc"]
 end
 

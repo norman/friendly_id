@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module FriendlyId #:nodoc:
   module Version #:nodoc:
     MAJOR = 2

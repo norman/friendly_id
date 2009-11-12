@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module FriendlyId::NonSluggableClassMethods
 
   include FriendlyId::Helpers

@@ -1,7 +1,5 @@
-# encoding: utf-8
-
 module FriendlyId
-  
+
   module Helpers
     # Calculate expected result size for find_some_with_friendly (taken from
     # active_record/base.rb)
@@ -11,5 +9,4 @@ module FriendlyId
       size
     end
   end
-  
 end

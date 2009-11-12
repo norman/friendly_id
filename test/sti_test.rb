@@ -7,7 +7,7 @@ class STIModelTest < Test::Unit::TestCase
   context "A slugged model using single table inheritance" do
 
     setup do
-      Novel.friendly_id_options = FriendlyId::DEFAULT_FRIENDLY_ID_OPTIONS.merge(:method => :title, :use_slug => true)
+      Novel.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :title, :use_slug => true)
       @novel = Novel.new :title => "Test novel"
       @novel.save!
     end

@@ -1,6 +1,8 @@
-# encoding: utf-8
-
 module FriendlyId::NonSluggableInstanceMethods
+
+  def self.included(base)
+    base.validate :validate_friendly_id
+  end
 
   attr :found_using_friendly_id
 
