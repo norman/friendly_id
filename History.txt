@@ -1,3 +1,11 @@
+== 2.2.3 2009-11-12
+
+* 4 minor enhancements:
+  * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
+  * Made sure friendly_id generator makes a lib/tasks directory (Josh Nichols)
+  * Finders now accept instances of ActiveRecord::Base, matching AR's behavior (Josh Nichols)
+  * SlugGenerationError now raise when a blank value is passed to strip_diacritics
+
 == 2.2.2 2009-10-26
 
 * 1 minor enhancement:
