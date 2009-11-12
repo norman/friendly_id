@@ -15,7 +15,7 @@ module FriendlyId
     :reserved_message => 'can not be "%s"'
   }.freeze
 
-  VALID_KEYS = (DEFAULT_OPTIONS.keys + [
+  VALID_OPTIONS = (DEFAULT_OPTIONS.keys + [
     :cache_column,
     :scope,
     :strip_diacritics,
@@ -52,7 +52,7 @@ module FriendlyId
   #     end
   #   end
   def has_friendly_id(method, options = {}, &block)
-    options.assert_valid_keys VALID_KEYS
+    options.assert_valid_keys VALID_OPTIONS
     options = DEFAULT_OPTIONS.merge(options).merge(:method => method)
     write_inheritable_attribute :friendly_id_options, options
     class_inheritable_accessor :friendly_id_options
