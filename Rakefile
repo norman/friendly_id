@@ -19,6 +19,20 @@ Hoe.spec "friendly_id" do
   self.remote_rdoc_dir = ""
 	self.readme_file = "README.rdoc"
   self.extra_rdoc_files = ["README.rdoc"]
+  self.post_install_message = <<-EOM
+
+    ***********************************************************
+
+      If you are upgrading friendly_id, please run
+
+          ./script generate friendly_id --skip-migration
+
+      in your Rails application to ensure that you have the
+      latest friendly_id Rake tasks.
+
+    ***********************************************************
+
+  EOM
 end
 
 require 'newgem/tasks'
