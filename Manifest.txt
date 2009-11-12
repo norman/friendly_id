@@ -28,6 +28,7 @@ test/models/city.rb
 test/models/country.rb
 test/models/district.rb
 test/models/event.rb
+test/models/legacy_thing.rb
 test/models/novel.rb
 test/models/person.rb
 test/models/post.rb
