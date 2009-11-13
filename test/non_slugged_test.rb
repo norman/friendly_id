@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require File.dirname(__FILE__) + '/test_helper'
 
 class NonSluggedTest < Test::Unit::TestCase
@@ -7,7 +5,7 @@ class NonSluggedTest < Test::Unit::TestCase
   context "A non-slugged model with default FriendlyId options" do
 
     setup do
-      @user = User.create!(:login => "joe", :email => "joe@example.org")
+      @user = User.create!(:name => "joe")
     end
 
     teardown do
@@ -52,7 +50,7 @@ class NonSluggedTest < Test::Unit::TestCase
     end
 
     should "not validate if the friendly_id text is reserved" do
-      user = User.new(:login => "new", :email => "test@example.org")
+      user = User.new(:name => "new")
       assert !user.valid?
     end
 
@@ -61,7 +59,7 @@ class NonSluggedTest < Test::Unit::TestCase
     end
 
     should "return its id if the friendly_id is null" do
-      @user.login = nil
+      @user.name = nil
       assert_equal @user.id.to_s, @user.to_param
     end
 
@@ -69,7 +67,7 @@ class NonSluggedTest < Test::Unit::TestCase
     context "when using an array as the find argument" do
 
       setup do
-        @user2 = User.create(:login => "jane", :email => "jane@example.org")
+        @user2 = User.create(:name => "jane")
       end
 
       should "return results" do
@@ -89,7 +87,7 @@ class NonSluggedTest < Test::Unit::TestCase
       end
 
       should "indicate if the results were found using a friendly_id" do
-        users = User.find([@user.id, @user2.friendly_id], :order => "login ASC")
+        users = User.find([@user.id, @user2.friendly_id], :order => "name ASC")
         assert users[0].found_using_friendly_id?
         assert users[1].found_using_numeric_id?
       end

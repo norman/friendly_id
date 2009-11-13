@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require File.dirname(__FILE__) + '/test_helper'
 
 class SlugTest < Test::Unit::TestCase
@@ -12,8 +11,8 @@ class SlugTest < Test::Unit::TestCase
     end
 
     should "indicate if it is the most recent slug" do
-      post = Post.create!(:title => "test title", :content => "test content")
-      post.title = "a new title"
+      post = Post.create!(:name => "test title")
+      post.name = "a new title"
       post.save!
       assert post.slugs.last.is_most_recent?
       assert !post.slugs.first.is_most_recent?

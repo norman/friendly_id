@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require File.dirname(__FILE__) + '/test_helper'
 
 class STIModelTest < Test::Unit::TestCase
@@ -7,8 +5,8 @@ class STIModelTest < Test::Unit::TestCase
   context "A slugged model using single table inheritance" do
 
     setup do
-      Novel.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :title, :use_slug => true)
-      @novel = Novel.new :title => "Test novel"
+      Novel.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :name, :use_slug => true)
+      @novel = Novel.new :name => "Test novel"
       @novel.save!
     end
 
