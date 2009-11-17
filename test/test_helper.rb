@@ -8,7 +8,7 @@ require 'test/unit'
 require 'contest'
 require 'mocha'
 
-# You can use "rake test AR_VERSION=2.0.5" to test against 2.0.5, for example.
+# You can use "rake test AR_VERSION=2.2.3" to test against 2.2.3 for example.
 # The default is to use the latest installed ActiveRecord.
 if ENV["AR_VERSION"]
   gem 'activerecord', "#{ENV["AR_VERSION"]}"
@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   has_friendly_id :name
 end
 
-# A model that uses default slug settings
+# A model that uses default slug settings and has a named scope
 class Post < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
   named_scope :published, :conditions => { :published => true }
@@ -101,7 +101,7 @@ class Event < ActiveRecord::Base
   has_friendly_id :event_date, :use_slug => true
 end
 
-# A base model for STI
+# A base model for single table inheritence
 class Book < ActiveRecord::Base ; end
 
 # A model that uses STI

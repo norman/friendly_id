@@ -14,6 +14,7 @@ Hoe.spec "friendly_id" do
   self.test_globs = ['test/**/*_test.rb']
   self.extra_deps << ['activerecord', '>= 2.2.3']
   self.extra_deps << ['activesupport', '>= 2.2.3']
+  self.extra_deps << ['contest', '>= 0.1.2']
   self.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
   self.extra_dev_deps << ['sqlite3-ruby']
   self.remote_rdoc_dir = ""
