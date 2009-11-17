@@ -294,8 +294,7 @@ discouraged:
 == Setting it up
 
 The current release works with Rails 2.2 and above, and is compatible with
-Ruby 1.8 and 1.9. If you need support for Rails 2.0 - 2.1, you need to install
-an older version of FriendlyId. Here's how to set it up.
+Ruby 1.8 and 1.9.
 
 1) Install the Gem:
 
