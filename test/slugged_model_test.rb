@@ -289,6 +289,14 @@ class SluggedModelTest < Test::Unit::TestCase
 
     end
 
+    context "when table does not exist" do
+      should "not raise an error when doing friendly_id setup" do
+        assert_nothing_raised do
+          Question.has_friendly_id :title, :use_slug => true
+        end
+      end
+    end
+
     context "when using an array as the find argument" do
 
       setup do
