@@ -12,9 +12,8 @@ instead of:
 
   http://example.com/states/4323454
 
-Want to find out more? Read on. The {most recent version of the FriendlyId
-RDocs}[http://friendly-id.rubyforge.org] can always be found on
-Rubyforge[http://www.rubyforge.org].
+You can always read the latest version of this document at the {friendly_id page on
+rdoc.info}[http://rdoc.info/projects/norman/friendly_id].
 
 === Why?
 
@@ -294,8 +293,7 @@ discouraged:
 == Setting it up
 
 The current release works with Rails 2.2 and above, and is compatible with
-Ruby 1.8 and 1.9. If you need support for Rails 2.0 - 2.1, you need to install
-an older version of FriendlyId. Here's how to set it up.
+Ruby 1.8 and 1.9.
 
 1) Install the Gem:
 
@@ -378,6 +376,7 @@ particular from the following people:
 * Rob Ingram
 * Sean Abrahams
 * Steve Luscher
+* Steven Noble
 * Tim Kadom
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released

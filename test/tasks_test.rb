@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
 require "friendly_id/tasks"
-require "mocha"
 
 class TasksTest < Test::Unit::TestCase
 
@@ -42,7 +41,7 @@ class TasksTest < Test::Unit::TestCase
   context "The 'delete_slugs_for' task" do
 
     setup do
-      @post = Post.create! :title => "Slugs Considered Harmful"
+      @post = Post.create! :name => "Slugs Considered Harmful"
       @city = City.create! :name => "Buenos Aires"
     end
 
@@ -59,9 +58,9 @@ class TasksTest < Test::Unit::TestCase
     end
 
     should "set the cached_slug column to NULL" do
-      FriendlyId::Tasks.delete_slugs_for("City")
-      @city.reload
-      assert_nil @city.my_slug
+      District.create! :name => "Garment"
+      FriendlyId::Tasks.delete_slugs_for("District")
+      assert_nil District.first.cached_slug
     end
 
   end
@@ -69,7 +68,7 @@ class TasksTest < Test::Unit::TestCase
   context "The 'delete_old_slugs' task" do
 
     setup do
-      @post = Post.create! :title => "Slugs Considered Harmful"
+      @post = Post.create! :name => "Slugs Considered Harmful"
       @city = City.create! :name => "Buenos Aires"
       City.connection.execute "UPDATE slugs SET created_at = '%s' WHERE id = %d" % [
         45.days.ago.strftime("%Y-%m-%d"), @city.slug.id]

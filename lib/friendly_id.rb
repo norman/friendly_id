@@ -70,6 +70,6 @@ module FriendlyId
   end
 end
 
-class ActiveRecord::Base
+class ActiveRecord::Base #:nodoc:#
   extend FriendlyId
 end

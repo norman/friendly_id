@@ -1,6 +1,3 @@
-# encoding: utf-8!
-require "mocha"
-
 require File.dirname(__FILE__) + '/test_helper'
 
 class CachedSlugModelTest < Test::Unit::TestCase

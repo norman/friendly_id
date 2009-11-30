@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require File.dirname(__FILE__) + '/test_helper'
 
 class SluggedModelTest < Test::Unit::TestCase
@@ -7,17 +6,16 @@ class SluggedModelTest < Test::Unit::TestCase
   context "A slugged model with default FriendlyId options" do
 
     setup do
-      Post.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :title, :use_slug => true)
-      @post = Post.new :title => "Test post", :content => "Test content", :published => true
+      Post.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :name, :use_slug => true)
+      @post = Post.new :name => "Test post", :published => true
       @post.save!
     end
 
     teardown do
       Post.delete_all
       Person.delete_all
+      Place.delete_all
       Slug.delete_all
-      Thing.delete_all
-      LegacyThing.delete_all
     end
 
     should "have friendly_id options" do
@@ -51,7 +49,7 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "generate slug text" do
-      post = Post.new :title => "Test post", :content => "Test content"
+      post = Post.new :name => "Test post"
       assert_not_nil post.slug_text
     end
 
@@ -63,36 +61,36 @@ class SluggedModelTest < Test::Unit::TestCase
 
     should "raise an error if the friendly_id text is reserved" do
       assert_raises(FriendlyId::SlugGenerationError) do
-        Post.create!(:title => "new")
+        Post.create!(:name => "new")
       end
     end
 
     should "raise an error if the friendly_id text is an empty string" do
       assert_raises(FriendlyId::SlugGenerationError) do
-        Post.create(:title => "")
+        Post.create(:name => "")
       end
     end
 
     should "raise an error if the friendly_id text is nil" do
       assert_raises(FriendlyId::SlugGenerationError) do
-        Post.create(:title => nil)
+        Post.create(:name => nil)
       end
     end
 
     should "raise an error if the normalized friendly id becomes blank" do
       assert_raises(FriendlyId::SlugGenerationError) do
-        post = Post.create!(:title => "-.-")
+        post = Post.create!(:name => "-.-")
       end
     end
 
     should "not make a new slug unless the friendly_id method value has changed" do
-      @post.content = "Changed content"
+      @post.published = !@post.published
       @post.save!
       assert_equal 1, @post.slugs.size
     end
 
     should "make a new slug if the friendly_id method value has changed" do
-      @post.title = "Changed title"
+      @post.name = "Changed title"
       @post.save!
       assert_equal 2, @post.slugs.size
     end
@@ -102,12 +100,12 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "increment sequence for duplicate slug names" do
-      @post2 = Post.create! :title => @post.title, :content => "Test content for post2"
+      @post2 = Post.create! :name => @post.name
       assert_equal 2, @post2.slug.sequence
     end
 
     should "have a friendly_id that terminates with -- and the slug sequence if the sequence is greater than 1" do
-      @post2 = Post.create! :title => @post.title, :content => "Test content for post2"
+      @post2 = Post.create! :name => @post.name
       assert_match(/--2\z/, @post2.friendly_id)
     end
 
@@ -116,36 +114,36 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "not strip diacritics" do
-      post = Post.new(:title => "¡Feliz año!")
+      post = Post.new(:name => "¡Feliz año!")
       assert_match(/#{'ñ'}/, post.slug_text)
     end
 
     should "not convert to ASCII" do
-      post = Post.new(:title => "katakana: ゲコゴサザシジ")
+      post = Post.new(:name => "katakana: ゲコゴサザシジ")
       assert_equal "katakana-ゲコゴサザシジ", post.slug_text
     end
 
     should "allow the same friendly_id across models" do
-      person = Person.create!(:name => @post.title)
-      assert_equal person.friendly_id, @post.friendly_id
+      district = District.create!(:name => @post.name)
+      assert_equal district.friendly_id, @post.friendly_id
     end
 
     should "truncate slug text longer than the max length" do
-      post = Post.new(:title => "a" * (Post.friendly_id_options[:max_length] + 1))
+      post = Post.new(:name => "a" * (Post.friendly_id_options[:max_length] + 1))
       assert_equal post.slug_text.length, Post.friendly_id_options[:max_length]
     end
 
     should "truncate slug in 'right way' when slug is unicode" do
-      post = Post.new(:title => "ё" * 100 + 'ю' *(Post.friendly_id_options[:max_length] - 100 + 1))
+      post = Post.new(:name => "ё" * 100 + 'ю' *(Post.friendly_id_options[:max_length] - 100 + 1))
       assert_equal post.slug_text.mb_chars[-1], 'ю'
     end
 
     should "be able to reuse an old friendly_id without incrementing the sequence" do
-      old_title = @post.title
+      old_title = @post.name
       old_friendly_id = @post.friendly_id
-      @post.title = "A changed title"
+      @post.name = "A changed title"
       @post.save!
-      @post.title = old_title
+      @post.name = old_title
       @post.save!
       assert_equal old_friendly_id, @post.friendly_id
     end
@@ -158,8 +156,8 @@ class SluggedModelTest < Test::Unit::TestCase
 
     # This emulates a fairly common issue where id's generated by fixtures are very high.
     should "continue to admit very large ids" do
-      Thing.connection.execute("INSERT INTO things (id, name) VALUES (2147483647, 'big')")
-      assert Thing.find(2147483647)
+      Person.connection.execute("INSERT INTO people (id, name) VALUES (2147483647, 'Joe Schmoe')")
+      assert Person.find(2147483647)
     end
 
     context "and configured to strip diacritics" do
@@ -168,19 +166,19 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "strip diacritics from Roman alphabet based characters" do
-        post = Post.new(:title => "¡Feliz año!")
+        post = Post.new(:name => "¡Feliz año!")
         assert_no_match(/#{'ñ'}/, post.slug_text)
       end
 
       should "raise an error if the friendly_id text is an empty string" do
         assert_raises(FriendlyId::SlugGenerationError) do
-          Post.create(:title => "")
+          Post.create(:name => "")
         end
       end
 
       should "raise an error if the friendly_id text is nil" do
         assert_raises(FriendlyId::SlugGenerationError) do
-          Post.create(:title => nil)
+          Post.create(:name => nil)
         end
       end
 
@@ -192,14 +190,14 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "strip non-ascii characters" do
-        post = Post.new(:title => "katakana: ゲコゴサザシジ")
+        post = Post.new(:name => "katakana: ゲコゴサザシジ")
         assert_equal "katakana", post.slug_text
       end
     end
 
     context "that uses a custom table name" do
       should "support normal CRUD operations" do
-        assert thing = LegacyThing.create!(:name => "a name")
+        assert thing = Place.create!(:name => "a name")
         thing.name = "a new name"
         assert thing.save!
         assert thing.destroy
@@ -268,7 +266,7 @@ class SluggedModelTest < Test::Unit::TestCase
     context "when found using an outdated friendly id" do
       setup do
         old_id = @post.friendly_id
-        @post.title = "Title changed"
+        @post.name = "Title changed"
         @post.save!
         @post = Post.find(old_id)
       end
@@ -294,7 +292,7 @@ class SluggedModelTest < Test::Unit::TestCase
     context "when using an array as the find argument" do
 
       setup do
-        @post2 = Post.create!(:title => "another post", :content => "more content", :published => true)
+        @post2 = Post.create!(:name => "another post", :published => true)
       end
 
       should "return results when passed an array of non-friendly ids" do
@@ -314,7 +312,7 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "return results when passed an array of non-friendly ids, of which one represents a record with multiple slugs" do
-        @post2.update_attributes(:title => 'another post [updated]')
+        @post2.update_attributes(:name => 'another post [updated]')
         assert_equal 2, Post.find([@post.id, @post2.id]).size
       end
 
