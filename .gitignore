@@ -1,3 +1,4 @@
+.yardoc
 *.log
 .DS_Store
 docs

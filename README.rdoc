@@ -12,6 +12,9 @@ instead of:
 
   http://example.com/states/4323454
 
+You can always read the latest version of this document at the {friendly_id page on
+rdoc.info}[http://rdoc.info/projects/norman/friendly_id].
+
 === Why?
 
 * Text-based id's look better
