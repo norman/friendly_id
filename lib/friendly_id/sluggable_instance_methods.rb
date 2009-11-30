@@ -1,18 +1,31 @@
 module FriendlyId::SluggableInstanceMethods
 
   def self.included(base)
-    base.has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
-    base.before_save :set_slug
-    base.after_save :set_slug_cache
-    unless base.friendly_id_options[:cache_column]
-      if base.columns.any? { |c| c.name == 'cached_slug' }
-        base.friendly_id_options[:cache_column] = :cached_slug
+    base.class_eval do
+      has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+      before_save :set_slug
+      after_save :set_slug_cache
+      # only protect the column if the class is not already using attributes_accessible
+      if !accessible_attributes
+        if friendly_id_options[:cache_column]
+          attr_protected friendly_id_options[:cache_column].to_sym
+        end
+        attr_protected :cached_slug
       end
     end
-    # only protect the column if the class is not already using attributes_accessible
-    if base.friendly_id_options[:cache_column] && !base.accessible_attributes
-      base.attr_protected base.friendly_id_options[:cache_column].to_sym
+
+    def base.cache_column
+      if defined?(@cache_column)
+        return @cache_column
+      elsif friendly_id_options[:cache_column]
+        @cache_column = friendly_id_options[:cache_column].to_sym
+      elsif columns.any? { |c| c.name == 'cached_slug' }
+        @cache_column = :cached_slug
+      else
+        @cache_column = nil
+      end
     end
+
   end
 
   NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
@@ -36,9 +49,7 @@ module FriendlyId::SluggableInstanceMethods
 
   # Was the record found using an old friendly id?
   def found_using_outdated_friendly_id?
-    if cache = friendly_id_options[:cache_column]
-      return false if send(cache) == @finder_slug_name
-    end
+    return false if cache_column && send(cache_column) == @finder_slug_name
     finder_slug.id != slug.id
   end
 
@@ -73,10 +84,11 @@ module FriendlyId::SluggableInstanceMethods
 
   # Returns the friendly id, or if none is available, the numeric id.
   def to_param
-    if cache = friendly_id_options[:cache_column]
-      return read_attribute(cache) || id.to_s
+    if cache_column
+      read_attribute(cache_column) || id.to_s
+    else
+      slug ? slug.to_friendly_id : id.to_s
     end
-    slug ? slug.to_friendly_id : id.to_s
   end
 
   # Get the processed string used as the basis of the friendly id.
@@ -104,6 +116,10 @@ module FriendlyId::SluggableInstanceMethods
   end
 
 private
+
+  def cache_column
+    self.class.cache_column
+  end
 
   def finder_slug=(finder_slug)
     @finder_slug_name = finder_slug.name
@@ -136,8 +152,8 @@ private
   end
 
   def set_slug_cache
-    if friendly_id_options[:cache_column] && send(friendly_id_options[:cache_column]) != slug.to_friendly_id
-      send "#{friendly_id_options[:cache_column]}=", slug.to_friendly_id
+    if cache_column && send(cache_column) != slug.to_friendly_id
+      send "#{cache_column}=", slug.to_friendly_id
       send :update_without_callbacks
     end
   end

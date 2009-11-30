@@ -19,8 +19,8 @@ module FriendlyId
         klass = parse_class_name(klass)
         validate_uses_slugs(klass)
         Slug.destroy_all(["sluggable_type = ?", klass.to_s])
-        if klass.friendly_id_options[:cache_column]
-          klass.update_all("#{klass.friendly_id_options[:cache_column]} = NULL")
+        if klass.cache_column
+          klass.update_all("#{klass.cache_column} = NULL")
         end
       end
 
