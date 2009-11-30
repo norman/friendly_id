@@ -71,5 +71,5 @@ module FriendlyId
 end
 
 class ActiveRecord::Base #:nodoc:#
-  extend FriendlyId
+  extend FriendlyId #:nodoc:#
 end
