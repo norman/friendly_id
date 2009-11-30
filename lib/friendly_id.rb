@@ -21,7 +21,7 @@ module FriendlyId
     :cache_column,
     :scope,
     :strip_diacritics,
-    :stip_non_ascii,
+    :strip_non_ascii,
     :use_slug
   ]).freeze
 
