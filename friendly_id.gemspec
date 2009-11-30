@@ -29,6 +29,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency 'contest'
   s.add_development_dependency 'sqlite3-ruby'
   s.add_development_dependency 'rcov'
+  s.add_development_dependency 'yard'
 
   s.post_install_message = <<-EOM
 

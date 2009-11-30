@@ -4,6 +4,7 @@ require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/clean'
 require 'rcov/rcovtask'
+require 'yard'
 
 CLEAN	<< "pkg" << "docs" << "coverage"
 
@@ -15,6 +16,11 @@ Rake::RDocTask.new do |r|
 	r.rdoc_dir = "docs"
 	r.main = "README.rdoc"
 	r.rdoc_files.include "README.rdoc", "History.txt", "lib/**/*.rb"
+end
+
+YARD::Rake::YardocTask.new do |t|
+  t.files = ['lib/**/*.rb', "README.rdoc", "History.txt"]
+  t.options = ["--output-dir=docs"]
 end
 
 Rcov::RcovTask.new do |r|
