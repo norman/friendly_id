@@ -1,47 +1,24 @@
-require 'newgem'
-require 'hoe'
-require 'lib/friendly_id/version'
-require 'hoe'
+require 'rake'
+require 'rake/testtask'
+require 'rake/gempackagetask'
+require 'rake/rdoctask'
+require 'rake/clean'
+require 'rcov/rcovtask'
 
-Hoe.spec "friendly_id" do
-  self.version = FriendlyId::Version::STRING
-  self.rubyforge_name = "friendly-id"
-  self.author = ['Norman Clarke', 'Adrian Mugnolo', 'Emilio Tagua']
-  self.email = ['norman@njclarke.com', 'adrian@mugnolo.com', 'miloops@gmail.com']
-  self.summary = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
-  self.description = 'A comprehensive slugging and pretty-URL plugin for Rails apps using ActiveRecord.'
-  self.url = 'http://friendly-id.rubyforge.org/'
-  self.test_globs = ['test/**/*_test.rb']
-  self.extra_deps << ['activerecord', '>= 2.2.3']
-  self.extra_deps << ['activesupport', '>= 2.2.3']
-  self.extra_deps << ['contest', '>= 0.1.2']
-  self.extra_dev_deps << ['newgem', ">= #{::Newgem::VERSION}"]
-  self.extra_dev_deps << ['sqlite3-ruby']
-  self.remote_rdoc_dir = ""
-	self.readme_file = "README.rdoc"
-  self.extra_rdoc_files = ["README.rdoc"]
-  self.post_install_message = <<-EOM
+CLEAN	<< "pkg" << "docs" << "coverage"
 
-    ***********************************************************
+task :default => :test
 
-      If you are upgrading friendly_id, please run
-
-          ./script/generate friendly_id --skip-migration
-
-      in your Rails application to ensure that you have the
-      latest friendly_id Rake tasks.
-
-    ***********************************************************
-
-  EOM
+Rake::TestTask.new(:test) { |t| t.pattern = 'test/**/*_test.rb' }
+Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
+Rake::RDocTask.new do |r|
+	r.rdoc_dir = "docs"
+	r.main = "README.rdoc"
+	r.rdoc_files.include "README.rdoc", "History.txt", "lib/**/*.rb"
 end
 
-require 'newgem/tasks'
-
-desc 'Publish RDoc to RubyForge.'
-task :publish_docs => [:clean, :docs] do
-  host = "compay@rubyforge.org"
-  remote_dir = "/var/www/gforge-projects/friendly-id"
-  local_dir = 'doc'
-  sh %{rsync -av --delete #{local_dir}/ #{host}:#{remote_dir}}
+Rcov::RcovTask.new do |r|
+	r.test_files = FileList['test/*_test.rb']
+	r.verbose = true
+  r.rcov_opts << "--exclude gems/*"
 end
