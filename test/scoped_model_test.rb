@@ -27,8 +27,12 @@ class ScopedModelTest < Test::Unit::TestCase
       assert_equal 2, Resident.find(:all, @resident.friendly_id).size
     end
 
-    should "find a single scoped records with a scope" do
+    should "find a single scoped records with a scope as a string" do
       assert Resident.find(@resident.friendly_id, :scope => @resident.country.to_param)
+    end
+
+    should "find a single scoped records with a scope" do
+      assert Resident.find(@resident.friendly_id, :scope => @resident.country)
     end
 
     should "raise an error when finding a single scoped record with no scope" do

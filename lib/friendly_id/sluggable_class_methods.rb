@@ -6,6 +6,7 @@ module FriendlyId::SluggableClassMethods
   def find_one(id_or_name, options) #:nodoc:#
 
     scope = options.delete(:scope)
+    scope = scope.to_param if scope && scope.respond_to?(:to_param)
 
     if id_or_name.is_a?(Integer) || id_or_name.kind_of?(ActiveRecord::Base)
       return super(id_or_name, options)
@@ -23,7 +24,6 @@ module FriendlyId::SluggableClassMethods
     }
 
     result = with_scope(:find => find_options) { find_initial(options) }
-
     if result
       result.finder_slug_name = id_or_name
     elsif id_or_name.to_i.to_s != id_or_name
