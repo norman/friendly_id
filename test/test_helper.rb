@@ -23,7 +23,7 @@ require File.dirname(__FILE__) + '/../generators/friendly_id/templates/create_sl
 require File.dirname(__FILE__) + '/support/models'
 
 db_settings_path = File.dirname(__FILE__) + '/support/database.yml'
-raise "Can not find database.yml file" unless File.exists?(db_settings_path)
+raise "Can not find database config at test/support/database.yml, see tests/support/ for examples" unless File.exists?(db_settings_path)
 ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings_path)))
 
 class ActiveRecord::Base
