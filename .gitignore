@@ -5,3 +5,4 @@ docs
 pkg
 coverage
 *.swp
+test/support/database.yml
