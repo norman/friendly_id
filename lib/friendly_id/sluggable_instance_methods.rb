@@ -130,7 +130,7 @@ private
       end
       # If we're renaming back to a previously used friendly_id, delete the
       # slug so that we can recycle the name without having to use a sequence.
-      slugs.find(:all, :conditions => {:name => slug_text, :scope => scope}).each { |s| s.destroy }
+      slugs.find(:all, :conditions => {:name => slug_text, :scope => slug_attributes[:scope]}).each { |s| s.destroy }
       slugs.build slug_attributes
     end
   end
