@@ -19,7 +19,6 @@ Rake::RDocTask.new do |r|
 end
 
 YARD::Rake::YardocTask.new do |t|
-  t.files = ['lib/**/*.rb', "README.rdoc", "History.txt"]
   t.options = ["--output-dir=docs"]
 end
 
