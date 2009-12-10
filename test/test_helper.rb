@@ -22,9 +22,10 @@ require 'friendly_id'
 require File.dirname(__FILE__) + '/../generators/friendly_id/templates/create_slugs'
 require File.dirname(__FILE__) + '/support/models'
 
-db_settings_path = File.dirname(__FILE__) + '/support/database.yml'
-raise "Can not find database config at test/support/database.yml, see tests/support/ for examples" unless File.exists?(db_settings_path)
-ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings_path)))
+local_db_settings = File.dirname(__FILE__) + '/support/database.yml'
+default_db_settings = File.dirname(__FILE__) + '/support/database.yml.sqlite3'
+db_settings = File.exists?(local_db_settings) ? local_db_settings : default_db_settings
+ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings)))
 
 class ActiveRecord::Base
   def log_protected_attribute_removal(*args) end
