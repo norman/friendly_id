@@ -3,8 +3,6 @@ require 'rake/testtask'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/clean'
-require 'rcov/rcovtask'
-require 'yard'
 
 CLEAN	<< "pkg" << "docs" << "coverage"
 
@@ -18,12 +16,20 @@ Rake::RDocTask.new do |r|
 	r.rdoc_files.include "README.rdoc", "History.txt", "lib/**/*.rb"
 end
 
-YARD::Rake::YardocTask.new do |t|
-  t.options = ["--output-dir=docs"]
+begin
+  require "yard"
+  YARD::Rake::YardocTask.new do |t|
+    t.options = ["--output-dir=docs"]
+  end
+rescue LoadError
 end
 
-Rcov::RcovTask.new do |r|
-	r.test_files = FileList['test/*_test.rb']
-	r.verbose = true
-  r.rcov_opts << "--exclude gems/*"
+begin
+  require 'rcov/rcovtask'
+  Rcov::RcovTask.new do |r|
+    r.test_files = FileList['test/*_test.rb']
+    r.verbose = true
+    r.rcov_opts << "--exclude gems/*"
+  end
+rescue LoadError
 end
