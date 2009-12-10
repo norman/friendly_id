@@ -361,6 +361,7 @@ particular from the following people:
 * Adam Cigánek
 * Alistair Holt
 * Andrew Loe III
+* Ben Woosley
 * Bence Nagy
 * Bruno Michel
 * Chris Nolan

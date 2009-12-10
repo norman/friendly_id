@@ -1,11 +1,13 @@
 == 2.2.6 2009-12-10
 
-* 1 major fix
+* 2 major fixes
   * Made cached_slug automagic configuration occur outside of has_friendly_id. This was causing problems
     in code where the class is loaded before ActiveRecord has established its connection.
+  * Fixes for scope feature with Postgres (Ben Woosley)
 
-* 1 minor enhancement
+* 2 minor enhancements
   * Migrated away from Hoe/Newgem for gem management.
+  * Made tests database-agnostic (Ben Woosley)
 
 == 2.2.5 2009-11-30
 
