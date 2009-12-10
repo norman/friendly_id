@@ -20,35 +20,22 @@ require 'active_record'
 require 'active_support'
 require 'friendly_id'
 require File.dirname(__FILE__) + '/../generators/friendly_id/templates/create_slugs'
+require File.dirname(__FILE__) + '/support/models'
 
-ActiveRecord::Base.establish_connection :adapter => "sqlite3", :database => ":memory:"
-
-def table(name, sql)
-  "CREATE TABLE #{name} (id INTEGER PRIMARY KEY AUTOINCREMENT, #{sql})"
-end
-
-def schema(&block)
-  ActiveRecord::Migration.verbose = false
-  CreateSlugs.up
-  yield ActiveRecord::Base.connection
-end
+db_settings_path = File.dirname(__FILE__) + '/support/database.yml'
+raise "Can not find database config at test/support/database.yml, see tests/support/ for examples" unless File.exists?(db_settings_path)
+ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings_path)))
 
 class ActiveRecord::Base
   def log_protected_attribute_removal(*args) end
 end
 
-schema do |conn|
-  conn.execute table("books",        "name VARCHAR, type VARCHAR")
-  conn.execute table("cities",       "name VARCHAR, my_slug VARCHAR, population INTEGER")
-  conn.execute table("countries",    "name VARCHAR")
-  conn.execute table("districts",    "name VARCHAR, cached_slug VARCHAR")
-  conn.execute table("events",       "name VARCHAR, event_date TIMESTAMP")
-  conn.execute table("legacy_table", "name VARCHAR")
-  conn.execute table("people",       "name VARCHAR")
-  conn.execute table("posts",        "name VARCHAR, published BOOLEAN")
-  conn.execute table("residents",    "name VARCHAR, country_id INTEGER")
-  conn.execute table("users",        "name VARCHAR")
+ActiveRecord::Base.connection.tables.each do |table|
+  ActiveRecord::Base.connection.drop_table(table)
 end
+ActiveRecord::Migration.verbose = false
+CreateSlugs.up
+CreateSupportModels.up
 
 # A model that uses the automagically configured "cached_slug" column
 class District < ActiveRecord::Base
