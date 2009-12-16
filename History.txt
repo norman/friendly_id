@@ -1,3 +1,8 @@
+== 2.2.7 2009-12-16
+
+* 1 minor fix
+  * Fixed typo in Rake tasks which caused delete_old_slugs to fail. (Diego R.V.)
+
 == 2.2.6 2009-12-10
 
 * 2 major fixes

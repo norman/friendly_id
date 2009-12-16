@@ -367,6 +367,7 @@ particular from the following people:
 * Chris Nolan
 * David Ramalho
 * Diego Carrion
+* Diego R. V.
 * Florian Aßmann
 * Harry Love
 * Jesse Crouch
