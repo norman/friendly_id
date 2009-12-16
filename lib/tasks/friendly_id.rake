@@ -16,7 +16,7 @@ namespace :friendly_id do
 
   desc "Kill obsolete slugs older than DAYS=45 days."
   task :remove_old_slugs => :environment do
-    FriendlyId::Task.delete_old_slugs(ENV["DAYS"], ENV["MODEL"])
+    FriendlyId::Tasks.delete_old_slugs(ENV["DAYS"], ENV["MODEL"])
   end
 end
 
