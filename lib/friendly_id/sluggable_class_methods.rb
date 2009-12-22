@@ -76,6 +76,18 @@ module FriendlyId::SluggableClassMethods
       :order, :select, :readonly, :group, :from, :lock, :having, :scope])
   end
 
+  def cache_column
+    if defined?(@cache_column)
+      return @cache_column
+    elsif friendly_id_options[:cache_column]
+      @cache_column = friendly_id_options[:cache_column].to_sym
+    elsif columns.any? { |c| c.name == 'cached_slug' }
+      @cache_column = :cached_slug
+    else
+      @cache_column = nil
+    end
+  end
+
   private
 
   # Assign finder slugs for the results found in find_some_with_friendly

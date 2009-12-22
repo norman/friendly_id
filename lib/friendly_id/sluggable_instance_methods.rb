@@ -13,19 +13,6 @@ module FriendlyId::SluggableInstanceMethods
         attr_protected :cached_slug
       end
     end
-
-    def base.cache_column
-      if defined?(@cache_column)
-        return @cache_column
-      elsif friendly_id_options[:cache_column]
-        @cache_column = friendly_id_options[:cache_column].to_sym
-      elsif columns.any? { |c| c.name == 'cached_slug' }
-        @cache_column = :cached_slug
-      else
-        @cache_column = nil
-      end
-    end
-
   end
 
   NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
