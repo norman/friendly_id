@@ -1,5 +1,6 @@
 require "friendly_id/helpers"
 require "friendly_id/slug"
+require "friendly_id/slug_string"
 require "friendly_id/sluggable_class_methods"
 require "friendly_id/sluggable_instance_methods"
 require "friendly_id/non_sluggable_class_methods"
