@@ -2,45 +2,32 @@
 class Slug < ActiveRecord::Base
 
   belongs_to :sluggable, :polymorphic => true
-  before_save :check_for_blank_name, :set_sequence
+  before_save :set_sequence
 
   class << self
 
-    # Sanitizes and dasherizes string to make it safe for URL's.
-    #
-    # Example:
-    #
-    #   slug.normalize('This... is an example!') # => "this-is-an-example"
-    #
-    # Note that the Unicode handling in ActiveSupport may fail to process some
-    # characters from Polish, Icelandic and other languages.
-    def normalize(slug_text)
+    def parse(friendly_id) #:nodoc:#
+      warn("Slug#parse is deprecated and will be removed in FriendlyId 3.0. Please use FriendlyId.parse.")
+      FriendlyId.parse(friendly_id)
+    end
+
+    def normalize(slug_text) #:nodoc:#
       warn("Slug#normalize is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#normalize.")
       raise SlugGenerationError if slug_text.blank?
       SlugString.new(slug_text.to_s).normalize.to_s
     end
 
-    def parse(friendly_id)
-      name, sequence = friendly_id.split('--')
-      sequence ||= "1"
-      return name, sequence
-    end
-
-    # Remove diacritics (accents, umlauts, etc.) from the string. Borrowed
-    # from "The Ruby Way."
-    def strip_diacritics(string)
+    def strip_diacritics(string) #:nodoc:#
       warn("Slug#strip_diacritics is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#approximate_ascii.")
       raise SlugGenerationError if string.blank?
       SlugString.new(string).approximate_ascii
     end
 
-    # Remove non-ascii characters from the string.
-    def strip_non_ascii(string)
+    def strip_non_ascii(string) #:nodoc:#
+      warn("Slug#strip_non_ascii is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#to_ascii.")
       raise SlugGenerationError if string.blank?
-      strip_diacritics(string).gsub(/[^a-z0-9]+/i, ' ')
+      SlugString.new(string).to_ascii
     end
-
-    private
 
   end
 
@@ -53,14 +40,14 @@ class Slug < ActiveRecord::Base
     sequence > 1 ? "#{name}--#{sequence}" : name
   end
 
-  protected
-
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
-  def check_for_blank_name #:nodoc:#
+  def validate #:nodoc:#
     if name.blank?
-      raise FriendlyId::SlugGenerationError.new("The slug text is blank.")
+      raise FriendlyId::SlugGenerationError.new("slug.name can not be blank.")
     end
   end
+
+  private
 
   def set_sequence
     return unless new_record?

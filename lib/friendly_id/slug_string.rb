@@ -1,6 +1,6 @@
 class SlugString < ActiveSupport::Multibyte::Chars
 
-    ASCII_APPROXIMATIONS = {
+    APPROXIMATIONS = {
       :common => Hash[
         192, 65, 193, 65, 194, 65, 195, 65, 196, 65, 197, 65, 198, [65, 69],
         199, 67, 200, 69, 201, 69, 202, 69, 203, 69, 204, 73, 205, 73, 206,
@@ -38,7 +38,9 @@ class SlugString < ActiveSupport::Multibyte::Chars
     cattr_accessor :approximations
     self.approximations = []
 
-    alias normalize_utf8 normalize
+    def initialize(string)
+      super string.to_s
+    end
 
     def approximate_ascii!(*args)
       @maps = (self.class.approximations + args + [:common]).flatten.uniq
@@ -67,11 +69,17 @@ class SlugString < ActiveSupport::Multibyte::Chars
       }.compact.pack("U*")
     end
 
+    alias normalize_utf8 normalize
+
     def normalize!
       clean!
       letters!
       downcase!
       with_dashes!
+    end
+
+    def to_ascii!
+      @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|c| c > 127}.pack("U*")
     end
 
     def upcase!
@@ -82,7 +90,7 @@ class SlugString < ActiveSupport::Multibyte::Chars
       @wrapped_string = @wrapped_string.gsub(/\s+/u, '-')
     end
 
-    %w[approximate_ascii clean downcase letters normalize upcase with_dashes].each do |method|
+    %w[approximate_ascii clean downcase letters normalize to_ascii upcase with_dashes].each do |method|
       class_eval(<<-EOM)
         def #{method}(*args)
           send_to_new_instance(:#{method}!, *args)
@@ -94,7 +102,7 @@ class SlugString < ActiveSupport::Multibyte::Chars
 
     def approx_char(char)
       @maps.each do |map|
-        if new_char = ASCII_APPROXIMATIONS[map][char]
+        if new_char = APPROXIMATIONS[map][char]
           return new_char
         end
       end
@@ -102,7 +110,7 @@ class SlugString < ActiveSupport::Multibyte::Chars
     end
 
     def send_to_new_instance(*args)
-      string = SlugString.new @wrapped_string
+      string = SlugString.new self
       string.send(*args)
       string
     end

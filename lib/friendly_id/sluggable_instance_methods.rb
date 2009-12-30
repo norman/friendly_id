@@ -80,26 +80,34 @@ module FriendlyId::SluggableInstanceMethods
 
   # Get the processed string used as the basis of the friendly id.
   def slug_text
+
     base = send friendly_id_options[:method]
+
     if self.slug_normalizer_block
-      base = self.slug_normalizer_block.call(base)
+      base = SlugString.new(self.slug_normalizer_block.call(base))
     else
+      base = SlugString.new base
       if self.friendly_id_options[:strip_diacritics]
-        base = Slug::strip_diacritics(base)
+        base.approximate_ascii!
       end
       if self.friendly_id_options[:strip_non_ascii]
-        base = Slug::strip_non_ascii(base)
+        base.to_ascii!
       end
-      base = Slug::normalize(base)
+      base.normalize!
     end
 
-    if base.mb_chars.length > friendly_id_options[:max_length]
-      base = base.mb_chars[0...friendly_id_options[:max_length]]
+    if base.length > friendly_id_options[:max_length]
+      base = base[0...friendly_id_options[:max_length]]
     end
-    if friendly_id_options[:reserved].include?(base)
+
+    if friendly_id_options[:reserved].include?(base.to_s)
       raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
+    elsif base.blank?
+      raise FriendlyId::SlugGenerationError.new("The slug text is blank")
     end
-    return base
+
+    return base.to_s
+
   end
 
 private
@@ -117,7 +125,7 @@ private
 
   def init_finder_slug
     return false if !@finder_slug_name
-    name, sequence = Slug.parse(@finder_slug_name)
+    name, sequence = FriendlyId.parse(@finder_slug_name)
     slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => name, :sequence => sequence, :sluggable_type => self.class.base_class.name })
     finder_slug = slug
   end

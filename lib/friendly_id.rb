@@ -56,12 +56,11 @@ module FriendlyId
   #   end
   def has_friendly_id(method, options = {}, &block)
     options.assert_valid_keys VALID_OPTIONS
-    options = DEFAULT_OPTIONS.merge(options).merge(:method => method)
-    write_inheritable_attribute :friendly_id_options, options
+    write_inheritable_attribute :friendly_id_options, DEFAULT_OPTIONS.merge(options).merge(:method => method)
     class_inheritable_accessor :friendly_id_options
-    class_inheritable_reader :slug_normalizer_block
-    write_inheritable_attribute(:slug_normalizer_block, block) if block_given?
     if friendly_id_options[:use_slug]
+      class_inheritable_reader :slug_normalizer_block
+      write_inheritable_attribute(:slug_normalizer_block, block) if block_given?
       extend SluggableClassMethods
       include SluggableInstanceMethods
     else
@@ -69,6 +68,14 @@ module FriendlyId
       include NonSluggableInstanceMethods
     end
   end
+
+  # Parse the sequence and slug name from a friendly_id string.
+  def self.parse(string)
+    name, sequence = string.split('--')
+    sequence ||= "1"
+    return name, sequence
+  end
+
 end
 
 class ActiveRecord::Base #:nodoc:#

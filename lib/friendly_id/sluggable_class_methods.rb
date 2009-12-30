@@ -15,7 +15,7 @@ module FriendlyId::SluggableClassMethods
     find_options = {:select => "#{self.table_name}.*"}
     find_options[:joins] = :slugs unless options[:include] && [*options[:include]].flatten.include?(:slugs)
 
-    name, sequence = Slug.parse(id_or_name)
+    name, sequence = FriendlyId.parse(id_or_name)
 
     find_options[:conditions] = {
       "#{Slug.table_name}.name"     => name,
@@ -105,7 +105,7 @@ module FriendlyId::SluggableClassMethods
     slugs = []
     ids = []
     ids_and_names.each do |id_or_name|
-      name, sequence = Slug.parse id_or_name.to_s
+      name, sequence = FriendlyId.parse id_or_name.to_s
       slug = Slug.find(:first, :conditions => {
         :name           => name,
         :scope          => scope,
