@@ -7,8 +7,8 @@ module FriendlyId::SluggableInstanceMethods
       after_save :set_slug_cache
       # only protect the column if the class is not already using attributes_accessible
       if !accessible_attributes
-        if friendly_id_options[:cache_column]
-          attr_protected friendly_id_options[:cache_column].to_sym
+        if friendly_id_config.cache_column
+          attr_protected friendly_id_config.cache_column
         end
         attr_protected :cached_slug
       end
@@ -81,26 +81,26 @@ module FriendlyId::SluggableInstanceMethods
   # Get the processed string used as the basis of the friendly id.
   def slug_text
 
-    base = send friendly_id_options[:method]
+    base = send friendly_id_config.method
 
-    if self.slug_normalizer_block
-      base = SlugString.new(self.slug_normalizer_block.call(base))
+    if self.friendly_id_config.normalizer
+      base = SlugString.new(self.friendly_id_config.normalizer.call(base))
     else
       base = SlugString.new base
-      if self.friendly_id_options[:strip_diacritics]
+      if self.friendly_id_config.approximate_ascii?
         base.approximate_ascii!
       end
-      if self.friendly_id_options[:strip_non_ascii]
+      if self.friendly_id_config.strip_non_ascii?
         base.to_ascii!
       end
       base.normalize!
     end
 
-    if base.length > friendly_id_options[:max_length]
-      base = base[0...friendly_id_options[:max_length]]
+    if base.length > friendly_id_config.max_length
+      base = base[0...friendly_id_config.max_length]
     end
 
-    if friendly_id_options[:reserved].include?(base.to_s)
+    if friendly_id_config.reserved_words.include?(base.to_s)
       raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
     elsif base.blank?
       raise FriendlyId::SlugGenerationError.new("The slug text is blank")
@@ -132,11 +132,11 @@ private
 
   # Set the slug using the generated friendly id.
   def set_slug
-    if self.class.friendly_id_options[:use_slug] && new_slug_needed?
+    if self.class.friendly_id_config.use_slug? && new_slug_needed?
       @most_recent_slug = nil
       slug_attributes = {:name => slug_text}
-      if friendly_id_options[:scope]
-        scope = send(friendly_id_options[:scope])
+      if friendly_id_config.scope?
+        scope = send(friendly_id_config.scope)
         slug_attributes[:scope] = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
       end
       # If we're renaming back to a previously used friendly_id, delete the

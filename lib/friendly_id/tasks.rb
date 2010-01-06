@@ -48,7 +48,7 @@ module FriendlyId
       private
 
       def validate_uses_slugs(klass)
-        raise "Class '%s' doesn't use slugs" % klass.to_s unless klass.friendly_id_options[:use_slug]
+        raise "Class '%s' doesn't use slugs" % klass.to_s unless klass.friendly_id_config.use_slug?
       end
 
     end

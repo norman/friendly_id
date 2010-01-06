@@ -6,7 +6,6 @@ class SluggedModelTest < Test::Unit::TestCase
   context "A slugged model with default FriendlyId options" do
 
     setup do
-      Post.friendly_id_options = FriendlyId::DEFAULT_OPTIONS.merge(:method => :name, :use_slug => true)
       @post = Post.new :name => "Test post", :published => true
       @post.save!
     end
@@ -18,8 +17,8 @@ class SluggedModelTest < Test::Unit::TestCase
       Slug.delete_all
     end
 
-    should "have friendly_id options" do
-      assert_not_nil Post.friendly_id_options
+    should "have a friendly_id config" do
+      assert_not_nil Post.friendly_id_config
     end
 
     should "have a slug" do
@@ -129,12 +128,12 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "truncate slug text longer than the max length" do
-      post = Post.new(:name => "a" * (Post.friendly_id_options[:max_length] + 1))
-      assert_equal post.slug_text.length, Post.friendly_id_options[:max_length]
+      post = Post.new(:name => "a" * (Post.friendly_id_config.max_length + 1))
+      assert_equal post.slug_text.length, Post.friendly_id_config.max_length
     end
 
     should "truncate slug in 'right way' when slug is unicode" do
-      post = Post.new(:name => "ё" * 100 + 'ю' *(Post.friendly_id_options[:max_length] - 100 + 1))
+      post = Post.new(:name => "ё" * 100 + 'ю' * (Post.friendly_id_config.max_length - 100 + 1))
       assert_equal post.slug_text.mb_chars[-1], 'ю'
     end
 
@@ -160,9 +159,10 @@ class SluggedModelTest < Test::Unit::TestCase
       assert Person.find(2147483647)
     end
 
-    context "and configured to strip diacritics" do
+    context "and configured to approximate_ascii" do
+
       setup do
-        Post.friendly_id_options = Post.friendly_id_options.merge(:strip_diacritics => true)
+        Post.friendly_id_config.stubs(:approximate_ascii?).returns(true)
       end
 
       should "strip diacritics from Roman alphabet based characters" do
@@ -185,14 +185,16 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     context "and configured to convert to ASCII" do
+
       setup do
-        Post.friendly_id_options = Post.friendly_id_options.merge(:strip_non_ascii => true)
+        Post.friendly_id_config.stubs(:strip_non_ascii?).returns(true)
       end
 
       should "strip non-ascii characters" do
         post = Post.new(:name => "katakana: ゲコゴサザシジ")
         assert_equal "katakana", post.slug_text
       end
+
     end
 
     context "that uses a custom table name" do

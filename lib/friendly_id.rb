@@ -5,26 +5,12 @@ require "friendly_id/sluggable_class_methods"
 require "friendly_id/sluggable_instance_methods"
 require "friendly_id/non_sluggable_class_methods"
 require "friendly_id/non_sluggable_instance_methods"
+require "friendly_id/config"
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
 module FriendlyId
 
-  # Default options for has_friendly_id.
-  DEFAULT_OPTIONS = {
-    :max_length       => 255,
-    :reserved         => ["new", "index"],
-    :reserved_message => 'can not be "%s"'
-  }.freeze
-
-  # The names of all valid configuration options.
-  VALID_OPTIONS = (DEFAULT_OPTIONS.keys + [
-    :cache_column,
-    :scope,
-    :strip_diacritics,
-    :strip_non_ascii,
-    :use_slug
-  ]).freeze
 
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
@@ -43,24 +29,16 @@ module FriendlyId
   # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will raise a FriendlyId::SlugGenerationError. Defaults to ["new", "index"].
   # * <tt>:reserved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
   #
-  # You can also optionally pass a block if you want to use your own custom
-  # slug normalization routines rather than the default ones that come with
-  # friendly_id:
-  #
-  #   require "stringex"
-  #   class Post < ActiveRecord::Base
-  #     has_friendly_id :title, :use_slug => true do |text|
-  #       # Use stringex to generate the friendly_id rather than the baked-in methods
-  #       text.to_url
-  #     end
-  #   end
   def has_friendly_id(method, options = {}, &block)
-    options.assert_valid_keys VALID_OPTIONS
-    write_inheritable_attribute :friendly_id_options, DEFAULT_OPTIONS.merge(options).merge(:method => method)
+    class_inheritable_accessor :friendly_id_config
+    write_inheritable_attribute :friendly_id_config, Config.new(options.merge(
+      :configured_class => self.class,
+      :method => method,
+      :normalizer => block
+    ))
     class_inheritable_accessor :friendly_id_options
-    if friendly_id_options[:use_slug]
-      class_inheritable_reader :slug_normalizer_block
-      write_inheritable_attribute(:slug_normalizer_block, block) if block_given?
+    write_inheritable_attribute :friendly_id_options, {}
+    if friendly_id_config.use_slug?
       extend SluggableClassMethods
       include SluggableInstanceMethods
     else

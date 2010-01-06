@@ -36,7 +36,7 @@ module FriendlyId::SluggableClassMethods
 
   rescue ActiveRecord::RecordNotFound => e
 
-    if friendly_id_options[:scope]
+    if friendly_id_config.scope?
       if !scope
         raise ActiveRecord::RecordNotFound.new("%s; expected scope but got none" % e.message)
       else
@@ -79,8 +79,8 @@ module FriendlyId::SluggableClassMethods
   def cache_column
     if defined?(@cache_column)
       return @cache_column
-    elsif friendly_id_options[:cache_column]
-      @cache_column = friendly_id_options[:cache_column].to_sym
+    elsif friendly_id_config.cache_column
+      @cache_column = friendly_id_config.cache_column
     elsif columns.any? { |c| c.name == 'cached_slug' }
       @cache_column = :cached_slug
     else
