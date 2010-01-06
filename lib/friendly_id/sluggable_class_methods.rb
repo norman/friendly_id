@@ -25,7 +25,7 @@ module FriendlyId::SluggableClassMethods
 
     result = with_scope(:find => find_options) { find_initial(options) }
     if result
-      result.finder_slug_name = id_or_name
+      result.friendly_id_finder = FriendlyId::Finder.new(:model => result, :name => id_or_name)
     elsif id_or_name.to_i.to_s != id_or_name
       raise ActiveRecord::RecordNotFound
     else
@@ -66,7 +66,7 @@ module FriendlyId::SluggableClassMethods
       raise ActiveRecord::RecordNotFound, "Couldn't find all #{ name.pluralize } with IDs (#{ ids_and_names * ', ' }) AND #{ sanitize_sql options[:conditions] } (found #{ results.size } results, but was looking for #{ expected })"
     end
 
-    assign_finder_slugs(slugs, results)
+    assign_finders(slugs, results)
 
     results
   end
@@ -91,10 +91,10 @@ module FriendlyId::SluggableClassMethods
   private
 
   # Assign finder slugs for the results found in find_some_with_friendly
-  def assign_finder_slugs(slugs, results) #:nodoc:#
+  def assign_finders(slugs, results) #:nodoc:#
     slugs.each do |slug|
       results.select { |r| r.id == slug.sluggable_id }.each do |result|
-        result.send(:finder_slug=, slug)
+        result.friendly_id_finder = FriendlyId::Finder.new(:model => result, :slug => slug)
       end
     end
   end

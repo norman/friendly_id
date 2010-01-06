@@ -49,7 +49,7 @@ class SluggedModelTest < Test::Unit::TestCase
 
     should "generate slug text" do
       post = Post.new :name => "Test post"
-      assert_not_nil post.slug_text
+      assert_not_nil post.send(:slug_text)
     end
 
     should "respect finder conditions" do
@@ -114,12 +114,12 @@ class SluggedModelTest < Test::Unit::TestCase
 
     should "not strip diacritics" do
       post = Post.new(:name => "¡Feliz año!")
-      assert_match(/#{'ñ'}/, post.slug_text)
+      assert_match(/#{'ñ'}/, post.send(:slug_text))
     end
 
     should "not convert to ASCII" do
       post = Post.new(:name => "katakana: ゲコゴサザシジ")
-      assert_equal "katakana-ゲコゴサザシジ", post.slug_text
+      assert_equal "katakana-ゲコゴサザシジ", post.send(:slug_text)
     end
 
     should "allow the same friendly_id across models" do
@@ -129,12 +129,12 @@ class SluggedModelTest < Test::Unit::TestCase
 
     should "truncate slug text longer than the max length" do
       post = Post.new(:name => "a" * (Post.friendly_id_config.max_length + 1))
-      assert_equal post.slug_text.length, Post.friendly_id_config.max_length
+      assert_equal post.send(:slug_text).length, Post.friendly_id_config.max_length
     end
 
     should "truncate slug in 'right way' when slug is unicode" do
       post = Post.new(:name => "ё" * 100 + 'ю' * (Post.friendly_id_config.max_length - 100 + 1))
-      assert_equal post.slug_text.mb_chars[-1], 'ю'
+      assert_equal post.send(:slug_text).mb_chars[-1], 'ю'
     end
 
     should "be able to reuse an old friendly_id without incrementing the sequence" do
@@ -167,7 +167,7 @@ class SluggedModelTest < Test::Unit::TestCase
 
       should "strip diacritics from Roman alphabet based characters" do
         post = Post.new(:name => "¡Feliz año!")
-        assert_no_match(/#{'ñ'}/, post.slug_text)
+        assert_no_match(/#{'ñ'}/, post.send(:slug_text))
       end
 
       should "raise an error if the friendly_id text is an empty string" do
@@ -192,7 +192,7 @@ class SluggedModelTest < Test::Unit::TestCase
 
       should "strip non-ascii characters" do
         post = Post.new(:name => "katakana: ゲコゴサザシジ")
-        assert_equal "katakana", post.slug_text
+        assert_equal "katakana", post.send(:slug_text)
       end
 
     end

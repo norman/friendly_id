@@ -6,6 +6,7 @@ require "friendly_id/sluggable_instance_methods"
 require "friendly_id/non_sluggable_class_methods"
 require "friendly_id/non_sluggable_instance_methods"
 require "friendly_id/config"
+require "friendly_id/finder"
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.

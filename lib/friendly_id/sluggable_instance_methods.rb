@@ -15,40 +15,40 @@ module FriendlyId::SluggableInstanceMethods
     end
   end
 
-  attr :finder_slug
-  attr_accessor :finder_slug_name
+  attr_accessor :friendly_id_finder
 
   def finder_slug
-    @finder_slug ||= init_finder_slug or nil
+    @friendly_id_finder && @friendly_id_finder.slug
   end
 
   # Was the record found using one of its friendly ids?
   def found_using_friendly_id?
-    !!@finder_slug_name
+    @friendly_id_finder ? @friendly_id_finder.friendly? : false
   end
 
   # Was the record found using its numeric id?
   def found_using_numeric_id?
-    !found_using_friendly_id?
+    @friendly_id_finder ? @friendly_id_finder.numeric? : true
   end
 
   # Was the record found using an old friendly id?
   def found_using_outdated_friendly_id?
-    return false if cache_column && send(cache_column) == @finder_slug_name
-    finder_slug.id != slug.id
+    @friendly_id_finder.outdated? if @friendly_id_finder
   end
 
   # Was the record found using an old friendly id, or its numeric id?
   def has_better_id?
-    has_a_slug? and found_using_numeric_id? || found_using_outdated_friendly_id?
+    @friendly_id_finder ? !@friendly_id_finder.best? : true
   end
 
   # Does the record have (at least) one slug?
-  def has_a_slug?
-    @finder_slug_name || slug
+  def slug?
+    !! slug
   end
+  alias :has_a_slug? :slug?
 
   # Returns the friendly id.
+  # @FIXME
   def friendly_id
     slug(true).to_friendly_id
   end
@@ -88,43 +88,25 @@ module FriendlyId::SluggableInstanceMethods
     end
   end
 
+  private
+
   # Get the processed string used as the basis of the friendly id.
   def slug_text
-
     base = normalize_friendly_id(send(friendly_id_config.method))
-
     if base.length > friendly_id_config.max_length
       base = base[0...friendly_id_config.max_length]
     end
-
     if friendly_id_config.reserved_words.include?(base.to_s)
       raise FriendlyId::SlugGenerationError.new("The slug text is a reserved value")
     elsif base.blank?
       raise FriendlyId::SlugGenerationError.new("The slug text is blank")
     end
-
     return base.to_s
-
   end
 
-private
 
   def cache_column
     self.class.cache_column
-  end
-
-  def finder_slug=(finder_slug)
-    @finder_slug_name = finder_slug.name
-    slug = finder_slug
-    slug.sluggable = self
-    slug
-  end
-
-  def init_finder_slug
-    return false if !@finder_slug_name
-    name, sequence = FriendlyId.parse_friendly_id(@finder_slug_name)
-    slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => name, :sequence => sequence, :sluggable_type => self.class.base_class.name })
-    finder_slug = slug
   end
 
   # Set the slug using the generated friendly id.

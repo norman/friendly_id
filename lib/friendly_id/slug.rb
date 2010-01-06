@@ -6,24 +6,24 @@ class Slug < ActiveRecord::Base
 
   class << self
 
-    def parse(friendly_id) #:nodoc:#
+    def parse(friendly_id)
       warn("Slug#parse is deprecated and will be removed in FriendlyId 3.0. Please use FriendlyId.parse_friendly_id.")
       FriendlyId.parse_friendly_id(friendly_id)
     end
 
-    def normalize(slug_text) #:nodoc:#
+    def normalize(slug_text)
       warn("Slug#normalize is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#normalize.")
       raise SlugGenerationError if slug_text.blank?
       SlugString.new(slug_text.to_s).normalize.to_s
     end
 
-    def strip_diacritics(string) #:nodoc:#
+    def strip_diacritics(string)
       warn("Slug#strip_diacritics is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#approximate_ascii.")
       raise SlugGenerationError if string.blank?
       SlugString.new(string).approximate_ascii
     end
 
-    def strip_non_ascii(string) #:nodoc:#
+    def strip_non_ascii(string)
       warn("Slug#strip_non_ascii is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#to_ascii.")
       raise SlugGenerationError if string.blank?
       SlugString.new(string).to_ascii
@@ -31,7 +31,7 @@ class Slug < ActiveRecord::Base
 
   end
 
-  # Whether or not this slug is the most recent of its owner's slugs.
+  # Whether this slug is the most recent of its owner's slugs.
   def is_most_recent?
     sluggable.slug == self
   end
