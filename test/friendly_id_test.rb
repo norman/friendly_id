@@ -5,11 +5,11 @@ class FriendlyIdTest < Test::Unit::TestCase
   context "the FriendlyId module" do
 
     should "parse a friendly_id name and sequence" do
-      assert_equal ["test", "2"], FriendlyId.parse("test--2")
+      assert_equal ["test", "2"], FriendlyId.parse_friendly_id("test--2")
     end
 
     should "parse with a default sequence of 1" do
-      assert_equal ["test", "1"], FriendlyId.parse("test")
+      assert_equal ["test", "1"], FriendlyId.parse_friendly_id("test")
     end
 
   end

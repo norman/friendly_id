@@ -12,8 +12,8 @@ class NonSluggedTest < Test::Unit::TestCase
       User.delete_all
     end
 
-    should "have friendly_id options" do
-      assert_not_nil User.friendly_id_options
+    should "have a friendly_id config" do
+      assert_not_nil User.friendly_id_config
     end
 
     should "not have a slug" do

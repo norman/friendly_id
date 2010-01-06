@@ -7,8 +7,8 @@ class Slug < ActiveRecord::Base
   class << self
 
     def parse(friendly_id) #:nodoc:#
-      warn("Slug#parse is deprecated and will be removed in FriendlyId 3.0. Please use FriendlyId.parse.")
-      FriendlyId.parse(friendly_id)
+      warn("Slug#parse is deprecated and will be removed in FriendlyId 3.0. Please use FriendlyId.parse_friendly_id.")
+      FriendlyId.parse_friendly_id(friendly_id)
     end
 
     def normalize(slug_text) #:nodoc:#

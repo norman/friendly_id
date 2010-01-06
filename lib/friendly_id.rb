@@ -9,35 +9,48 @@ require "friendly_id/config"
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
+# @author Norman Clarke
+# @author Emilio Tagua
+# @author Adrian Mugnolo
 module FriendlyId
 
 
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
 
-  # Set up an ActiveRecord model to use a friendly_id.
+  # Set up a model to use a friendly_id.
+  # @param [#to_sym] method The column or method that should be used as the basis of the friendly_id string.
+  # @param [Hash] options For valid configuration options, see {FriendlyId::Config}.
+  # @param [block] block An optional block through which to filter the friendly_id text; see {FriendlyId::Config#normalizer}.
+  #   Note that passing a block parameter is now deprecated and will be removed from FriendlyId 3.0.
+  # @example
   #
-  # The column argument can be one of your model's columns, or a method
-  # you use to generate the slug.
+  #   class User < ActiveRecord::Base
+  #     has_friendly_id :user_name
+  #   end
   #
-  # Options:
-  # * <tt>:use_slug</tt> - Defaults to nil. Use slugs when you want to use a non-unique text field for friendly ids.
-  # * <tt>:max_length</tt> - Defaults to 255. The maximum allowed length for a slug.
-  # * <tt>:cache_column</tt> - Defaults to nil. Use this column as a cache for generating to_param (experimental) Note that if you use this option, any calls to +attr_accessible+ must be made BEFORE any calls to has_friendly_id in your class.
-  # * <tt>:strip_diacritics</tt> - Defaults to nil. If true, it will remove accents, umlauts, etc. from western characters.
-  # * <tt>:strip_non_ascii</tt> - Defaults to nil. If true, it will remove all non-ASCII characters.
-  # * <tt>:reserved</tt> - Array of words that are reserved and can't be used as friendly_id's. For sluggable models, if such a word is used, it will raise a FriendlyId::SlugGenerationError. Defaults to ["new", "index"].
-  # * <tt>:reserved_message</tt> - The validation message that will be shown when a reserved word is used as a frindly_id. Defaults to '"%s" is reserved'.
+  #   class Post < ActiveRecord::Base
+  #     has_friendly_id :title, :use_slug => true
+  #   end
   #
   def has_friendly_id(method, options = {}, &block)
     class_inheritable_accessor :friendly_id_config
-    write_inheritable_attribute :friendly_id_config, Config.new(options.merge(
-      :configured_class => self.class,
-      :method => method,
-      :normalizer => block
-    ))
-    class_inheritable_accessor :friendly_id_options
-    write_inheritable_attribute :friendly_id_options, {}
+    write_inheritable_attribute :friendly_id_config, Config.new(self.class,
+      options.merge(:method => method, :normalizer => block))
+    load_adapters
+  end
+
+  # Parse the sequence and slug name from a friendly_id string.
+  def self.parse_friendly_id(string)
+    name, sequence = string.split('--')
+    sequence ||= "1"
+    return name, sequence
+  end
+
+
+  private
+
+  def load_adapters
     if friendly_id_config.use_slug?
       extend SluggableClassMethods
       include SluggableInstanceMethods
@@ -47,15 +60,10 @@ module FriendlyId
     end
   end
 
-  # Parse the sequence and slug name from a friendly_id string.
-  def self.parse(string)
-    name, sequence = string.split('--')
-    sequence ||= "1"
-    return name, sequence
-  end
-
 end
 
-class ActiveRecord::Base #:nodoc:#
-  extend FriendlyId #:nodoc:#
+# {FriendlyId#has_friendly_id has_friendly_id} is available to all subclasses of
+# ActiveRecord::Base.
+class ActiveRecord::Base
+  extend FriendlyId
 end

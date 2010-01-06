@@ -15,23 +15,6 @@ instead of:
 You can always read the latest version of this document at the {friendly_id page on
 rdoc.info}[http://rdoc.info/projects/norman/friendly_id].
 
-=== Why?
-
-* Text-based id's look better
-* They make URL's easier to remember.
-* They give no hint about the number of records in your database.
-* They are better for search engine optimization.
-
-=== But...
-
-* They can change, breaking your URL's and your SEO.
-* It can be tricky to ensure they're always unique.
-* They can become a pain to manage in large Rails applications.
-* They can conflict with your application's namespace.
-
-FriendlyId tries to offer you the all the advantages, and avoid or soften the
-potential impact of the disadvantages.
-
 == Typical Uses
 
 === User names ("non-slugged" models)

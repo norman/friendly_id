@@ -14,7 +14,7 @@ class SlugStringTest < Test::Unit::TestCase
       assert(output.length > s.length)
       assert_match output, /^[a-zA-Z']*$/
     end
-    
+
     should "strip non-letters" do
       s = SlugString.new "¡feliz año!"
       assert_equal "feliz año", s.letters
@@ -35,31 +35,31 @@ class SlugStringTest < Test::Unit::TestCase
       should "should replace whitespace with dashes" do
         assert_equal 'a-b', SlugString.new("a b").clean.with_dashes
       end
-  
+
       should "should replace multiple spaces with 1 dash" do
         assert_equal 'a-b', SlugString.new("a    b").clean.with_dashes
       end
-   
+
       should "should strip trailing space" do
         assert_equal 'ab', SlugString.new("ab ").clean
       end
-  
+
       should "should strip leading space" do
         assert_equal 'ab', SlugString.new(" ab").clean
       end
-  
+
       should "should strip trailing slashes" do
         assert_equal 'ab', SlugString.new("ab-").clean
       end
-  
+
       should "should strip leading slashes" do
         assert_equal 'ab', SlugString.new("-ab").clean
       end
-  
+
       should "should not modify valid name strings" do
         assert_equal 'a-b-c-d', SlugString.new("a-b-c-d").clean
       end
-      
+
       should "do special approximations for German" do
         assert_equal "Juergen", SlugString.new("Jürgen").approximate_ascii(:german)
       end
@@ -67,7 +67,7 @@ class SlugStringTest < Test::Unit::TestCase
       should "do special approximations for Spanish" do
         assert_equal "anno", SlugString.new("año").approximate_ascii(:spanish)
       end
-  
+
       should "work with non roman chars" do
         assert_equal "検-索", SlugString.new("検 索").with_dashes
       end

@@ -15,8 +15,6 @@ module FriendlyId::SluggableInstanceMethods
     end
   end
 
-  NUM_CHARS_RESERVED_FOR_FRIENDLY_ID_EXTENSION = 2
-
   attr :finder_slug
   attr_accessor :finder_slug_name
 
@@ -78,23 +76,22 @@ module FriendlyId::SluggableInstanceMethods
     end
   end
 
+  def normalize_friendly_id(string)
+    if friendly_id_config.normalizer?
+      SlugString.new friendly_id_config.normalizer.call(string)
+    else
+      string = SlugString.new string
+      string.approximate_ascii! if friendly_id_config.approximate_ascii?
+      string.to_ascii! if friendly_id_config.strip_non_ascii?
+      string.normalize!
+      string
+    end
+  end
+
   # Get the processed string used as the basis of the friendly id.
   def slug_text
 
-    base = send friendly_id_config.method
-
-    if self.friendly_id_config.normalizer
-      base = SlugString.new(self.friendly_id_config.normalizer.call(base))
-    else
-      base = SlugString.new base
-      if self.friendly_id_config.approximate_ascii?
-        base.approximate_ascii!
-      end
-      if self.friendly_id_config.strip_non_ascii?
-        base.to_ascii!
-      end
-      base.normalize!
-    end
+    base = normalize_friendly_id(send(friendly_id_config.method))
 
     if base.length > friendly_id_config.max_length
       base = base[0...friendly_id_config.max_length]
@@ -125,14 +122,14 @@ private
 
   def init_finder_slug
     return false if !@finder_slug_name
-    name, sequence = FriendlyId.parse(@finder_slug_name)
+    name, sequence = FriendlyId.parse_friendly_id(@finder_slug_name)
     slug = Slug.find(:first, :conditions => {:sluggable_id => id, :name => name, :sequence => sequence, :sluggable_type => self.class.base_class.name })
     finder_slug = slug
   end
 
   # Set the slug using the generated friendly id.
   def set_slug
-    if self.class.friendly_id_config.use_slug? && new_slug_needed?
+    if friendly_id_config.use_slug? && new_slug_needed?
       @most_recent_slug = nil
       slug_attributes = {:name => slug_text}
       if friendly_id_config.scope?

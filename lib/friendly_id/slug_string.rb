@@ -79,7 +79,7 @@ class SlugString < ActiveSupport::Multibyte::Chars
     end
 
     def to_ascii!
-      @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|c| c > 127}.pack("U*")
+      @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
     end
 
     def upcase!
