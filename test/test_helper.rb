@@ -1,6 +1,3 @@
-$:.unshift(File.dirname(__FILE__) + '/../lib')
-$:.unshift(File.dirname(__FILE__))
-
 $KCODE = 'UTF8' if RUBY_VERSION < '1.9'
 $VERBOSE = false
 
@@ -18,7 +15,7 @@ end
 
 require 'active_record'
 require 'active_support'
-require 'friendly_id'
+require File.dirname(__FILE__) + '/../lib/friendly_id'
 require File.dirname(__FILE__) + '/../generators/friendly_id/templates/create_slugs'
 require File.dirname(__FILE__) + '/support/models'
 

@@ -1,12 +1,12 @@
-require "friendly_id/helpers"
-require "friendly_id/slug"
-require "friendly_id/slug_string"
-require "friendly_id/sluggable_class_methods"
-require "friendly_id/sluggable_instance_methods"
-require "friendly_id/non_sluggable_class_methods"
-require "friendly_id/non_sluggable_instance_methods"
-require "friendly_id/config"
-require "friendly_id/finder"
+require File.join(File.dirname(__FILE__), "friendly_id", "helpers")
+require File.join(File.dirname(__FILE__), "friendly_id", "slug")
+require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
+require File.join(File.dirname(__FILE__), "friendly_id", "config")
+require File.join(File.dirname(__FILE__), "friendly_id", "slugged", "finder")
+require File.join(File.dirname(__FILE__), "friendly_id", "slugged", "class_methods")
+require File.join(File.dirname(__FILE__), "friendly_id", "slugged", "instance_methods")
+require File.join(File.dirname(__FILE__), "friendly_id", "simple", "class_methods")
+require File.join(File.dirname(__FILE__), "friendly_id", "simple", "instance_methods")
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
@@ -62,11 +62,11 @@ module FriendlyId
 
   def load_adapters
     if friendly_id_config.use_slug?
-      extend SluggableClassMethods
-      include SluggableInstanceMethods
+      extend Slugged::ClassMethods
+      include Slugged::InstanceMethods
     else
-      extend NonSluggableClassMethods
-      include NonSluggableInstanceMethods
+      extend Simple::ClassMethods
+      include Simple::InstanceMethods
     end
   end
 
