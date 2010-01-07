@@ -27,7 +27,7 @@ module FriendlyId
     attr_accessor :max_length
 
     # The method or column that will be used as the basis of the friendly_id string.
-    attr_accessor :method
+    attr_reader :method
 
     # A block or proc through which to filter the friendly_id text.
     # This method will be removed from FriendlyId 3.0.
@@ -55,8 +55,9 @@ module FriendlyId
     attr_accessor :use_slug
     alias :use_slugs= :use_slug
 
-    def initialize(configured_class, options = nil, &block)
+    def initialize(configured_class, method, options = nil, &block)
       @configured_class = configured_class
+      @method = method.to_sym
       DEFAULT_OPTIONS.merge(options || {}).each do |key, value|
         self.send "#{key}=".to_sym, value
       end

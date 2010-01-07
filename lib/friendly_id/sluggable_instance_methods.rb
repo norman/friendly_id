@@ -63,8 +63,8 @@ module FriendlyId::SluggableInstanceMethods
   # Returns the most recent slug, which is used to determine the friendly
   # id.
   def slug(reload = false)
-    @most_recent_slug = nil if reload
-    @most_recent_slug ||= slugs.first(:order => "id DESC")
+    @slug = nil if reload
+    @slug ||= slugs.first(:order => "id DESC")
   end
 
   # Returns the friendly id, or if none is available, the numeric id.
@@ -112,7 +112,7 @@ module FriendlyId::SluggableInstanceMethods
   # Set the slug using the generated friendly id.
   def set_slug
     if friendly_id_config.use_slug? && new_slug_needed?
-      @most_recent_slug = nil
+      @slug = nil
       slug_attributes = {:name => slug_text}
       if friendly_id_config.scope?
         scope = send(friendly_id_config.scope)

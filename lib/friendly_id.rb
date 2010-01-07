@@ -19,11 +19,20 @@ module FriendlyId
   # This error is raised when it's not possible to generate a unique slug.
   class SlugGenerationError < StandardError ; end
 
-  # Set up a model to use a friendly_id.
-  # @param [#to_sym] method The column or method that should be used as the basis of the friendly_id string.
-  # @param [Hash] options For valid configuration options, see {FriendlyId::Config}.
-  # @param [block] block An optional block through which to filter the friendly_id text; see {FriendlyId::Config#normalizer}.
-  #   Note that passing a block parameter is now deprecated and will be removed from FriendlyId 3.0.
+  # Set up a model to use a friendly_id. This method accepts a hash with
+  # {FriendlyId::Config several possible options}.
+  #
+  # @param [#to_sym] method The column or method that should be used as the
+  #   basis of the friendly_id string.
+  #
+  # @param [Hash] options For valid configuration options, see
+  #   {FriendlyId::Config}.
+  #
+  # @param [block] block An optional block through which to filter the
+  #   friendly_id text; see {FriendlyId::Config#normalizer}. Note that
+  #   passing a block parameter is now deprecated and will be removed
+  #   from FriendlyId 3.0.
+  #
   # @example
   #
   #   class User < ActiveRecord::Base
@@ -31,13 +40,13 @@ module FriendlyId
   #   end
   #
   #   class Post < ActiveRecord::Base
-  #     has_friendly_id :title, :use_slug => true
+  #     has_friendly_id :title, :use_slug => true, :approximate_ascii => true
   #   end
   #
   def has_friendly_id(method, options = {}, &block)
     class_inheritable_accessor :friendly_id_config
     write_inheritable_attribute :friendly_id_config, Config.new(self.class,
-      options.merge(:method => method, :normalizer => block))
+      method, options.merge(:normalizer => block))
     load_adapters
   end
 
