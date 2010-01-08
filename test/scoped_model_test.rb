@@ -46,7 +46,7 @@ class ScopedModelTest < Test::Unit::TestCase
         Resident.find(@resident.friendly_id)
         fail "The find should not have succeeded"
       rescue ActiveRecord::RecordNotFound => e
-        assert_match /expected scope/, e.message
+        assert_match /scope: expected/, e.message
       end
     end
 
@@ -55,7 +55,7 @@ class ScopedModelTest < Test::Unit::TestCase
         Resident.find(@resident.friendly_id, :scope => "badscope")
         fail "The find should not have succeeded"
       rescue ActiveRecord::RecordNotFound => e
-        assert_match /scope=badscope/, e.message
+        assert_match /scope: badscope/, e.message
       end
     end
 

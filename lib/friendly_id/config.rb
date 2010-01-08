@@ -67,6 +67,14 @@ module FriendlyId
     def reserved_words=(*words)
       @reserved_words = words.flatten.uniq
     end
+    
+    def reserved?(word)
+      reserved_words.include? word
+    end
+    
+    def reserved_error_message(word)
+      return method, (reserved_message % word) if reserved? word
+    end
 
     %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|
       class_eval(<<-EOM)

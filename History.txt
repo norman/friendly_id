@@ -1,3 +1,10 @@
+== 2.3.0 NOT RELEASED
+
+* 1 major enhancement
+  * Major refactorings, cleanups and deprecations en route to the 3.0 release.
+* 1 minor enhancement
+  * New option to pass arguments to approximate_ascii, allowing custom approximations specific to German or Spanish.
+
 == 2.2.7 2009-12-16
 
 * 1 minor fix

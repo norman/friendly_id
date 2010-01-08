@@ -19,7 +19,7 @@ end
 begin
   require "yard"
   YARD::Rake::YardocTask.new do |t|
-    t.options = ["--output-dir=docs"]
+    t.options = ["--output-dir=docs", "--private"]
   end
 rescue LoadError
 end

@@ -53,13 +53,13 @@ models by numeric id, you can detect whether they were found by the
 friendly_id:
 
   @post = Post.find(params[:id])
-  raise "some error" if !@post.found_using_friendly_id?
+  raise "some error" if @post.friendly_id_status.unfriendly?
 
 or, you can 301 redirect if the model was found by the numeric id if you don't
 care about numeric access, but want the SEO value of the friendly_id:
 
   @post = Post.find(params[:id])
-  redirect_to @post, :status => 301 if @post.has_better_id?
+  redirect_to @post, :status => 301 unless @post.friendly_id_status.best?
 
 The "has_better_id?" method returns true if the model was found with the
 numeric id, or with an outdated slug.
@@ -79,7 +79,7 @@ to do a 301 redirect to your updated URL.
     ...
 
     def ensure_current_post_url
-      redirect_to @post, :status => :moved_permanently if @post.has_better_id?
+      redirect_to @post, :status => :moved_permanently unless @post.friendly_id_status.best?
     end
 
   end
@@ -215,7 +215,7 @@ FriendlyId's slugging can strip diacritics from Western European characters,
 so that you can have ASCII-only URL's; for example, conveting "ñøîéçü" to
 "noiecu."
 
-  has_friendly_id :title, :use_slug => true, :strip_diacritics => true
+  has_friendly_id :title, :use_slug => true, :approximate_ascii => true
 
 If you are not using slugs, you'll have to do this manually for whatever value
 you're using as the friendly_id.
@@ -249,18 +249,25 @@ that uses a non-Roman writing system, your feedback would be most welcome.
 === Custom Slug Generation
 
 While FriendlyId's slug generation options work for most people, you may need
-something else. As of version 2.0.4 you can pass in your own custom slug
-generation block:
+something else. As of version 2.3.0 you can simply override the
++normalize_friendly_id+ method in your model class:
 
   class Post < ActiveRecord::Base
-    has_friendly_id :title, :use_slug => true do |text|
+    has_friendly_id :title, :use_slug => true
+    
+    def normalize_friendly_id(text)
       MySlugGeneratorClass::my_slug_method(text)
     end
+    
   end
 
 FriendlyId will still respect your settings for max length and reserved words,
-but will use your block rather than the baked-in methods to normalize the
+but will use your method rather than the baked-in methods to normalize the
 friendly_id text.
+
+Note that previous versions of friendly_id allowed this same functionality by
+passing a block to +has_friendly_id+, but this is deprecated as of version
+2.3.0.
 
 == Getting it
 

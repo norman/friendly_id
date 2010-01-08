@@ -11,7 +11,7 @@ class NonSluggedTest < Test::Unit::TestCase
     teardown do
       User.delete_all
     end
-
+    
     should "have a friendly_id config" do
       assert_not_nil User.friendly_id_config
     end
