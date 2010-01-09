@@ -6,7 +6,7 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
 
     teardown do
       Person.delete_all
-      Slug.delete_all
+      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
     end
 
     should "invoke the block code" do

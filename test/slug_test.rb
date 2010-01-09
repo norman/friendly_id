@@ -6,7 +6,7 @@ class SlugTest < Test::Unit::TestCase
   context "a slug" do
 
     teardown do
-      Slug.delete_all
+      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
       Post.delete_all
     end
 
@@ -23,12 +23,12 @@ class SlugTest < Test::Unit::TestCase
   context "the Slug class's to_friendly_id method" do
 
     should "include the sequence if the sequence is greater than 1" do
-      slug = Slug.new(:name => "test", :sequence => 2)
+      slug = FriendlyId::Adapters::ActiveRecord::Slug.new(:name => "test", :sequence => 2)
       assert_equal "test--2", slug.to_friendly_id
     end
 
     should "not include the sequence if the sequence is 1" do
-      slug = Slug.new(:name => "test", :sequence => 1)
+      slug = FriendlyId::Adapters::ActiveRecord::Slug.new(:name => "test", :sequence => 1)
       assert_equal "test", slug.to_friendly_id
     end
 

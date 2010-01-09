@@ -18,7 +18,7 @@ module FriendlyId
       def delete_slugs_for(klass)
         klass = parse_class_name(klass)
         validate_uses_slugs(klass)
-        Slug.destroy_all(["sluggable_type = ?", klass.to_s])
+        FriendlyId::Adapters::ActiveRecord::Slug.destroy_all(["sluggable_type = ?", klass.to_s])
         if klass.cache_column
           klass.update_all("#{klass.cache_column} = NULL")
         end
@@ -32,7 +32,7 @@ module FriendlyId
           conditions[0] << " AND sluggable_type = ?"
           conditions << klass.to_s
         end
-        slugs = Slug.find :all, :conditions => conditions
+        slugs = FriendlyId::Adapters::ActiveRecord::Slug.find :all, :conditions => conditions
         slugs.each { |s| s.destroy unless s.is_most_recent? }
       end
 

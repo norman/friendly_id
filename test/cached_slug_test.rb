@@ -11,7 +11,7 @@ class CachedSlugModelTest < Test::Unit::TestCase
 
     teardown do
       City.delete_all
-      Slug.delete_all
+      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
     end
 
     should "have a slug" do

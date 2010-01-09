@@ -199,7 +199,7 @@ module FriendlyId
 
         def self.included(base)
           base.class_eval do
-            has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+            has_many :slugs, :class_name => "FriendlyId::Adapters::ActiveRecord::Slug", :order => 'id DESC', :as => :sluggable, :dependent => :destroy
             before_save :set_slug
             after_save :set_slug_cache
             # only protect the column if the class is not already using attributes_accessible

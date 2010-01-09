@@ -73,7 +73,7 @@ module FriendlyId
     end
     
     def reserved_error_message(word)
-      return method, (reserved_message % word) if reserved? word
+      [method, reserved_message % word] if reserved? word
     end
 
     %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|

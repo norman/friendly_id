@@ -21,33 +21,35 @@ module FriendlyId
           attr_reader :friendly_ids, :results, :unfriendly_ids
           
           def initialize(ids, model, options={})
-            @friendly_ids, @unfriendly_ids = ids.partition {|id| self.class.friendly?(id) && id.to_s }
+            @friendly_ids, @unfriendly_ids = ids.partition {|id| self.class.friendly?(id) }
             super
           end
-          
+
+          def conditions
+            ["#{primary_key} IN (?) OR #{column} IN (?)", unfriendly_ids, friendly_ids]
+          end
+
           def error_message
             "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
               model.name.pluralize,
-              ids * ', ',
+              ids.join(', '),
               sanitize_sql(options[:conditions]),
               results.size,
               expected_size
             ]
           end
-          
+
           def find
-            @results = with_scope(:find => options) { all(:conditions => conditions) }
+            @results = with_scope(:find => options) { all :conditions => conditions }
             raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
             friendly_results.each { |result| result.friendly_id_status.name = result.friendly_id }
             @results
           end
-          
+
+          private
+
           def friendly_results
             results.select { |result| friendly_ids.include? result.friendly_id.to_s }
-          end
-          
-          def conditions
-            ["#{primary_key} IN (?) OR #{column} IN (?)", unfriendly_ids, friendly_ids]
           end
           
         end
@@ -93,7 +95,7 @@ module FriendlyId
         end
 
         def friendly_id_status
-          @friendly_id_status ||= Status.new(:model => self)
+          @friendly_id_status ||= Status.new :model => self
         end
 
         # Was the record found using one of its friendly ids?

@@ -15,7 +15,7 @@ class ScopedModelTest < Test::Unit::TestCase
     teardown do
       Resident.delete_all
       Country.delete_all
-      Slug.delete_all
+      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
     end
 
     should "should not show the scope in the friendly_id" do
