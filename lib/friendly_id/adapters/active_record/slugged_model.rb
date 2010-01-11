@@ -9,7 +9,8 @@ module FriendlyId
 
           # The slug that was used to find the model.
           def slug
-            @slug ||= model.slugs.find_by_name_and_sequence(*Finder.parse(name))
+            @slug ||= model.slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(
+              model.friendly_id_config.sequence_separator))
           end
 
           # Did the find operation use a friendly id?
@@ -150,7 +151,7 @@ module FriendlyId
             slugs = []
             ids = []
             ids_and_names.each do |id_or_name|
-              name, sequence = FriendlyId.parse_friendly_id id_or_name.to_s
+              name, sequence = id_or_name.to_s.parse_friendly_id(friendly_id_config.sequence_separator)
               slug = Slug.find(:first, :conditions => {
                 :name           => name,
                 :scope          => scope,

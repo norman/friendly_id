@@ -6,7 +6,8 @@ module FriendlyId
       :ascii_approximation_options => [],
       :max_length => 255,
       :reserved_words => ["index", "new"],
-      :reserved_message => "can not be %s"
+      :reserved_message => "can not be %s",
+      :sequence_separator => "--"
     }
 
     # Strip diacritics from Western characters.
@@ -44,9 +45,12 @@ module FriendlyId
     # FriendlyId::SlugGenerationError. For Rails applications, you are recommended
     # to include "index" and "new", which used as the defaults unless overridden.
     attr_accessor :reserved_words
-
+    
     # The method or relation to use as the friendly_id's scope.
     attr_accessor :scope
+    
+    # The string that separates slug names from slug sequences. Defaults to "--".
+    attr_accessor :sequence_separator
 
     # Strip non-ASCII characters from the friendly_id string.
     attr_accessor :strip_non_ascii

@@ -24,11 +24,13 @@ class SlugTest < Test::Unit::TestCase
 
     should "include the sequence if the sequence is greater than 1" do
       slug = FriendlyId::Adapters::ActiveRecord::Slug.new(:name => "test", :sequence => 2)
+      slug.stubs(:sluggable).returns Post.new
       assert_equal "test--2", slug.to_friendly_id
     end
 
     should "not include the sequence if the sequence is 1" do
       slug = FriendlyId::Adapters::ActiveRecord::Slug.new(:name => "test", :sequence => 1)
+      slug.stubs(:sluggable).returns Post.new
       assert_equal "test", slug.to_friendly_id
     end
 

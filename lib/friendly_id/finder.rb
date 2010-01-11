@@ -37,12 +37,6 @@ module FriendlyId
         !friendly?(id) unless friendly?(id) == nil
       end
       
-      def parse(id)
-        name, sequence = id.to_s.split("--")
-        sequence ||= 1
-        return name, sequence
-      end
-
     end
 
     def initialize(ids, model, options={})
@@ -82,7 +76,7 @@ module FriendlyId
     end
 
     def name
-      id.split("--")[0] if id
+      id.to_s.parse_friendly_id(friendly_id_config.sequence_separator)[0]
     end
 
     def offset
@@ -98,7 +92,7 @@ module FriendlyId
     end
 
     def sequence
-      (id.split("--")[1] || 1) if id
+      id.to_s.parse_friendly_id(friendly_id_config.sequence_separator)[1]
     end
 
     def slugs_included?

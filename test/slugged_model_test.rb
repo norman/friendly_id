@@ -196,6 +196,21 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
     end
+    
+    context "and configured to use a custom sequence separator" do
+      setup do
+        Post.friendly_id_config.stubs(:sequence_separator).returns(":")
+        @post2 = Post.create!(:name => @post.name)
+      end
+      
+      teardown do
+        @post2.destroy
+      end
+
+      should "use the custom separator" do
+        assert_equal "#{@post.slug.name}:2", @post2.friendly_id
+      end
+    end
 
     context "that uses a custom table name" do
       should "support normal CRUD operations" do

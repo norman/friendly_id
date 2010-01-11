@@ -70,7 +70,7 @@ class SlugString < ActiveSupport::Multibyte::Chars
     end
 
     alias normalize_utf8 normalize
-
+    
     def normalize!
       clean!
       letters!
