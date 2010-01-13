@@ -36,9 +36,17 @@ module FriendlyId
 
         extend DeprecatedSlugMethods
 
-        belongs_to :sluggable, :polymorphic => true
-        before_save :set_sequence
         table_name = "slugs"
+        belongs_to :sluggable, :polymorphic => true
+        before_save :enable_name_reversion, :set_sequence
+        named_scope :similar_to, lambda {|slug| {:conditions => {
+              :name           => slug.name,
+              :scope          => slug.scope,
+              :sluggable_type => slug.sluggable_type
+            },
+            :order => "sequence ASC"
+          }
+        }
 
         # Whether this slug is the most recent of its owner's slugs.
         def is_most_recent?
@@ -58,8 +66,22 @@ module FriendlyId
 
         private
 
+        # If we're renaming back to a previously used friendly_id, delete the
+        # slug so that we can recycle the name without having to use a sequence.
+        def enable_name_reversion
+          sluggable.slugs.find_all_by_name_and_scope(name, scope).each { |slug| slug.destroy }
+        end
+
         def friendly_id_with_sequence
           "#{name}#{separator}#{sequence}"
+        end
+
+        def similar_to_other_slugs?
+          !similar_slugs.empty?
+        end
+
+        def similar_slugs
+          self.class.similar_to(self)
         end
 
         def separator
@@ -68,10 +90,7 @@ module FriendlyId
 
         def set_sequence
           return unless new_record?
-          last = Slug.find(:first, :conditions => { :name => name, :scope => scope,
-            :sluggable_type => sluggable_type}, :order => "sequence DESC",
-            :select => 'sequence')
-          self.sequence = last.sequence + 1 if last
+          self.sequence = similar_slugs.last.sequence.succ if similar_to_other_slugs?
         end
 
       end

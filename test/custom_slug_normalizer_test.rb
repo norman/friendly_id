@@ -22,7 +22,7 @@ class CustomSlugNormalizerTest < Test::Unit::TestCase
 
     should "respect the reserved option" do
       Person.friendly_id_config.stubs(:reserved_words).returns(["JOE"])
-      assert_raises FriendlyId::SlugGenerationError do
+      assert_raises FriendlyId::SlugTextReservedError do
         Person.create!(:name => "Joe")
       end
     end

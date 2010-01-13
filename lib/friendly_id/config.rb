@@ -100,6 +100,10 @@ module FriendlyId
       warn('The "reserved" option is deprecated and will be removed from FriendlyId 3.0. Please use "reserved_words".')
       self.reserved_words = *args
     end
+    
+    def scope_for(model)
+      scope? ? model.send(scope).to_param : nil
+    end
 
     # This method will be removed from FriendlyId 3.0.
     # @deprecated Please use {#approximate_ascii approximate_ascii}.

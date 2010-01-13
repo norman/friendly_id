@@ -4,7 +4,7 @@ module FriendlyId
       
       module SimpleModel
         
-        class Finder < FriendlyId::Finder
+        module SimpleFinder
           
           def column
             "#{table_name}.#{friendly_id_config.method}"
@@ -16,31 +16,16 @@ module FriendlyId
           
         end
         
-        class MultipleFinder < Finder
+        class MultipleFinder < Finders::MultipleFinder
           
-          attr_reader :friendly_ids, :results, :unfriendly_ids
+          include SimpleFinder
           
-          def initialize(ids, model, options={})
-            @friendly_ids, @unfriendly_ids = ids.partition {|id| self.class.friendly?(id) }
-            super
-          end
-
           def conditions
             ["#{primary_key} IN (?) OR #{column} IN (?)", unfriendly_ids, friendly_ids]
           end
 
-          def error_message
-            "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
-              model.name.pluralize,
-              ids.join(', '),
-              sanitize_sql(options[:conditions]),
-              results.size,
-              expected_size
-            ]
-          end
-
           def find
-            @results = with_scope(:find => options) { all :conditions => conditions }
+            @results = with_scope(:find => options) { find_every :conditions => conditions }
             raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
             friendly_results.each { |result| result.friendly_id_status.name = result.friendly_id }
             @results
@@ -54,7 +39,9 @@ module FriendlyId
           
         end
         
-        class SingleFinder < Finder
+        class SingleFinder < Finders::SingleFinder
+          
+          include SimpleFinder
 
           def find
             result = with_scope(:find => find_options) { find_initial options }
@@ -77,7 +64,7 @@ module FriendlyId
           alias :best? :friendly?
         end
         
-        module Finders
+        module ClassMethods
           def find_one(id, options)
             finder = SingleFinder.new(id, self, options)
             finder.unfriendly? ? super : finder.find
@@ -91,7 +78,7 @@ module FriendlyId
 
         def self.included(base)
           base.validate :validate_friendly_id
-          base.extend Finders
+          base.extend ClassMethods
         end
 
         def friendly_id_status

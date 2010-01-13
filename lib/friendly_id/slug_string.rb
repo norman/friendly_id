@@ -69,13 +69,33 @@ class SlugString < ActiveSupport::Multibyte::Chars
       }.compact.pack("U*")
     end
 
+    # Normalize the string for a FriendlyIdConfig
+    # @param config [FriendlyIdConfig]
+    def normalize_for!(config)
+      if config.normalizer?
+        @wrapped_string = config.normalizer.call(to_s)
+      else
+        approximate_ascii! if config.approximate_ascii?
+        to_ascii! if config.strip_non_ascii?
+        normalize!
+      end
+      truncate!(config.max_length)
+      raise FriendlyId::SlugTextBlankError if blank?
+      raise FriendlyId::SlugTextReservedError if config.reserved?(to_s)
+      self
+    end
+
     alias normalize_utf8 normalize
-    
+
     def normalize!
       clean!
       letters!
       downcase!
       with_dashes!
+    end
+
+    def truncate!(max)
+      @wrapped_string = self[0...max].to_s if length > max
     end
 
     def to_ascii!
@@ -90,7 +110,8 @@ class SlugString < ActiveSupport::Multibyte::Chars
       @wrapped_string = @wrapped_string.gsub(/\s+/u, '-')
     end
 
-    %w[approximate_ascii clean downcase letters normalize to_ascii upcase with_dashes].each do |method|
+    %w[approximate_ascii clean downcase letters normalize normalize_for to_ascii
+        truncate upcase with_dashes].each do |method|
       class_eval(<<-EOM)
         def #{method}(*args)
           send_to_new_instance(:#{method}!, *args)

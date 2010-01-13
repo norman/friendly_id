@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "config")
-require File.join(File.dirname(__FILE__), "friendly_id", "finder")
 require File.join(File.dirname(__FILE__), "friendly_id", "status")
+require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "finders")
 require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "simple_model")
 require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "slugged_model")
 require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "slug")
@@ -13,8 +13,14 @@ require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_rec
 # @author Adrian Mugnolo
 module FriendlyId
 
-  # This error is raised when it's not possible to generate a unique slug.
+  # An error based on this class is raised when slug generation fails
   class SlugGenerationError < StandardError ; end
+  
+  # Raised when the slug text is blank.
+  class SlugTextBlankError < SlugGenerationError ; end
+  
+  # Raised when the slug text is reserved.
+  class SlugTextReservedError < SlugGenerationError ; end
 
   mattr_accessor :sequence_separator
 
@@ -47,27 +53,49 @@ module FriendlyId
     write_inheritable_attribute :friendly_id_config, Config.new(self.class,
       method, options.merge(:normalizer => block))
     FriendlyId.sequence_separator ||= "--"
-    load_adapters
+    load_friendly_id_adapter
   end
 
   private
-
-  # Load either the SluggedModel or SimpleModel modules.
-  # @TODO figure out best way to selectively load adapted modules
-  def load_adapters
-    if friendly_id_config.use_slug?
-      include Adapters::ActiveRecord::SluggedModel
-    else
-      include Adapters::ActiveRecord::SimpleModel
-    end
+  
+  def load_friendly_id_adapter
+    raise NotImplementedError
   end
 
 end
 
-# {FriendlyId#has_friendly_id has_friendly_id} is available to all subclasses of
-# ActiveRecord::Base.
-class ActiveRecord::Base
-  extend FriendlyId
+module ActiveRecord
+  
+  module FriendlyId
+    
+    include ::FriendlyId
+
+    private
+
+    def protect_friendly_id_attributes
+      # only protect the column if the class is not already using attributes_accessible
+      if !accessible_attributes
+        if column = friendly_id_config.cache_column
+          attr_protected column
+        end
+        attr_protected :cached_slug
+      end
+    end
+
+    def load_friendly_id_adapter
+      if friendly_id_config.use_slug?
+        include Adapters::ActiveRecord::SluggedModel
+      else
+        include Adapters::ActiveRecord::SimpleModel
+      end
+    end
+    
+  end
+  
+  class Base
+    extend FriendlyId
+  end
+
 end
 
 class String

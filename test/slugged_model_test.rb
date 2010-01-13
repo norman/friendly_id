@@ -59,25 +59,25 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "raise an error if the friendly_id text is reserved" do
-      assert_raises(FriendlyId::SlugGenerationError) do
+      assert_raises(FriendlyId::SlugTextReservedError) do
         Post.create!(:name => "new")
       end
     end
 
     should "raise an error if the friendly_id text is an empty string" do
-      assert_raises(FriendlyId::SlugGenerationError) do
+      assert_raises(FriendlyId::SlugTextBlankError) do
         Post.create(:name => "")
       end
     end
 
     should "raise an error if the friendly_id text is nil" do
-      assert_raises(FriendlyId::SlugGenerationError) do
+      assert_raises(FriendlyId::SlugTextBlankError) do
         Post.create(:name => nil)
       end
     end
 
     should "raise an error if the normalized friendly id becomes blank" do
-      assert_raises(FriendlyId::SlugGenerationError) do
+      assert_raises(FriendlyId::SlugTextBlankError) do
         post = Post.create!(:name => "-.-")
       end
     end
@@ -171,13 +171,13 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "raise an error if the friendly_id text is an empty string" do
-        assert_raises(FriendlyId::SlugGenerationError) do
+        assert_raises(FriendlyId::SlugTextBlankError) do
           Post.create(:name => "")
         end
       end
 
       should "raise an error if the friendly_id text is nil" do
-        assert_raises(FriendlyId::SlugGenerationError) do
+        assert_raises(FriendlyId::SlugTextBlankError) do
           Post.create(:name => nil)
         end
       end
