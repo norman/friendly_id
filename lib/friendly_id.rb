@@ -10,10 +10,10 @@ module FriendlyId
 
   # An error based on this class is raised when slug generation fails
   class SlugGenerationError < StandardError ; end
-  
+
   # Raised when the slug text is blank.
   class SlugTextBlankError < SlugGenerationError ; end
-  
+
   # Raised when the slug text is reserved.
   class SlugTextReservedError < SlugGenerationError ; end
 
@@ -59,7 +59,7 @@ module FriendlyId
   end
 
   private
-  
+
   # Implement this method to load the modules needed by the adapter.
   def load_friendly_id_adapter
     raise NotImplementedError
@@ -68,14 +68,14 @@ module FriendlyId
 end
 
 module ActiveRecord
-  
+
   module Friendly
-    
+
     include FriendlyId
 
     private
-    
-    # Prevent the cached_slug column from being accidentally or maliciously 
+
+    # Prevent the cached_slug column from being accidentally or maliciously
     # overwritten. Note that +attr_protected+ is used to protect the cached_slug
     # column, unless you have already invoked +attr_accessible+. So if you
     # wish to use +attr_accessible+, you must invoke it BEFORE you invoke
@@ -101,9 +101,9 @@ module ActiveRecord
         include Adapters::ActiveRecord::SimpleModel
       end
     end
-    
+
   end
-  
+
   class Base
     extend Friendly
   end
