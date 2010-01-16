@@ -32,7 +32,7 @@ module FriendlyId
 
     # A block or proc through which to filter the friendly_id text.
     # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please override the {SluggableInstanceMethods#normalize_friendly_id #normalize_friendly_id}
+    # @deprecated Please override the {FriendlyId::#normalize_friendly_id}
     #   method in your model class rather than passing a block to {#has_friendly_id}.
     attr_accessor :normalizer
 
@@ -45,10 +45,10 @@ module FriendlyId
     # FriendlyId::SlugGenerationError. For Rails applications, you are recommended
     # to include "index" and "new", which used as the defaults unless overridden.
     attr_accessor :reserved_words
-    
+
     # The method or relation to use as the friendly_id's scope.
     attr_accessor :scope
-    
+
     # The string that separates slug names from slug sequences. Defaults to "--".
     attr_accessor :sequence_separator
 
@@ -58,6 +58,8 @@ module FriendlyId
     # Use slugs for storing the friendly_id string.
     attr_accessor :use_slug
     alias :use_slugs= :use_slug
+    
+    attr_reader :custom_cache_column
 
     def initialize(configured_class, method, options = nil, &block)
       @configured_class = configured_class
@@ -67,23 +69,38 @@ module FriendlyId
       end
       yield self if block_given?
     end
+    
+    def cache_column=(cache_column)
+      @cache_column = cache_column
+      @custom_cache_column = cache_column
+    end
+
+    def cache_column
+      return @cache_column if defined?(@cache_column)
+      @cache_column = autodiscover_cache_column
+    end
+
+    def autodiscover_cache_column
+      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
+    end
 
     def reserved_words=(*words)
       @reserved_words = words.flatten.uniq
     end
-    
+
     def reserved?(word)
       reserved_words.include? word
     end
-    
+
     def reserved_error_message(word)
       [method, reserved_message % word] if reserved? word
     end
 
-    %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|
+    %w[approximate_ascii cache_column custom_cache_column normalizer scope
+        strip_non_ascii use_slug].each do |method|
       class_eval(<<-EOM)
         def #{method}?
-          !! @#{method}
+          !! #{method}
         end
       EOM
     end
@@ -100,11 +117,11 @@ module FriendlyId
       warn('The "reserved" option is deprecated and will be removed from FriendlyId 3.0. Please use "reserved_words".')
       self.reserved_words = *args
     end
-    
-    def scope_for(model)
-      scope? ? model.send(scope).to_param : nil
-    end
 
+    def scope_for(record)
+      scope? ? record.send(scope).to_param : nil
+    end
+    
     # This method will be removed from FriendlyId 3.0.
     # @deprecated Please use {#approximate_ascii approximate_ascii}.
     def strip_diacritics=(*args)

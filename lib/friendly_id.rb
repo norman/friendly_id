@@ -1,11 +1,6 @@
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "config")
-require File.join(File.dirname(__FILE__), "friendly_id", "status")
-require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "finders")
-require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "simple_model")
-require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "slugged_model")
-require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", "slug")
-
+require File.join(File.dirname(__FILE__), "friendly_id", "base_status")
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
 # @author Norman Clarke
@@ -22,6 +17,13 @@ module FriendlyId
   # Raised when the slug text is reserved.
   class SlugTextReservedError < SlugGenerationError ; end
 
+  # The string used to separate the slug text from it sequence, when duplicate
+  # slug names are used by different instances. Defaults to "--". Changing
+  # the value here affects all models using FriendlyId. To change the value
+  # for a single model, use the :sequence_separator configuration option to
+  # {#has_friendly_id}.
+  # @see FriendlyId::Config
+  # @TODO prevent setting this to "-".
   mattr_accessor :sequence_separator
 
   # Set up a model to use a friendly_id. This method accepts a hash with
@@ -47,10 +49,10 @@ module FriendlyId
   #   class Post < ActiveRecord::Base
   #     has_friendly_id :title, :use_slug => true, :approximate_ascii => true
   #   end
-  #
+  # @see FriendlyId::Config
   def has_friendly_id(method, options = {}, &block)
     class_inheritable_accessor :friendly_id_config
-    write_inheritable_attribute :friendly_id_config, Config.new(self.class,
+    write_inheritable_attribute :friendly_id_config, Config.new(self,
       method, options.merge(:normalizer => block))
     FriendlyId.sequence_separator ||= "--"
     load_friendly_id_adapter
@@ -58,6 +60,7 @@ module FriendlyId
 
   private
   
+  # Implement this method to load the modules needed by the adapter.
   def load_friendly_id_adapter
     raise NotImplementedError
   end
@@ -66,23 +69,32 @@ end
 
 module ActiveRecord
   
-  module FriendlyId
+  module Friendly
     
-    include ::FriendlyId
+    include FriendlyId
 
     private
-
+    
+    # Prevent the cached_slug column from being accidentally or maliciously 
+    # overwritten. Note that +attr_protected+ is used to protect the cached_slug
+    # column, unless you have already invoked +attr_accessible+. So if you
+    # wish to use +attr_accessible+, you must invoke it BEFORE you invoke
+    # {#has_friendly_id} in your class.
     def protect_friendly_id_attributes
       # only protect the column if the class is not already using attributes_accessible
       if !accessible_attributes
-        if column = friendly_id_config.cache_column
-          attr_protected column
+        if friendly_id_config.custom_cache_column?
+          attr_protected friendly_id_config.cache_column
         end
         attr_protected :cached_slug
       end
     end
 
+    # Loads either the slugged or non-slugged modules.
     def load_friendly_id_adapter
+      %w[finders simple_model slugged_model slug].each do |file|
+        require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", file)
+      end
       if friendly_id_config.use_slug?
         include Adapters::ActiveRecord::SluggedModel
       else
@@ -93,7 +105,7 @@ module ActiveRecord
   end
   
   class Base
-    extend FriendlyId
+    extend Friendly
   end
 
 end

@@ -1,25 +1,25 @@
 module FriendlyId
   module Adapters
     module ActiveRecord
-      
+
       module SimpleModel
-        
+
         module SimpleFinder
-          
+
           def column
             "#{table_name}.#{friendly_id_config.method}"
           end
-          
+
           def primary_key
             "#{quoted_table_name}.#{model.send :primary_key}"
           end
-          
+
         end
-        
+
         class MultipleFinder < Finders::MultipleFinder
-          
+
           include SimpleFinder
-          
+
           def conditions
             ["#{primary_key} IN (?) OR #{column} IN (?)", unfriendly_ids, friendly_ids]
           end
@@ -36,11 +36,11 @@ module FriendlyId
           def friendly_results
             results.select { |result| friendly_ids.include? result.friendly_id.to_s }
           end
-          
+
         end
-        
+
         class SingleFinder < Finders::SingleFinder
-          
+
           include SimpleFinder
 
           def find
@@ -56,20 +56,25 @@ module FriendlyId
 
         end
 
-        class Status < FriendlyId::Status
+        class Status
+
+          include FriendlyId::BaseStatus
+
           # Did the find operation use a friendly id?
           def friendly?
             !! name
           end
+
           alias :best? :friendly?
+
         end
-        
+
         module ClassMethods
           def find_one(id, options)
             finder = SingleFinder.new(id, self, options)
             finder.unfriendly? ? super : finder.find
           end
-        
+
           def find_some(ids_and_names, options)
             MultipleFinder.new(ids_and_names, self, options).find
           end
@@ -82,9 +87,9 @@ module FriendlyId
         end
 
         def friendly_id_status
-          @friendly_id_status ||= Status.new :model => self
+          @friendly_id_status ||= Status.new :record => self
         end
-
+``
         # Was the record found using one of its friendly ids?
         def found_using_friendly_id?
           friendly_id_status.friendly?

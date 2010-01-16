@@ -3,14 +3,14 @@ module FriendlyId
     module ActiveRecord
       module SluggedModel
 
-        class Status < ::FriendlyId::Status
+        class Status
 
+          include FriendlyId::BaseStatus
           attr_accessor :slug
 
           # The slug that was used to find the model.
           def slug
-            @slug ||= model.slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(
-              model.friendly_id_config.sequence_separator))
+            @slug ||= record.slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(separator))
           end
 
           # Did the find operation use a friendly id?
@@ -28,10 +28,14 @@ module FriendlyId
             !current?
           end
 
+          def separator
+            record.friendly_id_config.sequence_separator
+          end
+
           # Did the find operation use the best possible id? True if +id+ is
           # numeric, but the model has no slug, or +id+ is friendly and current
           def best?
-            current? || (numeric? && !model.slug)
+            current? || (numeric? && !record.slug)
           end
 
         end
@@ -41,8 +45,8 @@ module FriendlyId
           attr_reader :slugs
 
           def find
-            @results = with_scope(:find => find_options) { find_every options }.uniq
-            raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
+            @results = with_scope(:find => find_options) { all options }.uniq
+            raise ::ActiveRecord::RecordNotFound, error_message if @results.size != expected_size
             @results.each {|result| result.friendly_id_status.slug = slug_for(result)}
           end
 
@@ -53,8 +57,7 @@ module FriendlyId
           end
 
           def friendly_find_conditions
-            return if slugs.empty?
-            "slugs.id IN (%s)" % slugs.compact.to_s(:db)
+            "slugs.id IN (%s)" % slugs.compact.to_s(:db) if slugs?
           end
 
           def find_options
@@ -65,13 +68,17 @@ module FriendlyId
           def slugs
             @slugs ||= friendly_ids.map do |friendly_id|
               name, sequence = friendly_id.parse_friendly_id(friendly_id_config.sequence_separator)
-              Slug.first(:conditions => {
+              Slug.first :conditions => {
                 :name           => name,
                 :scope          => scope,
                 :sequence       => sequence,
                 :sluggable_type => base_class.name
-              })
+              }
             end
+          end
+
+          def slugs?
+            !slugs.empty?
           end
 
           def slug_for(result)
@@ -79,8 +86,11 @@ module FriendlyId
           end
 
           def unfriendly_find_conditions
-            return if unfriendly_ids.empty?
-            "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", unfriendly_ids.join(",")]
+            "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", unfriendly_ids.join(",")] if unfriendly_ids?
+          end
+
+          def unfriendly_ids?
+            ! unfriendly_ids.empty?
           end
 
         end
@@ -118,18 +128,6 @@ module FriendlyId
         end
 
         module ClassMethods
-
-          def cache_column
-            if defined?(@cache_column)
-              return @cache_column
-            elsif friendly_id_config.cache_column
-              @cache_column = friendly_id_config.cache_column
-            elsif columns.any? { |column| column.name == 'cached_slug' }
-              @cache_column = :cached_slug
-            else
-              @cache_column = nil
-            end
-          end
 
           protected
 
@@ -204,11 +202,10 @@ module FriendlyId
         include DeprecatedMethods
 
         def friendly_id_status
-          @friendly_id_status ||= Status.new(:model => self)
+          @friendly_id_status ||= Status.new(:record => self)
         end
 
         # Returns the friendly id.
-        # @FIXME
         def friendly_id
           slug.to_friendly_id
         end
@@ -217,12 +214,12 @@ module FriendlyId
         # Has the basis of our friendly id changed, requiring the generation of a
         # new slug?
         def new_slug_needed?
-          !slug || slug_text != slug.name
+          !slug || slug_text_changed?
         end
 
         # Returns the friendly id, or if none is available, the numeric id.
         def to_param
-          cache_column ? to_param_from_cache : to_param_from_slug
+          friendly_id_config.cache_column ? to_param_from_cache : to_param_from_slug
         end
 
         def normalize_friendly_id(string)
@@ -237,6 +234,10 @@ module FriendlyId
           @slug = slug
         end
 
+        def slug?
+          !! slug
+        end
+
         private
 
         # Get the processed string used as the basis of the friendly id.
@@ -244,16 +245,16 @@ module FriendlyId
           normalize_friendly_id(send(friendly_id_config.method))
         end
 
+        def slug_text_changed?
+          slug_text != slug.name
+        end
+
         def to_param_from_cache
-          read_attribute(cache_column) || id.to_s
+          read_attribute(friendly_id_config.cache_column) || id.to_s
         end
 
         def to_param_from_slug
-          slug ? slug.to_friendly_id : id.to_s
-        end
-
-        def cache_column
-          self.class.cache_column
+          slug? ? slug.to_friendly_id : id.to_s
         end
 
         # Set the slug using the generated friendly id.
@@ -262,12 +263,19 @@ module FriendlyId
           self.slug = slugs.build :name => slug_text, :scope => friendly_id_config.scope_for(self)
         end
 
+        def new_cache_needed?
+          uses_slug_cache? && send(friendly_id_config.cache_column) != slug.to_friendly_id
+        end
+
         def set_slug_cache
-          cache = cache_column
-          if cache && send(cache) != slug.to_friendly_id
-            send "#{cache}=", slug.to_friendly_id
+          if new_cache_needed?
+            send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
             send :update_without_callbacks
           end
+        end
+
+        def uses_slug_cache?
+          friendly_id_config.cache_column?
         end
 
       end

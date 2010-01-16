@@ -3,13 +3,13 @@ module FriendlyId
   # FriendlyId::AbstractStatus presents information about the status of the
   # id that was used to find the model.
   # @abstract
-  class Status
+  module BaseStatus
 
     # The id or name used as the finder argument
     attr_accessor :name
 
     # The found result, if any
-    attr_accessor :model
+    attr_accessor :record
 
     def initialize(options={})
       options.each {|key, value| self.send("#{key}=".to_sym, value)}

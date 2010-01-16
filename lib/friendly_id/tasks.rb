@@ -1,5 +1,6 @@
 module FriendlyId
   class Tasks
+    
     class << self
 
       def make_slugs(klass, options = {})
@@ -17,10 +18,11 @@ module FriendlyId
 
       def delete_slugs_for(klass)
         klass = parse_class_name(klass)
+        cache_column = klass.friendly_id_config.cache_column
         validate_uses_slugs(klass)
         FriendlyId::Adapters::ActiveRecord::Slug.destroy_all(["sluggable_type = ?", klass.to_s])
-        if klass.cache_column
-          klass.update_all("#{klass.cache_column} = NULL")
+        if cache_column
+          klass.update_all("#{cache_column} = NULL")
         end
       end
 
@@ -38,8 +40,8 @@ module FriendlyId
 
       def parse_class_name(class_name)
         return class_name if class_name.class == Class
-        if (class_name.split('::').size > 1)
-          class_name.split('::').inject(Kernel) {|scope, const_name| scope.const_get(const_name)}
+        if class_name.split('::').size > 1
+          class_name.split('::').inject(Kernel) {|scope, const_name| scope.const_get(const_name) }
         else
           Object.const_get(class_name)
         end
