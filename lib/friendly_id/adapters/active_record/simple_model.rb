@@ -89,7 +89,7 @@ module FriendlyId
         def friendly_id_status
           @friendly_id_status ||= Status.new :record => self
         end
-``
+
         # Was the record found using one of its friendly ids?
         def found_using_friendly_id?
           friendly_id_status.friendly?
