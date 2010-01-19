@@ -14,8 +14,8 @@ class SlugTest < Test::Unit::TestCase
       post = Post.create!(:name => "test title")
       post.name = "a new title"
       post.save!
-      assert post.slugs.last.is_most_recent?
-      assert !post.slugs.first.is_most_recent?
+      assert post.slugs.first.current?
+      assert !post.slugs.last.current?
     end
 
   end

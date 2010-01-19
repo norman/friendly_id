@@ -83,6 +83,7 @@ module FriendlyId
 
         def self.included(base)
           base.validate :validate_friendly_id
+          base.after_update :update_scopes
           base.extend ClassMethods
         end
 
@@ -113,6 +114,18 @@ module FriendlyId
         end
 
         private
+
+        def friendly_id_changes
+          changes[friendly_id_config.method.to_s]
+        end
+
+        def update_scopes
+          if changes = friendly_id_changes
+            friendly_id_config.child_scopes.each do |klass|
+              Slug.update_all "scope = '#{changes[1]}'", ["sluggable_type = ? AND scope = ?", klass.to_s, changes[0]]
+            end
+          end
+        end
 
         def validate_friendly_id
           if result = friendly_id_config.reserved_error_message(friendly_id)

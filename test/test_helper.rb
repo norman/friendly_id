@@ -59,15 +59,23 @@ class Resident < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true, :scope => :country
 end
 
-# A model used as a scope
+# A slugged model used as a scope
 class Country < ActiveRecord::Base
   has_many :people
+  has_many :residents
   has_friendly_id :name, :use_slug => true
 end
 
 # A model that doesn't use slugs
 class User < ActiveRecord::Base
   has_friendly_id :name
+  has_many :houses
+end
+
+# A model that uses a non-slugged model for its scope
+class House < ActiveRecord::Base
+  belongs_to :user
+  has_friendly_id :name, :use_slug => true, :scope => :user
 end
 
 # A model that uses default slug settings and has a named scope

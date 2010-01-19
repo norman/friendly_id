@@ -35,7 +35,7 @@ module FriendlyId
           conditions << klass.to_s
         end
         slugs = FriendlyId::Adapters::ActiveRecord::Slug.find :all, :conditions => conditions
-        slugs.each { |s| s.destroy unless s.is_most_recent? }
+        slugs.each { |s| s.destroy unless s.current? }
       end
 
       def parse_class_name(class_name)

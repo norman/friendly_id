@@ -20,6 +20,10 @@ module FriendlyId
     # The column used to cache the friendly_id string.
     attr_accessor :cache_column
 
+    # An array of classes for which the configured class serves as a
+    # FriendlyId scope.
+    attr_reader :child_scopes
+
     # The class that's using the configuration.
     attr_reader :configured_class
 
@@ -58,7 +62,7 @@ module FriendlyId
     # Use slugs for storing the friendly_id string.
     attr_accessor :use_slug
     alias :use_slugs= :use_slug
-    
+
     attr_reader :custom_cache_column
 
     def initialize(configured_class, method, options = nil, &block)
@@ -69,10 +73,9 @@ module FriendlyId
       end
       yield self if block_given?
     end
-    
-    def cache_column=(cache_column)
-      @cache_column = cache_column
-      @custom_cache_column = cache_column
+
+    def autodiscover_cache_column
+      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
     end
 
     def cache_column
@@ -80,8 +83,17 @@ module FriendlyId
       @cache_column = autodiscover_cache_column
     end
 
-    def autodiscover_cache_column
-      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
+    def cache_column=(cache_column)
+      @cache_column = cache_column
+      @custom_cache_column = cache_column
+    end
+
+    def child_scopes
+      @child_scopes ||= associated_friendly_classes.select { |klass| klass.friendly_id_config.scopes_over?(configured_class) }
+    end
+
+    def normalizer=(arg)
+      @normalizer = arg unless arg.nil?
     end
 
     def reserved_words=(*words)
@@ -96,6 +108,28 @@ module FriendlyId
       [method, reserved_message % word] if reserved? word
     end
 
+    # This method will be removed from FriendlyId 3.0.
+    # @deprecated Please use {#reserved_words reserved_words}.
+    def reserved=(*args)
+      warn('The "reserved" option is deprecated and will be removed from FriendlyId 3.0. Please use "reserved_words".')
+      self.reserved_words = *args
+    end
+
+    def scope_for(record)
+      scope? ? record.send(scope).to_param : nil
+    end
+
+    def scopes_over?(klass)
+      scope? && scope == klass.to_s.underscore.to_sym
+    end
+
+    # This method will be removed from FriendlyId 3.0.
+    # @deprecated Please use {#approximate_ascii approximate_ascii}.
+    def strip_diacritics=(*args)
+      warn('The "strip_diacritics" option is deprecated and will be removed from FriendlyId 3.0. Please use "approximate_ascii".')
+      self.strip_diacritics = *args
+    end
+
     %w[approximate_ascii cache_column custom_cache_column normalizer scope
         strip_non_ascii use_slug].each do |method|
       class_eval(<<-EOM)
@@ -107,28 +141,13 @@ module FriendlyId
 
     alias :use_slugs? :use_slug?
 
-    def normalizer=(arg)
-      @normalizer = arg unless arg.nil?
-    end
+    private
 
-    # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please use {#reserved_words reserved_words}.
-    def reserved=(*args)
-      warn('The "reserved" option is deprecated and will be removed from FriendlyId 3.0. Please use "reserved_words".')
-      self.reserved_words = *args
+    def associated_friendly_classes
+      configured_class.reflect_on_all_associations.select { |assoc|
+        assoc.klass.respond_to? :friendly_id_config
+      }.map(&:klass)
     end
-
-    def scope_for(record)
-      scope? ? record.send(scope).to_param : nil
-    end
-    
-    # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please use {#approximate_ascii approximate_ascii}.
-    def strip_diacritics=(*args)
-      warn('The "strip_diacritics" option is deprecated and will be removed from FriendlyId 3.0. Please use "approximate_ascii".')
-      self.strip_diacritics = *args
-    end
-
 
   end
 

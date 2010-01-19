@@ -30,6 +30,7 @@ module FriendlyId
           raise SlugGenerationError if string.blank?
           SlugString.new(string).to_ascii
         end
+
       end
 
       class Slug < ::ActiveRecord::Base
@@ -49,8 +50,14 @@ module FriendlyId
         }
 
         # Whether this slug is the most recent of its owner's slugs.
-        def is_most_recent?
+        def current?
           sluggable.slug == self
+        end
+
+        # @deprecated Please used Slug#current?
+        def is_most_recent?
+          warn("Slug#is_most_recent? is deprecated and will be removed in FriendlyId 3.0. Please use Slug#current?")
+          current?
         end
 
         def to_friendly_id

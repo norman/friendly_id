@@ -20,7 +20,7 @@ module FriendlyId
 
           # Did the find operation use the current slug?
           def current?
-            !! slug && slug.is_most_recent?
+            !! slug && slug.current?
           end
 
           # Did the find operation use an outdated slug?
@@ -194,6 +194,7 @@ module FriendlyId
               :order => 'id DESC', :as => :sluggable, :dependent => :destroy
             before_save :set_slug
             after_save :set_slug_cache
+            after_update :update_scopes
             protect_friendly_id_attributes
             extend ClassMethods
           end
@@ -260,7 +261,8 @@ module FriendlyId
         # Set the slug using the generated friendly id.
         def set_slug
           return unless new_slug_needed?
-          self.slug = slugs.build :name => slug_text, :scope => friendly_id_config.scope_for(self)
+          self.slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self)
+          @new_friendly_id = @slug.to_friendly_id
         end
 
         def new_cache_needed?
@@ -271,6 +273,14 @@ module FriendlyId
           if new_cache_needed?
             send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
             send :update_without_callbacks
+          end
+        end
+
+        def update_scopes
+          if slugs(true).size > 1 && @new_friendly_id
+            friendly_id_config.child_scopes.each do |klass|
+              Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?", klass.to_s, slugs.second.to_friendly_id]
+            end
           end
         end
 
