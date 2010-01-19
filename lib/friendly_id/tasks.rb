@@ -39,12 +39,7 @@ module FriendlyId
       end
 
       def parse_class_name(class_name)
-        return class_name if class_name.class == Class
-        if class_name.split('::').size > 1
-          class_name.split('::').inject(Kernel) {|scope, const_name| scope.const_get(const_name) }
-        else
-          Object.const_get(class_name)
-        end
+        class_name.to_s.classify.constantize
       end
 
       private
