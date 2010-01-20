@@ -40,6 +40,7 @@ module FriendlyId
         table_name = "slugs"
         belongs_to :sluggable, :polymorphic => true
         before_save :enable_name_reversion, :set_sequence
+        validate :validate_name
         named_scope :similar_to, lambda {|slug| {:conditions => {
               :name           => slug.name,
               :scope          => slug.scope,
@@ -65,7 +66,7 @@ module FriendlyId
         end
 
         # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
-        def validate #:nodoc:#
+        def validate_name #:nodoc:#
           if name.blank?
             raise FriendlyId::SlugGenerationError.new("slug.name can not be blank.")
           end
