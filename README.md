@@ -15,7 +15,8 @@ instead of:
 ## Docs, Info and Support
 
 * [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
-* [FriendlyId Google Group](http://groups.google.com/group/friendly_id)
+* [API Docs](http://norman.github.com/friendly_id)
+* [Google Group](http://groups.google.com/group/friendly_id)
 * [Source Code](http://github.com/norman/friendly_id/)
 * [Issue Tracker](http://github.com/norman/friendly_id/issues)
 
