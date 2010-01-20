@@ -4,7 +4,7 @@ require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/clean'
 
-CLEAN << "pkg" << "docs" << "coverage" << ".yardoc"
+CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
 
 task :default => :test
 
@@ -32,4 +32,15 @@ begin
     r.rcov_opts << "--exclude gems/*"
   end
 rescue LoadError
+end
+
+task :pushdocs => :yard do
+  branch = `git branch | grep '*'`.chomp.gsub("* ", "")
+  sh "git stash"
+  sh "git checkout gh-pages"
+  sh "cp -rp doc/* ."
+  sh "git commit -a -m 'Regenerated docs'"
+  sh "git push origin gh-pages"
+  sh "git checkout #{branch}"
+  sh "git stash apply"
 end
