@@ -36,7 +36,7 @@ module FriendlyId
 
     # A block or proc through which to filter the friendly_id text.
     # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please override the {FriendlyId::#normalize_friendly_id}
+    # @deprecated Please override the +normalize_friendly_id+
     #   method in your model class rather than passing a block to {#has_friendly_id}.
     attr_accessor :normalizer
 
