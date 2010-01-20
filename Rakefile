@@ -12,16 +12,14 @@ Rake::TestTask.new(:test) { |t| t.pattern = 'test/**/*_test.rb' }
 Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
 Rake::RDocTask.new do |r|
   r.rdoc_dir = "docs"
-  r.main = "README.rdoc"
-  r.rdoc_files.include "README.rdoc", "History.txt", "lib/**/*.rb"
+  r.rdoc_files.include "lib/**/*.rb"
 end
 
 begin
   require "yard"
   YARD::Rake::YardocTask.new do |t|
-    # t.files = FileList.new('lib/**/*.rb')
     t.options = ["--output-dir=docs"]
-    t.options << '--files' << ["GUIDE.md", "CONTRIBUTORS.md"].join(",")
+    t.options << '--files' << ["Guide.md", "Contributors.md", "History.md"].join(",")
   end
 rescue LoadError
 end

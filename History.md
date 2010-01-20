@@ -1,16 +1,16 @@
-== 2.3.0 NOT RELEASED
+## 2.3.0 NOT RELEASED YET
 
 * 1 major enhancement
   * Major refactorings, cleanups and deprecations en route to the 3.0 release.
 * 1 minor enhancement
   * New option to pass arguments to approximate_ascii, allowing custom approximations specific to German or Spanish.
 
-== 2.2.7 2009-12-16
+## 2.2.7 2009-12-16
 
 * 1 minor fix
   * Fixed typo in Rake tasks which caused delete_old_slugs to fail. (Diego R.V.)
 
-== 2.2.6 2009-12-10
+## 2.2.6 2009-12-10
 
 * 2 major fixes
   * Made cached_slug automagic configuration occur outside of has_friendly_id. This was causing problems
@@ -21,17 +21,17 @@
   * Migrated away from Hoe/Newgem for gem management.
   * Made tests database-agnostic (Ben Woosley)
 
-== 2.2.5 2009-11-30
+## 2.2.5 2009-11-30
 
 * 1 minor fix
   * Fixed typo which in config options (Steven Noble).
 
-== 2.2.4 2009-11-12
+## 2.2.4 2009-11-12
 
 * 1 minor fix
   * Fixed typo in post-install message.
 
-== 2.2.3 2009-11-12
+## 2.2.3 2009-11-12
 
 * 4 minor enhancements:
   * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
@@ -39,18 +39,18 @@
   * Finders now accept instances of ActiveRecord::Base, matching AR's behavior (Josh Nichols)
   * SlugGenerationError now raise when a blank value is passed to strip_diacritics
 
-== 2.2.2 2009-10-26
+## 2.2.2 2009-10-26
 
 * 1 minor enhancement:
   * Fixed Rake tasks creating duplicate slugs and not properly clearing cached slugs (closes GH issues #14 and #15)
 
-== 2.2.1 2009-10-23
+## 2.2.1 2009-10-23
 
 * 2 minor enhancements:
   * slug cache now properly caches the slug sequence (closes GH issue #10)
   * attr_protected is now only invoked on the cached_slug column if attr_accessible has not already been invoked. (closes GH issue #11)
 
-== 2.2.0 2009-10-19
+## 2.2.0 2009-10-19
 
 * 1 major enhancement:
   *  Added slug caching, offers huge performance boost (Bruno Michel)
@@ -59,25 +59,25 @@
   * Handle Unicode string length correctly (Mikhail Shirkov)
   * Remove alias_method_chain in favor of super (Diego Carrion)
 
-== 2.1.4 2009-09-01
+## 2.1.4 2009-09-01
 
 * 3 minor enhancements:
   * Fixed upgrade generator not installing rake tasks (Harry Love)
   * Fixed handling of very large id's (Nathan Phelps)
   * Fixed long index name on migration (Rob Ingram)
 
-== 2.1.3 2009-06-03
+## 2.1.3 2009-06-03
 
 * 1 minor enhancement:
   * Always call #to_s on slug_text to allow objects such as DateTimes to be used for the friendly_id text. (reported by Jon Ng)
 
-== 2.1.2 2009-05-21
+## 2.1.2 2009-05-21
 
 * 2 minor enhancements:
   * Non-slugged models now validate the friendly_id on save as well as create (Joe Van Dyk).
   * Replaced Shoulda with Contest.
 
-== 2.1.1 2009-03-25
+## 2.1.1 2009-03-25
 
 * 2 minor enhancements:
   * Fixed bug with find_some; if a record has old slugs, find_some will no longer return
@@ -85,23 +85,23 @@ multiple copies of that record when finding by numerical ID. (Steve Luscher)
   * Fixed bug with find_some: you can now find_some with an array of numerical IDs without
 an error being thrown. (Steve Luscher)
 
-== 2.1.0 2009-03-25
+## 2.1.0 2009-03-25
 
 * 2 major enhancements:
   * Ruby 1.9 compatibility.
   * Removed dependency on ancient Unicode gem.
 
-== 2.0.4 2009-02-12
+## 2.0.4 2009-02-12
 
 * 1 major enhancment:
   * You can now pass in your own custom slug generation blocks while setting up friendly_id.
 
-== 2.0.3 2009-02-11
+## 2.0.3 2009-02-11
 
 * 1 minor enhancment:
   * Fixed to_param returning an empty string for non-slugged models with a null friendly_id.
 
-== 2.0.2 2009-02-09
+## 2.0.2 2009-02-09
 
 * 2 major enhancements:
   * Made FriendlyId depend only on ActiveRecord. It should now be possible to
@@ -111,13 +111,13 @@ an error being thrown. (Steve Luscher)
 * 1 minor enhancment:
   * Made reserved words work for non-slugged models.
 
-== 2.0.1 2009-01-19
+## 2.0.1 2009-01-19
 
 * 1 minor enhancements:
   * Fix infinite redirect bug when using .has_better_id? in your controllers (Sean Abrahams)
 
 
-== 2.0.0 2009-01-03
+## 2.0.0 2009-01-03
 
 * 5 major enhancements:
   * Support for scoped slugs (Norman Clarke)
@@ -128,24 +128,24 @@ an error being thrown. (Steve Luscher)
   * Shoulda macro (Josh Nichols)
   * Various small bugfixes, cleanups and refactorings
 
-== 2008-12-01
+## 2008-12-01
 
 * Fixed bug that may return invalid records having similar id/names and using MySQL. (Emilio Tagua)
 * Fixed slug generation to increment only numeric extension without modifying the name on duplicated slugs. (Emilio Tagua)
 
-== 2008-10-31
+## 2008-10-31
 
 * Fixed compatibility with Rails 2.0.x. (Norman Clarke)
 * friendly_id::make_slugs update records in chunks of 1000 to avoid running out of memory with large datasets. (Tim Kadom)
 * Fixed logic error with slug name collisions. Thanks to Tim Kadom for reporting this bug.
 
-== 2008-10-22
+## 2008-10-22
 
 * Reverted use of UTF8Handler - was causing errors for some people (Bence Nagy)
 * Corrected find in case if a friendly_id begins with number (Bence Nagy)
 * Added ability to reserve words from slugs (Adam Cigánek)
 
-== 2008-10-09
+## 2008-10-09
 
 * Moved "require"" for iconv to init.rb (Florian Aßmann)
 * Removed "require" for Unicode, use Rails' handler instead (Florian Aßmann)
@@ -156,45 +156,45 @@ an error being thrown. (Steve Luscher)
 * Reformatted code and comments (Florian Aßmann)
 * Added support for Edge Rails' Inflector::parameterize (Norman Clarke)
 
-== 2008-08-25
+## 2008-08-25
 
 * Moved strip_diacritics into Slug for easier reuse/better organization.
 * Put class methods inside class << self block. (Norman Clarke)
 
 * Small change to allow friendly_id to work better with STI. (David Ramalho)
 
-== 2008-07-14
+## 2008-07-14
 
 * Improved slug generation for friendly id's with apostrophes. (Alistair Holt)
 * Added support for namespaced models in Rakefile. (David Ramalho)
 
-== 2008-06-23
+## 2008-06-23
 
 * Cached most recent slug to improve performance (Emilio Tagua).
 
-== 2008-06-10
+## 2008-06-10
 
 * Added ability to find friendly_ids by array (Emilio Tagua)
 
-== 2008-05-15
+## 2008-05-15
 
 * Made friendly_id raise an error if slug method returns a blank value.
 
-== 2008-05-12
+## 2008-05-12
 
 * Added experimental Github gemspec.
 
-== 2008-04-18
+## 2008-04-18
 
 * Improved slug name collision avoidance.
 
-== 2008-03-13
+## 2008-03-13
 
 * Added :dependent => :destroy to slug relation, as suggested by Emilio Tagua.
 * Fixed error when renaming a slugged item back to a previously used name.
 * Incorporated documentation changes suggested by Jesse Crouch and Chris Nolan.
 
-== 2008-02-07
+## 2008-02-07
 
 * Applied patches from blog commenter "suntzu" to fix problem with model values were being overwritten.
 * Applied patch from Dan Blue to make friendly_id no longer ignore options on ActiveRecordBase#find.
