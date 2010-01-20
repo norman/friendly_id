@@ -66,7 +66,7 @@ These features are explained in detail below.
 ## Installation
 
 FriendlyId can be installed as a gem, or as a Rails plugin. It is compatible
-with Rails 2.2.x, 2.3.x, and 3.x (mostly).
+with Rails 2.2.x, 2.3.x.
 
 ### As a Gem
 
@@ -79,6 +79,8 @@ After installing the gem, you will need to add an entry in environment.rb:
     config.gem "friendly_id"
 
 #### Rails 3.x
+
+*NOTE: Rails 3.x support is in progress and may or may not work at any given time.*
 
 Add an entry in the `Gemfile` for `friendly_id`, and in  `config/environment.rb`, add:
 
@@ -106,8 +108,6 @@ This will install the Rake tasks and slug migration for FriendlyId. If you are
 not going to use slugs, you can do:
 
     ./script/generate friendly_id --skip-migration
-
-*Note: The generator does not currently work with Rails 3. This will be fixed soon.*
 
 FriendlyId is now set up and ready for you to use.
 
@@ -240,11 +240,227 @@ string with some additional formatting options inherits Multibyte support from
 ActiveSupport::Multibyte::Chars.
 
 ### Converting non-Western characters to ASCII with Stringex
+
+Stringex is a library which provides some interesting options for transliterating
+non-Western strings to ASCII:
+
+  "你好".to_url => "ni-hao"
+
+Using Stringex with FriendlyId is a simple matter of installing and requiring
+the `stringex` gem, and overriding the `normalize_friendly_id` method in your
+model:
+
+    class City < ActiveRecord::Base
+
+      def normalize_friendly_id(text)
+        text.to_url
+      end
+
+    end
+
 ## Redirecting to the Current Friendly URL
+
+FriendlyId maintains a history of your record's older slugs, so if your
+record's friendly_id changes, your URL's won't break. It offers several
+methods to determine whether the model instance was found using the most
+recent friendly_id. This helps you redirect to your "unfriendly" URL's to your
+new "friendly" ones when adding FriendlyId to an existing application:
+
+  class PostsController < ApplicationController
+
+    before_filter ensure_current_post_url, :only => :show
+
+    ...
+
+    def ensure_current_post_url
+      redirect_to @post, :status => :moved_permanently unless @post.friendly_id_status.best?
+    end
+
+  end
+
+For more information, take a look at the documentation for {FriendlyId::BaseStatus}.
+
 ## Non-unique Slugs
+
+FriendlyId will append a arbitrary number to the end of the id to keep it
+unique if necessary:
+
+    /posts/new-version-released
+    /posts/new-version-released--2
+    /posts/new-version-released--3
+    ...
+    etc.
+
+Note that the number is preceeded by "--" to distinguish it from the
+rest of the slug. This is important to enable having slugs like:
+
+    /cars/peugeot-206
+    /cars/peugeot-206--2
+
+You can configure the separator string used by your model by setting the
+`:sequence_separator` option in {FriendlyId#has_friendly_id}:
+
+    has_friendly_id :title, :use_slug => true, :sequence_separator => ";"
+
+You can also override the default used in {FriendlyId::Config::DEFAULTS}
+to set the value for any model using FriendlyId.
+
 ## Reserved Words
+
+You can configure a list of strings as reserved so that, for example, you
+don't end up with this problem:
+
+    /users/joe-schmoe # A user chose "joe schmoe" as his user name - no worries.
+    /users/new        # A user chose "new" as his user name, and now no one can sign up.
+
+Here's how to do it:
+
+    class Restaurant < ActiveRecord::Base
+      belongs_to :city
+      has_friendly_id :name, :use_slug => true, :reserved => ["my", "values"]
+    end
+
+The strings "new" and "index" are reseved by default. When you attempt to
+store a reserved value, FriendlyId raises a
+{FriendlyId::SlugTextReservedError}. You can also override the default
+reserved words in {FriendlyId::Config::DEFAULTS} to set the value for any
+model using FriendlyId.
+
 ## Caching the FriendlyId Slug for Better Performance
+
+Checking the slugs table all the time has an impact on performance, so as of
+2.2.0, FriendlyId offers slug caching.
+
+This feature can improve the performance of some views by about 25%, and
+reduce memory consumption by about 40% as compared to the same view without
+cached slugs. The biggest improvement will be for "index" type views with many
+links that depend on slugs to generate the URL.
+
+### Automatic setup
+
+To enable slug caching, simply add a column named "cached_slug" to your model.
+FriendlyId will automatically use this column if it detects it:
+
+    class AddCachedSlugToUsers < ActiveRecord::Migration
+      def self.up
+        add_column :users, :cached_slug, :string
+      end
+
+      def self.down
+        remove_column :users, :cached_slug
+      end
+    end
+
+Then, redo the slugs:
+
+    rake friendly_id:redo_slugs MODEL=User
+
+This feature exists largely to improve the performance of URL generation, the
+part of Rails where FriendlyId has the biggest performance impact. FriendlyId
+never queries against this column, so it's not necessary to add an index on it
+unless your application does.
+
+Two warnings when using this feature:
+
+*DO NOT* forget to redo the slugs, or else this feature will not work!
+
+Also, this feature uses `attr_protected` to protect the `cached_slug` column,
+unless you have already invoked `attr_accessible`. So if you wish to use
+`attr_accessible`, you must invoke it BEFORE you invoke `has_friendly_id` in
+your class.
+
+### Using a custom column name
+
+You can also use a different name for the column if you choose, via the
+`:cache_column` config option:
+
+    class User < ActiveRecord::Base
+      has_friendly_id :name, :use_slug => true, :cache_column => 'my_cached_slug'
+    end
+
+
 ## Scoped Slugs
+
+FriendlyId can generate unique slugs within a given scope. For example, assume
+you have an application that displays restaurants. Without scoped slugs, if
+two restaurants are named "Joe's Diner," the second one will end up with
+"joes-diner--2" as its friendly_id. Using scoped allows you to keep the
+slug names unique for each city, so that the second "Joe's Diner" could have
+the slug "joes-diner" if it's located in a different city:
+
+    class Restaurant < ActiveRecord::Base
+      belongs_to :city
+      has_friendly_id :name, :use_slug => true, :scope => :city
+    end
+
+    class City < ActiveRecord::Base
+      has_many :restaurants
+      has_friendly_id :name, :use_slug => true
+    end
+
+    http://example.org/cities/seattle/restaurants/joes-diner
+    http://example.org/cities/chicago/restaurants/joes-diner
+
+    Restaurant.find("joes-diner", :scope => "seattle")  # returns 1 record
+    Restaurant.find("joes-diner", :scope => "chicago")  # returns 1 record
+    Restaurant.find("joes-diner")                       # returns both records
+
+The value for the `:scope` key in your model can be a custom method you
+define, or the name of a relation. If it's the name of a relation, then the
+scope's text value will be the result of calling `to_param` on the related
+model record. In the example above, the city model also uses FriendlyId and so
+its `to_param` method returns its friendly_id: "chicago" or "seattle".
+
+### Updating a Relation's Scoped Slugs
+
+When using a relation as the scope, updating the relation will update the
+slugs, but only if both models have specified the relationship. In the above
+example, updates to City will update the slugs for Restaurant because City
+specifies that it `has_many :restaurants`.
+
+### Routes for Scoped Models
+
+Note that FriendlyId does not set up any routes for scoped models; you must
+do this yourself in your application. Here's an example of one way to set
+this up:
+
+    # in routes.rb
+    map.resources :restaurants
+    map.restaurant "/restaurants/:scope/:id", :controller => "restaurants"
+
+    # in views
+    link_to 'Show', restaurant_path(restaurant.city, restaurant)
+
+    # in controllers
+    @restaurant = Restaurant.find(params[:id], :scope => params[:scope])
+
+
 ## FriendlyId Rake Tasks
-### Generating New Slugs
+
+FriendlyId provides several tasks to help maintain your application. The
+tasks can be invoked via Rake, or programatically through {FriendlyId::Tasks}.
+
+### Generating New Slugs For the First Time
+
+    friendly_id:make_slugs MODEL=<model name>
+
+Use this task to generate slugs after installing FriendlyId in a new
+application.
+
+
+### Regenerating Slugs
+
+    friendly_id:redo_slugs MODEL=<model name>
+
+Use this task to regenrate slugs after making any changes to your model's
+FriendlyId configuration options that affect slug generation. For example,
+if you introduce a `cached_slug` column or change the `:seqence_separator`.
+    
+
 ### Deleting Old Slugs
+
+    rake friendly_id:remove_old_slugs MODEL=<model name> DAYS=<days>
+
+Use this task if you wish to delete expired slugs; manually or perhaps via
+cron. If you don't specify the days option, the default is to remove unused
+slugs older than 45 days.

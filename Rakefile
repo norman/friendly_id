@@ -4,7 +4,7 @@ require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/clean'
 
-CLEAN << "pkg" << "docs" << "coverage"
+CLEAN << "pkg" << "docs" << "coverage" << ".yardoc"
 
 task :default => :test
 
@@ -21,7 +21,7 @@ begin
   YARD::Rake::YardocTask.new do |t|
     # t.files = FileList.new('lib/**/*.rb')
     t.options = ["--output-dir=docs"]
-    t.options << '--files' << "GUIDE.md"
+    t.options << '--files' << ["GUIDE.md", "CONTRIBUTORS.md"].join(",")
   end
 rescue LoadError
 end

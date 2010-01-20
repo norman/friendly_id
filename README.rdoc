@@ -12,319 +12,30 @@ instead of:
 
   http://example.com/states/4323454
 
-You can always read the latest version of this document at the {friendly_id page on
-rdoc.info}[http://rdoc.info/projects/norman/friendly_id].
-
-== Typical Uses
-
-=== User names ("non-slugged" models)
-
-Usually users have unique user names stored in a column with a unique
-constraint or index. In this case, all you need to do is add this to your
-model:
-
-  has_friendly_id :login
-
-and you can then write code like this:
-
-  @member = Member.find("joe")   # the old Member.find(1) still works, too.
-  @member.to_param               # returns "joe"
-  redirect_to @member            # The URL would be /members/joe
-
-=== Blog posts ("slugged" models)
-
-Blog posts generally have titles which are distinctive but not necessarily
-unique. In this and similar cases, FriendlyId provides a Slug model separate
-from your Post model. The Slug model handles duplicate friendly_ids, as well
-as versioning.
-
-Your model code would look something like this:
-
-  has_friendly_id :title, :use_slug => true
-
-and you can then write code like this:
-
-  @post = Post.find("new-version-released")  # Post.find(1) still works, too
-  @post.to_param                             # returns "new-version-released"
-  redirect_to @post                          # The URL would be /posts/new-version-released
-
-Now in your controllers, if you want to prevent people from accessing your
-models by numeric id, you can detect whether they were found by the
-friendly_id:
-
-  @post = Post.find(params[:id])
-  raise "some error" if @post.friendly_id_status.unfriendly?
-
-or, you can 301 redirect if the model was found by the numeric id if you don't
-care about numeric access, but want the SEO value of the friendly_id:
-
-  @post = Post.find(params[:id])
-  redirect_to @post, :status => 301 unless @post.friendly_id_status.best?
-
-The "has_better_id?" method returns true if the model was found with the
-numeric id, or with an outdated slug.
-
-== Extra Features
-
-=== Slug Versioning
-
-FriendlyId will record changes to slugs so that you can tell when the model is
-found with an older slug, or by the numeric id. This can be useful if you want
-to do a 301 redirect to your updated URL.
-
-  class PostsController < ApplicationController
-
-    before_filter ensure_current_post_url, :only => :show
-
-    ...
-
-    def ensure_current_post_url
-      redirect_to @post, :status => :moved_permanently unless @post.friendly_id_status.best?
-    end
-
-  end
-
-This is particularly useful when implementing FrindlyId on an existing
-website that already has many URL's with the old numeric id listed on search
-engines. When the search engine spiders crawl your site, they will
-eventually pick up the new, more SEO-friendly URL's.
-
-=== Non-unique Slug Names
-
-FriendlyId will append a arbitrary number to the end of the id to keep it
-unique if necessary:
-
-  /posts/new-version-released
-  /posts/new-version-released--2
-  /posts/new-version-released--3
-  ...
-  etc.
-
-Note that the number is preceeded by two dashes to distinguish it from the
-rest of the slug. This is important to enable having slugs like:
-
-  /cars/peugeot-206
-  /cars/peugeot-206--2
-
-=== Reserved Names
-
-You can mark off some strings as reserved so that, for example, you don't end
-up with this problem:
-
-  /users/joe-schmoe # A user chose "joe schmoe" as his user name - no worries.
-  /users/new # A user chose "new" as his user name, and now no one can sign up.
-
-Here's how to do it:
-
-  class Restaurant < ActiveRecord::Base
-    belongs_to :city
-    has_friendly_id :name, :use_slug => true, :reserved => ["my", "values"]
-  end
-
-As of FriendlyId version 2.0.2, "new" and "index" are reseved by default. When
-you attempt to store a reserved value, FriendlyId raises a
-FriendlyId::SlugGenerationError.
-
-=== Cached slugs
-
-Checking the slugs table all the time has an impact on performance, so as of
-2.3.0, FriendlyId offers slug caching.
-
-This feature can improve the performance of some views by about 25%, and reduce
-memory consumption by about 40% as compared to the same view without cached
-slugs. The biggest improvement will be for "index" type views with many links
-that depend on slugs to generate the URL.
-
-==== Automagic setup:
-
-To enable slug caching, simply add a column named "cached_slug" to your model.
-FriendlyId will automagically use this column if it detects it:
-
-  class AddCachedSlugToUsers < ActiveRecord::Migration
-    def self.up
-      add_column :users, :cached_slug, :string
-    end
-
-    def self.down
-      remove_column :users, :cached_slug
-    end
-  end
-
-Then, redo the slugs:
-
-  rake friendly_id:redo_slugs MODEL=User
-
-This feature exists largely to improve the performance of URL
-generation, the part of Rails where FriendlyId has the biggest
-performance impact. FriendlyId never queries against this column, so
-it's not necessary to add an index on it unless your application does.
-
-Two warnings when using this feature:
-
-*DO NOT* forget to redo the slugs, or else this feature will not work!
-
-Also, this feature uses +attr_protected+ to protect the cached_slug
-column, unless you have already invoked +attr_accessible+. So if you
-wish to use +attr_accessible+, you must invoke it BEFORE you invoke
-+has_friendly_id+ in your class.
-
-==== Using a custom column name:
-
-You can also use a different name for the column if you choose, via the
-:cache_column config option:
-
-  class User < ActiveRecord::Base
-    has_friendly_id :name, :use_slug => true, :cache_column => 'my_cached_slug'
-  end
-
-=== Scoped Slugs
-
-FriendlyId can generate unique slugs within a given scope. For example:
-
-  class Restaurant < ActiveRecord::Base
-    belongs_to :city
-    has_friendly_id :name, :use_slug => true, :scope => :city
-  end
-
-  class City < ActiveRecord::Base
-    has_many :restaurants
-    has_friendly_id :name, :use_slug => true
-  end
-
-  http://example.org/cities/seattle/restaurants/joes-diner
-  http://example.org/cities/chicago/restaurants/joes-diner
-
-  Restaurant.find("joes-diner", :scope => "seattle") # returns 1 record
-  Restaurant.find("joes-diner", :scope => "chicago") # returns 1 record
-  Restaurant.find("joes-diner") # returns both records
-
-
-The value for the :scope key in your model can be a custom method you define,
-or the name of a relation. If it's the name of a relation, then the scope's
-text value will be the result of calling <code>to_param</code> on the related
-model record. In the example above, the city model also uses FriendlyId and so
-its <code>to_param</code> method returns its friendly_id: chicago or seattle.
-
-This feature is new in FriendlyId 2 and should be considered of experimental
-quality. Please don't use this for code that needs to run on the Space
-Shuttle.
-
-=== Text Normalization
-
-FriendlyId's slugging can strip diacritics from Western European characters,
-so that you can have ASCII-only URL's; for example, conveting "ñøîéçü" to
-"noiecu."
-
-  has_friendly_id :title, :use_slug => true, :approximate_ascii => true
-
-If you are not using slugs, you'll have to do this manually for whatever value
-you're using as the friendly_id.
-
-=== Diacritic-sensitive normalization
-
-FriendlyId can also normalize slug text while preserving accented characters, if
-you prefer to leave them in your URL's:
-
-  has_friendly_id :title, :use_slug => true
-  ...
-  @post = Post.create(:title => "¡Feliz Año!")
-  @post.friendly_id # "feliz-año"
-
-=== Unicode URL's
-
-FriendlyId can generate slugs in any language that can be written with
-Unicode. It does its best to strip away punctuation regardless of the language
-being used. Since the authors only speak English, Spanish, Portuguese and
-German, this has not been extensively tested with anything like Chinese,
-Russian, Greek, etc, but it "should work." If you're a speaker of a language
-that uses a non-Roman writing system, your feedback would be most welcome.
-
-  has_friendly_id :title, :use_slug => true
-  ...
-  @post = Post.create(:title => "友好编号在中国")
-  @post.friendly_id # "友好编号在中国"
-  @post2 = Post.create(:title => "友好编号在中国")
-  @post2.friendly_id # "友好编号在中国--2"
-
-=== Custom Slug Generation
-
-While FriendlyId's slug generation options work for most people, you may need
-something else. As of version 2.3.0 you can simply override the
-+normalize_friendly_id+ method in your model class:
-
-  class Post < ActiveRecord::Base
-    has_friendly_id :title, :use_slug => true
-    
-    def normalize_friendly_id(text)
-      MySlugGeneratorClass::my_slug_method(text)
-    end
-    
-  end
-
-FriendlyId will still respect your settings for max length and reserved words,
-but will use your method rather than the baked-in methods to normalize the
-friendly_id text.
-
-Note that previous versions of friendly_id allowed this same functionality by
-passing a block to +has_friendly_id+, but this is deprecated as of version
-2.3.0.
-
-== Getting it
-
-FriendlyId is best installed as a Ruby Gem:
+== Rails Quickstart:
 
   gem install friendly_id
-
-Alternatively, you can install it as a Rails plugin, though this is
-discouraged:
-
-  ./script/plugin install git://github.com/norman/friendly_id.git
-
-== Setting it up
-
-The current release works with Rails 2.2 and above, and is compatible with
-Ruby 1.8 and 1.9.
-
-1) Install the Gem:
-
-  sudo gem install friendly_id
-  cd my_app
-  script/generate friendly_id
-  rake db:migrate
-
-2) Add the gem to config/environment.rb:
-
-  config.gem "friendly_id"
-
-3) Add some code to your models:
-
-  class Post < ActiveRecord::Base
-    has_friendly_id :title, :use_slug => true
+  
+  ./script/generate friendly_id
+  
+  rake db:migrate 
+  
+  class User < ActiveRecord::Base
+    has_friendly_id :user_name
   end
+  
+  rake friendly_id:make_slugs
+  
+  ./script/server
+  
+  get http://0.0.0.0:3000/users/joe-schmoe
 
-4) If you are using slugs, you can use a Rake task to generate slugs for your
-existing records:
+== FriendlyId Features and Guide
 
-rake friendly_id:make_slugs MODEL=MyModelName
-
-If you eventually want to expire old slugs every so often, or perhaps every
-day via cron, you can do:
-
-rake friendly_id:remove_old_slugs
-
-The default is to remove dead slugs older than 45 days, but is configurable:
-
-rake friendly_id:remove_old_slugs MODEL=MyModelName DAYS=60
-
-== Installing an older version
-
-You can download older versions of FriendlyId from Github that work with Rails <
-2.2. These versions are, however, no longer maintained or supported.
-
-== Hacking FriendlyId:
-
-FriendlyId is {hosted on Github}[git://github.com/norman/friendly_id.git], and
-we love pull requests. :-)
+FriendlyId offers many advanced features, including: slug history and
+versioning, scoped slugs, reserved words, a custom slug generator, unicode and
+accented characters. For more information on using FriendlyId, please see the
+FriendlyId Guide.
 
 == Bugs:
 
@@ -344,32 +55,6 @@ add a test that reproduces the error you are experiencing.
 
 FriendlyId was created by {Norman Clarke}[mailto:norman@njclarke.com],
 {Adrian Mugnolo}[mailto:adrian@mugnolo.com], and {Emilio Tagua}[mailto:miloops@gmail.com].
-
-We are grateful for many contributions from the Ruby and Rails community, in
-particular from the following people:
-
-* Adam Cigánek
-* Alistair Holt
-* Andrew Loe III
-* Ben Woosley
-* Bence Nagy
-* Bruno Michel
-* Chris Nolan
-* David Ramalho
-* Diego Carrion
-* Diego R. V.
-* Florian Aßmann
-* Harry Love
-* Jesse Crouch
-* Joe Van Dyk
-* Josh Nichols
-* Mikhail Shirkov
-* Nathan Phelps
-* Rob Ingram
-* Sean Abrahams
-* Steve Luscher
-* Steven Noble
-* Tim Kadom
 
 Copyright (c) 2008 Norman Clarke, Adrian Mugnolo and Emilio Tagua, released
 under the MIT license.
