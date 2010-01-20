@@ -17,15 +17,6 @@ module FriendlyId
   # Raised when the slug text is reserved.
   class SlugTextReservedError < SlugGenerationError ; end
 
-  # The string used to separate the slug text from it sequence, when duplicate
-  # slug names are used by different instances. Defaults to "--". Changing
-  # the value here affects all models using FriendlyId. To change the value
-  # for a single model, use the :sequence_separator configuration option to
-  # {#has_friendly_id}.
-  # @see FriendlyId::Config
-  # @TODO prevent setting this to "-".
-  mattr_accessor :sequence_separator
-
   # Set up a model to use a friendly_id. This method accepts a hash with
   # {FriendlyId::Config several possible options}.
   #
@@ -52,9 +43,8 @@ module FriendlyId
   # @see FriendlyId::Config
   def has_friendly_id(method, options = {}, &block)
     class_inheritable_accessor :friendly_id_config
-    write_inheritable_attribute :friendly_id_config, Config.new(self,
+    write_inheritable_attribute :friendly_id_config, Config.new(self, 
       method, options.merge(:normalizer => block))
-    FriendlyId.sequence_separator ||= "--"
     load_friendly_id_adapter
   end
 
@@ -112,7 +102,7 @@ end
 
 class String
   def parse_friendly_id(separator = nil)
-    name, sequence = split(separator || FriendlyId.sequence_separator)
+    name, sequence = split(separator || FriendlyId::Config::DEFAULTS[:sequence_separator])
     return name, sequence ||= "1"
   end
 end

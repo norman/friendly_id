@@ -2,12 +2,18 @@ module FriendlyId
 
   class Config
 
-    DEFAULT_OPTIONS = {
+    # * sequence_separator: 
+    #   The string used to separate the slug text from it sequence, when duplicate
+    #   slug names are used by different instances. Defaults to "--". Changing
+    #   the value here affects all models using FriendlyId. To change the value
+    #   for a single model, use the :sequence_separator configuration option to
+    #   {#has_friendly_id}.
+    DEFAULTS = {
       :ascii_approximation_options => [],
-      :max_length => 255,
-      :reserved_words => ["index", "new"],
-      :reserved_message => "can not be %s",
-      :sequence_separator => "--"
+      :max_length                  => 255,
+      :reserved_words              => ["index", "new"],
+      :reserved_message            => "can not be %s",
+      :sequence_separator          => "--"
     }
 
     # Strip diacritics from Western characters.
@@ -68,7 +74,7 @@ module FriendlyId
     def initialize(configured_class, method, options = nil, &block)
       @configured_class = configured_class
       @method = method.to_sym
-      DEFAULT_OPTIONS.merge(options || {}).each do |key, value|
+      DEFAULTS.merge(options || {}).each do |key, value|
         self.send "#{key}=".to_sym, value
       end
       yield self if block_given?
