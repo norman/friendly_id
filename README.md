@@ -14,7 +14,7 @@ instead of:
     
 ## Docs, Info and Support
 
-* {file:Guide.md FriendlyId Guide}
+* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
 * [FriendlyId Google Group](http://groups.google.com/group/friendly_id)
 * [Source Code](http://github.com/norman/friendly_id/)
 * [Issue Tracker](http://github.com/norman/friendly_id/issues)
