@@ -1,6 +1,7 @@
 .yardoc
 *.log
 .DS_Store
+doc
 docs
 pkg
 coverage
