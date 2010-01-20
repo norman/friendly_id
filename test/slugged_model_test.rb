@@ -118,7 +118,7 @@ class SluggedModelTest < Test::Unit::TestCase
     end
 
     should "not convert to ASCII" do
-      post = Post.new(:name => "katakana: ゲコゴサザシジ")
+      post = Post.new(:name => "katakana: ゲコゴサザシジ!")
       assert_equal "katakana-ゲコゴサザシジ", post.send(:slug_text)
     end
 
