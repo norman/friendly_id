@@ -11,7 +11,7 @@ Using FriendlyId, it's easy to make your application use URL's like:
 instead of:
 
     http://example.com/states/4323454
-    
+
 ## Docs, Info and Support
 
 * [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
@@ -20,23 +20,25 @@ instead of:
 * [Source Code](http://github.com/norman/friendly_id/)
 * [Issue Tracker](http://github.com/norman/friendly_id/issues)
 
-## Rails Quickstart:
+## Rails Quickstart
 
     gem install friendly_id
-  
+
+    cd my_app
+
     ./script/generate friendly_id
-  
-    rake db:migrate 
-  
+
+    rake db:migrate
+
     class User < ActiveRecord::Base
-      has_friendly_id :user_name
+      has_friendly_id :user_name, :use_slug => true
     end
-  
+
     rake friendly_id:make_slugs
-  
+
     ./script/server
-  
-    get http://0.0.0.0:3000/users/joe-schmoe
+
+    GET http://0.0.0.0:3000/users/joe-schmoe
 
 ## FriendlyId Features and Guide
 
