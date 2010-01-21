@@ -34,7 +34,7 @@ begin
 rescue LoadError
 end
 
-task :pushdocs => :yard do
+task :pushdocs do
   branch = `git branch | grep '*'`.chomp.gsub("* ", "")
   sh "git stash"
   sh "git checkout gh-pages"
