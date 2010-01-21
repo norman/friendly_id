@@ -1,3 +1,5 @@
+require "active_record"
+require "active_record/version"
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
 require File.join(File.dirname(__FILE__), "friendly_id", "status")
@@ -88,13 +90,32 @@ module ActiveRecord
 
     # Loads either the slugged or non-slugged modules.
     def load_friendly_id_adapter
+      validate_ar_version
+
       %w[finders simple_model slugged_model slug].each do |file|
         require File.join(File.dirname(__FILE__), "friendly_id", "active_record_2", file)
       end
+
+      mod = ActiveRecord::VERSION::MAJOR == 3 ? ActiveRecord3 : ActiveRecord2
+
       if friendly_id_config.use_slug?
-        include ActiveRecord2::SluggedModel
+        include mod::SluggedModel
       else
-        include ActiveRecord2::SimpleModel
+        include mod::SimpleModel
+      end
+
+    end
+
+    private
+
+    def validate_ar_version
+
+      if ActiveRecord::VERSION::MAJOR > 2
+        raise "FriendlyId is not yet compatible with ActiveRecord > 2"
+      end
+
+      if ActiveRecord::VERSION::MAJOR == 2 && ActiveRecord::VERSION::MINOR < 2
+        raise "FriendlyId is not compatible with ActiveRecord < 2.2.3"
       end
     end
 
