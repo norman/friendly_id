@@ -240,19 +240,19 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "indicate that it was found using the friendly_id" do
-        assert @post.found_using_friendly_id?
+        assert @post.friendly_id_status.friendly?
       end
 
-      should "not indicate that it has a better id" do
-        assert !@post.has_better_id?
+      should "indicate that it was found using its best id" do
+        assert @post.friendly_id_status.best?
       end
 
       should "not indicate that it was found using its numeric id" do
-        assert !@post.found_using_numeric_id?
+        assert !@post.friendly_id_status.numeric?
       end
 
       should "have a finder slug" do
-        assert_not_nil @post.finder_slug
+        assert_not_nil @post.friendly_id_status.slug
       end
 
     end
@@ -263,19 +263,19 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "indicate that it was not found using the friendly id" do
-        assert !@post.found_using_friendly_id?
+        assert !@post.friendly_id_status.friendly?
       end
 
       should "indicate that it has a better id" do
-        assert @post.has_better_id?
+        assert !@post.friendly_id_status.best?
       end
 
       should "indicate that it was found using its numeric id" do
-        assert @post.found_using_numeric_id?
+        assert @post.friendly_id_status.numeric?
       end
 
       should "not have a finder slug" do
-        assert_nil @post.finder_slug
+        assert_nil @post.friendly_id_status.slug
       end
 
     end
@@ -289,19 +289,19 @@ class SluggedModelTest < Test::Unit::TestCase
       end
 
       should "indicate that it was found using a friendly_id" do
-        assert @post.found_using_friendly_id?
+        assert @post.friendly_id_status.friendly?
       end
 
       should "indicate that it has a better id" do
-        assert @post.has_better_id?
+        assert !@post.friendly_id_status.best?
       end
 
       should "not indicate that it was found using its numeric id" do
-        assert !@post.found_using_numeric_id?
+        assert !@post.friendly_id_status.numeric?
       end
 
       should "should have a finder slug different from its default slug" do
-        assert_not_equal @post.slug, @post.finder_slug
+        assert_not_equal @post.slug, @post.friendly_id_status.slug
       end
 
     end
@@ -343,7 +343,7 @@ class SluggedModelTest < Test::Unit::TestCase
 
       should "indicate that the results were found using a friendly_id" do
         @posts = Post.find [@post.friendly_id, @post2.friendly_id]
-        @posts.each { |p| assert p.found_using_friendly_id? }
+        @posts.each { |p| assert p.friendly_id_status.friendly? }
       end
 
       should "raise an error when all records are not found" do

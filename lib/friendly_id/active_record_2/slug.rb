@@ -1,4 +1,3 @@
-# A Slug is a unique, human-friendly identifier for an ActiveRecord.
 module FriendlyId
   module ActiveRecord2
 
@@ -32,6 +31,7 @@ module FriendlyId
 
     end
 
+    # A Slug is a unique, human-friendly identifier for an ActiveRecord.
     class Slug < ::ActiveRecord::Base
 
       extend DeprecatedSlugMethods

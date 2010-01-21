@@ -36,17 +36,17 @@ class NonSluggedTest < Test::Unit::TestCase
 
     should "indicate if it was found by its friendly id" do
       user = User.find(@user.friendly_id)
-      assert user.found_using_friendly_id?
+      assert user.friendly_id_status.friendly?
     end
 
     should "indicate if it was found by its numeric id" do
       user = User.find(@user.id)
-      assert user.found_using_numeric_id?
+      assert user.friendly_id_status.numeric?
     end
 
     should "indicate if it has a better id" do
       user = User.find(@user.id)
-      assert user.has_better_id?
+      assert !user.friendly_id_status.best?
     end
 
     should "not validate if the friendly_id text is reserved" do
@@ -88,8 +88,8 @@ class NonSluggedTest < Test::Unit::TestCase
 
       should "indicate if the results were found using a friendly_id" do
         users = User.find([@user.id, @user2.friendly_id], :order => "name ASC")
-        assert users[0].found_using_friendly_id?
-        assert users[1].found_using_numeric_id?
+        assert users[0].friendly_id_status.friendly?
+        assert users[1].friendly_id_status.numeric?
       end
 
     end

@@ -25,7 +25,7 @@ class STIModelTest < Test::Unit::TestCase
       end
 
       should "not indicate that it has a better id" do
-        assert !@novel.has_better_id?
+        assert @novel.friendly_id_status.best?
       end
 
     end
@@ -38,7 +38,7 @@ class STIModelTest < Test::Unit::TestCase
       end
 
       should "indicate that it has a better id" do
-        assert @novel.has_better_id?
+        assert !@novel.friendly_id_status.best?
       end
 
     end

@@ -52,7 +52,7 @@ class CachedSlugModelTest < Test::Unit::TestCase
       end
 
       should "not indicate that it has a better id" do
-        assert !@paris.has_better_id?
+        assert @paris.friendly_id_status.best?
       end
 
     end
@@ -64,7 +64,7 @@ class CachedSlugModelTest < Test::Unit::TestCase
       end
 
       should "indicate that it has a better id" do
-        assert @paris.has_better_id?
+        assert !@paris.friendly_id_status.best?
       end
 
     end

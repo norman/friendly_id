@@ -103,10 +103,12 @@ module FriendlyId
           friendly_id_config.scope? ? raise_scoped_error : (raise @error)
         end
 
+        private
+
         def find_options
           slug_table = Slug.table_name
           {
-            :select => "#{model.table_name}.*",
+            :select => "#{model_class.table_name}.*",
             :joins => slugs_included? ? options[:joins] : :slugs,
             :conditions => {
               "#{slug_table}.name"     => name,
@@ -124,17 +126,17 @@ module FriendlyId
 
       end
 
-      module ClassMethods
+      # The methods in this module override ActiveRecord's +find_one+ and
+      # +find_some+ to add FriendlyId's features.
+      module FinderMethods
 
         protected
 
-        # Finds a single record using the friendly id, or the record's id.
         def find_one(id_or_name, options) #:nodoc:#
           finder = SingleFinder.new(id_or_name, self, options)
           finder.unfriendly? ? super : finder.find or super
         end
 
-        # Finds multiple records using the friendly ids, or the records' ids.
         def find_some(ids_and_names, options) #:nodoc:#
           finder = MultipleFinder.new(ids_and_names, self, options).find
         end
@@ -148,38 +150,52 @@ module FriendlyId
 
       end
 
+      # These methods will be removed in FriendlyId 3.0.
       module DeprecatedMethods
+
+        # @deprecated Please use #to_param
+        def best_id
+          warn("best_id is deprecated and will be removed in 3.0. Please use #to_param.")
+          to_param
+        end
+
         # @deprecated Please use #friendly_id_status.slug.
         def finder_slug
+          warn("finder_slug is deprecated and will be removed in 3.0. Please use #friendly_id_status.slug.")
           friendly_id_status.slug
         end
 
         # Was the record found using one of its friendly ids?
         # @deprecated Please use #friendly_id_status.friendly?
         def found_using_friendly_id?
+          warn("found_using_friendly_id? is deprecated and will be removed in 3.0. Please use #friendly_id_status.friendly?")
           friendly_id_status.friendly?
         end
 
         # Was the record found using its numeric id?
         # @deprecated Please use #friendly_id_status.numeric?
         def found_using_numeric_id?
+          warn("found_using_numeric_id is deprecated and will be removed in 3.0. Please use #friendly_id_status.numeric?")
           friendly_id_status.numeric?
         end
 
         # Was the record found using an old friendly id?
         # @deprecated Please use #friendly_id_status.outdated?
         def found_using_outdated_friendly_id?
+          warn("found_using_outdated_friendly_id is deprecated and will be removed in 3.0. Please use #friendly_id_status.outdated?")
           friendly_id_status.outdated?
         end
 
         # Was the record found using an old friendly id, or its numeric id?
         # @deprecated Please use !#friendly_id_status.best?
         def has_better_id?
+          warn("has_better_id? is deprecated and will be removed in 3.0. Please use !#friendly_id_status.best?")
           ! friendly_id_status.best?
         end
 
         # @deprecated Please use #slug?
         def has_a_slug?
+          warn("has_a_slug? is deprecated and will be removed in 3.0. Please use #slug?")
           slug?
         end
 
@@ -189,30 +205,48 @@ module FriendlyId
         base.class_eval do
           has_many :slugs, :class_name => "FriendlyId::ActiveRecord2::Slug",
             :order => 'id DESC', :as => :sluggable, :dependent => :destroy
-          before_save :set_slug
+          before_save :build_slug
           after_save :set_slug_cache
           after_update :update_scopes
           protect_friendly_id_attributes
-          extend ClassMethods
+          extend FinderMethods
         end
       end
 
       include DeprecatedMethods
 
+      # Get the {FriendlyId::Status} after the find has been performed.
       def friendly_id_status
         @friendly_id_status ||= Status.new(:record => self)
       end
 
-      # Returns the friendly id.
+      # The friendly id.
       def friendly_id
         slug.to_friendly_id
       end
-      alias best_id friendly_id
 
-      # Has the basis of our friendly id changed, requiring the generation of a
-      # new slug?
-      def new_slug_needed?
-        !slug || slug_text_changed?
+      # Clean up the string before setting it as the friendly_id. You can override
+      # this method to add your own custom normalization routines.
+      # @param string An instance of {FriendlyId::SlugString}.
+      # @return [String]
+      def normalize_friendly_id(string)
+        string.normalize_for!(friendly_id_config).to_s
+      end
+
+      # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.
+      def slug
+        @slug ||= slugs.first(:order => "id DESC")
+      end
+
+      # Set the slug.
+      def slug=(slug)
+        @slug = slug
+        @new_friendly_id = @slug.to_friendly_id
+      end
+
+      # Does the instance have a slug?
+      def slug?
+        !! slug
       end
 
       # Returns the friendly id, or if none is available, the numeric id.
@@ -220,52 +254,46 @@ module FriendlyId
         friendly_id_config.cache_column ? to_param_from_cache : to_param_from_slug
       end
 
-      def normalize_friendly_id(string)
-        string.normalize_for!(friendly_id_config).to_s
-      end
-
-      def slug
-        @slug ||= slugs.first(:order => "id DESC")
-      end
-
-      def slug=(slug)
-        @slug = slug
-      end
-
-      def slug?
-        !! slug
-      end
-
       private
+
+      # Has the basis of our friendly id changed, requiring the generation of a
+      # new slug?
+      def new_slug_needed?
+        !slug || slug_text_changed?
+      end
 
       # Get the processed string used as the basis of the friendly id.
       def slug_text
         normalize_friendly_id(SlugString.new(send(friendly_id_config.method)))
       end
 
+      # Has the slug text changed?
       def slug_text_changed?
         slug_text != slug.name
       end
 
+      # Respond with the cached value if available.
       def to_param_from_cache
         read_attribute(friendly_id_config.cache_column) || id.to_s
       end
 
+      # Respond with the slugged value if available.
       def to_param_from_slug
         slug? ? slug.to_friendly_id : id.to_s
       end
 
-      # Set the slug using the generated friendly id.
-      def set_slug
+      # Build the new slug using the generated friendly id.
+      def build_slug
         return unless new_slug_needed?
         self.slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self)
-        @new_friendly_id = @slug.to_friendly_id
       end
 
+      # Reset the cached friendly_id?
       def new_cache_needed?
         uses_slug_cache? && send(friendly_id_config.cache_column) != slug.to_friendly_id
       end
 
+      # Reset the cached friendly_id.
       def set_slug_cache
         if new_cache_needed?
           send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
@@ -273,6 +301,8 @@ module FriendlyId
         end
       end
 
+      # Update the slugs for any model that is using this model as its
+      # FriendlyId scope.
       def update_scopes
         if slugs(true).size > 1 && @new_friendly_id
           friendly_id_config.child_scopes.each do |klass|
@@ -281,6 +311,7 @@ module FriendlyId
         end
       end
 
+      # Does the model use slug caching?
       def uses_slug_cache?
         friendly_id_config.cache_column?
       end

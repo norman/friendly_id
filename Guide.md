@@ -135,8 +135,9 @@ it more suitable for use in a URL:
     @city.create :name => "Viña del Mar"
     @city.friendly_id  # will be "viña-del-mar"
 
-By default, the string is {SlugString#downcase! downcased} and {SlugString#clean! stripped}, {SlugString#with_dashes! spaces are replaced with dashes},
-and {SlugString#letters! non-letters are removed}.
+By default, the string is {FriendlyId::SlugString#downcase! downcased} and 
+{FriendlyId::SlugString#clean! stripped}, {FriendlyId::SlugString#with_dashes! spaces are replaced with dashes},
+and {FriendlyId::SlugString#letters! non-letters are removed}.
 
 ### Replacing Accented Characters
 
@@ -278,7 +279,7 @@ new "friendly" ones when adding FriendlyId to an existing application:
 
   end
 
-For more information, take a look at the documentation for {FriendlyId::BaseStatus}.
+For more information, take a look at the documentation for {FriendlyId::Status}.
 
 ## Non-unique Slugs
 

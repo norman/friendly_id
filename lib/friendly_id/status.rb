@@ -1,7 +1,8 @@
 module FriendlyId
 
   # FriendlyId::Status presents information about the status of the
-  # id that was used to find the model.
+  # id that was used to find the model. This class can be useful for figuring
+  # out when to redirect to a new URL.
   class Status
 
     # The id or name used as the finder argument
@@ -26,7 +27,7 @@ module FriendlyId
 
     # Did the find operation use the best available id?
     def best?
-      friendly?
+      record.friendly_id && friendly?
     end
 
   end
