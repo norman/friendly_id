@@ -465,3 +465,14 @@ if you introduce a `cached_slug` column or change the `:seqence_separator`.
 Use this task if you wish to delete expired slugs; manually or perhaps via
 cron. If you don't specify the days option, the default is to remove unused
 slugs older than 45 days.
+
+# Hacking FriendlyId
+
+A couple of notes for programmers intending to work on FriendlyId:
+
+If you intend to send a pull request, in general it's best to make minor
+changes in the master branch, and major changes in the edge branch.
+
+Before removing any public or protected methods, FriendlyId will deprecate
+them through one major release cycle. Private methods may, however, change at
+any time.

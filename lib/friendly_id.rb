@@ -49,6 +49,7 @@ module FriendlyId
     load_friendly_id_adapter
   end
 
+  # Does the model class use the FriendlyId plugin?
   def uses_friendly_id?
     respond_to? :friendly_id_config
   end

@@ -132,12 +132,12 @@ module FriendlyId
 
         protected
 
-        def find_one(id_or_name, options) #:nodoc:#
+        def find_one(id_or_name, options)
           finder = SingleFinder.new(id_or_name, self, options)
           finder.unfriendly? ? super : finder.find or super
         end
 
-        def find_some(ids_and_names, options) #:nodoc:#
+        def find_some(ids_and_names, options)
           finder = MultipleFinder.new(ids_and_names, self, options).find
         end
 

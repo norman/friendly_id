@@ -65,7 +65,7 @@ module FriendlyId
       end
 
       # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
-      def validate_name #:nodoc:#
+      def validate_name
         if name.blank?
           raise FriendlyId::SlugGenerationError.new("slug.name can not be blank.")
         end

@@ -1,5 +1,5 @@
-module FriendlyId #:nodoc:
-  module Version #:nodoc:
+module FriendlyId
+  module Version 
     MAJOR = 2
     MINOR = 3
     TINY = 0
