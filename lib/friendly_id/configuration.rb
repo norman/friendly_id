@@ -102,7 +102,7 @@ module FriendlyId
     end
 
     def reserved?(word)
-      reserved_words.include? word
+      reserved_words.include? word.to_s
     end
 
     def reserved_error_message(word)

@@ -82,11 +82,11 @@ module FriendlyId
         end
         truncate!(config.max_length)
         raise FriendlyId::SlugTextBlankError if blank?
-        raise FriendlyId::SlugTextReservedError if config.reserved?(to_s)
+        raise FriendlyId::SlugTextReservedError if config.reserved?(self)
         self
       end
 
-      alias normalize_utf8 normalize
+      alias :normalize_utf8 :normalize rescue NoMethodError
 
       def normalize!
         clean!
