@@ -17,7 +17,7 @@ class ScopedModelTest < Test::Unit::TestCase
     Country.delete_all
     User.delete_all
     House.delete_all
-    FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+    $slug_class.delete_all
   end
 
   context "A slugged model used as a scope for another model" do

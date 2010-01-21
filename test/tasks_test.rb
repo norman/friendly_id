@@ -22,18 +22,18 @@ class TasksTest < Test::Unit::TestCase
       City.create! :name => "Rio de Janeiro"
       City.create! :name => "Tokyo"
       City.create! :name => "Nairobi"
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     teardown do
       City.delete_all
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     should "make one slug per model" do
-      assert_equal 0, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 0, $slug_class.count
       FriendlyId::Tasks.make_slugs("City")
-      assert_equal 4, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 4, $slug_class.count
     end
 
   end
@@ -48,13 +48,13 @@ class TasksTest < Test::Unit::TestCase
     teardown do
       Post.delete_all
       City.delete_all
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     should "Delete only slugs for the specified model" do
-      assert_equal 2, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 2, $slug_class.count
       FriendlyId::Tasks.delete_slugs_for("City")
-      assert_equal 1, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 1, $slug_class.count
     end
 
     should "set the cached_slug column to NULL" do
@@ -79,25 +79,25 @@ class TasksTest < Test::Unit::TestCase
     teardown do
       Post.delete_all
       City.delete_all
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     should "delete slugs older than 45 days by default" do
-      assert_equal 3, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 3, $slug_class.count
       FriendlyId::Tasks.delete_old_slugs
-      assert_equal 2, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 2, $slug_class.count
     end
 
     should "respect the days argument" do
-      assert_equal 3, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 3, $slug_class.count
       FriendlyId::Tasks.delete_old_slugs(100)
-      assert_equal 3, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 3, $slug_class.count
     end
 
     should "respect the class argument" do
-      assert_equal 3, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 3, $slug_class.count
       FriendlyId::Tasks.delete_old_slugs(1, "Post")
-      assert_equal 3, FriendlyId::Adapters::ActiveRecord::Slug.count
+      assert_equal 3, $slug_class.count
     end
 
   end

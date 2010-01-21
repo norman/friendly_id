@@ -1,9 +1,8 @@
 module FriendlyId
 
-  # FriendlyId::AbstractStatus presents information about the status of the
+  # FriendlyId::Status presents information about the status of the
   # id that was used to find the model.
-  # @abstract
-  module BaseStatus
+  class Status
 
     # The id or name used as the finder argument
     attr_accessor :name
@@ -17,7 +16,7 @@ module FriendlyId
 
     # Did the find operation use a friendly id?
     def friendly?
-      raise NotImplemtedError.new
+      !! name
     end
 
     # Did the find operation use a numeric id?
@@ -25,10 +24,9 @@ module FriendlyId
       !friendly?
     end
 
-    # Did the find operation use the best possible id? True if there is
-    # a slug, and the most recent one was used.
+    # Did the find operation use the best available id?
     def best?
-      raise NotImplementedError.new
+      friendly?
     end
 
   end

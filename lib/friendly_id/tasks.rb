@@ -20,7 +20,7 @@ module FriendlyId
         klass = parse_class_name(klass)
         cache_column = klass.friendly_id_config.cache_column
         validate_uses_slugs(klass)
-        FriendlyId::Adapters::ActiveRecord::Slug.destroy_all(["sluggable_type = ?", klass.to_s])
+        FriendlyId::ActiveRecord2::Slug.destroy_all(["sluggable_type = ?", klass.to_s])
         if cache_column
           klass.update_all("#{cache_column} = NULL")
         end
@@ -34,7 +34,7 @@ module FriendlyId
           conditions[0] << " AND sluggable_type = ?"
           conditions << klass.to_s
         end
-        slugs = FriendlyId::Adapters::ActiveRecord::Slug.find :all, :conditions => conditions
+        slugs = FriendlyId::ActiveRecord2::Slug.find :all, :conditions => conditions
         slugs.each { |s| s.destroy unless s.current? }
       end
 

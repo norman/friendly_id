@@ -1,6 +1,7 @@
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "config")
-require File.join(File.dirname(__FILE__), "friendly_id", "base_status")
+require File.join(File.dirname(__FILE__), "friendly_id", "status")
+
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
 # @author Norman Clarke
@@ -83,12 +84,12 @@ module ActiveRecord
     # Loads either the slugged or non-slugged modules.
     def load_friendly_id_adapter
       %w[finders simple_model slugged_model slug].each do |file|
-        require File.join(File.dirname(__FILE__), "friendly_id", "adapters", "active_record", file)
+        require File.join(File.dirname(__FILE__), "friendly_id", "active_record_2", file)
       end
       if friendly_id_config.use_slug?
-        include Adapters::ActiveRecord::SluggedModel
+        include ActiveRecord2::SluggedModel
       else
-        include Adapters::ActiveRecord::SimpleModel
+        include ActiveRecord2::SimpleModel
       end
     end
 

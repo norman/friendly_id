@@ -14,7 +14,7 @@ class SluggedModelTest < Test::Unit::TestCase
       Post.delete_all
       Person.delete_all
       Place.delete_all
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     should "have a friendly_id config" do

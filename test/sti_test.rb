@@ -11,7 +11,7 @@ class STIModelTest < Test::Unit::TestCase
 
     teardown do
       Novel.delete_all
-      FriendlyId::Adapters::ActiveRecord::Slug.delete_all
+      $slug_class.delete_all
     end
 
     should "have a slug" do
