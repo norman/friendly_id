@@ -119,7 +119,7 @@ FriendlyId is configured using the {FriendlyId#has_friendly_id} class method:
       has_friendly_id :a_column_or_method options_hash
     end
 
-For a list of valid options, see the instance attrbute summary for {FriendlyId::Config}.
+For a list of valid options, see the instance attrbute summary for {FriendlyId::Configuration}.
 
 # Features
 
@@ -303,7 +303,7 @@ You can configure the separator string used by your model by setting the
 
     has_friendly_id :title, :use_slug => true, :sequence_separator => ";"
 
-You can also override the default used in {FriendlyId::Config::DEFAULTS}
+You can also override the default used in {FriendlyId::Configuration::DEFAULTS}
 to set the value for any model using FriendlyId.
 
 ## Reserved Words
@@ -324,7 +324,7 @@ Here's how to do it:
 The strings "new" and "index" are reseved by default. When you attempt to
 store a reserved value, FriendlyId raises a
 {FriendlyId::SlugTextReservedError}. You can also override the default
-reserved words in {FriendlyId::Config::DEFAULTS} to set the value for any
+reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
 model using FriendlyId.
 
 ## Caching the FriendlyId Slug for Better Performance

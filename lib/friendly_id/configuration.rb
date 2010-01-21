@@ -1,13 +1,7 @@
 module FriendlyId
 
-  class Config
+  class Configuration
 
-    # * sequence_separator: 
-    #   The string used to separate the slug text from it sequence, when duplicate
-    #   slug names are used by different instances. Defaults to "--". Changing
-    #   the value here affects all models using FriendlyId. To change the value
-    #   for a single model, use the :sequence_separator configuration option to
-    #   {#has_friendly_id}.
     DEFAULTS = {
       :ascii_approximation_options => [],
       :max_length                  => 255,
@@ -133,7 +127,7 @@ module FriendlyId
     # This method will be removed from FriendlyId 3.0.
     # @deprecated Please use {#approximate_ascii approximate_ascii}.
     def strip_diacritics=(*args)
-      warn('The "strip_diacritics" option is deprecated and will be removed from FriendlyId 3.0. Please use "approximate_ascii".')
+      warn('strip_diacritics is deprecated and will be removed from 3.0. Please use #approximate_ascii')
       self.strip_diacritics = *args
     end
 
@@ -152,8 +146,7 @@ module FriendlyId
 
     def associated_friendly_classes
       configured_class.reflect_on_all_associations.select { |assoc|
-        assoc.klass.respond_to? :friendly_id_config
-      }.map(&:klass)
+        assoc.klass.uses_friendly_id? }.map(&:klass)
     end
 
   end

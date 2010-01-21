@@ -1,5 +1,5 @@
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
-require File.join(File.dirname(__FILE__), "friendly_id", "config")
+require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
 require File.join(File.dirname(__FILE__), "friendly_id", "status")
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
@@ -19,16 +19,16 @@ module FriendlyId
   class SlugTextReservedError < SlugGenerationError ; end
 
   # Set up a model to use a friendly_id. This method accepts a hash with
-  # {FriendlyId::Config several possible options}.
+  # {FriendlyId::Configuration several possible options}.
   #
   # @param [#to_sym] method The column or method that should be used as the
   #   basis of the friendly_id string.
   #
   # @param [Hash] options For valid configuration options, see
-  #   {FriendlyId::Config}.
+  #   {FriendlyId::Configuration}.
   #
   # @param [block] block An optional block through which to filter the
-  #   friendly_id text; see {FriendlyId::Config#normalizer}. Note that
+  #   friendly_id text; see {FriendlyId::Configuration#normalizer}. Note that
   #   passing a block parameter is now deprecated and will be removed
   #   from FriendlyId 3.0.
   #
@@ -41,12 +41,16 @@ module FriendlyId
   #   class Post < ActiveRecord::Base
   #     has_friendly_id :title, :use_slug => true, :approximate_ascii => true
   #   end
-  # @see FriendlyId::Config
+  # @see FriendlyId::Configuration
   def has_friendly_id(method, options = {}, &block)
     class_inheritable_accessor :friendly_id_config
-    write_inheritable_attribute :friendly_id_config, Config.new(self, 
+    write_inheritable_attribute :friendly_id_config, Configuration.new(self,
       method, options.merge(:normalizer => block))
     load_friendly_id_adapter
+  end
+
+  def uses_friendly_id?
+    respond_to? :friendly_id_config
   end
 
   private
@@ -103,7 +107,7 @@ end
 
 class String
   def parse_friendly_id(separator = nil)
-    name, sequence = split(separator || FriendlyId::Config::DEFAULTS[:sequence_separator])
+    name, sequence = split(separator || FriendlyId::Configuration::DEFAULTS[:sequence_separator])
     return name, sequence ||= "1"
   end
 end
