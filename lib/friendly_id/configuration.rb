@@ -1,5 +1,23 @@
 module FriendlyId
 
+  # This class is not intended to be used on its own, it is used internally
+  # by {FriendlyId#has_friendly_id} to load the model's configuration.
+  #
+  # The arguments accepted by {#has_friendly_id} correspond to the writeable
+  # instance attributes of this class; please see the description of the 
+  # attributes below for information on the possible options.
+  #
+  # @example
+  # has_friendly_id :name, 
+  #  :use_slug => true,
+  #  :max_length => 150, 
+  #  :approximate_ascii => true,
+  #  :ascii_approximation_options => :german,
+  #  :sequence_separator => ":",
+  #  :reserved_words => ["reserved", "words"],
+  #  :scope => :country,
+  #  :cache_column => :my_cache_column_name
+  #  # etc.
   class Configuration
 
     DEFAULTS = {
@@ -17,7 +35,11 @@ module FriendlyId
     # values supported by {SlugString#approximate_ascii!}.
     attr_accessor :ascii_approximation_options
 
-    # The column used to cache the friendly_id string.
+    # The column used to cache the friendly_id string. If no column is specified,
+    # FriendlyId will look for a column named +cached_slug+ and use it automatically
+    # if it exists. If for some reason you have a column named +cached_slug+
+    # but don't want FriendlyId to modify it, pass the option 
+    # +:cache_column => false+ to {#has_friendly_id}.
     attr_accessor :cache_column
 
     # An array of classes for which the configured class serves as a
@@ -74,11 +96,7 @@ module FriendlyId
       end
       yield self if block_given?
     end
-
-    def autodiscover_cache_column
-      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
-    end
-
+    
     def cache_column
       return @cache_column if defined?(@cache_column)
       @cache_column = autodiscover_cache_column
@@ -94,7 +112,9 @@ module FriendlyId
     end
 
     def normalizer=(arg)
-      @normalizer = arg unless arg.nil?
+      return if arg.nil?
+      raise("passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #friendly_id_normalizer.")
+      @normalizer = arg
     end
 
     def reserved_words=(*words)
@@ -143,6 +163,10 @@ module FriendlyId
     alias :use_slugs? :use_slug?
 
     private
+
+    def autodiscover_cache_column
+      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
+    end
 
     def associated_friendly_classes
       configured_class.reflect_on_all_associations.select { |assoc|

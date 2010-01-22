@@ -48,9 +48,12 @@ end
 
 # A model with a custom slug text normalizer
 class Person < ActiveRecord::Base
-  has_friendly_id :name, :use_slug => true do |text|
-    text.upcase
+  has_friendly_id :name, :use_slug => true
+
+  def normalize_friendly_id(string)
+    string.upcase
   end
+
 end
 
 # A slugged model that uses a scope

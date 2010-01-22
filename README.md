@@ -12,13 +12,12 @@ instead of:
 
     http://example.com/states/4323454
 
-## Docs, Info and Support
+## FriendlyId Features
 
-* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
-* [API Docs](http://norman.github.com/friendly_id)
-* [Google Group](http://groups.google.com/group/friendly_id)
-* [Source Code](http://github.com/norman/friendly_id/)
-* [Issue Tracker](http://github.com/norman/friendly_id/issues)
+FriendlyId offers many advanced features, including: slug history and
+versioning, scoped slugs, reserved words, custom slug generators, and
+excellent Unicode support. For complete information on using FriendlyId,
+please see the {file:GUIDE.md FriendlyId Guide}.
 
 ## Rails Quickstart
 
@@ -40,12 +39,13 @@ instead of:
 
     GET http://0.0.0.0:3000/users/joe-schmoe
 
-## FriendlyId Features and Guide
+## Docs, Info and Support
 
-FriendlyId offers many advanced features, including: slug history and
-versioning, scoped slugs, reserved words, a custom slug generator, unicode and
-accented characters. For more information on using FriendlyId, please see the
-{file:GUIDE.md FriendlyId Guide}.
+* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
+* [API Docs](http://norman.github.com/friendly_id)
+* [Google Group](http://groups.google.com/group/friendly_id)
+* [Source Code](http://github.com/norman/friendly_id/)
+* [Issue Tracker](http://github.com/norman/friendly_id/issues)
 
 ## Bugs:
 

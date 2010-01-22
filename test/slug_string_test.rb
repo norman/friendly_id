@@ -15,9 +15,9 @@ class FriendlyId::SlugStringTest < Test::Unit::TestCase
       assert_match output, /^[a-zA-Z']*$/
     end
 
-    should "strip non-letters" do
+    should "strip non-word chars" do
       s = FriendlyId::SlugString.new "¡feliz año!"
-      assert_equal "feliz año", s.letters
+      assert_equal "feliz año", s.word_chars
     end
 
   end

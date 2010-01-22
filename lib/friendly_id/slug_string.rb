@@ -1,6 +1,28 @@
+# encoding: utf-8
 module FriendlyId
+
+  # This class provides some string-manipulation methods specific to slugs.
+  # Its Unicode support is provided by ActiveSupport::Multibyte::Chars; this
+  # is needed primarily for Unicode encoding normalization and proper
+  # calculation of string lengths.
+  #
+  # Note that this class includes many "bang methods" such as {#clean!} and {#normalize!}
+  # that perform actions on the string in-place. Each of these methods has a
+  # corresponding "bangless" method (i.e., +SlugString#clean!+ and +SlugString#clean+)
+  # which does not appear in the generated because it is generated dynamically.
+  #
+  # All of the bang methods return an instance of String, while the bangless
+  # versions return an instance of FriendlyId::SlugString, so that calls to
+  # methods specific to this class can be chained:
+  #
+  #   string = SlugString.new("hello world")
+  #   string.with_dashes! # => "hello-world"
+  #   string.with_dashes  # => <FriendlyId::SlugString:0x000001013e1590 @wrapped_string="hello-world">
+  #
+  # @see http://www.utf8-chartable.de/unicode-utf8-table.pl?utf8=dec Unicode character table
   class SlugString < ActiveSupport::Multibyte::Chars
 
+      # All values are Unicode decimal characters or character arrays.
       APPROXIMATIONS = {
         :common => Hash[
           192, 65, 193, 65, 194, 65, 195, 65, 196, 65, 197, 65, 198, [65, 69],
@@ -39,39 +61,96 @@ module FriendlyId
       cattr_accessor :approximations
       self.approximations = []
 
+      # @param string [String] The string to use as the basis of the SlugString.
       def initialize(string)
         super string.to_s
       end
 
+      # Approximate an ASCII string. This works only for Western strings using
+      # characters that are Roman-alphabet characters + diacritics. Non-letter
+      # characters are left unmodified.
+      #
+      #   string = SlugString.new "Łódź, Poland"
+      #   string.approximate_ascii                 # => "Lodz, Poland"
+      #   string = SlugString.new "日本"
+      #   string.approximate_ascii                 # => "日本"
+      #
+      # You can pass any key(s) from {APPROXIMATIONS} as arguments. This allows
+      # for contextual approximations. By default; +:spanish+ and +:german+ are
+      # provided:
+      #
+      #   string = SlugString.new "Jürgen Müller"
+      #   string.approximate_ascii                 # => "Jurgen Muller"
+      #   string.approximate_ascii :german        # => "Juergen Mueller"
+      #   string = SlugString.new "¡Feliz año!"
+      #   string.approximate_ascii                 # => "¡Feliz ano!"
+      #   string.approximate_ascii :spanish       # => "¡Feliz anno!"
+      #
+      # You can modify the built-in approximations, or add your own:
+      #
+      #   # Make Spanish use "nh" rather than "nn"
+      #   FriendlyId::SlugString::APPROXIMATIONS[:spanish] = {
+      #     # Ñ => "Nh"
+      #     209 => [78, 104],
+      #     # ñ => "nh"
+      #     241 => [110, 104]
+      #   }
+      #
+      # It's also possible to use a custom approximation for all strings:
+      #
+      #   FriendlyId::SlugString.approximations << :german
+      #
+      # Notice that this method does not simply convert to ASCII; if you want
+      # to remove non-ASCII characters such as "¡" and "¿", use {#to_ascii!}:
+      #
+      #   string.approximate_ascii!(:spanish)       # => "¡Feliz anno!"
+      #   string.to_ascii!                          # => "Feliz anno!"
+      # @param *args <Symbol>
+      # @return String
       def approximate_ascii!(*args)
         @maps = (self.class.approximations + args + [:common]).flatten.uniq
         @wrapped_string = normalize_utf8(:c).unpack("U*").map { |char| approx_char(char) }.flatten.pack("U*")
       end
 
+      # Removes leading and trailing spaces or dashses, and replaces multiple
+      # whitespace characters with a single space.
+      # @return String
       def clean!
         @wrapped_string = @wrapped_string.gsub(/\A\-|\-\z/, '').gsub(/\s+/u, ' ').strip
       end
 
+      # Lowercases the string. Note that this works for Unicode strings,
+      # though your milage may vary with Greek and Turkic strings.
+      # @return String
       def downcase!
         @wrapped_string = apply_mapping :lowercase_mapping
       end
 
-      def letters!
+      # Remove any non-word characters.
+      # @return String
+      def word_chars!
         @wrapped_string = normalize_utf8(:c).unpack("U*").map { |char|
           case char
+          # control chars
           when 0..31
+          # punctuation; 45 is "-" (HYPHEN-MINUS) and allowed
           when 33..44
+          # more puncuation
           when 46..47
+          # more puncuation and other symbols
           when 58..64
+          # brackets and other symbols
           when 91..96
+          # braces, pipe, tilde, etc.
           when 123..191
           else char
           end
         }.compact.pack("U*")
       end
 
-      # Normalize the string for a FriendlyIdConfig
-      # @param config [FriendlyIdConfig]
+      # Normalize the string for a given {FriendlyId::Configuration}.
+      # @param config [FriendlyId::Configuration]
+      # @return String
       def normalize_for!(config)
         if config.normalizer?
           @wrapped_string = config.normalizer.call(to_s)
@@ -146,6 +225,7 @@ module FriendlyId
 
       private
 
+      # Look up the character's approximation in the configured maps.
       def approx_char(char)
         @maps.each do |map|
           if new_char = APPROXIMATIONS[map][char]
@@ -155,6 +235,7 @@ module FriendlyId
         char
       end
 
+      # Used as the basis of the bangless methods.
       def send_to_new_instance(*args)
         string = SlugString.new self
         string.send(*args)

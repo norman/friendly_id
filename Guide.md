@@ -61,12 +61,12 @@ wish to modify to make them more suitable for use in URL's.
 
 If you are unsure whether to use slugs, then your best bet is to use them,
 because FriendlyId provides many useful features that only work with slugs.
-These features are explained in detail below.
+These features are explained in detail {file:Guide.md#features below}.
 
 ## Installation
 
 FriendlyId can be installed as a gem, or as a Rails plugin. It is compatible
-with Rails 2.2.x, 2.3.x.
+with Rails 2.2.x, 2.3.x. Support for Rails 3.x is in progress.
 
 ### As a Gem
 
@@ -74,7 +74,7 @@ with Rails 2.2.x, 2.3.x.
 
 #### Rails 2.2.x - 2.3.x
 
-After installing the gem, you will need to add an entry in environment.rb:
+After installing the gem, add an entry in environment.rb:
 
     config.gem "friendly_id"
 
@@ -90,12 +90,12 @@ somewhere before `Application.initialize!`.
 
 ### As a Plugin
 
-Plugin installtion is simple for all supported versions of Rails:
+Plugin installation is simple for all supported versions of Rails:
 
     ./script/plugin install git://github.com/norman/friendly_id.git
 
 However, installing as a gem offers simpler version control than plugin
-installtion. Whenever possible, install as a gem instead.
+installation. Whenever possible, install as a gem instead.
 
 ### Setup
 
@@ -113,20 +113,29 @@ FriendlyId is now set up and ready for you to use.
 
 ## Configuration
 
-FriendlyId is configured using the {FriendlyId#has_friendly_id} class method:
+FriendlyId is configured in your model using the {FriendlyId#has_friendly_id} class method:
 
-    class MyModel < ActiveRecord::Base
-      has_friendly_id :a_column_or_method options_hash
+    has_friendly_id :a_column_or_method options_hash
+
+    class Post < ActiveRecord::Base
+      # use the "title" column as the basis of the friendly_id, and use slugs
+      has_friendly_id :title, :use_slug => true,
+        # remove accents and other diacritics from Western characters
+        :approximate_ascii => true,
+        # don't use slugs longer than 50 chars
+        :max_length => 50
     end
 
-For a list of valid options, see the instance attrbute summary for {FriendlyId::Configuration}.
+For the full list of valid configuration options, see the instance attribute
+summary for {FriendlyId::Configuration}.
 
 # Features
 
 ## FriendlyId Strings
 
-When using slugs, FriendlyId will automatically modify the slug text to make
-it more suitable for use in a URL:
+FriendlyId comes with {FriendlyId::SlugString excellent support for Unicode
+strings}. When using slugs, FriendlyId will automatically modify the slug text
+to make it more suitable for use in a URL:
 
     class City < ActiveRecord::Base
       has_friendly_id :name, :use_slug => true
@@ -135,9 +144,9 @@ it more suitable for use in a URL:
     @city.create :name => "Viña del Mar"
     @city.friendly_id  # will be "viña-del-mar"
 
-By default, the string is {FriendlyId::SlugString#downcase! downcased} and 
+By default, the string is {FriendlyId::SlugString#downcase! downcased} and
 {FriendlyId::SlugString#clean! stripped}, {FriendlyId::SlugString#with_dashes! spaces are replaced with dashes},
-and {FriendlyId::SlugString#letters! non-letters are removed}.
+and {FriendlyId::SlugString#word_chars! non-word characters are removed}.
 
 ### Replacing Accented Characters
 
@@ -230,7 +239,7 @@ order to fine-tune the output:
     class City < ActiveRecord::Base
 
       def normalize_friendly_id(text)
-        text.clean.approximate_ascii.underscore.upcase
+        my_text_modifier_method(text)
       end
 
     end
@@ -245,7 +254,7 @@ ActiveSupport::Multibyte::Chars.
 Stringex is a library which provides some interesting options for transliterating
 non-Western strings to ASCII:
 
-  "你好".to_url => "ni-hao"
+    "你好".to_url => "ni-hao"
 
 Using Stringex with FriendlyId is a simple matter of installing and requiring
 the `stringex` gem, and overriding the `normalize_friendly_id` method in your
@@ -267,17 +276,17 @@ methods to determine whether the model instance was found using the most
 recent friendly_id. This helps you redirect to your "unfriendly" URL's to your
 new "friendly" ones when adding FriendlyId to an existing application:
 
-  class PostsController < ApplicationController
+    class PostsController < ApplicationController
 
-    before_filter ensure_current_post_url, :only => :show
+      before_filter ensure_current_post_url, :only => :show
 
-    ...
+      ...
 
-    def ensure_current_post_url
-      redirect_to @post, :status => :moved_permanently unless @post.friendly_id_status.best?
+      def ensure_current_post_url
+        redirect_to @post, :status => :moved_permanently unless @post.friendly_id_status.best?
+      end
+
     end
-
-  end
 
 For more information, take a look at the documentation for {FriendlyId::Status}.
 
@@ -292,7 +301,7 @@ unique if necessary:
     ...
     etc.
 
-Note that the number is preceeded by "--" to distinguish it from the
+Note that the number is preceded by "--" to distinguish it from the
 rest of the slug. This is important to enable having slugs like:
 
     /cars/peugeot-206
@@ -303,8 +312,10 @@ You can configure the separator string used by your model by setting the
 
     has_friendly_id :title, :use_slug => true, :sequence_separator => ";"
 
-You can also override the default used in {FriendlyId::Configuration::DEFAULTS}
-to set the value for any model using FriendlyId.
+You can also override the default used in
+{FriendlyId::Configuration::DEFAULTS} to set the value for any model using
+FriendlyId. If you change this value in an existing application, be sure to
+{file:Guide.md#regenerating_slugs regenerate the slugs} afterwards.
 
 ## Reserved Words
 
@@ -314,14 +325,14 @@ don't end up with this problem:
     /users/joe-schmoe # A user chose "joe schmoe" as his user name - no worries.
     /users/new        # A user chose "new" as his user name, and now no one can sign up.
 
-Here's how to do it:
+Reserved words are configured using the `:reserved_words` option:
 
     class Restaurant < ActiveRecord::Base
       belongs_to :city
-      has_friendly_id :name, :use_slug => true, :reserved => ["my", "values"]
+      has_friendly_id :name, :use_slug => true, :reserved_words => ["my", "values"]
     end
 
-The strings "new" and "index" are reseved by default. When you attempt to
+The strings "new" and "index" are reserved by default. When you attempt to
 store a reserved value, FriendlyId raises a
 {FriendlyId::SlugTextReservedError}. You can also override the default
 reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
@@ -439,7 +450,7 @@ this up:
 ## FriendlyId Rake Tasks
 
 FriendlyId provides several tasks to help maintain your application. The
-tasks can be invoked via Rake, or programatically through {FriendlyId::Tasks}.
+tasks can be invoked via Rake, or programmatically through {FriendlyId::Tasks}.
 
 ### Generating New Slugs For the First Time
 
@@ -448,15 +459,13 @@ tasks can be invoked via Rake, or programatically through {FriendlyId::Tasks}.
 Use this task to generate slugs after installing FriendlyId in a new
 application.
 
-
 ### Regenerating Slugs
 
     friendly_id:redo_slugs MODEL=<model name>
 
-Use this task to regenrate slugs after making any changes to your model's
+Use this task to regenerate slugs after making any changes to your model's
 FriendlyId configuration options that affect slug generation. For example,
 if you introduce a `cached_slug` column or change the `:seqence_separator`.
-    
 
 ### Deleting Old Slugs
 
