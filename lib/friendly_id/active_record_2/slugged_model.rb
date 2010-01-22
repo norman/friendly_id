@@ -264,7 +264,8 @@ module FriendlyId
 
       # Get the processed string used as the basis of the friendly id.
       def slug_text
-        normalize_friendly_id(SlugString.new(send(friendly_id_config.method)))
+        text = normalize_friendly_id(SlugString.new(send(friendly_id_config.method)))
+        SlugString.new(text.to_s).validate_for!(friendly_id_config).to_s
       end
 
       # Has the slug text changed?

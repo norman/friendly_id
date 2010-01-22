@@ -80,38 +80,62 @@ module FriendlyId
           to_ascii! if config.strip_non_ascii?
           normalize!
         end
+      end
+
+      alias :normalize_utf8 :normalize rescue NoMethodError
+
+      # Normalize the string for use as a FriendlyId. Note that in
+      # this context, +normalize+ means, strip, remove non-letters/numbers,
+      # downcasing and converting whitespace to dashes.
+      # ActiveSupport::Multibyte::Chars#normalize is aliased to +normalize_utf8+
+      # in this subclass.
+      # @return String
+      def normalize!
+        clean!
+        word_chars!
+        downcase!
+        with_dashes!
+      end
+
+      # Truncate the string to +max+ length.
+      # @return String
+      def truncate!(max)
+        @wrapped_string = self[0...max].to_s if length > max
+      end
+
+      # Delete any non-ascii characters.
+      # @return String
+      def to_ascii!
+        @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
+      end
+
+      # Upper-cases the string. Note that this works for Unicode strings,
+      # though your milage may vary with Greek and Turkic strings.
+      # @return String
+      def upcase!
+        @wrapped_string = apply_mapping :uppercase_mapping
+      end
+
+      # Validate that the slug string is not blank or reserved, and truncate
+      # it to the max length if necessary.
+      # @param config [FriendlyId::Configuration]
+      # @return String
+      # @raise FriendlyId::SlugTextBlankError
+      # @raise FriendlyId::SlugTextReservedError
+      def validate_for!(config)
         truncate!(config.max_length)
         raise FriendlyId::SlugTextBlankError if blank?
         raise FriendlyId::SlugTextReservedError if config.reserved?(self)
         self
       end
 
-      alias :normalize_utf8 :normalize rescue NoMethodError
-
-      def normalize!
-        clean!
-        letters!
-        downcase!
-        with_dashes!
-      end
-
-      def truncate!(max)
-        @wrapped_string = self[0...max].to_s if length > max
-      end
-
-      def to_ascii!
-        @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
-      end
-
-      def upcase!
-        @wrapped_string = apply_mapping :uppercase_mapping
-      end
-
+      # Replaces whitespace with dashes ("-").
+      # @return String
       def with_dashes!
         @wrapped_string = @wrapped_string.gsub(/\s+/u, '-')
       end
 
-      %w[approximate_ascii clean downcase letters normalize normalize_for to_ascii
+      %w[approximate_ascii clean downcase word_chars normalize normalize_for to_ascii
           truncate upcase with_dashes].each do |method|
         class_eval(<<-EOM)
           def #{method}(*args)
