@@ -90,18 +90,17 @@ module ActiveRecord
 
     # Loads either the slugged or non-slugged modules.
     def load_friendly_id_adapter
+
       validate_ar_version
 
       %w[finders simple_model slugged_model slug].each do |file|
         require File.join(File.dirname(__FILE__), "friendly_id", "active_record_2", file)
       end
 
-      mod = ActiveRecord::VERSION::MAJOR == 3 ? ActiveRecord3 : ActiveRecord2
-
       if friendly_id_config.use_slug?
-        include mod::SluggedModel
+        include ActiveRecord2::SluggedModel
       else
-        include mod::SimpleModel
+        include ActiveRecord2::SimpleModel
       end
 
     end
