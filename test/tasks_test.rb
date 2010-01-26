@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper'
 require File.dirname(__FILE__) + '/../lib/friendly_id/tasks'
+require "contest"
 
 class TasksTest < Test::Unit::TestCase
 
