@@ -2,8 +2,7 @@ $KCODE = 'UTF8' if RUBY_VERSION < '1.9'
 $VERBOSE = false
 
 require 'rubygems'
-require 'test/unit'
-require 'contest'
+  require 'test/unit'
 require 'mocha'
 
 # You can use "rake test AR_VERSION=2.2.3" to test against 2.2.3 for example.
@@ -118,3 +117,18 @@ class Question < ActiveRecord::Base
 end
 
 $slug_class = FriendlyId::ActiveRecord2::Slug
+
+module FriendlyId
+  module Test
+    module Declarative
+      def test(name, &block)
+        define_method("test_#{name.gsub(/[^a-z0-9]/i, "_")}".to_sym, &block)
+      end
+      alias :should :test
+    end
+  end
+end
+
+class Test::Unit::TestCase
+  extend FriendlyId::Test::Declarative
+end
