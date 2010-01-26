@@ -103,7 +103,10 @@ module FriendlyId
 
       def self.included(base)
         base.class_eval do
+          column = friendly_id_config.column
           validate :validate_friendly_id
+          validates_presence_of column
+          validates_length_of column, :maximum => friendly_id_config.max_length
           after_update :update_scopes
           extend FinderMethods
           include DeprecatedMethods
