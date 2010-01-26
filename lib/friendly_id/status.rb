@@ -27,7 +27,7 @@ module FriendlyId
 
     # Did the find operation use the best available id?
     def best?
-      record.friendly_id && friendly?
+      record.friendly_id ? friendly? : true
     end
 
   end
