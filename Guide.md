@@ -230,6 +230,11 @@ your model:
     @city = City.create(:name => "Buenos Aires", :country => @country)
     @city.friendly_id # will be "buenos-aires-argentina"
 
+One word of caution: in the example above, if the country's name were updated,
+say, to "Argentine Republic", the city's friendly_id would not be
+automatically updated. For this reason, it's a good idea to avoid using
+frequently-updated relations as a part of the friendly_id.
+
 ## Using a Custom Method to Process the Slug Text
 
 If the built-in slug text handling options don't work for your application,
