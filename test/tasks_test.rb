@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require(File.dirname(__FILE__) + '/test_helper') unless defined? FriendlyId
 require File.dirname(__FILE__) + '/../lib/friendly_id/tasks'
 require "contest"
 

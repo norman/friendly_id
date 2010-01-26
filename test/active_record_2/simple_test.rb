@@ -21,6 +21,7 @@ module FriendlyId
         class StatusTest < ::Test::Unit::TestCase
 
           include SimpleTest
+          extend Declarative
 
           test "should default to not friendly" do
             assert !status.friendly?

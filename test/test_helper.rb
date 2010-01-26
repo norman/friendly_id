@@ -128,7 +128,3 @@ module FriendlyId
     end
   end
 end
-
-class Test::Unit::TestCase
-  extend FriendlyId::Test::Declarative
-end

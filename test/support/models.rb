@@ -15,6 +15,7 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
       t.string :my_slug
       t.integer :population
+      t.index :my_slug, :unique => true
     end
 
     create_table :countries do |t|
@@ -25,6 +26,7 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
       t.string :note
       t.string :cached_slug
+      t.index :cached_slug, :unique => true
     end
 
     create_table :events do |t|
