@@ -24,7 +24,7 @@ module FriendlyId
       :ascii_approximation_options => [],
       :max_length                  => 255,
       :reserved_words              => ["index", "new"],
-      :reserved_message            => "can not be %s",
+      :reserved_message            => 'can not be "%s"',
       :sequence_separator          => "--"
     }
 
