@@ -116,7 +116,7 @@ class Question < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
 
-$slug_class = FriendlyId::ActiveRecord2::Slug
+$slug_class = Slug
 
 module FriendlyId
   module Test

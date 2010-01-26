@@ -206,8 +206,7 @@ module FriendlyId
 
       def self.included(base)
         base.class_eval do
-          has_many :slugs, :class_name => "FriendlyId::ActiveRecord2::Slug",
-            :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+          has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
           before_save :build_slug
           after_save :set_slug_cache
           after_update :update_scopes
