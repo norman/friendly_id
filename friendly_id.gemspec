@@ -16,12 +16,10 @@ spec = Gem::Specification.new do |s|
   EOM
 
   s.has_rdoc         = true
-  s.rdoc_options     << "--main" << "README.rdoc"
-  s.extra_rdoc_files = ["README.rdoc", "History.txt"]
-
-  s.test_files       = Dir.glob 'test/*_test.rb'
-  s.files            = Dir["lib/**/*.rb", "lib/**/*.rake", "init.rb", "README.rdoc", "History.txt",
-                           "LICENSE", "Rakefile", "generators/**/*.*", "test/**/*.*", "extras/**/*.*"]
+  s.test_files       = Dir.glob 'test/**/*_test.rb'
+  s.files            = Dir["lib/**/*.rb", "lib/**/*.rake", "init.rb", "*.md",
+                           "LICENSE", "Rakefile", "generators/**/*.*", 
+                           "test/**/*.*", "extras/**/*.*"]
 
   s.add_dependency 'activerecord', '>= 2.2.3'
   s.add_dependency 'activesupport', '>= 2.2.3'
