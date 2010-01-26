@@ -244,7 +244,7 @@ module FriendlyId
       # Set the slug.
       def slug=(slug)
         @slug = slug
-        @new_friendly_id = @slug.to_friendly_id
+        @new_friendly_id = @slug.to_friendly_id unless slug.nil?
       end
 
       # Does the instance have a slug?
