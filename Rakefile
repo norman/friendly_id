@@ -27,7 +27,7 @@ end
 begin
   require 'rcov/rcovtask'
   Rcov::RcovTask.new do |r|
-    r.test_files = FileList['test/*_test.rb']
+    r.test_files = FileList['test/**/*_test.rb']
     r.verbose = true
     r.rcov_opts << "--exclude gems/*"
   end
