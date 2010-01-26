@@ -199,12 +199,12 @@ module FriendlyId
       # it to the max length if necessary.
       # @param config [FriendlyId::Configuration]
       # @return String
-      # @raise FriendlyId::SlugTextBlankError
-      # @raise FriendlyId::SlugTextReservedError
+      # @raise FriendlyId::BlankError
+      # @raise FriendlyId::ReservedError
       def validate_for!(config)
         truncate!(config.max_length)
-        raise FriendlyId::SlugTextBlankError if blank?
-        raise FriendlyId::SlugTextReservedError if config.reserved?(self)
+        raise FriendlyId::BlankError if blank?
+        raise FriendlyId::ReservedError if config.reserved?(self)
         self
       end
 

@@ -334,7 +334,7 @@ Reserved words are configured using the `:reserved_words` option:
 
 The strings "new" and "index" are reserved by default. When you attempt to
 store a reserved value, FriendlyId raises a
-{FriendlyId::SlugTextReservedError}. You can also override the default
+{FriendlyId::ReservedError}. You can also override the default
 reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
 model using FriendlyId.
 

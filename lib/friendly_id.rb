@@ -15,10 +15,10 @@ module FriendlyId
   class SlugGenerationError < StandardError ; end
 
   # Raised when the slug text is blank.
-  class SlugTextBlankError < SlugGenerationError ; end
+  class BlankError < SlugGenerationError ; end
 
   # Raised when the slug text is reserved.
-  class SlugTextReservedError < SlugGenerationError ; end
+  class ReservedError < SlugGenerationError ; end
 
   # Set up a model to use a friendly_id. This method accepts a hash with
   # {FriendlyId::Configuration several possible options}.
