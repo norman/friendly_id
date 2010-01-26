@@ -67,7 +67,7 @@ module FriendlyId
 
           def find_one(id, options)
             finder = SingleFinder.new(id, self, options)
-            finder.unfriendly? ? super : finder.find
+            !finder.friendly? ? super : finder.find
           end
 
           def find_some(ids_and_names, options)
