@@ -3,6 +3,7 @@ module FriendlyId
     module SluggedModel
 
       class Status < FriendlyId::Status
+
         attr_accessor :slug
 
         # The slug that was used to find the model.
@@ -25,14 +26,16 @@ module FriendlyId
           !current?
         end
 
-        def separator
-          record.friendly_id_config.sequence_separator
-        end
-
         # Did the find operation use the best possible id? True if +id+ is
         # numeric, but the model has no slug, or +id+ is friendly and current
         def best?
           current? || (numeric? && !record.slug)
+        end
+
+        private
+
+        def separator
+          record.friendly_id_config.sequence_separator
         end
 
       end
