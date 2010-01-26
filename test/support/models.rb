@@ -1,9 +1,14 @@
 class CreateSupportModels < ActiveRecord::Migration
   def self.up
 
+    create_table :authors do |t|
+      t.string :name
+    end
+
     create_table :books do |t|
       t.string :name
       t.string :type
+      t.string :note
     end
 
     create_table :cities do |t|
@@ -18,6 +23,7 @@ class CreateSupportModels < ActiveRecord::Migration
 
     create_table :districts do |t|
       t.string :name
+      t.string :note
       t.string :cached_slug
     end
 
@@ -26,8 +32,14 @@ class CreateSupportModels < ActiveRecord::Migration
       t.datetime :event_date
     end
 
+    create_table :houses do |t|
+      t.string :name
+      t.integer :user_id
+    end
+
     create_table :legacy_table do |t|
       t.string :name
+      t.string :note
     end
 
     create_table :people do |t|
@@ -37,6 +49,7 @@ class CreateSupportModels < ActiveRecord::Migration
     create_table :posts do |t|
       t.string :name
       t.boolean :published
+      t.string :note
     end
 
     create_table :residents do |t|
@@ -46,11 +59,7 @@ class CreateSupportModels < ActiveRecord::Migration
 
     create_table :users do |t|
       t.string :name
-    end
-
-    create_table :houses do |t|
-      t.string :name
-      t.integer :user_id
+      t.index :name, :unique => true
     end
 
   end

@@ -20,7 +20,7 @@ require File.dirname(__FILE__) + '/../generators/friendly_id/templates/create_sl
 require File.dirname(__FILE__) + '/support/models'
 
 local_db_settings = File.dirname(__FILE__) + '/support/database.yml'
-default_db_settings = File.dirname(__FILE__) + '/support/database.yml.sqlite3'
+default_db_settings = File.dirname(__FILE__) + '/support/database.sqlite3.yml'
 db_settings = File.exists?(local_db_settings) ? local_db_settings : default_db_settings
 ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings)))
 
@@ -74,6 +74,12 @@ class User < ActiveRecord::Base
   has_friendly_id :name
   has_many :houses
 end
+
+# Another model that doesn't use slugs
+class Author < ActiveRecord::Base
+  has_friendly_id :name
+end
+
 
 # A model that uses a non-slugged model for its scope
 class House < ActiveRecord::Base
