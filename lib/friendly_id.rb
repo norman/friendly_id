@@ -1,3 +1,4 @@
+require "forwardable"
 require "active_record"
 require "active_record/version"
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")

@@ -12,6 +12,13 @@ module FriendlyId
       # The base finder.
       class Finder
 
+        extend Forwardable
+
+        %w[all base_class find_every find_initial friendly_id_config primary_key
+           quoted_table_name sanitize_sql table_name with_scope].each do |method|
+          def_delegator :model_class, method
+        end
+
         # An array of ids; can be both friendly and unfriendly.
         attr_accessor :ids
 
@@ -60,10 +67,6 @@ module FriendlyId
           self.options = options
           self.model_class = model_class
           self.scope = options[:scope]
-        end
-
-        def method_missing(*args, &block)
-          model_class.send(*args, &block)
         end
 
         # Perform the find.

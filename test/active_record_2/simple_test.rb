@@ -20,7 +20,6 @@ module FriendlyId
 
         class StatusTest < ::Test::Unit::TestCase
 
-          extend Declarative
           include SimpleTest
 
           test "should default to not friendly" do
