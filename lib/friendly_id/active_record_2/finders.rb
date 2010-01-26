@@ -128,8 +128,9 @@ module FriendlyId
 
         attr_reader :friendly_ids, :results, :unfriendly_ids
 
-        def initialize(ids, model, options={})
+        def initialize(ids, model_class, options={})
           @friendly_ids, @unfriendly_ids = ids.partition {|id| self.class.friendly?(id) }
+          @unfriendly_ids = @unfriendly_ids.map {|id| id.kind_of?(ActiveRecord::Base) ? id.id : id}
           super
         end
 
