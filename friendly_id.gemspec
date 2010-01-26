@@ -18,12 +18,11 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc         = true
   s.test_files       = Dir.glob 'test/**/*_test.rb'
   s.files            = Dir["lib/**/*.rb", "lib/**/*.rake", "init.rb", "*.md",
-                           "LICENSE", "Rakefile", "generators/**/*.*", 
+                           "LICENSE", "Rakefile", "generators/**/*.*",
                            "test/**/*.*", "extras/**/*.*"]
 
   s.add_dependency 'activerecord', '>= 2.2.3'
   s.add_dependency 'activesupport', '>= 2.2.3'
-  s.add_development_dependency 'contest'
 
   s.post_install_message = <<-EOM
 
