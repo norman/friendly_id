@@ -47,13 +47,16 @@ module FriendlyId
         def find
           @results = with_scope(:find => find_options) { all options }.uniq
           raise ::ActiveRecord::RecordNotFound, error_message if @results.size != expected_size
-          @results.each {|result| result.friendly_id_status.slug = slug_for(result)}
+          @results.each {|result| result.friendly_id_status.name = slug_for(result)}
         end
 
         private
 
         def find_conditions
-          [unfriendly_find_conditions, friendly_find_conditions].compact.join(" OR ")
+          slugs
+          # [unfriendly_find_conditions, friendly_find_conditions].compact.join(" OR ")
+          ids = (unfriendly_ids + sluggable_ids).join(",")
+          "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", ids]
         end
 
         def friendly_find_conditions
@@ -64,16 +67,27 @@ module FriendlyId
           {:select => "#{table_name}.*", :conditions => find_conditions,
             :joins => slugs_included? ? options[:joins] : :slugs}
         end
+        
+        def sluggable_ids
+          if !@sluggable_ids
+            @sluggable_ids ||= []
+            slugs
+          end
+          @sluggable_ids
+        end
 
         def slugs
+          @sluggable_ids ||= []
           @slugs ||= friendly_ids.map do |friendly_id|
             name, sequence = friendly_id.parse_friendly_id(friendly_id_config.sequence_separator)
-            Slug.first :conditions => {
+            slug = Slug.first :conditions => {
               :name           => name,
               :scope          => scope,
               :sequence       => sequence,
               :sluggable_type => base_class.name
             }
+            sluggable_ids << slug.sluggable_id if slug
+            slug
           end
         end
 

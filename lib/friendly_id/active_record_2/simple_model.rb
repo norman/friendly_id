@@ -25,7 +25,7 @@ module FriendlyId
         def find
           @results = with_scope(:find => options) { find_every :conditions => conditions }
           raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
-          friendly_results.each { |result| result.friendly_id_status.name = result.friendly_id }
+          friendly_results.each { |result| result.friendly_id_status.name = result.to_param }
           @results
         end
 
@@ -36,7 +36,7 @@ module FriendlyId
         end
 
         def friendly_results
-          results.select { |result| friendly_ids.include? result.friendly_id.to_s }
+          results.select { |result| friendly_ids.include? result.to_param }
         end
 
       end
