@@ -35,6 +35,7 @@ compatible with Rails 3.0.
 * Simple models now correctly validate friendly_id length.
 * Passing block into FriendlyId deprecated in favor of overriding
   the model's `normalize_friendly_id` method.
+* Updating only the model's scope now also updates the slug.
 * Major refactorings, cleanups and deprecations en route to the 3.0 release.
 
 ## 2.2.8 (NOT RELEASED YET)
@@ -151,7 +152,7 @@ compatible with Rails 3.0.
 * Shoulda macro (Josh Nichols)
 * Various small bugfixes, cleanups and refactorings
 
-## 2008-12-01
+## 1.0 (2008-12-11)
 
 * Fixed bug that may return invalid records having similar id/names and using
   MySQL. (Emilio Tagua)
@@ -184,7 +185,7 @@ compatible with Rails 3.0.
 * Reformatted code and comments (Florian Aßmann)
 * Added support for Edge Rails' Inflector::parameterize (Norman Clarke)
 
-## 2008-08-25
+## 0.5 (2008-08-25)
 
 * Moved strip_diacritics into Slug for easier reuse/better organization.
 * Put class methods inside class << self block. (Norman Clarke)

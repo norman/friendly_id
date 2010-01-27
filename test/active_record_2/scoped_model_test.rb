@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper' unless defined? FriendlyId
 
 module FriendlyId
   module Test
-    
+
     class ScopedModelTest < ::Test::Unit::TestCase
 
       extend Declarative
@@ -38,36 +38,54 @@ module FriendlyId
         assert_equal [House], User.friendly_id_config.child_scopes
       end
 
+      test "should update the slug when the scope changes" do
+        @resident.update_attributes! :country => Country.create!(:name => "Argentina")
+        assert_equal "argentina", @resident.slugs(true).first.scope
+      end
+
+      test "updating only the scope should not append sequence to friendly_id" do
+        old_friendly_id = @resident.friendly_id
+        @resident.update_attributes! :country => Country.create!(:name => "Argentina")
+        assert_equal old_friendly_id, @resident.friendly_id
+      end
+
+      test "updating the scope should increment sequence to avoid conflicts" do
+        old_friendly_id = @resident.friendly_id
+        @resident.update_attributes! :country => @canada
+        assert_equal "#{old_friendly_id}--2", @resident.friendly_id
+        assert_equal "canada", @resident.slugs(true).first.scope
+      end
+
       test "a non-slugged model should update its child model's scopes when its friendly_id changes" do
         @user.update_attributes(:name => "jack")
         assert_equal "jack", @user.to_param
         assert_equal "jack", @house.slugs(true).first.scope
       end
 
-      should "should not show the scope in the friendly_id" do
+      test "should should not show the scope in the friendly_id" do
         assert_equal "john-smith", @resident.friendly_id
         assert_equal "john-smith", @resident2.friendly_id
       end
 
-      should "find all scoped records without scope" do
+      test "should find all scoped records without scope" do
         assert_equal 2, Resident.find(:all, @resident.friendly_id).size
       end
 
-      should "find a single scoped record with a scope as a string" do
+      test "should find a single scoped record with a scope as a string" do
         assert Resident.find(@resident.friendly_id, :scope => @resident.country)
       end
 
-      should "find a single scoped record with a scope" do
+      test "should find a single scoped record with a scope" do
         assert Resident.find(@resident.friendly_id, :scope => @resident.country)
       end
 
-      should "raise an error when finding a single scoped record with no scope" do
+      test "should raise an error when finding a single scoped record with no scope" do
         assert_raises ActiveRecord::RecordNotFound do
           Resident.find(@resident.friendly_id)
         end
       end
 
-      should "append scope error info when missing scope causes a find to fail" do
+      test "should append scope error info when missing scope causes a find to fail" do
         begin
           Resident.find(@resident.friendly_id)
           fail "The find should not have succeeded"
@@ -76,7 +94,7 @@ module FriendlyId
         end
       end
 
-      should "append scope error info when the scope value causes a find to fail" do
+      test "should append scope error info when the scope value causes a find to fail" do
         begin
           Resident.find(@resident.friendly_id, :scope => "badscope")
           fail "The find should not have succeeded"

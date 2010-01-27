@@ -209,7 +209,8 @@ module FriendlyId
           has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
           before_save :build_slug
           after_save :set_slug_cache
-          after_update :update_scopes
+          after_update :update_scope
+          after_update :update_dependent_scopes
           protect_friendly_id_attributes
           extend FinderMethods
         end
@@ -263,6 +264,10 @@ module FriendlyId
       def new_slug_needed?
         !slug || slug_text_changed?
       end
+      
+      def scope_changed?
+        friendly_id_config.scope? && send(friendly_id_config.scope.to_param) != slug.scope
+      end
 
       # Get the processed string used as the basis of the friendly id.
       def slug_text
@@ -303,10 +308,17 @@ module FriendlyId
           send :update_without_callbacks
         end
       end
+      
+      def update_scope
+        return unless scope_changed?
+        slug.update_attributes :scope => send(friendly_id_config.scope).to_param
+      rescue ActiveRecord::StatementInvalid
+        slug.update_attributes :sequence => Slug.similar_to(slug).first.sequence.succ
+      end
 
       # Update the slugs for any model that is using this model as its
       # FriendlyId scope.
-      def update_scopes
+      def update_dependent_scopes
         if slugs(true).size > 1 && @new_friendly_id
           friendly_id_config.child_scopes.each do |klass|
             Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?", klass.to_s, slugs.second.to_friendly_id]
