@@ -2,7 +2,7 @@ $KCODE = 'UTF8' if RUBY_VERSION < '1.9'
 $VERBOSE = false
 
 require 'rubygems'
-  require 'test/unit'
+require 'test/unit'
 require 'mocha'
 
 # You can use "rake test AR_VERSION=2.2.3" to test against 2.2.3 for example.

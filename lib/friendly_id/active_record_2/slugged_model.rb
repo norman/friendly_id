@@ -95,6 +95,13 @@ module FriendlyId
 
       end
 
+      class CachedMultipleFinder < SimpleModel::MultipleFinder
+        # The column used to store the cached slug.
+        def column
+          "#{table_name}.#{friendly_id_config.cache_column}"
+        end
+      end
+
       class SingleFinder < Finders::SingleFinder
 
         def find
@@ -129,6 +136,20 @@ module FriendlyId
 
       end
 
+      class CachedSingleFinder < SimpleModel::SingleFinder
+
+        # The column used to store the cached slug.
+        def column
+          "#{table_name}.#{friendly_id_config.cache_column}"
+        end
+
+        def find_options
+          key = self.class.friendly?(id) ? column : model_class.primary_key
+          {:conditions =>  {key => id}}
+        end
+
+      end
+
       # The methods in this module override ActiveRecord's +find_one+ and
       # +find_some+ to add FriendlyId's features.
       module FinderMethods
@@ -136,12 +157,14 @@ module FriendlyId
         protected
 
         def find_one(id_or_name, options)
-          finder = SingleFinder.new(id_or_name, self, options)
+          klass = friendly_id_config.cache_column ? CachedSingleFinder : SingleFinder
+          finder = klass.new(id_or_name, self, options)
           finder.unfriendly? ? super : finder.find or super
         end
 
         def find_some(ids_and_names, options)
-          finder = MultipleFinder.new(ids_and_names, self, options).find
+          klass = friendly_id_config.cache_column ? CachedMultipleFinder : MultipleFinder
+          finder = klass.new(ids_and_names, self, options).find
         end
 
         # Since Rails goes out of its way to make these options completely
@@ -264,7 +287,7 @@ module FriendlyId
       def new_slug_needed?
         !slug || slug_text_changed?
       end
-      
+
       def scope_changed?
         friendly_id_config.scope? && send(friendly_id_config.scope.to_param) != slug.scope
       end
@@ -308,7 +331,7 @@ module FriendlyId
           send :update_without_callbacks
         end
       end
-      
+
       def update_scope
         return unless scope_changed?
         slug.update_attributes :scope => send(friendly_id_config.scope).to_param

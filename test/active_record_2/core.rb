@@ -35,7 +35,7 @@ module FriendlyId
         test "instances should have a friendly id" do
           assert_match(/hello/, instance.friendly_id)
         end
-        
+
         test "should return their friendly_id for #to_param" do
           assert_match(instance.friendly_id, instance.to_param)
         end
