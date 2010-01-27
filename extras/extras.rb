@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/../test/test_helper'
 require 'ffaker'
 
 TIMES = (ENV['N'] || 100).to_i
-FACTOR = 20
 POSTS     = []
 DISTRICTS = []
 USERS     = []
@@ -15,8 +14,8 @@ District.delete_all
 
 100.times do
   name = Faker::Name.name
-  USERS     << (User.create! :name     => name).friendly_id
-  POSTS     << (Post.create! :name     => name).friendly_id
+  USERS     << (User.create!     :name => name).friendly_id
+  POSTS     << (Post.create!     :name => name).friendly_id
   DISTRICTS << (District.create! :name => name).friendly_id
 end
 

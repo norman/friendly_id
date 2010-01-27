@@ -164,7 +164,7 @@ module FriendlyId
 
         def find_some(ids_and_names, options)
           klass = friendly_id_config.cache_column ? CachedMultipleFinder : MultipleFinder
-          finder = klass.new(ids_and_names, self, options).find
+          klass.new(ids_and_names, self, options).find
         end
 
         # Since Rails goes out of its way to make these options completely
