@@ -126,8 +126,9 @@ FriendlyId is configured in your model using the {FriendlyId#has_friendly_id} cl
         :max_length => 50
     end
 
-For the full list of valid configuration options, see the instance attribute
-summary for {FriendlyId::Configuration}.
+Read on to learn about the various features that can be configured. For the
+full list of valid configuration options, see the instance attribute summary
+for {FriendlyId::Configuration}.
 
 # Features
 

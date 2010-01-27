@@ -1,32 +1,44 @@
-## 2.3.0 NOT RELEASED YET
+# FriendlyId Changelog
 
-This is a major update à la "Snow Leopard" in that it adds no major new
-features, but significantly changes the underlying code with an eye towards
-mantainability and future releases. If have been using FriendlyId without any
-monkey-patching, you should be able to simply upgrade with no issues other
-than some possible deprecation messages showing up in your logs. If, however,
-you are monkey-patching FriendlyId, or maintaining your own fork, then this
-upgrade may causes issues. You may wish to stick with the 2.2 series, which is
-being maintained for bug-fixes in a separate fork. Note that no new features
-will be added to 2.2.x; only bug fixes, and that 2.2.x will not be compatible
-with Rails 3.0. But if you have a Rails Rails 2.x codebase that works with
-FriendlyId 2.2.x and fails with FriendlyId 2.3.x, rest assured that 2.2.x will
-continue to be maintained and supported for at least another year.
+* Table of Contents
+{:toc}
 
-* Sequence separator still defaults to "--" but can now be configured.
-* New option to pass arguments to approximate_ascii, allowing custom approximations specific to German or Spanish.
-* FriendlyId now raises subclasses of SlugGenerationError depending on the error context.
+
+## 2.3.0 (NOT RELEASED YET)
+
+This is a major update à la "Snow Leopard" that adds no new major features,
+but significantly improves the underlying code. Most users should be able to
+upgrade with no issues other than new deprecation messages appearing in the
+logs.
+
+If, however, you have monkey-patched FriendlyId, or are maintaining your own
+fork, then this upgrade may causes issues. You may wish to stick with the 2.2
+series, which is being maintained for bug-fixes in a separate fork.
+
+Note that **only** bug-fixes will be added to 2.2.x; it will not be made
+compatible with Rails 3.0.
+
+**Changes:**
+
+* {FriendlyId::SlugString} class added, allowing finer-grained control over Unicode friendly_id strings.
+* {FriendlyId::Configuration} class added, offering more flexible/hackable options.
+* Sequence separator can now be configured to something other than "--".
+* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, allowing custom approximations specific to German or Spanish.
+* FriendlyId now raises subclasses of {FriendlyId::SlugGenerationError} depending on the error context.
 * Simple models now correctly validate friendly_id length.
-* SlugString class added, allowing finer-grained control over Unicode friendly_id strings.
-* FriendlyId::Configuration class added, offering more flexible/hackable options.
 * Passing block into FriendlyId deprecated in favor of overriding #normalize_friendly_id method.
 * Major refactorings, cleanups and deprecations en route to the 3.0 release.
 
-## 2.2.7 2009-12-16
+## 2.2.8 (NOT RELEASED YET)
+
+* Updating scoped relations now updates the downstream slugs (Ian Stewart)
+* Fixed slug not deleting some quote characters (Alexander Gräfe)
+
+## 2.2.7 (2009-12-16)
 
 * Fixed typo in Rake tasks which caused delete_old_slugs to fail. (Diego R.V.)
 
-## 2.2.6 2009-12-10
+## 2.2.6 (2009-12-10)
 
 * Made cached_slug automagic configuration occur outside of has_friendly_id. This was causing problems
   in code where the class is loaded before ActiveRecord has established its connection.
@@ -34,81 +46,81 @@ continue to be maintained and supported for at least another year.
 * Migrated away from Hoe/Newgem for gem management.
 * Made tests database-agnostic (Ben Woosley)
 
-## 2.2.5 2009-11-30
+## 2.2.5 (2009-11-30)
 
 * Fixed typo which in config options (Steven Noble).
 
-## 2.2.4 2009-11-12
+## 2.2.4 (2009-11-12)
 
 * Fixed typo in post-install message.
 
-## 2.2.3 2009-11-12
+## 2.2.3 (2009-11-12)
 
 * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
 * Made sure friendly_id generator makes a lib/tasks directory (Josh Nichols)
 * Finders now accept instances of ActiveRecord::Base, matching AR's behavior (Josh Nichols)
 * SlugGenerationError now raise when a blank value is passed to strip_diacritics
 
-## 2.2.2 2009-10-26
+## 2.2.2 (2009-10-26)
 
 * Fixed Rake tasks creating duplicate slugs and not properly clearing cached slugs (closes GH issues #14 and #15)
 
-## 2.2.1 2009-10-23
+## 2.2.1 (2009-10-23)
 
 * slug cache now properly caches the slug sequence (closes GH issue #10)
 * attr_protected is now only invoked on the cached_slug column if attr_accessible has not already been invoked. (closes GH issue #11)
 
-## 2.2.0 2009-10-19
+## 2.2.0 (2009-10-19)
 
 * Added slug caching, offers huge performance boost (Bruno Michel)
 * Handle Unicode string length correctly (Mikhail Shirkov)
 * Remove alias_method_chain in favor of super (Diego Carrion)
 
-## 2.1.4 2009-09-01
+## 2.1.4 (2009-09-01)
 
 * Fixed upgrade generator not installing rake tasks (Harry Love)
 * Fixed handling of very large id's (Nathan Phelps)
 * Fixed long index name on migration (Rob Ingram)
 
-## 2.1.3 2009-06-03
+## 2.1.3 (2009-06-03)
 
 * Always call #to_s on slug_text to allow objects such as DateTimes to be used for the friendly_id text. (reported by Jon Ng)
 
-## 2.1.2 2009-05-21
+## 2.1.2 (2009-05-21)
 
 * Non-slugged models now validate the friendly_id on save as well as create (Joe Van Dyk).
 * Replaced Shoulda with Contest.
 
-## 2.1.1 2009-03-25
+## 2.1.1 (2009-03-25)
 
 * Fixed bug with find_some; if a record has old slugs, find_some will no longer return multiple copies of that record when finding by numerical ID. (Steve Luscher)
 * Fixed bug with find_some: you can now find_some with an array of numerical IDs without an error being thrown. (Steve Luscher)
 
-## 2.1.0 2009-03-25
+## 2.1.0 (2009-03-25)
 
 * Ruby 1.9 compatibility.
 * Removed dependency on ancient Unicode gem.
 
-## 2.0.4 2009-02-12
+## 2.0.4 (2009-02-12)
 
 * You can now pass in your own custom slug generation blocks while setting up friendly_id.
 
-## 2.0.3 2009-02-11
+## 2.0.3 (2009-02-11)
 
 * Fixed to_param returning an empty string for non-slugged models with a null friendly_id.
 
-## 2.0.2 2009-02-09
+## 2.0.2 (2009-02-09)
 
 * Made FriendlyId depend only on ActiveRecord. It should now be possible to use FriendlyId with Camping or any other codebase that uses AR.
 * Overhauled creaky testing setup and switched to Shoulda.
 * Made reserved words work for non-slugged models.
 
-## 2.0.1 2009-01-19
+## 2.0.1 (2009-01-19)
 
 * Fix infinite redirect bug when using .has_better_id? in your controllers (Sean Abrahams)
 
 
-## 2.0.0 2009-01-03
+## 2.0.0 (2009-01-03)
 
 * Support for scoped slugs (Norman Clarke)
 * Support for UTF-8 friendly_ids (Norman Clarke)

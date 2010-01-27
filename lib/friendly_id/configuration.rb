@@ -1,16 +1,17 @@
 module FriendlyId
 
   # This class is not intended to be used on its own, it is used internally
-  # by {FriendlyId#has_friendly_id} to load the model's configuration.
+  # by {FriendlyId#has_friendly_id} to store a model's configuration and
+  # configuration-related methods.
   #
   # The arguments accepted by {#has_friendly_id} correspond to the writeable
-  # instance attributes of this class; please see the description of the 
+  # instance attributes of this class; please see the description of the
   # attributes below for information on the possible options.
   #
   # @example
-  # has_friendly_id :name, 
+  # has_friendly_id :name,
   #  :use_slug => true,
-  #  :max_length => 150, 
+  #  :max_length => 150,
   #  :approximate_ascii => true,
   #  :ascii_approximation_options => :german,
   #  :sequence_separator => ":",
@@ -38,7 +39,7 @@ module FriendlyId
     # The column used to cache the friendly_id string. If no column is specified,
     # FriendlyId will look for a column named +cached_slug+ and use it automatically
     # if it exists. If for some reason you have a column named +cached_slug+
-    # but don't want FriendlyId to modify it, pass the option 
+    # but don't want FriendlyId to modify it, pass the option
     # +:cache_column => false+ to {#has_friendly_id}.
     attr_accessor :cache_column
 
@@ -96,7 +97,7 @@ module FriendlyId
       end
       yield self if block_given?
     end
-    
+
     def cache_column
       return @cache_column if defined?(@cache_column)
       @cache_column = autodiscover_cache_column
