@@ -1,5 +1,8 @@
 # FriendlyId Changelog
 
+We would like to think our many {file:Contributors contributors} for
+suggestions, ideas and improvements to FriendlyId.
+
 * Table of Contents
 {:toc}
 
@@ -20,13 +23,18 @@ compatible with Rails 3.0.
 
 **Changes:**
 
-* {FriendlyId::SlugString} class added, allowing finer-grained control over Unicode friendly_id strings.
-* {FriendlyId::Configuration} class added, offering more flexible/hackable options.
+* {FriendlyId::SlugString} class added, allowing finer-grained control over 
+  Unicode friendly_id strings.
+* {FriendlyId::Configuration} class added, offering more flexible/hackable
+  options.
 * Sequence separator can now be configured to something other than "--".
-* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, allowing custom approximations specific to German or Spanish.
-* FriendlyId now raises subclasses of {FriendlyId::SlugGenerationError} depending on the error context.
+* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, 
+  allowing custom approximations specific to German or Spanish.
+* FriendlyId now raises subclasses of {FriendlyId::SlugGenerationError}
+  depending on the error context.
 * Simple models now correctly validate friendly_id length.
-* Passing block into FriendlyId deprecated in favor of overriding #normalize_friendly_id method.
+* Passing block into FriendlyId deprecated in favor of overriding
+  the model's `normalize_friendly_id` method.
 * Major refactorings, cleanups and deprecations en route to the 3.0 release.
 
 ## 2.2.8 (NOT RELEASED YET)
@@ -40,15 +48,16 @@ compatible with Rails 3.0.
 
 ## 2.2.6 (2009-12-10)
 
-* Made cached_slug automagic configuration occur outside of has_friendly_id. This was causing problems
-  in code where the class is loaded before ActiveRecord has established its connection.
+* Made cached_slug automagic configuration occur outside of has_friendly_id.
+  This was causing problems in code where the class is loaded before
+  ActiveRecord has established its connection.
 * Fixes for scope feature with Postgres (Ben Woosley)
 * Migrated away from Hoe/Newgem for gem management.
 * Made tests database-agnostic (Ben Woosley)
 
 ## 2.2.5 (2009-11-30)
 
-* Fixed typo which in config options (Steven Noble).
+* Fixed typo in config options (Steven Noble).
 
 ## 2.2.4 (2009-11-12)
 
@@ -58,17 +67,21 @@ compatible with Rails 3.0.
 
 * Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)
 * Made sure friendly_id generator makes a lib/tasks directory (Josh Nichols)
-* Finders now accept instances of ActiveRecord::Base, matching AR's behavior (Josh Nichols)
-* SlugGenerationError now raise when a blank value is passed to strip_diacritics
+* Finders now accept instances of ActiveRecord::Base, matching AR's behavior
+  (Josh Nichols)
+* SlugGenerationError now raise when a blank value is passed to
+  strip_diacritics
 
 ## 2.2.2 (2009-10-26)
 
-* Fixed Rake tasks creating duplicate slugs and not properly clearing cached slugs (closes GH issues #14 and #15)
+* Fixed Rake tasks creating duplicate slugs and not properly clearing cached
+  slugs (closes GH issues #14 and #15)
 
 ## 2.2.1 (2009-10-23)
 
 * slug cache now properly caches the slug sequence (closes GH issue #10)
-* attr_protected is now only invoked on the cached_slug column if attr_accessible has not already been invoked. (closes GH issue #11)
+* attr_protected is now only invoked on the cached_slug column if
+  attr_accessible has not already been invoked. (closes GH issue #11)
 
 ## 2.2.0 (2009-10-19)
 
@@ -84,17 +97,22 @@ compatible with Rails 3.0.
 
 ## 2.1.3 (2009-06-03)
 
-* Always call #to_s on slug_text to allow objects such as DateTimes to be used for the friendly_id text. (reported by Jon Ng)
+* Always call #to_s on slug_text to allow objects such as DateTimes to be used
+  for the friendly_id text. (reported by Jon Ng)
 
 ## 2.1.2 (2009-05-21)
 
-* Non-slugged models now validate the friendly_id on save as well as create (Joe Van Dyk).
+* Non-slugged models now validate the friendly_id on save as well as create
+  (Joe Van Dyk).
 * Replaced Shoulda with Contest.
 
 ## 2.1.1 (2009-03-25)
 
-* Fixed bug with find_some; if a record has old slugs, find_some will no longer return multiple copies of that record when finding by numerical ID. (Steve Luscher)
-* Fixed bug with find_some: you can now find_some with an array of numerical IDs without an error being thrown. (Steve Luscher)
+* Fixed bug with find_some; if a record has old slugs, find_some will no
+  longer return multiple copies of that record when finding by numerical ID.
+  (Steve Luscher)
+* Fixed bug with find_some: you can now find_some with an array of numerical
+  IDs without an error being thrown. (Steve Luscher)
 
 ## 2.1.0 (2009-03-25)
 
@@ -103,21 +121,25 @@ compatible with Rails 3.0.
 
 ## 2.0.4 (2009-02-12)
 
-* You can now pass in your own custom slug generation blocks while setting up friendly_id.
+* You can now pass in your own custom slug generation blocks while setting up
+  friendly_id.
 
 ## 2.0.3 (2009-02-11)
 
-* Fixed to_param returning an empty string for non-slugged models with a null friendly_id.
+* Fixed to_param returning an empty string for non-slugged models with a null
+  friendly_id.
 
 ## 2.0.2 (2009-02-09)
 
-* Made FriendlyId depend only on ActiveRecord. It should now be possible to use FriendlyId with Camping or any other codebase that uses AR.
+* Made FriendlyId depend only on ActiveRecord. It should now be possible to
+  use FriendlyId with Camping or any other codebase that uses AR.
 * Overhauled creaky testing setup and switched to Shoulda.
 * Made reserved words work for non-slugged models.
 
 ## 2.0.1 (2009-01-19)
 
-* Fix infinite redirect bug when using .has_better_id? in your controllers (Sean Abrahams)
+* Fix infinite redirect bug when using .has_better_id? in your controllers
+  (Sean Abrahams)
 
 
 ## 2.0.0 (2009-01-03)
@@ -131,14 +153,18 @@ compatible with Rails 3.0.
 
 ## 2008-12-01
 
-* Fixed bug that may return invalid records having similar id/names and using MySQL. (Emilio Tagua)
-* Fixed slug generation to increment only numeric extension without modifying the name on duplicated slugs. (Emilio Tagua)
+* Fixed bug that may return invalid records having similar id/names and using
+  MySQL. (Emilio Tagua)
+* Fixed slug generation to increment only numeric extension without modifying
+  the name on duplicated slugs. (Emilio Tagua)
 
 ## 2008-10-31
 
 * Fixed compatibility with Rails 2.0.x. (Norman Clarke)
-* friendly_id::make_slugs update records in chunks of 1000 to avoid running out of memory with large datasets. (Tim Kadom)
-* Fixed logic error with slug name collisions. Thanks to Tim Kadom for reporting this bug.
+* friendly_id::make_slugs update records in chunks of 1000 to avoid running
+  out of memory with large datasets. (Tim Kadom)
+* Fixed logic error with slug name collisions. Thanks to Tim Kadom for
+  reporting this bug.
 
 ## 2008-10-22
 
@@ -151,7 +177,8 @@ compatible with Rails 3.0.
 * Moved "require"" for iconv to init.rb (Florian Aßmann)
 * Removed "require" for Unicode, use Rails' handler instead (Florian Aßmann)
 * Replaced some magic numbers with constants (Florian Aßmann)
-* Don't overwrite find, alias_method_chain find_one and find_some instead (Florian Aßmann)
+* Don't overwrite find, alias_method_chain find_one and find_some instead
+  (Florian Aßmann)
 * Slugs behave more like ids now (Florian Aßmann)
 * Can find by mixture of ids and slugs (Florian Aßmann)
 * Reformatted code and comments (Florian Aßmann)
@@ -197,6 +224,9 @@ compatible with Rails 3.0.
 
 ## 2008-02-07
 
-* Applied patches from blog commenter "suntzu" to fix problem with model values were being overwritten.
-* Applied patch from Dan Blue to make friendly_id no longer ignore options on ActiveRecordBase#find.
-* Added call to options.assert_valid_keys in has_friendly_id. Thanks to W. Andrew Loe III for pointing out that this was missing.
+* Applied patches from blog commenter "suntzu" to fix problem with model
+  values were being overwritten.
+* Applied patch from Dan Blue to make friendly_id no longer ignore options on
+  ActiveRecordBase#find.
+* Added call to options.assert_valid_keys in has_friendly_id. Thanks to W.
+  Andrew Loe III for pointing out that this was missing.
