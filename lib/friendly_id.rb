@@ -115,7 +115,7 @@ module ActiveRecord
       end
 
       if ActiveRecord::VERSION::MAJOR == 2 && ActiveRecord::VERSION::MINOR < 2
-        raise "FriendlyId is not compatible with ActiveRecord < 2.2.3"
+        raise "FriendlyId is not compatible with ActiveRecord < 2.2"
       end
     end
 
