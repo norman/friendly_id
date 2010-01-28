@@ -47,15 +47,15 @@ module FriendlyId
 
         def find
           result = with_scope(:find => find_options) { find_initial options }
-          raise ::ActiveRecord::RecordNotFound.new if !result
-          result.friendly_id_status.name = id
+          raise ::ActiveRecord::RecordNotFound.new if friendly? && !result
+          result.friendly_id_status.name = id if result
           result
         end
 
         private
 
         def find_options
-          {:conditions => {column => id}}
+          @find_options ||= {:conditions => {column => id}}
         end
 
       end
@@ -66,12 +66,12 @@ module FriendlyId
           protected
 
           def find_one(id, options)
-            finder = SingleFinder.new(id, self, options)
+            finder = Finders::FinderProxy.new(id, self, options)
             !finder.friendly? ? super : finder.find
           end
 
           def find_some(ids_and_names, options)
-            MultipleFinder.new(ids_and_names, self, options).find
+            Finders::FinderProxy.new(ids_and_names, self, options).find
           end
       end
 

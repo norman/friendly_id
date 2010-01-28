@@ -9,7 +9,82 @@ module FriendlyId
     # FriendlyId-specific methods.
     module Finders
 
+      # FinderProxy is used to choose which {Finder} subclass to instantiate;
+      # depending on the model_class's +friendly_id_config+ and the options
+      # passed into the constructor, it will decide whether to use simple or
+      # slugged finder, a single or multiple finder, and in the case of slugs,
+      # a cached or uncached finder.
+      class FinderProxy
+
+        attr_reader :finder
+        attr :finder_class
+        attr :ids
+        attr :model_class
+        attr :options
+
+        def initialize(ids, model_class, options={})
+          @ids = ids
+          @model_class = model_class
+          @options = options
+        end
+
+        def method_missing(symbol, *args)
+          finder.send(symbol, *args)
+        end
+
+        # Perform the find query.
+        def finder
+          @finder ||= finder_class.new(ids, model_class, options)
+        end
+
+        private
+
+        def finder_class
+          @finder_class ||= slugged? ? slugged_finder_class : simple_finder_class
+        end
+
+        private
+
+        def cache_available?
+          !! model_class.friendly_id_config.cache_column
+        end
+
+        def multiple?
+          ids.kind_of? Array
+        end
+
+        def multiple_slugged_finder_class
+          use_cache? ? SluggedModel::CachedMultipleFinder : SluggedModel::MultipleFinder
+        end
+
+        def simple_finder_class
+          multiple? ? SimpleModel::MultipleFinder : SimpleModel::SingleFinder
+        end
+
+        def slugged?
+          !! model_class.friendly_id_config.use_slug?
+        end
+
+        def slugged_finder_class
+          multiple? ? multiple_slugged_finder_class : single_slugged_finder_class
+        end
+
+        def scoped?
+          !! options[:scope]
+        end
+
+        def single_slugged_finder_class
+          use_cache? ? SluggedModel::CachedSingleFinder : SluggedModel::SingleFinder
+        end
+
+        def use_cache?
+          cache_available? and !scoped?
+        end
+
+      end
+
       # The base finder.
+      # @abstract
       class Finder
 
         extend Forwardable

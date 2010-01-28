@@ -67,7 +67,7 @@ module FriendlyId
           {:select => "#{table_name}.*", :conditions => find_conditions,
             :joins => slugs_included? ? options[:joins] : :slugs}
         end
-        
+
         def sluggable_ids
           if !@sluggable_ids
             @sluggable_ids ||= []
@@ -109,6 +109,9 @@ module FriendlyId
 
       end
 
+      # Performs a find a single friendly_id using the cached_slug column,
+      # if available. This is significantly faster, and can be used in all 
+      # circumstances unless the +:scope+ argument is present.
       class CachedMultipleFinder < SimpleModel::MultipleFinder
         # The column used to store the cached slug.
         def column
@@ -150,16 +153,14 @@ module FriendlyId
 
       end
 
+      # Performs a find for multiple friendly_ids using the cached_slug column,
+      # if available. This is significantly faster, and can be used in all 
+      # circumstances unless the +:scope+ argument is present.
       class CachedSingleFinder < SimpleModel::SingleFinder
 
         # The column used to store the cached slug.
         def column
           "#{table_name}.#{friendly_id_config.cache_column}"
-        end
-
-        def find_options
-          key = self.class.friendly?(id) ? column : model_class.primary_key
-          {:conditions =>  {key => id}}
         end
 
       end
@@ -171,14 +172,12 @@ module FriendlyId
         protected
 
         def find_one(id_or_name, options)
-          klass = friendly_id_config.cache_column ? CachedSingleFinder : SingleFinder
-          finder = klass.new(id_or_name, self, options)
+          finder = Finders::FinderProxy.new(id_or_name, self, options)
           finder.unfriendly? ? super : finder.find or super
         end
 
         def find_some(ids_and_names, options)
-          klass = friendly_id_config.cache_column ? CachedMultipleFinder : MultipleFinder
-          klass.new(ids_and_names, self, options).find
+          Finders::FinderProxy.new(ids_and_names, self, options).find
         end
 
         # Since Rails goes out of its way to make these options completely
@@ -303,7 +302,7 @@ module FriendlyId
       end
 
       def scope_changed?
-        friendly_id_config.scope? && send(friendly_id_config.scope.to_param) != slug.scope
+        friendly_id_config.scope? && send(friendly_id_config.scope).to_param != slug.scope
       end
 
       # Get the processed string used as the basis of the friendly id.
