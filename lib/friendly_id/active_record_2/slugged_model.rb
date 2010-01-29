@@ -274,6 +274,7 @@ module FriendlyId
 
       # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.
       def slug
+        return @slug if new_record?
         @slug ||= slugs.first(:order => "id DESC")
       end
 
