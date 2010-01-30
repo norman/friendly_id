@@ -58,6 +58,10 @@ class Slug < ::ActiveRecord::Base
     sluggable.slug == self
   end
 
+  def outdated?
+    !current?
+  end
+
   # @deprecated Please used Slug#current?
   def is_most_recent?
     warn("Slug#is_most_recent? is deprecated and will be removed in FriendlyId 3.0. Please use Slug#current?")
