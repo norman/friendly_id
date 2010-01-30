@@ -1,106 +1,84 @@
 require(File.dirname(__FILE__) + '/test_helper') unless defined? FriendlyId
 require File.dirname(__FILE__) + '/../lib/friendly_id/tasks'
-require "contest"
 
 class TasksTest < Test::Unit::TestCase
 
-  context "FriendlyId tasks" do
+  extend FriendlyId::Test::Declarative
 
-    should "parse a top-level class name and return a class" do
-      assert_equal String, FriendlyId::Tasks.parse_class_name("String")
-    end
-
-    should "parse a namespaced class name and return a class" do
-      assert_equal Test::Unit, FriendlyId::Tasks.parse_class_name("Test::Unit")
-    end
-
+  def teardown
+    ENV["MODEL"] = nil
+    [City, District, Post, Slug].map(&:delete_all)
   end
 
-  context "The 'make slugs' task" do
-
-    setup do
-      City.create! :name => "Buenos Aires"
-      City.create! :name => "Rio de Janeiro"
-      City.create! :name => "Tokyo"
-      City.create! :name => "Nairobi"
-      $slug_class.delete_all
-    end
-
-    teardown do
-      City.delete_all
-      $slug_class.delete_all
-    end
-
-    should "make one slug per model" do
-      assert_equal 0, $slug_class.count
-      FriendlyId::Tasks.make_slugs("City")
-      assert_equal 4, $slug_class.count
-    end
-
+  test "should make slugs" do
+    City.create! :name => "Nairobi"
+    City.create! :name => "Buenos Aires"
+    Slug.delete_all
+    ENV["MODEL"] = "City"
+    FriendlyId::TaskRunner.new.make_slugs
+    assert_equal 2, Slug.count
   end
 
-  context "The 'delete_slugs_for' task" do
-
-    setup do
-      @post = Post.create! :name => "Slugs Considered Harmful"
-      @city = City.create! :name => "Buenos Aires"
-    end
-
-    teardown do
-      Post.delete_all
-      City.delete_all
-      $slug_class.delete_all
-    end
-
-    should "Delete only slugs for the specified model" do
-      assert_equal 2, $slug_class.count
-      FriendlyId::Tasks.delete_slugs_for("City")
-      assert_equal 1, $slug_class.count
-    end
-
-    should "set the cached_slug column to NULL" do
-      District.create! :name => "Garment"
-      FriendlyId::Tasks.delete_slugs_for("District")
-      assert_nil District.first.cached_slug
-    end
-
+  test "should admit lower case, plural model names" do
+    ENV["MODEL"] = "cities"
+    assert_equal City, FriendlyId::TaskRunner.new.klass
   end
 
-  context "The 'delete_old_slugs' task" do
+  test "make_slugs should raise error if no model given" do
+    assert_raise(RuntimeError) { FriendlyId::TaskRunner.new.make_slugs }
+  end
 
-    setup do
-      @post = Post.create! :name => "Slugs Considered Harmful"
-      @city = City.create! :name => "Buenos Aires"
-      City.connection.execute "UPDATE slugs SET created_at = '%s' WHERE id = %d" % [
-        45.days.ago.strftime("%Y-%m-%d"), @city.slug.id]
-      @city.name = "Ciudad de Buenos Aires"
-      @city.save!
-    end
+  test "make_slugs should raise error if class doesn't use FriendlyId" do
+    ENV["MODEL"] = "String"
+    assert_raise(RuntimeError) { FriendlyId::TaskRunner.new.make_slugs }
+  end
 
-    teardown do
-      Post.delete_all
-      City.delete_all
-      $slug_class.delete_all
-    end
+  test"delete_slugs delete only slugs for the specified model" do
+    Post.create! :name => "Slugs Considered Harmful"
+    City.create! :name => "Buenos Aires"
+    ENV["MODEL"] = "city"
+    FriendlyId::TaskRunner.new.delete_slugs
+    assert_equal 1, Slug.count
+  end
 
-    should "delete slugs older than 45 days by default" do
-      assert_equal 3, $slug_class.count
-      FriendlyId::Tasks.delete_old_slugs
-      assert_equal 2, $slug_class.count
-    end
+  test "delete_slugs should set the cached_slug column to NULL" do
+    ENV["MODEL"] = "district"
+    District.create! :name => "Garment"
+    FriendlyId::TaskRunner.new.delete_slugs
+    assert_nil District.first.cached_slug
+  end
 
-    should "respect the days argument" do
-      assert_equal 3, $slug_class.count
-      FriendlyId::Tasks.delete_old_slugs(100)
-      assert_equal 3, $slug_class.count
-    end
 
-    should "respect the class argument" do
-      assert_equal 3, $slug_class.count
-      FriendlyId::Tasks.delete_old_slugs(1, "Post")
-      assert_equal 3, $slug_class.count
-    end
+  test "delete_old_slugs should delete slugs older than 45 days by default" do
+    set_up_old_slugs
+    FriendlyId::TaskRunner.new.delete_old_slugs
+    assert_equal 2, Slug.count
+  end
 
+  test "delete_old_slugs should respect the days argument" do
+    set_up_old_slugs
+    ENV["DAYS"] = "100"
+    FriendlyId::TaskRunner.new.delete_old_slugs
+    assert_equal 3, Slug.count
+  end
+
+  test "delete_old_slugs should respect the class argument" do
+    set_up_old_slugs
+    ENV["MODEL"] = "post"
+    FriendlyId::TaskRunner.new.delete_old_slugs
+    assert_equal 3, Slug.count
+  end
+
+  private
+
+  def set_up_old_slugs
+    Post.create! :name => "Slugs Considered Harmful"
+    city = City.create! :name => "Buenos Aires"
+    City.connection.execute "UPDATE slugs SET created_at = '%s' WHERE id = %d" % [
+      45.days.ago.strftime("%Y-%m-%d"), city.slug.id
+    ]
+    city.update_attributes :name => "Ciudad de Buenos Aires"
+    assert_equal 3, Slug.count
   end
 
 end
