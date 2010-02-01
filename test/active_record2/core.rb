@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
 
@@ -6,7 +6,7 @@ module FriendlyId
 
     module ActiveRecord2
 
-      module TestCore
+      module Core
 
         extend Declarative
 
@@ -33,7 +33,7 @@ module FriendlyId
         end
 
         test "instances should have a friendly id" do
-          assert_match(/hello/, instance.friendly_id)
+          assert_not_nil instance.friendly_id
         end
 
         test "should return their friendly_id for #to_param" do

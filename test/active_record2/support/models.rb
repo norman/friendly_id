@@ -46,6 +46,7 @@ class CreateSupportModels < ActiveRecord::Migration
 
     create_table :people do |t|
       t.string :name
+      t.string :note
     end
 
     create_table :posts do |t|

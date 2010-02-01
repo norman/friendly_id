@@ -11,21 +11,21 @@ module FriendlyId
       # @deprecated Please use SlugString#normalize.
       def normalize(slug_text)
         warn("Slug#normalize is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#normalize.")
-        raise SlugGenerationError if slug_text.blank?
+        raise BlankError if slug_text.blank?
         SlugString.new(slug_text.to_s).normalize.to_s
       end
 
       # @deprecated Please use SlugString#approximate_ascii."
       def strip_diacritics(string)
         warn("Slug#strip_diacritics is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#approximate_ascii.")
-        raise SlugGenerationError if string.blank?
+        raise BlankError if string.blank?
         SlugString.new(string).approximate_ascii
       end
 
       # @deprecated Please use SlugString#to_ascii.
       def strip_non_ascii(string)
         warn("Slug#strip_non_ascii is deprecated and will be removed in FriendlyId 3.0. Please use SlugString#to_ascii.")
-        raise SlugGenerationError if string.blank?
+        raise BlankError if string.blank?
         SlugString.new(string).to_ascii
       end
 
@@ -75,7 +75,7 @@ class Slug < ::ActiveRecord::Base
   # Raise a FriendlyId::SlugGenerationError if the slug name is blank.
   def validate_name
     if name.blank?
-      raise FriendlyId::SlugGenerationError.new("slug.name can not be blank.")
+      raise FriendlyId::BlankError.new("slug.name can not be blank.")
     end
   end
 

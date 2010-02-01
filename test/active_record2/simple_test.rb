@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/core'
+
 module FriendlyId
   module Test
     module ActiveRecord2
@@ -48,7 +49,7 @@ module FriendlyId
         end
 
         class BasicTest < ::Test::Unit::TestCase
-          include TestCore
+          include Core
           include SimpleTest
         end
 

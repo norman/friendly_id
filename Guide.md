@@ -113,7 +113,7 @@ FriendlyId is now set up and ready for you to use.
 
 ## Configuration
 
-FriendlyId is configured in your model using the {FriendlyId#has_friendly_id} class method:
+FriendlyId is configured in your model using the `has_friendly_id` method:
 
     has_friendly_id :a_column_or_method options_hash
 
@@ -314,7 +314,7 @@ rest of the slug. This is important to enable having slugs like:
     /cars/peugeot-206--2
 
 You can configure the separator string used by your model by setting the
-`:sequence_separator` option in {FriendlyId#has_friendly_id}:
+`:sequence_separator` option in `has_friendly_id`:
 
     has_friendly_id :title, :use_slug => true, :sequence_separator => ";"
 
@@ -455,8 +455,7 @@ this up:
 
 ## FriendlyId Rake Tasks
 
-FriendlyId provides several tasks to help maintain your application. The
-tasks can be invoked via Rake, or programmatically through {FriendlyId::Tasks}.
+FriendlyId provides several tasks to help maintain your application.
 
 ### Generating New Slugs For the First Time
 

@@ -7,7 +7,7 @@ class FriendlyIdGenerator < Rails::Generator::Base
       end
       unless options[:skip_tasks]
         m.directory "lib/tasks"
-        m.file "/../../../lib/tasks/friendly_id.rake", "lib/tasks/friendly_id.rake"
+        m.file "/../../../lib/friendly_id/active_record2/tasks/friendly_id.rake", "lib/tasks/friendly_id.rake"
       end
     end
   end

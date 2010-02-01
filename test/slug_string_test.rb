@@ -6,7 +6,7 @@ module FriendlyId
 
     class SlugStringTest < ::Test::Unit::TestCase
 
-        extend Declarative
+        extend ActiveSupport::Testing::Declarative
 
         test "should approximate ascii" do
           # create string with range of Unicode's western characters with

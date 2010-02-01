@@ -1,5 +1,5 @@
 # encoding: utf-8
-require(File.dirname(__FILE__) + '/test_helper') unless defined? FriendlyId
+require(File.dirname(__FILE__) + '/test_helper')
 
 module FriendlyId
   module Test

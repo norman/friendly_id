@@ -1,10 +1,10 @@
 module FriendlyId
 
   # This class is not intended to be used on its own, it is used internally
-  # by {FriendlyId#has_friendly_id} to store a model's configuration and
+  # by `has_friendly_id` to store a model's configuration and
   # configuration-related methods.
   #
-  # The arguments accepted by {#has_friendly_id} correspond to the writeable
+  # The arguments accepted by +has_friendly_id+ correspond to the writeable
   # instance attributes of this class; please see the description of the
   # attributes below for information on the possible options.
   #
@@ -36,17 +36,6 @@ module FriendlyId
     # values supported by {SlugString#approximate_ascii!}.
     attr_accessor :ascii_approximation_options
 
-    # The column used to cache the friendly_id string. If no column is specified,
-    # FriendlyId will look for a column named +cached_slug+ and use it automatically
-    # if it exists. If for some reason you have a column named +cached_slug+
-    # but don't want FriendlyId to modify it, pass the option
-    # +:cache_column => false+ to {#has_friendly_id}.
-    attr_accessor :cache_column
-
-    # An array of classes for which the configured class serves as a
-    # FriendlyId scope.
-    attr_reader :child_scopes
-
     # The class that's using the configuration.
     attr_reader :configured_class
 
@@ -56,12 +45,11 @@ module FriendlyId
 
     # The method or column that will be used as the basis of the friendly_id string.
     attr_reader :method
-    alias :column :method
 
     # A block or proc through which to filter the friendly_id text.
     # This method will be removed from FriendlyId 3.0.
     # @deprecated Please override the +normalize_friendly_id+
-    #   method in your model class rather than passing a block to {#has_friendly_id}.
+    #   method in your model class rather than passing a block to `has_friendly_id`.
     attr_accessor :normalizer
 
     # The message shown when a reserved word is used.
@@ -87,8 +75,6 @@ module FriendlyId
     attr_accessor :use_slug
     alias :use_slugs= :use_slug
 
-    attr_reader :custom_cache_column
-
     def initialize(configured_class, method, options = nil, &block)
       @configured_class = configured_class
       @method = method.to_sym
@@ -96,24 +82,6 @@ module FriendlyId
         self.send "#{key}=".to_sym, value
       end
       yield self if block_given?
-    end
-
-    def cache_column
-      return @cache_column if defined?(@cache_column)
-      @cache_column = autodiscover_cache_column
-    end
-
-    def cache_column=(cache_column)
-      @cache_column = cache_column
-      @custom_cache_column = cache_column
-    end
-
-    def cache_finders?
-      !! cache_column
-    end
-
-    def child_scopes
-      @child_scopes ||= associated_friendly_classes.select { |klass| klass.friendly_id_config.scopes_over?(configured_class) }
     end
 
     def normalizer=(arg)
@@ -141,14 +109,6 @@ module FriendlyId
       self.reserved_words = *args
     end
 
-    def scope_for(record)
-      scope? ? record.send(scope).to_param : nil
-    end
-
-    def scopes_over?(klass)
-      scope? && scope == klass.to_s.underscore.to_sym
-    end
-
     # This method will be removed from FriendlyId 3.0.
     # @deprecated Please use {#approximate_ascii approximate_ascii}.
     def strip_diacritics=(*args)
@@ -156,8 +116,7 @@ module FriendlyId
       self.strip_diacritics = *args
     end
 
-    %w[approximate_ascii cache_column custom_cache_column normalizer scope
-        strip_non_ascii use_slug].each do |method|
+    %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|
       class_eval(<<-EOM)
         def #{method}?
           !! #{method}
@@ -166,17 +125,6 @@ module FriendlyId
     end
 
     alias :use_slugs? :use_slug?
-
-    private
-
-    def autodiscover_cache_column
-      :cached_slug if configured_class.columns.any? { |column| column.name == 'cached_slug' }
-    end
-
-    def associated_friendly_classes
-      configured_class.reflect_on_all_associations.select { |assoc|
-        assoc.klass.uses_friendly_id? }.map(&:klass)
-    end
 
   end
 
