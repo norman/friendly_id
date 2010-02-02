@@ -4,7 +4,7 @@ module FriendlyId
     module ActiveRecord2
       module Slugged
 
-        extend Declarative
+        extend FriendlyId::Test::Declarative
 
         test "should have a slug" do
           assert_not_nil instance.slug

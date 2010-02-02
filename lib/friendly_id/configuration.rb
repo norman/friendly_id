@@ -45,6 +45,7 @@ module FriendlyId
 
     # The method or column that will be used as the basis of the friendly_id string.
     attr_reader :method
+    alias :column :method
 
     # A block or proc through which to filter the friendly_id text.
     # This method will be removed from FriendlyId 3.0.

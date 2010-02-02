@@ -5,7 +5,7 @@ module FriendlyId
 
     class ScopedModelTest < ::Test::Unit::TestCase
 
-      extend Declarative
+      extend FriendlyId::Test::Declarative
 
       def setup
         @user = User.create!(:name => "john")

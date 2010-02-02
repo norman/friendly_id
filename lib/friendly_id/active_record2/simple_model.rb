@@ -18,8 +18,10 @@ module FriendlyId
 
       end
 
-      class MultipleFinder < Finders::MultipleFinder
+      class MultipleFinder
 
+        include FriendlyId::Finders::Base
+        include FriendlyId::ActiveRecord2::Finders::Multiple
         include SimpleFinder
 
         def find
@@ -41,8 +43,10 @@ module FriendlyId
 
       end
 
-      class SingleFinder < Finders::SingleFinder
+      class SingleFinder
 
+        include FriendlyId::Finders::Base
+        include FriendlyId::Finders::Single
         include SimpleFinder
 
         def find
@@ -63,16 +67,16 @@ module FriendlyId
       # The methods in this module override ActiveRecord's +find_one+ and
       # +find_some+ to add FriendlyId's features.
       module FinderMethods
-          protected
+        protected
 
-          def find_one(id, options)
-            finder = Finders::FinderProxy.new(id, self, options)
-            !finder.friendly? ? super : finder.find
-          end
+        def find_one(id, options)
+          finder = Finders::FinderProxy.new(id, self, options)
+          !finder.friendly? ? super : finder.find
+        end
 
-          def find_some(ids_and_names, options)
-            Finders::FinderProxy.new(ids_and_names, self, options).find
-          end
+        def find_some(ids_and_names, options)
+          Finders::FinderProxy.new(ids_and_names, self, options).find
+        end
       end
 
       # These methods will be removed in FriendlyId 3.0.

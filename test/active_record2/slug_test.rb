@@ -6,7 +6,7 @@ module FriendlyId
 
     class SlugTest < ::Test::Unit::TestCase
 
-      extend Declarative
+      extend FriendlyId::Test::Declarative
 
       def teardown
         $slug_class.delete_all

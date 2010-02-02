@@ -7,7 +7,7 @@ module FriendlyId
 
       class CachedSlugTest < ::Test::Unit::TestCase
 
-        extend Declarative
+        extend FriendlyId::Test::Declarative
         include Core
         include Slugged
 
@@ -49,7 +49,7 @@ module FriendlyId
           instance.save!
         end
 
-        should "cache the incremented sequence for duplicate slug names" do
+        test "should cache the incremented sequence for duplicate slug names" do
           instance_2 = klass.create!(:name => instance.name)
           assert_match(/2\z/, instance_2.send(cache_column))
         end

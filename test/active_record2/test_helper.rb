@@ -106,14 +106,3 @@ class Question < ActiveRecord::Base
 end
 
 $slug_class = Slug
-
-module FriendlyId
-  module Test
-    module Declarative
-      def test(name, &block)
-        define_method("test_#{name.gsub(/[^a-z0-9]/i, "_")}".to_sym, &block)
-      end
-      alias :should :test
-    end
-  end
-end

@@ -7,7 +7,7 @@ module FriendlyId
 
       class CustomSlugNormalizerTest < ::Test::Unit::TestCase
 
-        extend Declarative
+        extend FriendlyId::Test::Declarative
         include Core
         include Slugged
 
@@ -20,11 +20,11 @@ module FriendlyId
           Slug.delete_all
         end
 
-        should "invoke the block code" do
+        test "should invoke the block code" do
           assert_equal "JOE SCHMOE", klass.create!(:name => "Joe Schmoe").friendly_id
         end
 
-        should "respect the max_length option" do
+        test "should respect the max_length option" do
           klass.friendly_id_config.stubs(:max_length).returns(3)
           assert_equal "JOE", klass.create!(:name => "Joe Schmoe").friendly_id
         end

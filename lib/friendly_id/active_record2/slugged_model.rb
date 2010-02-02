@@ -40,7 +40,18 @@ module FriendlyId
 
       end
 
-      class MultipleFinder < Finders::MultipleFinder
+      module SluggedFinder
+        # Whether :include => :slugs has been passed as an option.
+        def slugs_included?
+          [*(options[:include] or [])].flatten.include?(:slugs)
+        end
+      end
+
+      class MultipleFinder
+
+        include FriendlyId::Finders::Base
+        include FriendlyId::ActiveRecord2::Finders::Multiple
+        include SluggedFinder
 
         attr_reader :slugs
 
@@ -110,7 +121,7 @@ module FriendlyId
       end
 
       # Performs a find a single friendly_id using the cached_slug column,
-      # if available. This is significantly faster, and can be used in all 
+      # if available. This is significantly faster, and can be used in all
       # circumstances unless the +:scope+ argument is present.
       class CachedMultipleFinder < SimpleModel::MultipleFinder
         # The column used to store the cached slug.
@@ -119,7 +130,11 @@ module FriendlyId
         end
       end
 
-      class SingleFinder < Finders::SingleFinder
+      class SingleFinder
+
+        include FriendlyId::Finders::Base
+        include FriendlyId::Finders::Single
+        include SluggedFinder
 
         def find
           result = with_scope({:find => find_options}) { find_initial options }
@@ -154,7 +169,7 @@ module FriendlyId
       end
 
       # Performs a find for multiple friendly_ids using the cached_slug column,
-      # if available. This is significantly faster, and can be used in all 
+      # if available. This is significantly faster, and can be used in all
       # circumstances unless the +:scope+ argument is present.
       class CachedSingleFinder < SimpleModel::SingleFinder
 

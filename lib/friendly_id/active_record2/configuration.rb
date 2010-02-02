@@ -16,8 +16,6 @@ module FriendlyId
 
       attr_reader :custom_cache_column
 
-      alias :column :method
-
       def cache_column
         return @cache_column if defined?(@cache_column)
         @cache_column = autodiscover_cache_column

@@ -6,7 +6,7 @@ module FriendlyId
 
     class FriendlyIdTest < ::Test::Unit::TestCase
 
-      extend ActiveSupport::Testing::Declarative
+      extend FriendlyId::Test::Declarative
 
       test "should parse a friendly_id name and sequence" do
         assert_equal ["test", "2"], "test--2".parse_friendly_id
