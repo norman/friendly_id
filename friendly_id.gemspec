@@ -7,12 +7,11 @@ spec = Gem::Specification.new do |s|
   s.authors           = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
   s.email             = ["norman@njclarke.com", "adrian@mugnolo.com", "miloops@gmail.com"]
   s.homepage          = "http://norman.github.com/friendly_id"
-  s.summary           = "A comprehensive slugging and pretty-URL plugin for ActiveRecord."
+  s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.description       = <<-EOM
     FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins
     for Ruby on Rails. It allows you to create pretty URL’s and work with
-    human-friendly strings as if they were numeric ids for ActiveRecord
-    models.
+    human-friendly strings as if they were numeric ids for ActiveRecord models.
   EOM
 
   s.has_rdoc         = true
@@ -21,7 +20,6 @@ spec = Gem::Specification.new do |s|
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*" ]
 
-  s.add_dependency "activerecord", ">= 2.2"
   s.add_dependency "activesupport", ">= 2.2"
 
   s.post_install_message = <<-EOM
