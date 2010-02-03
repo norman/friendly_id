@@ -2,44 +2,6 @@ module FriendlyId
   module ActiveRecord2
     module SluggedModel
 
-      class Status < FriendlyId::Status
-
-        attr_accessor :slug
-
-        # The slug that was used to find the model.
-        def slug
-          @slug ||= record.slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(separator))
-        end
-
-        # Did the find operation use a friendly id?
-        def friendly?
-          !! (name or slug)
-        end
-
-        # Did the find operation use the current slug?
-        def current?
-          !! slug && slug.current?
-        end
-
-        # Did the find operation use an outdated slug?
-        def outdated?
-          !current?
-        end
-
-        # Did the find operation use the best possible id? True if +id+ is
-        # numeric, but the model has no slug, or +id+ is friendly and current
-        def best?
-          current? || (numeric? && !record.slug)
-        end
-
-        private
-
-        def separator
-          record.friendly_id_config.sequence_separator
-        end
-
-      end
-
       module SluggedFinder
         # Whether :include => :slugs has been passed as an option.
         def slugs_included?
@@ -267,24 +229,12 @@ module FriendlyId
         end
       end
 
+      include Slugged
       include DeprecatedMethods
 
-      # Get the {FriendlyId::Status} after the find has been performed.
-      def friendly_id_status
-        @friendly_id_status ||= Status.new(:record => self)
-      end
-
-      # The friendly id.
-      def friendly_id
-        slug.to_friendly_id
-      end
-
-      # Clean up the string before setting it as the friendly_id. You can override
-      # this method to add your own custom normalization routines.
-      # @param string An instance of {FriendlyId::SlugString}.
-      # @return [String]
-      def normalize_friendly_id(string)
-        string.normalize_for!(friendly_id_config).to_s
+      def find_slug(name)
+        separator = friendly_id_config.sequence_separator
+        slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(separator))
       end
 
       # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.
@@ -295,13 +245,8 @@ module FriendlyId
 
       # Set the slug.
       def slug=(slug)
-        @slug = slug
-        @new_friendly_id = @slug.to_friendly_id unless slug.nil?
-      end
-
-      # Does the instance have a slug?
-      def slug?
-        !! slug
+        @new_friendly_id = slug.to_friendly_id unless slug.nil?
+        super
       end
 
       # Returns the friendly id, or if none is available, the numeric id.
@@ -311,25 +256,8 @@ module FriendlyId
 
       private
 
-      # Has the basis of our friendly id changed, requiring the generation of a
-      # new slug?
-      def new_slug_needed?
-        !slug || slug_text_changed?
-      end
-
       def scope_changed?
         friendly_id_config.scope? && send(friendly_id_config.scope).to_param != slug.scope
-      end
-
-      # Get the processed string used as the basis of the friendly id.
-      def slug_text
-        text = normalize_friendly_id(SlugString.new(send(friendly_id_config.method)))
-        SlugString.new(text.to_s).validate_for!(friendly_id_config).to_s
-      end
-
-      # Has the slug text changed?
-      def slug_text_changed?
-        slug_text != slug.name
       end
 
       # Respond with the cached value if available.
@@ -373,7 +301,8 @@ module FriendlyId
       def update_dependent_scopes
         if slugs(true).size > 1 && @new_friendly_id
           friendly_id_config.child_scopes.each do |klass|
-            Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?", klass.to_s, slugs.second.to_friendly_id]
+            Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?",
+              klass.to_s, slugs.second.to_friendly_id]
           end
         end
       end
