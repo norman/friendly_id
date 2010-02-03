@@ -17,10 +17,6 @@ module FriendlyId
         build_slug
       end
 
-      def friendly_id_config
-        self.class.friendly_id_config
-      end
-
     end
   end
 end
