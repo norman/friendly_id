@@ -1,5 +1,6 @@
 require "sequel"
 require File.join(File.dirname(__FILE__), "sequel", "simple_model")
+require File.join(File.dirname(__FILE__), "sequel", "slugged_model")
 
 module Sequel
 
@@ -10,6 +11,7 @@ module Sequel
       def self.configure(model, method, opts={})
         model.instance_eval do
           if friendly_id_config.use_slug?
+            include ::FriendlyId::Sequel::SluggedModel
           else
             include ::FriendlyId::Sequel::SimpleModel
           end

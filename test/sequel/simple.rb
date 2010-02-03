@@ -5,11 +5,11 @@ module FriendlyId
       module Simple
 
         def klass
-          @klass ||= User
+          User
         end
-        
+
         def other_class
-          @other_class ||= Post
+          Book
         end
 
         def instance
