@@ -5,7 +5,10 @@ module FriendlyId
 
     class ScopedModelTest < ::Test::Unit::TestCase
 
-      extend FriendlyId::Test::Declarative
+      include FriendlyId::Test::Generic
+      include FriendlyId::Test::Slugged
+      include FriendlyId::Test::ActiveRecord2::Slugged
+      include FriendlyId::Test::ActiveRecord2::Core
 
       def setup
         @user = User.create!(:name => "john")
@@ -21,7 +24,7 @@ module FriendlyId
         Country.delete_all
         User.delete_all
         House.delete_all
-        $slug_class.delete_all
+        Slug.delete_all
       end
 
       test "a slugged model should auto-detect that it is being used as a parent scope" do

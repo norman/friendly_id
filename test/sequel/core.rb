@@ -1,17 +1,14 @@
-require File.dirname(__FILE__) + '/test_helper'
-require File.dirname(__FILE__) + '/../generic'
+require File.dirname(__FILE__) + "/test_helper"
 
 module FriendlyId
   module Test
     module Sequel
       module Core
 
-        extend FriendlyId::Test::Declarative
-        include Generic
-
         def teardown
           klass.delete
           other_class.delete
+          FriendlyId::Sequel::Slug.delete
         end
 
         def find_method
@@ -24,6 +21,10 @@ module FriendlyId
 
         def delete_all_method
           :destroy
+        end
+
+        def save_method
+          :save
         end
 
         def validation_exceptions

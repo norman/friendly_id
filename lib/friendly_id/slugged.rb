@@ -39,6 +39,10 @@ module FriendlyId
       raise NotImplementedError
     end
 
+    def friendly_id_config
+      self.class.friendly_id_config
+    end
+
     # Get the {FriendlyId::Status} after the find has been performed.
     def friendly_id_status
       @friendly_id_status ||= Status.new(:record => self)

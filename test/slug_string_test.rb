@@ -1,15 +1,13 @@
 # encoding: utf-8
-require(File.dirname(__FILE__) + '/test_helper') unless defined? FriendlyId
+require(File.dirname(__FILE__) + "/test_helper")
 
 module FriendlyId
   module Test
 
     class SlugStringTest < ::Test::Unit::TestCase
 
-        extend FriendlyId::Test::Declarative
-
         test "should approximate ascii" do
-          # create string with range of Unicode's western characters with
+          # create string with range of Unicode"s western characters with
           # diacritics, excluding the division and multiplication signs which for
           # some reason or other are floating in the middle of all the letters.
           s = SlugString.new((0xC0..0x17E).to_a.reject {|c| [0xD7, 0xF7].include? c}.pack("U*"))
@@ -32,31 +30,31 @@ module FriendlyId
         end
 
         test "should replace whitespace with dashes" do
-          assert_equal 'a-b', SlugString.new("a b").clean.with_dashes
+          assert_equal "a-b", SlugString.new("a b").clean.with_dashes
         end
 
         test "should replace multiple spaces with 1 dash" do
-          assert_equal 'a-b', SlugString.new("a    b").clean.with_dashes
+          assert_equal "a-b", SlugString.new("a    b").clean.with_dashes
         end
 
         test "should strip trailing space" do
-          assert_equal 'ab', SlugString.new("ab ").clean
+          assert_equal "ab", SlugString.new("ab ").clean
         end
 
         test "should strip leading space" do
-          assert_equal 'ab', SlugString.new(" ab").clean
+          assert_equal "ab", SlugString.new(" ab").clean
         end
 
         test "should strip trailing slashes" do
-          assert_equal 'ab', SlugString.new("ab-").clean
+          assert_equal "ab", SlugString.new("ab-").clean
         end
 
         test "should strip leading slashes" do
-          assert_equal 'ab', SlugString.new("-ab").clean
+          assert_equal "ab", SlugString.new("-ab").clean
         end
 
         test "should not modify valid name strings" do
-          assert_equal 'a-b-c-d', SlugString.new("a-b-c-d").clean
+          assert_equal "a-b-c-d", SlugString.new("a-b-c-d").clean
         end
 
         test "should do special approximations for German" do

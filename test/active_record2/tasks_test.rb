@@ -3,8 +3,6 @@ require File.dirname(__FILE__) + '/../../lib/friendly_id/active_record2/tasks'
 
 class TasksTest < Test::Unit::TestCase
 
-  extend FriendlyId::Test::Declarative
-
   def teardown
     ENV["MODEL"] = nil
     [City, District, Post, Slug].map(&:delete_all)

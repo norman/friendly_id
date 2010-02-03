@@ -1,13 +1,11 @@
-require File.dirname(__FILE__) + '/core'
-require File.dirname(__FILE__) + '/slugged'
+require File.dirname(__FILE__) + '/test_helper'
+
 
 module FriendlyId
   module Test
     module ActiveRecord2
 
       class StatusTest < ::Test::Unit::TestCase
-
-        extend FriendlyId::Test::Declarative
 
         test "should default to not friendly" do
           assert !status.friendly?
@@ -18,7 +16,7 @@ module FriendlyId
         end
 
         test "should be friendly if slug is set" do
-          status.slug = $slug_class.new
+          status.slug = Slug.new
           assert status.friendly?
         end
 
@@ -33,7 +31,7 @@ module FriendlyId
         end
 
         test "should not be current if non-current slug is set" do
-          status.slug = $slug_class.new(:sluggable => instance)
+          status.slug = Slug.new(:sluggable => instance)
           assert !status.current?
         end
 
@@ -47,7 +45,7 @@ module FriendlyId
           instance.slug = nil
           assert status.best?
         end
-        
+
         def instance
           @instance ||= Post.create! :name => "hello world"
         end

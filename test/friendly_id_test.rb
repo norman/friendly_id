@@ -1,12 +1,10 @@
-require(File.dirname(__FILE__) + '/test_helper')
+require(File.dirname(__FILE__) + "/test_helper")
 
 module FriendlyId
 
   module Test
 
     class FriendlyIdTest < ::Test::Unit::TestCase
-
-      extend FriendlyId::Test::Declarative
 
       test "should parse a friendly_id name and sequence" do
         assert_equal ["test", "2"], "test--2".parse_friendly_id

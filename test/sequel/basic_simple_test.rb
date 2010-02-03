@@ -1,13 +1,12 @@
 require File.dirname(__FILE__) + "/test_helper"
-require File.dirname(__FILE__) + "/simple"
-
 
 module FriendlyId
   module Test
     module Sequel
       class BasicSimpleTest < ::Test::Unit::TestCase
-        include Core
-        include Simple
+        include FriendlyId::Test::Generic
+        include FriendlyId::Test::Sequel::Core
+        include FriendlyId::Test::Sequel::Simple
       end
     end
   end

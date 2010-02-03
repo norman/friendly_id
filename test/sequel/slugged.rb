@@ -4,14 +4,14 @@ module FriendlyId
   module Test
     module Sequel
 
-      module Simple
+      module Slugged
 
         def klass
-          User
+          Post
         end
 
         def other_class
-          Book
+          City
         end
 
         def instance

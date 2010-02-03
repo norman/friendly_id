@@ -1,12 +1,10 @@
-require File.dirname(__FILE__) + '/test_helper'
+require File.dirname(__FILE__) + "/test_helper"
 
 module FriendlyId
 
   module Test
 
     module Generic
-
-      extend FriendlyId::Test::Declarative
 
       def setup
         klass.send delete_all_method
@@ -28,15 +26,15 @@ module FriendlyId
       def other_class
         raise NotImplementedError
       end
-      
+
       def find_method
         raise NotImplementedError
       end
-      
+
       def create_method
         raise NotImplementedError
       end
-      
+
       def validation_exceptions
         return RuntimeError
       end

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/core'
+require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
   module Test
@@ -22,7 +22,6 @@ module FriendlyId
         class StatusTest < ::Test::Unit::TestCase
 
           include SimpleTest
-          extend FriendlyId::Test::Declarative
 
           test "should default to not friendly" do
             assert !status.friendly?

@@ -10,7 +10,7 @@ USERS     = []
 User.delete_all
 Post.delete_all
 District.delete_all
-($slug_class or Slug).delete_all
+(Slug or Slug).delete_all
 
 100.times do
   name = Faker::Name.name

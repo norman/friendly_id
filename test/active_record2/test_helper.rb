@@ -2,10 +2,11 @@ require File.dirname(__FILE__) + "/../test_helper"
 
 require "active_record"
 require "active_support"
-require "mocha"
 require File.dirname(__FILE__) + "/../../lib/friendly_id/active_record2.rb"
 require File.dirname(__FILE__) + "/../../generators/friendly_id/templates/create_slugs"
 require File.dirname(__FILE__) + "/support/models"
+require File.dirname(__FILE__) + '/core'
+require File.dirname(__FILE__) + '/slugged'
 
 local_db_settings = File.dirname(__FILE__) + "/support/database.yml"
 default_db_settings = File.dirname(__FILE__) + "/support/database.sqlite3.yml"
@@ -104,5 +105,3 @@ end
 class Question < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
-
-$slug_class = Slug

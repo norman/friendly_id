@@ -1,15 +1,13 @@
 # encoding: utf-8
-require(File.dirname(__FILE__) + '/test_helper')
+require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
   module Test
 
     class SlugTest < ::Test::Unit::TestCase
 
-      extend FriendlyId::Test::Declarative
-
       def teardown
-        $slug_class.delete_all
+        Slug.delete_all
         Post.delete_all
       end
 
@@ -22,14 +20,12 @@ module FriendlyId
       end
 
       test "should include the sequence if the sequence is greater than 1" do
-        slug = $slug_class.new(:name => "test", :sequence => 2)
-        slug.stubs(:sluggable).returns Post.new
+        slug = Slug.new(:name => "test", :sluggable => Post.new, :sequence => 2)
         assert_equal "test--2", slug.to_friendly_id
       end
 
       test "should not include the sequence if the sequence is 1" do
-        slug = $slug_class.new(:name => "test", :sequence => 1)
-        slug.stubs(:sluggable).returns Post.new
+        slug = Slug.new(:name => "test",  :sluggable => Post.new, :sequence => 1)
         assert_equal "test", slug.to_friendly_id
       end
 
