@@ -20,6 +20,7 @@ spec = Gem::Specification.new do |s|
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*" ]
 
+  s.add_dependency "activerecord", ">= 2.2"
   s.add_dependency "activesupport", ">= 2.2"
 
   s.post_install_message = <<-EOM
