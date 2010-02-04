@@ -7,7 +7,7 @@ suggestions, ideas and improvements to FriendlyId.
 {:toc}
 
 
-## 2.3.0 (NOT RELEASED YET)
+## 2.3.0 (2010-02-04)
 
 This is a major update à la "Snow Leopard" that adds no new major features,
 but significantly improves the underlying code. Most users should be able to
@@ -15,21 +15,18 @@ upgrade with no issues other than new deprecation messages appearing in the
 logs.
 
 If, however, you have monkey-patched FriendlyId, or are maintaining your own
-fork, then this upgrade may causes issues. You may wish to stick with the 2.2
-series, which is being maintained for bug-fixes in a separate fork.
-
-Note that **only** bug-fixes will be added to 2.2.x; it will not be made
-compatible with Rails 3.0.
+fork, then this upgrade may causes issues.
 
 **Changes:**
 
+* Sequence separator can now be configured to something other than "--".
+* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, 
+  allowing custom approximations specific to German or Spanish.
+* FriendlyId now queries against the cached_slug column, which improves performance.
 * {FriendlyId::SlugString} class added, allowing finer-grained control over 
   Unicode friendly_id strings.
 * {FriendlyId::Configuration} class added, offering more flexible/hackable
   options.
-* Sequence separator can now be configured to something other than "--".
-* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, 
-  allowing custom approximations specific to German or Spanish.
 * FriendlyId now raises subclasses of {FriendlyId::SlugGenerationError}
   depending on the error context.
 * Simple models now correctly validate friendly_id length.
@@ -37,11 +34,6 @@ compatible with Rails 3.0.
   the model's `normalize_friendly_id` method.
 * Updating only the model's scope now also updates the slug.
 * Major refactorings, cleanups and deprecations en route to the 3.0 release.
-
-## 2.2.8 (NOT RELEASED YET)
-
-* Updating scoped relations now updates the downstream slugs (Ian Stewart)
-* Fixed slug not deleting some quote characters (Alexander Gräfe)
 
 ## 2.2.7 (2009-12-16)
 
