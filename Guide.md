@@ -491,7 +491,7 @@ own solution is unlikely to be any faster than FriendlyId with cached slugs
 enabled. But if it is, then your patches would be very welcome!
 
     ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
-    friendly_id (2.3.0.rc1)
+    friendly_id (2.3.0)
     sqlite3 3.6.19 in-memory database
     ------------------------------------------------------------------------------------------------
     find model using id                                                 x10000 |   2.948 |       0 |
