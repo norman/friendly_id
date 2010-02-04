@@ -31,27 +31,17 @@ begin
 rescue LoadError
 end
 
-task :test do
-  puts "\nTesting FriendlyId:\n\n"
-  Rake::Task["test:friendly_id"].invoke
-  puts "\nTesting ActiveRecord 2:\n\n"
-  Rake::Task["test:ar2"].invoke
-  puts "\nTesting Sequel:\n\n"
-  Rake::Task["test:sequel"].invoke
-end
+
+Rake::TestTask.new(:test) { |t| t.pattern = "test/**/*_test.rb" }
 
 namespace :test do
-
   task :rails do
     rm_rf "fid"
     sh "rails --template extras/template-gem.rb fid"
     sh "cd fid; rake test"
   end
-
   Rake::TestTask.new(:friendly_id) { |t| t.pattern = "test/*_test.rb" }
-  Rake::TestTask.new(:ar2) { |t| t.pattern = "test/active_record2/*_test.rb" }
-  Rake::TestTask.new(:sequel) { |t| t.pattern = "test/sequel/*_test.rb" }
-
+  Rake::TestTask.new(:ar) { |t| t.pattern = "test/active_record2/*_test.rb" }
 end
 
 task :pushdocs do
