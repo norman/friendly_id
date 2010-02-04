@@ -1,6 +1,6 @@
 module FriendlyId
   module Sequel
-    class Slug < ::Sequel::Model(:slugs)
+    class Slug < ::Sequel::Model
 
       def to_friendly_id
         sequence > 1 ? friendly_id_with_sequence : name
