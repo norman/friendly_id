@@ -76,17 +76,7 @@ with Rails 2.2.x, 2.3.x. Support for Rails 3.x is in progress.
 
 After installing the gem, add an entry in environment.rb:
 
-    config.gem "friendly_id"
-
-#### Rails 3.x
-
-*NOTE: Rails 3.x support is in progress and may or may not work at any given time.*
-
-Add an entry in the `Gemfile` for `friendly_id`, and in  `config/environment.rb`, add:
-
-    Bundler.require_env
-
-somewhere before `Application.initialize!`.
+    config.gem "friendly_id", :version => ">= 2.3"
 
 ### As a Plugin
 
@@ -95,7 +85,8 @@ Plugin installation is simple for all supported versions of Rails:
     ./script/plugin install git://github.com/norman/friendly_id.git
 
 However, installing as a gem offers simpler version control than plugin
-installation. Whenever possible, install as a gem instead.
+installation. Whenever possible, install as a gem instead. Plugin support will
+probably be removed in version 3.0.
 
 ### Setup
 
@@ -349,11 +340,6 @@ model using FriendlyId.
 Checking the slugs table all the time has an impact on performance, so as of
 2.2.0, FriendlyId offers slug caching.
 
-This feature can improve the performance of some views by about 25%, and
-reduce memory consumption by about 40% as compared to the same view without
-cached slugs. The biggest improvement will be for "index" type views with many
-links that depend on slugs to generate the URL.
-
 ### Automatic setup
 
 To enable slug caching, simply add a column named "cached_slug" to your model.
@@ -373,19 +359,20 @@ Then, redo the slugs:
 
     rake friendly_id:redo_slugs MODEL=User
 
-This feature exists largely to improve the performance of URL generation, the
-part of Rails where FriendlyId has the biggest performance impact. FriendlyId
-never queries against this column, so it's not necessary to add an index on it
-unless your application does.
+FriendlyId will also query against the cache column if it's available, which
+can significantly improve the performance of many queries, particularly when
+passing an array of friendly ids to #find.
 
-Two warnings when using this feature:
+A few warnings when using this feature:
 
-*DO NOT* forget to redo the slugs, or else this feature will not work!
-
-Also, this feature uses `attr_protected` to protect the `cached_slug` column,
-unless you have already invoked `attr_accessible`. So if you wish to use
-`attr_accessible`, you must invoke it BEFORE you invoke `has_friendly_id` in
-your class.
+* *DO NOT* forget to redo the slugs, or else this feature will not work!
+* This feature uses `attr_protected` to protect the `cached_slug` column,
+  unless you have already invoked `attr_accessible`. If you wish to use
+  `attr_accessible`, you must invoke it BEFORE you invoke `has_friendly_id` in
+  your class.
+* FriendlyId can not query against the slug cache when you pass a :scope
+  argument to #find. Try to avoid passing an array of friendly id's and a
+  scope to #find, as this will result in weak performance.
 
 ### Using a custom column name
 
@@ -490,3 +477,33 @@ changes in the master branch, and major changes in the edge branch.
 Before removing any public or protected methods, FriendlyId will deprecate
 them through one major release cycle. Private methods may, however, change at
 any time.
+
+## Some Benchmarks
+
+These benchmarks can give you an idea of FriendlyId's impact on the
+performance of your application. Of course your results may vary.
+
+Note that much of the performance difference can be attributed to finding an
+SQL record by a text column. Finding a single record by numeric primary key is
+always the fastest operation, and thus the best choice when possible. If you
+decide not to use FriendlyId for performance reasons, keep in mind that your
+own solution is unlikely to be any faster than FriendlyId with cached slugs
+enabled. But if it is, then your patches would be very welcome!
+
+    ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
+    friendly_id (2.3.0.rc1)
+    sqlite3 3.6.19 in-memory database
+    ------------------------------------------------------------------------------------------------
+    find model using id                                                 x10000 |   2.948 |       0 |
+    find model using array of ids                                       x10000 |   6.020 |       0 |
+    find unslugged model using friendly id                              x10000 |   4.474 |     52% |
+    find unslugged model using array of friendly ids                    x10000 |   6.498 |      7% |
+    find slugged model using friendly id                                x10000 |   7.536 |    155% |
+    find slugged model using array of friendly ids                      x10000 |  18.020 |    200% |
+    find cached slugged model using friendly id                         x10000 |   4.791 |     63% |
+    find cached slugged model using array of friendly ids               x10000 |   7.275 |     21% |
+    find model using id, then to_param                                  x10000 |   2.974 |       0 |
+    find unslugged model using friendly id, then to_param               x10000 |   4.608 |     55% |
+    find slugged model using friendly id, then to_param                 x10000 |  12.589 |    323% |
+    find cached slugged model using friendly id, then to_param          x10000 |   5.037 |     69% |
+    ------------------------------------------------------------------------------------------------

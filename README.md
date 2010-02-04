@@ -23,17 +23,24 @@ please see the {file:GUIDE.md FriendlyId Guide}.
 
     gem install friendly_id
 
+    rails my_app
+
     cd my_app
 
+    # add to config/environment.rb
+    config.gem "friendly_id", :version => ">= 2.3.0"
+
     ./script/generate friendly_id
+    ./script/generate scaffold user name:string cached_slug:string
 
     rake db:migrate
 
+    # edit app/models/user.rb
     class User < ActiveRecord::Base
-      has_friendly_id :user_name, :use_slug => true
+      has_friendly_id :name, :use_slug => true
     end
 
-    rake friendly_id:make_slugs
+    User.create! :name => "Joe Schmoe"
 
     ./script/server
 
@@ -56,7 +63,8 @@ If you have a bug to report, please include the following information:
 
 * Stack trace and error message.
 * Version information for FriendlyId, Rails and Ruby.
-* Any snippets of relevant model, view or controller code that shows how your are using FriendlyId.
+* Any snippets of relevant model, view or controller code that shows how your
+  are using FriendlyId.
 
 If you are able to, it helps even more if you can fork FriendlyId on Github,
 and add a test that reproduces the error you are experiencing.
