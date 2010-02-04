@@ -13,57 +13,57 @@ class TasksTest < Test::Unit::TestCase
     City.create! :name => "Buenos Aires"
     Slug.delete_all
     ENV["MODEL"] = "City"
-    FriendlyId::ActiveRecord2::TaskRunner.new.make_slugs
+    FriendlyId::TaskRunner.new.make_slugs
     assert_equal 2, Slug.count
   end
 
   test "should admit lower case, plural model names" do
     ENV["MODEL"] = "cities"
-    assert_equal City, FriendlyId::ActiveRecord2::TaskRunner.new.klass
+    assert_equal City, FriendlyId::TaskRunner.new.klass
   end
 
   test "make_slugs should raise error if no model given" do
-    assert_raise(RuntimeError) { FriendlyId::ActiveRecord2::TaskRunner.new.make_slugs }
+    assert_raise(RuntimeError) { FriendlyId::TaskRunner.new.make_slugs }
   end
 
   test "make_slugs should raise error if class doesn't use FriendlyId" do
     ENV["MODEL"] = "String"
-    assert_raise(RuntimeError) { FriendlyId::ActiveRecord2::TaskRunner.new.make_slugs }
+    assert_raise(RuntimeError) { FriendlyId::TaskRunner.new.make_slugs }
   end
 
   test"delete_slugs delete only slugs for the specified model" do
     Post.create! :name => "Slugs Considered Harmful"
     City.create! :name => "Buenos Aires"
     ENV["MODEL"] = "city"
-    FriendlyId::ActiveRecord2::TaskRunner.new.delete_slugs
+    FriendlyId::TaskRunner.new.delete_slugs
     assert_equal 1, Slug.count
   end
 
   test "delete_slugs should set the cached_slug column to NULL" do
     ENV["MODEL"] = "district"
     District.create! :name => "Garment"
-    FriendlyId::ActiveRecord2::TaskRunner.new.delete_slugs
+    FriendlyId::TaskRunner.new.delete_slugs
     assert_nil District.first.cached_slug
   end
 
 
   test "delete_old_slugs should delete slugs older than 45 days by default" do
     set_up_old_slugs
-    FriendlyId::ActiveRecord2::TaskRunner.new.delete_old_slugs
+    FriendlyId::TaskRunner.new.delete_old_slugs
     assert_equal 2, Slug.count
   end
 
   test "delete_old_slugs should respect the days argument" do
     set_up_old_slugs
     ENV["DAYS"] = "100"
-    FriendlyId::ActiveRecord2::TaskRunner.new.delete_old_slugs
+    FriendlyId::TaskRunner.new.delete_old_slugs
     assert_equal 3, Slug.count
   end
 
   test "delete_old_slugs should respect the class argument" do
     set_up_old_slugs
     ENV["MODEL"] = "post"
-    FriendlyId::ActiveRecord2::TaskRunner.new.delete_old_slugs
+    FriendlyId::TaskRunner.new.delete_old_slugs
     assert_equal 3, Slug.count
   end
 
