@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby -KU
 require File.dirname(__FILE__) + '/../test/test_helper'
+require File.dirname(__FILE__) + '/../test/active_record2/test_helper'
 require 'ffaker'
 
 TIMES = (ENV['N'] || 100).to_i
