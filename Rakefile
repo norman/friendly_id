@@ -45,6 +45,15 @@ namespace :test do
   end
   Rake::TestTask.new(:friendly_id) { |t| t.pattern = "test/*_test.rb" }
   Rake::TestTask.new(:ar) { |t| t.pattern = "test/active_record2/*_test.rb" }
+  
+  namespace :rails do
+    task :plugin do
+      rm_rf "fid"
+      sh "rails --template extras/template-plugin.rb fid"
+      sh "cd fid; rake test"
+    end
+  end
+
 end
 
 task :pushdocs do

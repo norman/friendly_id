@@ -21,6 +21,6 @@ one:
 
 two:
   name: mystring
-  sequence: 2
+  sequence: 1
   sluggable: two (Post)
 }

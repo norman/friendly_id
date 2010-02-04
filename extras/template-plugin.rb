@@ -1,6 +1,6 @@
 run "rm public/index.html"
 inside 'vendor/plugins' do
-  run "git clone ../../../../ friendly_id"
+  run "git clone ../../../ friendly_id"
 end
 gem "haml"
 gem "will_paginate"
