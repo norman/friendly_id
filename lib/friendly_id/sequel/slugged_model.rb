@@ -28,7 +28,7 @@ module FriendlyId
 
       end
 
-      include FriendlyId::Slugged
+      include FriendlyId::Slugged::Model
 
       def self.included(base)
         base.one_to_many :slugs,

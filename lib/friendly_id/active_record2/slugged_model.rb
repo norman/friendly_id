@@ -229,7 +229,7 @@ module FriendlyId
         end
       end
 
-      include Slugged
+      include FriendlyId::Slugged::Model
       include DeprecatedMethods
 
       def find_slug(name)
