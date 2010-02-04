@@ -63,7 +63,7 @@ module FriendlyId
         end
 
       end
-      
+
       # The methods in this module override ActiveRecord's +find_one+ and
       # +find_some+ to add FriendlyId's features.
       module FinderMethods
@@ -140,7 +140,7 @@ module FriendlyId
         changes[friendly_id_config.column.to_s]
       end
 
-      # Update the slugs for any model that is using this model as its 
+      # Update the slugs for any model that is using this model as its
       # FriendlyId scope.
       def update_scopes
         if changes = friendly_id_changes

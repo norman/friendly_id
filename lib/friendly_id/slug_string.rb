@@ -69,7 +69,7 @@ module FriendlyId
       #
       #  > ruby -rrubygems -rlib/friendly_id -e 'p FriendlyId::SlugString.dump_approximations'
       #
-      # {:common => 
+      # {:common =>
       # {"À"=>"A", "Á"=>"A", "Â"=>"A", "Ã"=>"A", "Ä"=>"A", "Å"=>"A", "Æ"=>"AE",
       # "Ç"=>"C", "È"=>"E", "É"=>"E", "Ê"=>"E", "Ë"=>"E", "Ì"=>"I", "Í"=>"I",
       # "Î"=>"I", "Ï"=>"I", "Ð"=>"D", "Ñ"=>"N", "Ò"=>"O", "Ó"=>"O", "Ô"=>"O",

@@ -18,7 +18,7 @@ module FriendlyId
         method, options.merge(:normalizer => block))
       if friendly_id_config.use_slug?
         include SluggedModel
-      else 
+      else
         include SimpleModel
       end
     end
