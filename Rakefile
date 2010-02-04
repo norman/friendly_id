@@ -32,7 +32,10 @@ rescue LoadError
 end
 
 
-Rake::TestTask.new(:test) { |t| t.pattern = "test/**/*_test.rb" }
+task :test do
+  Rake::Task["test:friendly_id"].invoke
+  Rake::Task["test:ar"].invoke
+end
 
 namespace :test do
   task :rails do
