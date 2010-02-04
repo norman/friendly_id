@@ -1,4 +1,3 @@
-require "forwardable"
 require File.join(File.dirname(__FILE__), "active_record2", "configuration")
 require File.join(File.dirname(__FILE__), "active_record2", "finders")
 require File.join(File.dirname(__FILE__), "active_record2", "simple_model")
