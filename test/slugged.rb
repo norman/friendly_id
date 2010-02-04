@@ -4,6 +4,7 @@ module FriendlyId
 
   module Test
 
+    # Tests for any model that implements slugs.
     module Slugged
 
       test "should have a slug" do

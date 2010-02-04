@@ -3,7 +3,9 @@ require File.dirname(__FILE__) + "/test_helper"
 module FriendlyId
 
   module Test
-
+    
+    # Tests for any model that implements FriendlyId. Any test that tests model
+    # features should include this module.
     module Generic
 
       def setup

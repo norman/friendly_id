@@ -1,6 +1,7 @@
 require "rubygems"
 require "sequel/extensions/migration"
 require "logger"
+
 require File.dirname(__FILE__) + "/../test_helper"
 require File.dirname(__FILE__) + "/../../lib/friendly_id/sequel"
 require File.dirname(__FILE__) + "/../../lib/friendly_id/sequel/create_slugs"

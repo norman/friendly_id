@@ -9,7 +9,7 @@ module FriendlyId
       # not be determined.
       # The return value will be:
       # * +true+ - if the id is definitely friendly (i.e., any string with non-numeric characters)
-      # * +false+ - if the id is definitely unfriendly (i.e., an Integer, ActiveRecord::Base, etc.)
+      # * +false+ - if the id is definitely unfriendly (i.e., an Integer, a model instance, etc.)
       # * +nil+ - if it can not be determined (i.e., a numeric string like "206".)
       # @return [true, false, nil]
       # @see #unfriendly?

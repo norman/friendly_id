@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + "/test_helper"
 module FriendlyId
   module Test
     module Sequel
+      
+      # Core tests for any sequel model using FriendlyId.
       module Core
 
         def teardown

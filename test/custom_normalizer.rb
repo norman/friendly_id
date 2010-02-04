@@ -3,6 +3,9 @@ require File.dirname(__FILE__) + "/test_helper"
 module FriendlyId
   module Test
 
+    # Generic tests for models to ensure that they properly implement using the
+    # +normalize_friendly_id+ method to allow developers to hook into the
+    # slug string generation.
     module CustomNormalizer
 
       test "should invoke the custom normalizer" do

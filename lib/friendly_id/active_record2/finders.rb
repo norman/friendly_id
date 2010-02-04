@@ -9,7 +9,7 @@ module FriendlyId
     # FriendlyId-specific methods.
     module Finders
 
-      # FinderProxy is used to choose which {Finder} subclass to instantiate;
+      # FinderProxy is used to choose which finder class to instantiate;
       # depending on the model_class's +friendly_id_config+ and the options
       # passed into the constructor, it will decide whether to use simple or
       # slugged finder, a single or multiple finder, and in the case of slugs,

@@ -1,5 +1,5 @@
 module FriendlyId
-  module Version 
+  module Version
     MAJOR = 2
     MINOR = 3
     TINY = 0
