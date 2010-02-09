@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 2.3.1 (2010-02-09)
+
+* Fixed stack level too deep error on #strip_diacritics.
+
 
 ## 2.3.0 (2010-02-04)
 
@@ -20,10 +24,10 @@ fork, then this upgrade may causes issues.
 **Changes:**
 
 * Sequence separator can now be configured to something other than "--".
-* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!}, 
+* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!},
   allowing custom approximations specific to German or Spanish.
 * FriendlyId now queries against the cached_slug column, which improves performance.
-* {FriendlyId::SlugString} class added, allowing finer-grained control over 
+* {FriendlyId::SlugString} class added, allowing finer-grained control over
   Unicode friendly_id strings.
 * {FriendlyId::Configuration} class added, offering more flexible/hackable
   options.
