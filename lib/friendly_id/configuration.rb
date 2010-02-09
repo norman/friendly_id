@@ -114,7 +114,7 @@ module FriendlyId
     # @deprecated Please use {#approximate_ascii approximate_ascii}.
     def strip_diacritics=(*args)
       warn('strip_diacritics is deprecated and will be removed from 3.0. Please use #approximate_ascii')
-      self.strip_diacritics = *args
+      self.approximate_ascii = *args
     end
 
     %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|
