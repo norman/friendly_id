@@ -17,7 +17,7 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
-please see the {file:GUIDE.md FriendlyId Guide}.
+please see the {http://norman.github.com/friendly_id/file.Guide.html FriendlyId Guide}.
 
 ## Rails Quickstart
 
