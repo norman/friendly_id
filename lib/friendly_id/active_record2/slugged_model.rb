@@ -37,7 +37,7 @@ module FriendlyId
         end
 
         def find_options
-          {:select => "#{table_name}.*", :conditions => find_conditions,
+          {:select => "#{quoted_table_name}.*", :conditions => find_conditions,
             :joins => slugs_included? ? options[:joins] : :slugs}
         end
 
@@ -112,7 +112,7 @@ module FriendlyId
         def find_options
           slug_table = Slug.table_name
           {
-            :select => "#{model_class.table_name}.*",
+            :select => "#{model_class.quoted_table_name}.*",
             :joins => slugs_included? ? options[:joins] : :slugs,
             :conditions => {
               "#{slug_table}.name"     => name,
