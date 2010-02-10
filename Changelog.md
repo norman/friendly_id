@@ -10,6 +10,10 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Fixed stack level too deep error on #strip_diacritics.
 
+## 2.3.1 (NOT RELEASED YET)
+
+* Fixed missing quotes on table names in a few places (Brian Collins).
+
 
 ## 2.3.0 (2010-02-04)
 
