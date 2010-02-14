@@ -139,6 +139,13 @@ module FriendlyId
         assert_equal instance2, klass.send(find_method, instance2.friendly_id)
       end
 
+      test "should remain findable by previous slugs" do
+        old_friendly_id = instance.friendly_id
+        instance.update_attributes :name => "#{old_friendly_id} updated"
+        assert_not_equal old_friendly_id, instance.friendly_id
+        assert_equal instance, klass.find(old_friendly_id)
+      end
+
     end
 
     # Tests for models to ensure that they properly implement using the

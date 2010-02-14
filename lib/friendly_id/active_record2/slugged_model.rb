@@ -135,6 +135,12 @@ module FriendlyId
       # circumstances unless the +:scope+ argument is present.
       class CachedSingleFinder < SimpleModel::SingleFinder
 
+        def find
+          super
+        rescue ActiveRecord::RecordNotFound
+          SingleFinder.new(id, model_class, options).find
+        end
+
         # The column used to store the cached slug.
         def column
           "#{table_name}.#{friendly_id_config.cache_column}"
