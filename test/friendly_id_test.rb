@@ -18,6 +18,14 @@ module FriendlyId
         assert_equal ["test", "2"], "test:2".parse_friendly_id(":")
       end
 
+      test "should parse when default sequence seperator also occurs in friendly_id name" do
+        assert_equal ["test--test", "2"], "test--test--2".parse_friendly_id
+      end
+
+      test "should parse when custom sequence seperator also occurs in friendly_id name" do
+        assert_equal ["test:test", "2"], "test:test:2".parse_friendly_id(":")
+      end
+
     end
   end
 end
