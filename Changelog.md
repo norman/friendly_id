@@ -6,8 +6,9 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 2.3.2 (NOT RELEASED YET)
+## 2.3.2 (2010-02-14)
 
+* Fixed finding by old slug when using cached slugs.
 * Sequence separator parsing now correctly handles occurrences of the sequence
   separator string inside the friendly_id text (Johan Kok).
 * Fixed missing quotes on table names in a few places (Brian Collins).
