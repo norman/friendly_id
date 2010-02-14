@@ -18,12 +18,20 @@ module FriendlyId
         assert_equal ["test", "2"], "test:2".parse_friendly_id(":")
       end
 
-      test "should parse when default sequence seperator also occurs in friendly_id name" do
+      test "should parse when default sequence separator occurs in friendly_id name" do
         assert_equal ["test--test", "2"], "test--test--2".parse_friendly_id
       end
 
-      test "should parse when custom sequence seperator also occurs in friendly_id name" do
+      test "should parse when custom sequence separator occurs in friendly_id name" do
         assert_equal ["test:test", "2"], "test:test:2".parse_friendly_id(":")
+      end
+
+      test "should parse when sequence separator and number occur in friendly_id name" do
+        assert_equal ["test--2--test", "1"], "test--2--test".parse_friendly_id
+      end
+
+      test "should parse when sequence separator, number and sequence occur in friendly_id name" do
+        assert_equal ["test--2--test", "2"], "test--2--test--2".parse_friendly_id
       end
 
     end
