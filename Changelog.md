@@ -6,13 +6,16 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 2.3.2 (NOT RELEASED YET)
+
+* Sequence separator parsing now correctly handles occurrences of the sequence
+  separator string inside the friendly_id text (Johan Kok).
+* Fixed missing quotes on table names in a few places (Brian Collins).
+
+
 ## 2.3.1 (2010-02-09)
 
 * Fixed stack level too deep error on #strip_diacritics.
-
-## 2.3.1 (NOT RELEASED YET)
-
-* Fixed missing quotes on table names in a few places (Brian Collins).
 
 
 ## 2.3.0 (2010-02-04)

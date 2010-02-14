@@ -7,6 +7,7 @@ community, in particular from the following people:
 * Andrew Loe III
 * Ben Woosley
 * Bence Nagy
+* Brian Collins
 * Bruno Michel
 * Chris Nolan
 * David Ramalho
@@ -17,6 +18,7 @@ community, in particular from the following people:
 * Ian Stewart
 * Jesse Crouch
 * Joe Van Dyk
+* Johan Kok
 * Josh Nichols
 * Mikhail Shirkov
 * Nathan Phelps
