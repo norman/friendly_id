@@ -296,7 +296,7 @@ module FriendlyId
       end
 
       def update_scope
-        return unless scope_changed?
+        return unless slug && scope_changed?
         slug.update_attributes :scope => send(friendly_id_config.scope).to_param
       rescue ActiveRecord::StatementInvalid
         slug.update_attributes :sequence => Slug.similar_to(slug).first.sequence.succ

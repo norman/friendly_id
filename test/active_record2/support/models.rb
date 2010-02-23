@@ -65,6 +65,10 @@ class CreateSupportModels < ActiveRecord::Migration
       t.index :name, :unique => true
     end
 
+    create_table :articles do |t|
+      t.string :name
+      t.boolean :published, :default => false
+    end
   end
 
   def self.down

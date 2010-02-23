@@ -51,7 +51,7 @@ module FriendlyId
 
       # The friendly id.
       def friendly_id
-        slug.to_friendly_id
+        slug.to_friendly_id if slug?
       end
 
       # Clean up the string before setting it as the friendly_id. You can override

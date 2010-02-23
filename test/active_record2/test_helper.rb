@@ -105,3 +105,10 @@ end
 class Question < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
+
+class Article < ActiveRecord::Base
+  has_friendly_id :generate_friendly_id, :use_slug => true, :allow_nil => true
+  def generate_friendly_id
+    name if article.published?
+  end
+end
