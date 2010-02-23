@@ -22,12 +22,19 @@ module FriendlyId
   class Configuration
 
     DEFAULTS = {
+      :allow_nil                   => false,
       :ascii_approximation_options => [],
       :max_length                  => 255,
       :reserved_words              => ["index", "new"],
       :reserved_message            => 'can not be "%s"',
       :sequence_separator          => "--"
     }
+
+    # Whether to allow friendly_id and/or slugs to be nil. This is not
+    # generally useful on its own, but may allow you greater flexibility to
+    # customize your application.
+    attr_accessor :allow_nil
+    alias :allow_nil? :allow_nil
 
     # Strip diacritics from Western characters.
     attr_accessor :approximate_ascii
