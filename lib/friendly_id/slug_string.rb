@@ -257,7 +257,7 @@ module FriendlyId
       # Replaces whitespace with dashes ("-").
       # @return String
       def with_dashes!
-        @wrapped_string = @wrapped_string.gsub(/\s+/u, '-')
+        @wrapped_string = @wrapped_string.gsub(/\s+/u, '-').squeeze('-')
       end
 
       %w[approximate_ascii clean downcase word_chars normalize normalize_for to_ascii

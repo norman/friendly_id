@@ -37,6 +37,10 @@ module FriendlyId
           assert_equal "a-b", SlugString.new("a    b").clean.with_dashes
         end
 
+        test "should replace multiple dashes with 1 dash" do
+          assert_equal "male-female", SlugString.new("male - female").with_dashes
+        end
+
         test "should strip trailing space" do
           assert_equal "ab", SlugString.new("ab ").clean
         end
