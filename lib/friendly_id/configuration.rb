@@ -87,7 +87,7 @@ module FriendlyId
 
     def normalizer=(arg)
       return if arg.nil?
-      raise("passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #friendly_id_normalizer.")
+      raise("passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #normalize_friendly_id.")
       @normalizer = arg
     end
 
