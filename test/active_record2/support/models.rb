@@ -65,6 +65,11 @@ class CreateSupportModels < ActiveRecord::Migration
       t.index :name, :unique => true
     end
 
+    create_table :blocks do |t|
+      t.string :name
+      t.string :note
+    end
+
   end
 
   def self.down
