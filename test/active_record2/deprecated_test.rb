@@ -12,7 +12,7 @@ module FriendlyId
         include FriendlyId::Test::ActiveRecord2::Core
 
         def klass
-          Block 
+          Block
         end
 
       end
