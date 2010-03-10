@@ -6,6 +6,12 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 2.3.3 (2010-03-10)
+
+* Fixed sequence regexp to grab all trailing digits. (Nash Kabbara)
+* Block param now warns, not raises. (Kamal Fariz Mahyuddin)
+* Misc doc fixes. (Kamal Fariz Mahyuddin)
+
 ## 2.3.2 (2010-02-14)
 
 * Fixed finding by old slug when using cached slugs.
