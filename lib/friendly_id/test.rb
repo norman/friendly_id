@@ -139,6 +139,12 @@ module FriendlyId
         assert_equal instance2, klass.send(find_method, instance2.friendly_id)
       end
 
+      test "should indicate correct status when found with a sequence" do
+        instance2 = klass.send(create_method, :name => instance.name)
+        instance2 = klass.send(find_method, instance2.friendly_id)
+        assert instance2.friendly_id_status.best?
+      end
+
       test "should remain findable by previous slugs" do
         old_friendly_id = instance.friendly_id
         instance.update_attributes :name => "#{old_friendly_id} updated"

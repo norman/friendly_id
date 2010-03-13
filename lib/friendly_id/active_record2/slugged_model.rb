@@ -101,7 +101,8 @@ module FriendlyId
         def find
           result = with_scope({:find => find_options}) { find_initial options }
           raise ::ActiveRecord::RecordNotFound.new if friendly? and !result
-          result.friendly_id_status.name = name if result
+          # TODO cleanup name/sequence; this is inconsistent
+          result.friendly_id_status.name = id if result
           result
         rescue ::ActiveRecord::RecordNotFound => @error
           friendly_id_config.scope? ? raise_scoped_error : (raise @error)
