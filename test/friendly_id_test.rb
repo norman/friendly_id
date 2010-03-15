@@ -54,6 +54,9 @@ module FriendlyId
         assert_equal ["test--2--test", "12"], "test--2--test--12".parse_friendly_id
       end
 
+      test "should parse with a separator and no sequence" do
+        assert_equal ["test", "1"], "test--".parse_friendly_id
+      end
 
     end
   end
