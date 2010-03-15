@@ -46,8 +46,24 @@ module FriendlyId
           assert status.best?
         end
 
+        [:record, :name, :slug].each do |symbol|
+          test "should have #{symbol} after find using friendly_id" do
+            instance2 = klass.find(instance.friendly_id)
+            assert_not_nil instance2.friendly_id_status.send(symbol)
+          end
+        end
+
+        test "should not be best if no slug is set" do
+          status.slug = nil
+          assert !status.best?
+        end
+
+        def klass
+          Post
+        end
+
         def instance
-          @instance ||= Post.create! :name => "hello world"
+          @instance ||= klass.create! :name => "hello world"
         end
 
         def status
