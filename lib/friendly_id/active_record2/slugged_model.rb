@@ -69,7 +69,7 @@ module FriendlyId
         end
 
         def slug_for(result)
-          slugs.select {|slug| result.id == slug.sluggable_id}.first
+          slugs.detect {|slug| result.id == slug.sluggable_id}
         end
 
         def unfriendly_find_conditions
