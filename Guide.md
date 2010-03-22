@@ -384,6 +384,21 @@ You can also use a different name for the column if you choose, via the
     end
 
 
+## Nil slugs and skipping validations
+
+You can choose to allow nil friendly_ids via the `:allow_nil` config option:
+
+    class User < ActiveRecord::Base
+      has_friendly_id :name, :allow_nil => true
+    end
+
+This works whether the model uses slugs or not.
+
+For slugged models, if the friendly_id text is `nil`, no slug will be created. This can be useful, for example, to only create slugs for published articles and avoid creating many slugs with sequences.
+
+For models that don't use slugs, this will make FriendlyId skip all its validations when the friendly_id text is nil. This can be useful, for example, if you wish to add the friendly_id value as an `:after_save` callback.
+
+
 ## Scoped Slugs
 
 FriendlyId can generate unique slugs within a given scope. For example, assume
