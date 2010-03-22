@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 2.3.5 (NOT RELEASED YET)
+
+* Added allow_nil option (Andre Duffeck and Norman Clarke)
+
 ## 2.3.4 (2010-03-22)
 
 * Made slugged status use the slug sequence. This fixes problems with #best?

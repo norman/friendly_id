@@ -4,6 +4,7 @@ community, in particular from the following people:
 * Adam Cigánek
 * Alexander Gräfe
 * Alistair Holt
+* Andre Duffeck
 * Andrew Loe III
 * Ben Woosley
 * Bence Nagy
