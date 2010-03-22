@@ -273,7 +273,7 @@ module FriendlyId
 
       # Reset the cached friendly_id?
       def new_cache_needed?
-        uses_slug_cache? && send(friendly_id_config.cache_column) != slug.to_friendly_id
+        uses_slug_cache? && slug? && send(friendly_id_config.cache_column) != slug.to_friendly_id
       end
 
       # Reset the cached friendly_id.

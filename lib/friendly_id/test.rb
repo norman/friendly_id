@@ -49,7 +49,7 @@ module FriendlyId
         assert_not_nil klass.friendly_id_config
       end
 
-      test "instances should have a friendly id" do
+      test "instances should have a friendly id by default" do
         assert_not_nil instance.friendly_id
       end
 
@@ -87,10 +87,15 @@ module FriendlyId
         end
       end
 
-      test "creation should raise an error if the friendly_id text is nil" do
+      test "creation should raise an error if the friendly_id text is nil and allow_nil is false" do
         assert_raise(*[validation_exceptions].flatten) do
           klass.send(create_method, :name => nil)
         end
+      end
+
+      test "creation should succeed if the friendly_id text is nil and allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        klass.send(create_method, :name => nil)
       end
 
       test "should allow the same friendly_id across models" do

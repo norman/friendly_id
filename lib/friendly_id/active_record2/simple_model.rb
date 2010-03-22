@@ -108,9 +108,9 @@ module FriendlyId
       def self.included(base)
         base.class_eval do
           column = friendly_id_config.column
-          validate :validate_friendly_id
-          validates_presence_of column
-          validates_length_of column, :maximum => friendly_id_config.max_length
+          validate :validate_friendly_id, :unless => :skip_friendly_id_validation
+          validates_presence_of column, :unless => :skip_friendly_id_validation
+          validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validation
           after_update :update_scopes
           extend FinderMethods
           include DeprecatedMethods
@@ -148,6 +148,10 @@ module FriendlyId
             Slug.update_all "scope = '#{changes[1]}'", ["sluggable_type = ? AND scope = ?", klass.to_s, changes[0]]
           end
         end
+      end
+
+      def skip_friendly_id_validation
+        self.class.friendly_id_config.allow_nil?
       end
 
       def validate_friendly_id

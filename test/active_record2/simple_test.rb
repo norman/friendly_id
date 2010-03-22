@@ -21,6 +21,8 @@ module FriendlyId
 
         class StatusTest < ::Test::Unit::TestCase
 
+          include FriendlyId::Test::Generic
+          include FriendlyId::Test::ActiveRecord2::Core
           include SimpleTest
 
           test "should default to not friendly" do

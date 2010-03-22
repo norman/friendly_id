@@ -92,6 +92,10 @@ module FriendlyId
       yield self if block_given?
     end
 
+    def forbid_nil?
+      !allow_nil?
+    end
+
     def normalizer=(arg)
       return if arg.nil?
       warn("passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #normalize_friendly_id.")
