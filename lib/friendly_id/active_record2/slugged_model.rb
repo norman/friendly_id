@@ -7,6 +7,12 @@ module FriendlyId
         def slugs_included?
           [*(options[:include] or [])].flatten.include?(:slugs)
         end
+
+        def handle_friendly_result
+          raise ::ActiveRecord::RecordNotFound.new unless @result
+          @result.friendly_id_status.friendly_id = id
+        end
+
       end
 
       class MultipleFinder
@@ -80,11 +86,9 @@ module FriendlyId
         include SluggedFinder
 
         def find
-          result = with_scope({:find => find_options}) { find_initial options }
-          raise ::ActiveRecord::RecordNotFound.new if friendly? and !result
-          # TODO cleanup name/sequence; this is inconsistent
-          result.friendly_id_status.name = id if result
-          result
+          @result = with_scope({:find => find_options}) { find_initial options }
+          handle_friendly_result if friendly?
+          @result
         rescue ::ActiveRecord::RecordNotFound => @error
           friendly_id_config.scope? ? raise_scoped_error : (raise @error)
         end
@@ -117,8 +121,12 @@ module FriendlyId
       # circumstances unless the +:scope+ argument is present.
       class CachedSingleFinder < SimpleModel::SingleFinder
 
+        include SluggedFinder
+
         def find
-          super
+          @result = with_scope({:find => find_options}) { find_initial options }
+          handle_friendly_result if friendly?
+          @result
         rescue ActiveRecord::RecordNotFound
           SingleFinder.new(id, model_class, options).find
         end
@@ -220,9 +228,8 @@ module FriendlyId
       include FriendlyId::Slugged::Model
       include DeprecatedMethods
 
-      def find_slug(name)
-        separator = friendly_id_config.sequence_separator
-        slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(separator))
+      def find_slug(name, sequence)
+        slugs.find_by_name_and_sequence(name, sequence)
       end
 
       # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.

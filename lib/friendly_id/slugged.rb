@@ -3,7 +3,7 @@ module FriendlyId
 
     class Status < FriendlyId::Status
 
-      attr_accessor :slug
+      attr_accessor :sequence, :slug
 
       # Did the find operation use the best possible id? True if +id+ is
       # numeric, but the model has no slug, or +id+ is friendly and current
@@ -21,6 +21,10 @@ module FriendlyId
         !! (name or slug)
       end
 
+      def friendly_id=(friendly_id)
+        @name, @sequence = friendly_id.parse_friendly_id(record.friendly_id_config.sequence_separator)
+      end
+
       # Did the find operation use an outdated slug?
       def outdated?
         !current?
@@ -28,7 +32,7 @@ module FriendlyId
 
       # The slug that was used to find the model.
       def slug
-        @slug ||= record.find_slug(name)
+        @slug ||= record.find_slug(name, sequence)
       end
 
     end
