@@ -6,6 +6,13 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 2.3.4 (2010-03-22)
+
+* Made slugged status use the slug sequence. This fixes problems with #best?
+  returning false when finding with a sequenced slug.
+* Doc fixes. (Juan Schiwndt)
+* Misc cleanups.
+
 ## 2.3.3 (2010-03-10)
 
 * Fixed sequence regexp to grab all trailing digits. (Nash Kabbara)

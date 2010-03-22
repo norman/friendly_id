@@ -13,15 +13,21 @@ community, in particular from the following people:
 * David Ramalho
 * Diego Carrion
 * Diego R. V.
-* Florian Aßmann
+* Eric Lindvall
+* Florian Aßmanqn
 * Harry Love
 * Ian Stewart
 * Jesse Crouch
 * Joe Van Dyk
 * Johan Kok
 * Josh Nichols
+* Juan Schwindt
+* Kamal Fariz Mahyuddin
+* Louis T.
 * Mikhail Shirkov
 * Nathan Phelps
+* Nash Kabbara
+* Ramon Soares
 * Rdavila
 * Rob Ingram
 * Sean Abrahams
