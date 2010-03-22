@@ -3,16 +3,12 @@ module FriendlyId
 
     class Status < FriendlyId::Status
 
-      attr_accessor :slug
+      attr_accessor :sequence, :slug
 
-      # The slug that was used to find the model.
-      def slug
-        @slug ||= record.find_slug(name)
-      end
-
-      # Did the find operation use a friendly id?
-      def friendly?
-        !! (name or slug)
+      # Did the find operation use the best possible id? True if +id+ is
+      # numeric, but the model has no slug, or +id+ is friendly and current
+      def best?
+        current? || (numeric? && !record.slug)
       end
 
       # Did the find operation use the current slug?
@@ -20,15 +16,23 @@ module FriendlyId
         !! slug && slug.current?
       end
 
+      # Did the find operation use a friendly id?
+      def friendly?
+        !! (name or slug)
+      end
+
+      def friendly_id=(friendly_id)
+        @name, @sequence = friendly_id.parse_friendly_id(record.friendly_id_config.sequence_separator)
+      end
+
       # Did the find operation use an outdated slug?
       def outdated?
         !current?
       end
 
-      # Did the find operation use the best possible id? True if +id+ is
-      # numeric, but the model has no slug, or +id+ is friendly and current
-      def best?
-        current? || (numeric? && !record.slug)
+      # The slug that was used to find the model.
+      def slug
+        @slug ||= record.find_slug(name, sequence)
       end
 
     end

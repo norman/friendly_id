@@ -7,6 +7,12 @@ module FriendlyId
         def slugs_included?
           [*(options[:include] or [])].flatten.include?(:slugs)
         end
+
+        def handle_friendly_result
+          raise ::ActiveRecord::RecordNotFound.new unless @result
+          @result.friendly_id_status.friendly_id = id
+        end
+
       end
 
       class MultipleFinder
@@ -26,14 +32,10 @@ module FriendlyId
         private
 
         def find_conditions
-          slugs
-          # [unfriendly_find_conditions, friendly_find_conditions].compact.join(" OR ")
-          ids = (unfriendly_ids + sluggable_ids).join(",")
-          "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", ids]
-        end
-
-        def friendly_find_conditions
-          "slugs.id IN (%s)" % slugs.compact.to_s(:db) if slugs?
+          "%s IN (%s)" % [
+            "#{quoted_table_name}.#{primary_key}",
+            (unfriendly_ids + sluggable_ids).join(",")
+          ]
         end
 
         def find_options
@@ -42,38 +44,23 @@ module FriendlyId
         end
 
         def sluggable_ids
-          if !@sluggable_ids
-            @sluggable_ids ||= []
-            slugs
-          end
-          @sluggable_ids
+          @sluggable_ids ||= slugs.map(&:sluggable_id)
         end
 
         def slugs
-          @sluggable_ids ||= []
           @slugs ||= friendly_ids.map do |friendly_id|
             name, sequence = friendly_id.parse_friendly_id(friendly_id_config.sequence_separator)
-            slug = Slug.first :conditions => {
+            Slug.first :conditions => {
               :name           => name,
               :scope          => scope,
               :sequence       => sequence,
               :sluggable_type => base_class.name
             }
-            sluggable_ids << slug.sluggable_id if slug
-            slug
-          end
-        end
-
-        def slugs?
-          !slugs.empty?
+          end.compact
         end
 
         def slug_for(result)
-          slugs.select {|slug| result.id == slug.sluggable_id}.first
-        end
-
-        def unfriendly_find_conditions
-          "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", unfriendly_ids.join(",")] if unfriendly_ids?
+          slugs.detect {|slug| result.id == slug.sluggable_id}
         end
 
         def unfriendly_ids?
@@ -99,10 +86,9 @@ module FriendlyId
         include SluggedFinder
 
         def find
-          result = with_scope({:find => find_options}) { find_initial options }
-          raise ::ActiveRecord::RecordNotFound.new if friendly? and !result
-          result.friendly_id_status.name = name if result
-          result
+          @result = with_scope({:find => find_options}) { find_initial options }
+          handle_friendly_result if friendly?
+          @result
         rescue ::ActiveRecord::RecordNotFound => @error
           friendly_id_config.scope? ? raise_scoped_error : (raise @error)
         end
@@ -135,8 +121,12 @@ module FriendlyId
       # circumstances unless the +:scope+ argument is present.
       class CachedSingleFinder < SimpleModel::SingleFinder
 
+        include SluggedFinder
+
         def find
-          super
+          @result = with_scope({:find => find_options}) { find_initial options }
+          handle_friendly_result if friendly?
+          @result
         rescue ActiveRecord::RecordNotFound
           SingleFinder.new(id, model_class, options).find
         end
@@ -238,9 +228,8 @@ module FriendlyId
       include FriendlyId::Slugged::Model
       include DeprecatedMethods
 
-      def find_slug(name)
-        separator = friendly_id_config.sequence_separator
-        slugs.find_by_name_and_sequence(*name.to_s.parse_friendly_id(separator))
+      def find_slug(name, sequence)
+        slugs.find_by_name_and_sequence(name, sequence)
       end
 
       # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.

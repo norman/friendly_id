@@ -56,6 +56,7 @@ module FriendlyId
     end
 
     def validate_uses_slugs
+      (raise "You need to pass a MODEL=<model name> argument to rake") if klass.blank?
       unless friendly_id_config.use_slug?
         raise "Class '%s' doesn't use slugs" % klass.to_s
       end

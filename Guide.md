@@ -22,7 +22,7 @@ column with no spaces or special characters, and that is seldom or never
 updated. The most common example of this is a user name or login column:
 
     class User < ActiveRecord::Base
-      :validates_format_of :login, :with => /\A[a-z0-9]\z/i
+      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
       has_friendly_id :login
     end
 
@@ -466,6 +466,16 @@ if you introduce a `cached_slug` column or change the `:seqence_separator`.
 Use this task if you wish to delete expired slugs; manually or perhaps via
 cron. If you don't specify the days option, the default is to remove unused
 slugs older than 45 days.
+
+# Misc tips
+
+## MySQL 5.0 or less
+
+Currently, the default FriendlyId migration will not work with MySQL 5.0 or less
+because it creates and index that's too large. The easiest way to work around
+this is to change the generated migration to add limits on some column lengths.
+Please see [this issue](http://github.com/norman/friendly_id/issues#issue/50) in
+the FriendlyId issue tracker for more information.
 
 # Hacking FriendlyId
 

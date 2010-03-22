@@ -69,9 +69,14 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
       t.boolean :published, :default => false
     end
+
+    create_table :blocks do |t|
+      t.string :name
+      t.string :note
+    end
+
   end
 
   def self.down
   end
 end
-

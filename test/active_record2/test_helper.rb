@@ -112,3 +112,10 @@ class Article < ActiveRecord::Base
     name if article.published?
   end
 end
+
+# A model using the deprecated block syntax
+class Block < ActiveRecord::Base
+  has_friendly_id :name, :use_slug => true do |text|
+    FriendlyId::SlugString.new(text).clean.with_dashes
+  end
+end
