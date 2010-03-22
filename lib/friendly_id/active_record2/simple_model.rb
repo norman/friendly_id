@@ -108,9 +108,9 @@ module FriendlyId
       def self.included(base)
         base.class_eval do
           column = friendly_id_config.column
-          validate :validate_friendly_id, :unless => :skip_friendly_id_validation
-          validates_presence_of column, :unless => :skip_friendly_id_validation
-          validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validation
+          validate :validate_friendly_id, :unless => :skip_friendly_id_validations
+          validates_presence_of column, :unless => :skip_friendly_id_validations
+          validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
           extend FinderMethods
           include DeprecatedMethods
@@ -150,8 +150,8 @@ module FriendlyId
         end
       end
 
-      def skip_friendly_id_validation
-        self.class.friendly_id_config.allow_nil?
+      def skip_friendly_id_validations
+        friendly_id.nil? && self.class.friendly_id_config.allow_nil?
       end
 
       def validate_friendly_id
