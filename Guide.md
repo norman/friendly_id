@@ -398,6 +398,9 @@ For slugged models, if the friendly_id text is `nil`, no slug will be created. T
 
 For models that don't use slugs, this will make FriendlyId skip all its validations when the friendly_id text is `nil`. This can be useful, for example, if you wish to add the friendly_id value in an `:after_save` callback.
 
+For non-slugged models, if you simply wish to skip friendly_ids's validations
+for some reason, you can override the `skip_friendly_id_validations` method.
+Note that this method is **not** used by slugged models.
 
 ## Scoped Slugs
 
