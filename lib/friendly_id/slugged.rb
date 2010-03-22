@@ -90,7 +90,7 @@ module FriendlyId
       # new slug?
       def new_slug_needed?
         if friendly_id_config.allow_nil?
-          !slug_text.blank? || slug? && slug_text_changed?
+          (!slug? && !slug_text.blank?) || (slug? && slug_text_changed?)
         else
           !slug? || slug_text_changed?
         end

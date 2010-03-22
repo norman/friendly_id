@@ -157,6 +157,12 @@ module FriendlyId
         assert_equal instance, klass.find(old_friendly_id)
       end
 
+      test "should not create a slug when allow_nil is true and friendy_id text is blank" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        instance = klass.send(create_method, :name => nil)
+        assert_nil instance.slug
+      end
+
     end
 
     # Tests for FriendlyId::Status.
@@ -169,7 +175,7 @@ module FriendlyId
         assert status.numeric?
       end
     end
-    
+
     # Tests for FriendlyId::Status for a model that uses slugs.
     module SluggedStatus
 
