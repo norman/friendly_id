@@ -26,14 +26,10 @@ module FriendlyId
         private
 
         def find_conditions
-          slugs
-          # [unfriendly_find_conditions, friendly_find_conditions].compact.join(" OR ")
-          ids = (unfriendly_ids + sluggable_ids).join(",")
-          "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", ids]
-        end
-
-        def friendly_find_conditions
-          "slugs.id IN (%s)" % slugs.compact.to_s(:db) if slugs?
+          "%s IN (%s)" % [
+            "#{quoted_table_name}.#{primary_key}",
+            (unfriendly_ids + sluggable_ids).join(",")
+          ]
         end
 
         def find_options
@@ -42,38 +38,23 @@ module FriendlyId
         end
 
         def sluggable_ids
-          if !@sluggable_ids
-            @sluggable_ids ||= []
-            slugs
-          end
-          @sluggable_ids
+          @sluggable_ids ||= slugs.map(&:sluggable_id)
         end
 
         def slugs
-          @sluggable_ids ||= []
           @slugs ||= friendly_ids.map do |friendly_id|
             name, sequence = friendly_id.parse_friendly_id(friendly_id_config.sequence_separator)
-            slug = Slug.first :conditions => {
+            Slug.first :conditions => {
               :name           => name,
               :scope          => scope,
               :sequence       => sequence,
               :sluggable_type => base_class.name
             }
-            sluggable_ids << slug.sluggable_id if slug
-            slug
-          end
-        end
-
-        def slugs?
-          !slugs.empty?
+          end.compact
         end
 
         def slug_for(result)
           slugs.detect {|slug| result.id == slug.sluggable_id}
-        end
-
-        def unfriendly_find_conditions
-          "%s IN (%s)" % ["#{quoted_table_name}.#{primary_key}", unfriendly_ids.join(",")] if unfriendly_ids?
         end
 
         def unfriendly_ids?
