@@ -22,7 +22,7 @@ column with no spaces or special characters, and that is seldom or never
 updated. The most common example of this is a user name or login column:
 
     class User < ActiveRecord::Base
-      :validates_format_of :login, :with => /\A[a-z0-9]\z/i
+      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
       has_friendly_id :login
     end
 
