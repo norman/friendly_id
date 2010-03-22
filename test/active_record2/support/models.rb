@@ -5,6 +5,11 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
     end
 
+    create_table :blocks do |t|
+      t.string :name
+      t.string :note
+    end
+
     create_table :books do |t|
       t.string :name
       t.string :type
@@ -63,16 +68,6 @@ class CreateSupportModels < ActiveRecord::Migration
     create_table :users do |t|
       t.string :name
       t.index :name, :unique => true
-    end
-
-    create_table :articles do |t|
-      t.string :name
-      t.boolean :published, :default => false
-    end
-
-    create_table :blocks do |t|
-      t.string :name
-      t.string :note
     end
 
   end
