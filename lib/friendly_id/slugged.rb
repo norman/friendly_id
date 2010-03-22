@@ -17,7 +17,7 @@ module FriendlyId
 
       # Did the find operation use the current slug?
       def current?
-        slug && slug.current?
+        !! slug && slug.current?
       end
 
       # Did the find operation use an outdated slug?
