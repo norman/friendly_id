@@ -1,8 +1,8 @@
 module FriendlyId
   module Version
-    MAJOR = 2
-    MINOR = 3
-    TINY = 5
+    MAJOR = 3
+    MINOR = 0
+    TINY = 0
     STRING = [MAJOR, MINOR, TINY].join('.')
   end
 end
