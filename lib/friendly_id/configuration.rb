@@ -54,12 +54,6 @@ module FriendlyId
     attr_reader :method
     alias :column :method
 
-    # A block or proc through which to filter the friendly_id text.
-    # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please override the +normalize_friendly_id+
-    #   method in your model class rather than passing a block to `has_friendly_id`.
-    attr_accessor :normalizer
-
     # The message shown when a reserved word is used.
     # @see #reserved_words
     attr_accessor :reserved_message
@@ -96,12 +90,6 @@ module FriendlyId
       !allow_nil?
     end
 
-    def normalizer=(arg)
-      return if arg.nil?
-      warn("passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #normalize_friendly_id.")
-      @normalizer = arg
-    end
-
     def reserved_words=(*words)
       @reserved_words = words.flatten.uniq
     end
@@ -114,21 +102,7 @@ module FriendlyId
       [method, reserved_message % word] if reserved? word
     end
 
-    # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please use {#reserved_words reserved_words}.
-    def reserved=(*args)
-      warn('The "reserved" option is deprecated and will be removed from FriendlyId 3.0. Please use "reserved_words".')
-      self.reserved_words = *args
-    end
-
-    # This method will be removed from FriendlyId 3.0.
-    # @deprecated Please use {#approximate_ascii approximate_ascii}.
-    def strip_diacritics=(*args)
-      warn('strip_diacritics is deprecated and will be removed from 3.0. Please use #approximate_ascii')
-      self.approximate_ascii = *args
-    end
-
-    %w[approximate_ascii normalizer scope strip_non_ascii use_slug].each do |method|
+    %w[approximate_ascii scope strip_non_ascii use_slug].each do |method|
       class_eval(<<-EOM)
         def #{method}?
           !! #{method}

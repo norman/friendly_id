@@ -30,11 +30,6 @@ module FriendlyId
     # @param [Hash] options For valid configuration options, see
     #   {FriendlyId::Configuration}.
     #
-    # @param [block] block An optional block through which to filter the
-    #   friendly_id text; see {FriendlyId::Configuration#normalizer}. Note that
-    #   passing a block parameter is now deprecated and will be removed
-    #   from FriendlyId 3.0.
-    #
     # @example
     #
     #   class User < ActiveRecord::Base
@@ -46,7 +41,7 @@ module FriendlyId
     #   end
     #
     # @see FriendlyId::Configuration
-    def has_friendly_id(method, options = {}, &block)
+    def has_friendly_id(method, options = {})
       raise NotImplementedError
     end
 

@@ -198,13 +198,9 @@ module FriendlyId
       # @param config [FriendlyId::Configuration]
       # @return String
       def normalize_for!(config)
-        if config.normalizer?
-          @wrapped_string = config.normalizer.call(to_s)
-        else
-          approximate_ascii! if config.approximate_ascii?
-          to_ascii! if config.strip_non_ascii?
-          normalize!
-        end
+        approximate_ascii! if config.approximate_ascii?
+        to_ascii! if config.strip_non_ascii?
+        normalize!
       end
 
       alias :normalize_utf8 :normalize rescue NoMethodError

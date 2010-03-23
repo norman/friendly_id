@@ -11,10 +11,9 @@ module FriendlyId
 
     include FriendlyId::Base
 
-    def has_friendly_id(method, options = {}, &block)
+    def has_friendly_id(method, options = {})
       class_inheritable_accessor :friendly_id_config
-      write_inheritable_attribute :friendly_id_config, Configuration.new(self,
-        method, options.merge(:normalizer => block))
+      write_inheritable_attribute :friendly_id_config, Configuration.new(self, method, options)
       if friendly_id_config.use_slug?
         include SluggedModel
       else

@@ -162,57 +162,6 @@ module FriendlyId
 
       end
 
-      # These methods will be removed in FriendlyId 3.0.
-      module DeprecatedMethods
-
-        # @deprecated Please use #to_param
-        def best_id
-          warn("best_id is deprecated and will be removed in 3.0. Please use #to_param.")
-          to_param
-        end
-
-        # @deprecated Please use #friendly_id_status.slug.
-        def finder_slug
-          warn("finder_slug is deprecated and will be removed in 3.0. Please use #friendly_id_status.slug.")
-          friendly_id_status.slug
-        end
-
-        # Was the record found using one of its friendly ids?
-        # @deprecated Please use #friendly_id_status.friendly?
-        def found_using_friendly_id?
-          warn("found_using_friendly_id? is deprecated and will be removed in 3.0. Please use #friendly_id_status.friendly?")
-          friendly_id_status.friendly?
-        end
-
-        # Was the record found using its numeric id?
-        # @deprecated Please use #friendly_id_status.numeric?
-        def found_using_numeric_id?
-          warn("found_using_numeric_id is deprecated and will be removed in 3.0. Please use #friendly_id_status.numeric?")
-          friendly_id_status.numeric?
-        end
-
-        # Was the record found using an old friendly id?
-        # @deprecated Please use #friendly_id_status.outdated?
-        def found_using_outdated_friendly_id?
-          warn("found_using_outdated_friendly_id is deprecated and will be removed in 3.0. Please use #friendly_id_status.outdated?")
-          friendly_id_status.outdated?
-        end
-
-        # Was the record found using an old friendly id, or its numeric id?
-        # @deprecated Please use !#friendly_id_status.best?
-        def has_better_id?
-          warn("has_better_id? is deprecated and will be removed in 3.0. Please use !#friendly_id_status.best?")
-          ! friendly_id_status.best?
-        end
-
-        # @deprecated Please use #slug?
-        def has_a_slug?
-          warn("has_a_slug? is deprecated and will be removed in 3.0. Please use #slug?")
-          slug?
-        end
-
-      end
-
       def self.included(base)
         base.class_eval do
           has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
@@ -226,7 +175,6 @@ module FriendlyId
       end
 
       include FriendlyId::Slugged::Model
-      include DeprecatedMethods
 
       def find_slug(name, sequence)
         slugs.find_by_name_and_sequence(name, sequence)

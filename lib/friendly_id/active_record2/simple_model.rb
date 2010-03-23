@@ -79,32 +79,6 @@ module FriendlyId
         end
       end
 
-      # These methods will be removed in FriendlyId 3.0.
-      module DeprecatedMethods
-
-        # Was the record found using one of its friendly ids?
-        # @deprecated Please use #friendly_id_status.friendly?
-        def found_using_friendly_id?
-          warn("found_using_friendly_id? is deprecated and will be removed in 3.0. Please use #friendly_id_status.friendly?")
-          friendly_id_status.friendly?
-        end
-
-        # Was the record found using its numeric id?
-        # @deprecated Please use #friendly_id_status.numeric?
-        def found_using_numeric_id?
-          warn("found_using_numeric_id is deprecated and will be removed in 3.0. Please use #friendly_id_status.numeric?")
-          friendly_id_status.numeric?
-        end
-
-        # Was the record found using an old friendly id, or its numeric id?
-        # @deprecated Please use !#friendly_id_status.best?
-        def has_better_id?
-          warn("has_better_id? is deprecated and will be removed in 3.0. Please use !#friendly_id_status.best?")
-          ! friendly_id_status.best?
-        end
-
-      end
-
       def self.included(base)
         base.class_eval do
           column = friendly_id_config.column
@@ -113,7 +87,6 @@ module FriendlyId
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
           extend FinderMethods
-          include DeprecatedMethods
         end
       end
 
