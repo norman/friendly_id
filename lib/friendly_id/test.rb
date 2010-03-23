@@ -18,7 +18,6 @@ module FriendlyId
 
       def teardown
         klass.send delete_all_method
-        # other_class.delete_all
       end
 
       def instance
@@ -38,6 +37,10 @@ module FriendlyId
       end
 
       def create_method
+        raise NotImplementedError
+      end
+
+      def update_method
         raise NotImplementedError
       end
 
@@ -95,12 +98,24 @@ module FriendlyId
 
       test "creation should succeed if the friendly_id text is nil and allow_nil is true" do
         klass.friendly_id_config.stubs(:allow_nil?).returns(true)
-        klass.send(create_method, :name => nil)
+        assert klass.send(create_method, :name => nil)
       end
 
       test "should allow the same friendly_id across models" do
         other_instance = other_class.send(create_method, :name => instance.name)
         assert_equal other_instance.friendly_id, instance.friendly_id
+      end
+
+    end
+
+    module Simple
+
+      test "should allow friendly_id to be nillable if allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        instance = klass.send(create_method, :name => "hello")
+        assert instance.friendly_id
+        instance.name = nil
+        assert instance.send(save_method)
       end
 
     end
@@ -161,6 +176,16 @@ module FriendlyId
         klass.friendly_id_config.stubs(:allow_nil?).returns(true)
         instance = klass.send(create_method, :name => nil)
         assert_nil instance.slug
+      end
+
+      test "should not allow friendly_id to be nillable even if allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        instance = klass.send(create_method, :name => "hello")
+        assert instance.friendly_id
+        instance.name = nil
+        assert_raise(*[validation_exceptions].flatten) do
+          instance.send(save_method)
+        end
       end
 
     end

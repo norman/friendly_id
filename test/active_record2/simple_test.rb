@@ -22,6 +22,7 @@ module FriendlyId
         class StatusTest < ::Test::Unit::TestCase
 
           include FriendlyId::Test::Generic
+          include FriendlyId::Test::Simple
           include FriendlyId::Test::ActiveRecord2::Core
           include SimpleTest
 
