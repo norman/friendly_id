@@ -77,8 +77,9 @@ module FriendlyId
       def slug_text
         text = normalize_friendly_id(SlugString.new(send(friendly_id_config.method)))
         if friendly_id_config.forbid_nil?
-          SlugString.new(text.to_s).validate_for!(friendly_id_config).to_s
+          text = SlugString.new(text.to_s).validate_for!(friendly_id_config).to_s
         end
+        text
       end
 
       # Has the slug text changed?
