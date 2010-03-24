@@ -231,7 +231,12 @@ module FriendlyId
       # Delete any non-ascii characters.
       # @return String
       def to_ascii!
-        @wrapped_string = normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
+        if '>= 1.9'.respond_to?(:force_encoding)
+          @wrapped_string.encode!("ASCII", :invalid => :replace, :undef => :replace,
+            :replace => "")
+        else
+          @wrapped_string = tidy_bytes.normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
+        end
       end
 
       # Upper-cases the string. Note that this works for Unicode strings,

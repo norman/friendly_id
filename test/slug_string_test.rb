@@ -73,6 +73,10 @@ module FriendlyId
           assert_equal "検-索", SlugString.new("検 索").with_dashes
         end
 
+        test "to_ascii should work with invalid UTF-8 strings" do
+          assert_equal "abc", SlugString.new("\x93abc").to_ascii.to_s
+        end
+
     end
   end
 end
