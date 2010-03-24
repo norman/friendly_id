@@ -162,7 +162,7 @@ module FriendlyId
       # whitespace characters with a single space.
       # @return String
       def clean!
-        @wrapped_string = @wrapped_string.gsub(/\A\-|\-\z/, '').gsub(/\s+/u, ' ').strip
+        @wrapped_string = @wrapped_string.gsub(/\A\-|\-\z/, "").gsub(/\s+/u, " ").strip
       end
 
       # Lowercases the string. Note that this works for Unicode strings,
@@ -231,7 +231,7 @@ module FriendlyId
       # Delete any non-ascii characters.
       # @return String
       def to_ascii!
-        if '>= 1.9'.respond_to?(:force_encoding)
+        if ">= 1.9".respond_to?(:force_encoding)
           @wrapped_string.encode!("ASCII", :invalid => :replace, :undef => :replace,
             :replace => "")
         else
@@ -262,7 +262,7 @@ module FriendlyId
       # Replaces whitespace with dashes ("-").
       # @return String
       def with_dashes!
-        @wrapped_string = @wrapped_string.gsub(/[\s\-]+/u, '-')
+        @wrapped_string = @wrapped_string.gsub(/[\s\-]+/u, "-")
       end
 
       %w[approximate_ascii clean downcase word_chars normalize normalize_for to_ascii
