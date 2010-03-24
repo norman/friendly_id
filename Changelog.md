@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 2.3.5 (NOT RELEASED YET)
 
+* Fixed searching by numeric friendly_id in non-slugged models.
 * Added allow_nil option (Andre Duffeck and Norman Clarke)
 
 ## 2.3.4 (2010-03-22)
