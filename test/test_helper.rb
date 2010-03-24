@@ -1,7 +1,6 @@
 $KCODE = "UTF8" if RUBY_VERSION < "1.9"
 $VERBOSE = false
-
-require "rubygems"
+require File.join(File.dirname(__FILE__), '../.bundle/environment')
 require "test/unit"
 require "mocha"
 require "active_support"
