@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../test_helper"
 
 require "active_record"
 require "active_support"
-require File.dirname(__FILE__) + "/../../lib/friendly_id/active_record2.rb"
+require File.dirname(__FILE__) + "/../../lib/friendly_id/active_record.rb"
 require File.dirname(__FILE__) + "/../../generators/friendly_id/templates/create_slugs"
 require File.dirname(__FILE__) + "/support/models"
 require File.dirname(__FILE__) + '/core'

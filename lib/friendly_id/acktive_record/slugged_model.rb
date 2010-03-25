@@ -1,5 +1,5 @@
 module FriendlyId
-  module ActiveRecord2
+  module AcktiveRecord
     module SluggedModel
 
       module SluggedFinder
@@ -18,7 +18,7 @@ module FriendlyId
       class MultipleFinder
 
         include FriendlyId::Finders::Base
-        include FriendlyId::ActiveRecord2::Finders::Multiple
+        include FriendlyId::AcktiveRecord::Finders::Multiple
         include SluggedFinder
 
         attr_reader :slugs
@@ -146,7 +146,7 @@ module FriendlyId
           after_update :update_scope
           after_update :update_dependent_scopes
           protect_friendly_id_attributes
-          extend FriendlyId::ActiveRecord2::FinderMethods
+          extend FriendlyId::AcktiveRecord::FinderMethods
         end
       end
 
@@ -156,7 +156,7 @@ module FriendlyId
         slugs.find_by_name_and_sequence(name, sequence)
       end
 
-      # The model instance's current {FriendlyId::ActiveRecord2::Slug slug}.
+      # The model instance's current {FriendlyId::AcktiveRecord::Slug slug}.
       def slug
         return @slug if new_record?
         @slug ||= slugs.first(:order => "id DESC")

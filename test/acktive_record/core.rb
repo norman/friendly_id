@@ -4,7 +4,7 @@ module FriendlyId
 
   module Test
 
-    module ActiveRecord2
+    module AcktiveRecord
 
       module Core
 

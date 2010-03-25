@@ -2,7 +2,7 @@ module FriendlyId
 
   # The adapter for Ruby on Rails's ActiveRecord. Compatible with AR 2.2.x -
   # 2.3.x.
-  module ActiveRecord2
+  module AcktiveRecord
 
     # The classes in this module are used internally by FriendlyId, and exist
     # largely to avoid polluting the ActiveRecord models with too many

@@ -7,8 +7,8 @@ module FriendlyId
 
       include FriendlyId::Test::Generic
       include FriendlyId::Test::Slugged
-      include FriendlyId::Test::ActiveRecord2::Slugged
-      include FriendlyId::Test::ActiveRecord2::Core
+      include FriendlyId::Test::AcktiveRecord::Slugged
+      include FriendlyId::Test::AcktiveRecord::Core
 
       def setup
         @user = User.create!(:name => "john")

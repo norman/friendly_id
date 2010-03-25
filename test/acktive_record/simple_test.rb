@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
   module Test
-    module ActiveRecord2
+    module AcktiveRecord
       module Simple
 
         module SimpleTest
@@ -23,7 +23,7 @@ module FriendlyId
 
           include FriendlyId::Test::Generic
           include FriendlyId::Test::Simple
-          include FriendlyId::Test::ActiveRecord2::Core
+          include FriendlyId::Test::AcktiveRecord::Core
           include SimpleTest
 
           test "should default to not friendly" do

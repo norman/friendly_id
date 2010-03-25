@@ -1,13 +1,13 @@
-require File.join(File.dirname(__FILE__), "active_record2", "configuration")
-require File.join(File.dirname(__FILE__), "active_record2", "finders")
-require File.join(File.dirname(__FILE__), "active_record2", "simple_model")
-require File.join(File.dirname(__FILE__), "active_record2", "slugged_model")
-require File.join(File.dirname(__FILE__), "active_record2", "slug")
-require File.join(File.dirname(__FILE__), "active_record2", "tasks")
+require File.join(File.dirname(__FILE__), "acktive_record", "configuration")
+require File.join(File.dirname(__FILE__), "acktive_record", "finders")
+require File.join(File.dirname(__FILE__), "acktive_record", "simple_model")
+require File.join(File.dirname(__FILE__), "acktive_record", "slugged_model")
+require File.join(File.dirname(__FILE__), "acktive_record", "slug")
+require File.join(File.dirname(__FILE__), "acktive_record", "tasks")
 
 module FriendlyId
 
-  module ActiveRecord2
+  module AcktiveRecord
 
     include FriendlyId::Base
 
@@ -42,5 +42,5 @@ module FriendlyId
 end
 
 class ActiveRecord::Base
-  extend FriendlyId::ActiveRecord2
+  extend FriendlyId::AcktiveRecord
 end

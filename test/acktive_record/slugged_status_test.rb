@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
   module Test
-    module ActiveRecord2
+    module AcktiveRecord
 
       class StatusTest < ::Test::Unit::TestCase
 
