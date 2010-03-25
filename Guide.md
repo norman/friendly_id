@@ -506,6 +506,15 @@ Before removing any public or protected methods, FriendlyId will deprecate
 them through one major release cycle. Private methods may, however, change at
 any time.
 
+## Running the Tests
+
+FriendlyId uses [Bundler](http://github.com/carlhuda/bundler) to manage its gem
+dependencies. To run the tests, first make sure you have bundler installed.
+Then, copy Gemfile.default to Gemfile. If you wish to test against different gem
+versions than the ones specifed in the Gemfile (for example, to test with
+Postgres or MySQL rather than SQLite3, or to test against different versions of
+ActiveRecord), then simply modify the Gemfile to suit your dependencies.
+
 ## Some Benchmarks
 
 These benchmarks can give you an idea of FriendlyId's impact on the

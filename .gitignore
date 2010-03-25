@@ -7,3 +7,5 @@ pkg
 coverage
 *.swp
 test/support/database.yml
+Gemfile
+Gemfile.lock

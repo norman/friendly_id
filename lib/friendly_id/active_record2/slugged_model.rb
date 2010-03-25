@@ -138,30 +138,6 @@ module FriendlyId
 
       end
 
-      # The methods in this module override ActiveRecord's +find_one+ and
-      # +find_some+ to add FriendlyId's features.
-      module FinderMethods
-
-        protected
-
-        def find_one(id_or_name, options)
-          finder = Finders::FinderProxy.new(id_or_name, self, options)
-          finder.unfriendly? ? super : finder.find or super
-        end
-
-        def find_some(ids_and_names, options)
-          Finders::FinderProxy.new(ids_and_names, self, options).find
-        end
-
-        # Since Rails goes out of its way to make these options completely
-        # inaccessible, we have to copy them here.
-        def validate_find_options(options)
-          options.assert_valid_keys([:conditions, :include, :joins, :limit, :offset,
-            :order, :select, :readonly, :group, :from, :lock, :having, :scope])
-        end
-
-      end
-
       def self.included(base)
         base.class_eval do
           has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
@@ -170,7 +146,7 @@ module FriendlyId
           after_update :update_scope
           after_update :update_dependent_scopes
           protect_friendly_id_attributes
-          extend FinderMethods
+          extend FriendlyId::ActiveRecord2::FinderMethods
         end
       end
 

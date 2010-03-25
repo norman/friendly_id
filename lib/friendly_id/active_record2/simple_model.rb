@@ -64,21 +64,6 @@ module FriendlyId
 
       end
 
-      # The methods in this module override ActiveRecord's +find_one+ and
-      # +find_some+ to add FriendlyId's features.
-      module FinderMethods
-        protected
-
-        def find_one(id, options)
-          finder = Finders::FinderProxy.new(id, self, options)
-          !finder.friendly? ? super : finder.find
-        end
-
-        def find_some(ids_and_names, options)
-          Finders::FinderProxy.new(ids_and_names, self, options).find
-        end
-      end
-
       def self.included(base)
         base.class_eval do
           column = friendly_id_config.column
@@ -86,7 +71,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          extend FinderMethods
+          extend FriendlyId::ActiveRecord2::FinderMethods
         end
       end
 
