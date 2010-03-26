@@ -10,10 +10,14 @@ class FriendlyIdGenerator < Rails::Generators::Base
 
   class_option :"skip-migration", :type => :boolean, :desc => "Don't generate a migration for the slugs table"
   class_option :"skip-tasks", :type => :boolean, :desc => "Don't add friendly_id Rake tasks to lib/tasks"
+  class_option :"skip-initializer", :type => :boolean, :desc => "Don't add friendly_id initializer to config/initializers"
 
   def copy_files(*args)
     migration_template MIGRATIONS_FILE, "db/migrate/create_slugs.rb" unless options["skip-migration"]
     rakefile "friendly_id.rake", File.read(RAKE_FILE) unless options["skip-tasks"]
+    initializer "friendly_id.rb" do
+      'require "friendly_id/active_record"'
+    end unless options["skip-initializer"]
   end
 
   # Taken from ActiveRecord's migration generator
