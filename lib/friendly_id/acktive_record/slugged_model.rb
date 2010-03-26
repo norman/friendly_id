@@ -124,7 +124,7 @@ module FriendlyId
         include SluggedFinder
 
         def find
-          @result = with_scope({:find => find_options}) { find_initial options }
+          @result = model_class.scoped(find_options).first(options)
           handle_friendly_result if friendly?
           @result
         rescue ActiveRecord::RecordNotFound

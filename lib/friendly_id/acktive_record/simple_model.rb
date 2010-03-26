@@ -63,17 +63,6 @@ module FriendlyId
         end
 
       end
-      
-      module FinderMethods
-        def find(*args, &block)
-          finder = Finders::FinderProxy.new(self, *args, &block)
-          if finder.multiple?
-            finder.find
-          else
-            finder.unfriendly? ? super : finder.find or super
-          end
-        end
-      end
 
       def self.included(base)
         base.class_eval do
@@ -82,7 +71,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          extend FinderMethods
+          extend FriendlyId::AcktiveRecord::FinderMethods
         end
       end
 
