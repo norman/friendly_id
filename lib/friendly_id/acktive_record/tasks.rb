@@ -47,7 +47,7 @@ module FriendlyId
     end
 
     def delete_old_slugs
-      conditions = ["created_at < ?", DateTime.now - days.days]
+      conditions = ["created_at < ?", DateTime.now - days]
       if klass
         conditions[0] << " AND sluggable_type = ?"
         conditions << klass.to_s
