@@ -1,2 +1,2 @@
 require "friendly_id"
-require "friendly_id/acktive_record"
+require "friendly_id/active_record"
