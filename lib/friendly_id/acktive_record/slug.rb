@@ -5,7 +5,7 @@ class Slug < ::ActiveRecord::Base
   belongs_to :sluggable, :polymorphic => true
   before_save :enable_name_reversion, :set_sequence
   validate :validate_name
-  named_scope :similar_to, lambda {|slug| {:conditions => {
+  send FriendlyId::AcktiveRecord::Compat.scope_method, :similar_to, lambda {|slug| {:conditions => {
         :name           => slug.name,
         :scope          => slug.scope,
         :sluggable_type => slug.sluggable_type

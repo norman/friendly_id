@@ -1,13 +1,12 @@
-require File.join(File.dirname(__FILE__), "acktive_record", "configuration")
-require File.join(File.dirname(__FILE__), "acktive_record", "finders")
-require File.join(File.dirname(__FILE__), "acktive_record", "simple_model")
-require File.join(File.dirname(__FILE__), "acktive_record", "slugged_model")
-require File.join(File.dirname(__FILE__), "acktive_record", "slug")
-require File.join(File.dirname(__FILE__), "acktive_record", "tasks")
-
 module FriendlyId
 
   module AcktiveRecord
+
+    module Compat
+      def self.scope_method
+        ActiveRecord::VERSION::STRING >= "3" ? :scope : :named_scope
+      end
+    end
 
     include FriendlyId::Base
 
@@ -44,3 +43,10 @@ end
 class ActiveRecord::Base
   extend FriendlyId::AcktiveRecord
 end
+
+require File.join(File.dirname(__FILE__), "acktive_record", "configuration")
+require File.join(File.dirname(__FILE__), "acktive_record", "finders")
+require File.join(File.dirname(__FILE__), "acktive_record", "simple_model")
+require File.join(File.dirname(__FILE__), "acktive_record", "slugged_model")
+require File.join(File.dirname(__FILE__), "acktive_record", "slug")
+require File.join(File.dirname(__FILE__), "acktive_record", "tasks")
