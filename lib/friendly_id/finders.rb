@@ -14,7 +14,7 @@ module FriendlyId
       # @return [true, false, nil]
       # @see #unfriendly?
       def self.friendly?(id)
-        if id.is_a?(Integer) or id.class.respond_to? :friendly_id_config
+        if id.is_a?(Integer) or id.is_a?(Symbol) or id.class.respond_to? :friendly_id_config
           return false
         elsif id.to_i.to_s != id.to_s
           return true

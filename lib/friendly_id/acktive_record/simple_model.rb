@@ -25,7 +25,7 @@ module FriendlyId
         include SimpleFinder
 
         def find
-          @results = with_scope(:find => options) { find_every :conditions => conditions }
+          @results = model_class.scoped(:conditions => conditions).scoped(options).all(options)
           raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
           friendly_results.each { |result| result.friendly_id_status.name = result.to_param }
           @results
@@ -50,7 +50,7 @@ module FriendlyId
         include SimpleFinder
 
         def find
-          result = with_scope(:find => find_options) { find_initial options }
+          result = model_class.scoped(find_options).first(options)
           raise ::ActiveRecord::RecordNotFound.new if friendly? && !result
           result.friendly_id_status.name = id if result
           result
@@ -63,6 +63,17 @@ module FriendlyId
         end
 
       end
+      
+      module FinderMethods
+        def find(*args, &block)
+          finder = Finders::FinderProxy.new(self, *args, &block)
+          if finder.multiple?
+            finder.find
+          else
+            finder.unfriendly? ? super : finder.find or super
+          end
+        end
+      end
 
       def self.included(base)
         base.class_eval do
@@ -71,7 +82,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          extend FriendlyId::AcktiveRecord::FinderMethods
+          extend FinderMethods
         end
       end
 

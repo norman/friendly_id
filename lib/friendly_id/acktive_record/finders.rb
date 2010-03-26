@@ -22,10 +22,10 @@ module FriendlyId
         attr :model_class
         attr :options
 
-        def initialize(ids, model_class, options={})
-          @ids = ids
+        def initialize(model_class, *args, &block)
           @model_class = model_class
-          @options = options
+          @ids = args.shift
+          @options = args.first.kind_of?(Hash) ? args.first : {}
         end
 
         def method_missing(symbol, *args)
@@ -37,20 +37,18 @@ module FriendlyId
           @finder ||= finder_class.new(ids, model_class, options)
         end
 
-        private
-
         def finder_class
           @finder_class ||= slugged? ? slugged_finder_class : simple_finder_class
+        end
+
+        def multiple?
+          ids.kind_of? Array
         end
 
         private
 
         def cache_available?
           !! model_class.friendly_id_config.cache_column
-        end
-
-        def multiple?
-          ids.kind_of? Array
         end
 
         def multiple_slugged_finder_class

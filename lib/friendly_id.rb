@@ -1,8 +1,11 @@
+require "active_support/core_ext/class/attribute_accessors"
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
 require File.join(File.dirname(__FILE__), "friendly_id", "status")
 require File.join(File.dirname(__FILE__), "friendly_id", "finders")
 require File.join(File.dirname(__FILE__), "friendly_id", "slugged")
+
+
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
