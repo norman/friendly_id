@@ -14,6 +14,9 @@ spec = Gem::Specification.new do |s|
     human-friendly strings as if they were numeric ids for ActiveRecord models.
   EOM
 
+  s.platform                  = Gem::Platform::RUBY
+  s.required_rubygems_version = ">= 1.3.6"
+
   s.has_rdoc         = true
   s.test_files       = Dir.glob "test/**/*_test.rb"
   s.files            = Dir["lib/**/*.rb", "lib/**/*.rake", "*.md", "LICENSE",
