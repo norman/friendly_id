@@ -109,7 +109,7 @@ module FriendlyId
         end
 
         def raise_scoped_error
-          scope_message = options[:scope] || "expected, but none given"
+          scope_message = scope || "expected, but none given"
           message = "%s, scope: %s" % [@error.message, scope_message]
           raise ::ActiveRecord::RecordNotFound, message
         end

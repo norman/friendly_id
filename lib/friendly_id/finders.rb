@@ -35,7 +35,7 @@ module FriendlyId
         self.ids = ids
         self.options = options
         self.model_class = model_class
-        self.scope = options[:scope]
+        self.scope = options.delete :scope
       end
 
       def method_missing(*args, &block)
@@ -67,7 +67,9 @@ module FriendlyId
       alias :id= :ids=
 
       def scope=(scope)
-        @scope = scope.to_param unless scope.nil?
+        unless scope.nil?
+          @scope = scope.respond_to?(:to_param) ? scope.to_param : scope.to_s
+        end
       end
     end
 
