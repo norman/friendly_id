@@ -19,6 +19,8 @@ versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
 please see the {http://norman.github.com/friendly_id/file.Guide.html FriendlyId Guide}.
 
+FriendlyId is compatible with Rails 2.2.x - 3.0.
+
 ## Rails Quickstart
 
     gem install friendly_id
@@ -27,11 +29,11 @@ please see the {http://norman.github.com/friendly_id/file.Guide.html FriendlyId 
 
     cd my_app
 
-    # add to config/environment.rb
-    config.gem "friendly_id", :version => ">= 2.3.0"
+    # add to Gemfile
+    gem "friendly_id", "~> 3.0"
 
-    ./script/generate friendly_id
-    ./script/generate scaffold user name:string cached_slug:string
+    rails generate friendly_id
+    rails generate scaffold user name:string cached_slug:string
 
     rake db:migrate
 

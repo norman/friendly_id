@@ -66,7 +66,7 @@ These features are explained in detail {file:Guide.md#features below}.
 ## Installation
 
 FriendlyId can be installed as a gem, or as a Rails plugin. It is compatible
-with Rails 2.2.x, 2.3.x. Support for Rails 3.x is in progress.
+with Rails 2.2.x, 2.3.x. and 3.0.
 
 ### As a Gem
 
@@ -76,7 +76,13 @@ with Rails 2.2.x, 2.3.x. Support for Rails 3.x is in progress.
 
 After installing the gem, add an entry in environment.rb:
 
-    config.gem "friendly_id", :version => ">= 2.3"
+    config.gem "friendly_id", :version => "~> 2.3"
+    
+### Rails 3.0
+
+After installing the gem, add an entry in the Gemfile:
+
+    gem "friendly_id", "~> 3.0"
 
 ### As a Plugin
 
@@ -85,8 +91,8 @@ Plugin installation is simple for all supported versions of Rails:
     ./script/plugin install git://github.com/norman/friendly_id.git
 
 However, installing as a gem offers simpler version control than plugin
-installation. Whenever possible, install as a gem instead. Plugin support will
-probably be removed in version 3.0.
+installation. Whenever possible, install as a gem instead. Plugin support may
+eventually be removed in a future version.
 
 ### Setup
 
@@ -528,6 +534,7 @@ own solution is unlikely to be any faster than FriendlyId with cached slugs
 enabled. But if it is, then your patches would be very welcome!
 
     ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
+    activerecord (2.3.5)
     friendly_id (2.3.0)
     sqlite3 3.6.19 in-memory database
     ------------------------------------------------------------------------------------------------
