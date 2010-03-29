@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/test_helper'
 
 module FriendlyId
   module Test
-    module AcktiveRecord
+    module ActiveRecordAdapter
       module Slugged
 
         test "should allow eager loading of slugs" do

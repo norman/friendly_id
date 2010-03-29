@@ -1,6 +1,6 @@
 module FriendlyId
 
-  module AcktiveRecord
+  module ActiveRecordAdapter
 
     module Compat
       def self.scope_method
@@ -41,12 +41,12 @@ module FriendlyId
 end
 
 class ActiveRecord::Base
-  extend FriendlyId::AcktiveRecord
+  extend FriendlyId::ActiveRecordAdapter
 end
 
-require File.join(File.dirname(__FILE__), "acktive_record", "configuration")
-require File.join(File.dirname(__FILE__), "acktive_record", "finders")
-require File.join(File.dirname(__FILE__), "acktive_record", "simple_model")
-require File.join(File.dirname(__FILE__), "acktive_record", "slugged_model")
-require File.join(File.dirname(__FILE__), "acktive_record", "slug")
-require File.join(File.dirname(__FILE__), "acktive_record", "tasks")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "configuration")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "finders")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "simple_model")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "slugged_model")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "slug")
+require File.join(File.dirname(__FILE__), "active_record_adapter", "tasks")

@@ -80,7 +80,7 @@ end
 # A model that uses default slug settings and has a named scope
 class Post < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
-  send FriendlyId::AcktiveRecord::Compat.scope_method, :published, :conditions => { :published => true }
+  send FriendlyId::ActiveRecordAdapter::Compat.scope_method, :published, :conditions => { :published => true }
 end
 
 # Model that uses a custom table name

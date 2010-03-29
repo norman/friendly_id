@@ -1,5 +1,5 @@
 module FriendlyId
-  module AcktiveRecord
+  module ActiveRecordAdapter
 
     module SimpleModel
 
@@ -21,7 +21,7 @@ module FriendlyId
       class MultipleFinder
 
         include FriendlyId::Finders::Base
-        include FriendlyId::AcktiveRecord::Finders::Multiple
+        include FriendlyId::ActiveRecordAdapter::Finders::Multiple
         include SimpleFinder
 
         def find
@@ -71,7 +71,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          extend FriendlyId::AcktiveRecord::FinderMethods
+          extend FriendlyId::ActiveRecordAdapter::FinderMethods
         end
       end
 
