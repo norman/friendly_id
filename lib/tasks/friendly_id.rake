@@ -12,7 +12,7 @@ namespace :friendly_id do
     Rake::Task["friendly_id:make_slugs"].invoke
   end
 
-  desc "Kill obsolete slugs older than DAYS=45 days."
+  desc "Destroy obsolete slugs older than DAYS=45 days."
   task :remove_old_slugs => :environment do
     FriendlyId::TaskRunner.new.delete_old_slugs
   end

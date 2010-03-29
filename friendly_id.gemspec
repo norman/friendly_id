@@ -26,18 +26,4 @@ spec = Gem::Specification.new do |s|
   s.add_dependency "activerecord", ">= 2.2"
   s.add_dependency "activesupport", ">= 2.2"
 
-  s.post_install_message = <<-EOM
-
-    ***********************************************************
-
-      If you are upgrading friendly_id, please run
-
-          ./script/generate friendly_id --skip-migration
-
-      in your Rails application to ensure that you have the
-      latest friendly_id Rake tasks.
-
-    ***********************************************************
-
-  EOM
 end

@@ -1,5 +1,7 @@
 class FriendlyIdGenerator < Rails::Generator::Base
 
+  RAKE_TASKS = File.join(File.dirname(__FILE__), "..", "..", "lib", "tasks", "friendly_id.rake")
+
   def manifest
     record do |m|
       unless options[:skip_migration]
@@ -7,7 +9,7 @@ class FriendlyIdGenerator < Rails::Generator::Base
       end
       unless options[:skip_tasks]
         m.directory "lib/tasks"
-        m.file "/../../../lib/friendly_id/acktive_record/tasks/friendly_id.rake", "lib/tasks/friendly_id.rake"
+        m.file RAKE_TASKS, "lib/tasks/friendly_id.rake"
       end
     end
   end
