@@ -1,6 +1,9 @@
 module FriendlyId
+
   module ActiveRecordAdapter
 
+    # Extends FriendlyId::Configuration with some implementation details and
+    # features specific to ActiveRecord.
     class Configuration < FriendlyId::Configuration
 
       # The column used to cache the friendly_id string. If no column is specified,
