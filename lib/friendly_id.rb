@@ -1,4 +1,5 @@
 require "active_support/core_ext/class/attribute_accessors"
+require "active_support/core_ext/object/blank"
 
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
