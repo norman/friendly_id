@@ -20,7 +20,6 @@ module FriendlyId
 
       class MultipleFinder
 
-        include FriendlyId::Finders::Base
         include FriendlyId::ActiveRecordAdapter::Finders::Multiple
         include SimpleFinder
 

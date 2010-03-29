@@ -85,6 +85,8 @@ module FriendlyId
       # @abstract
       module Multiple
 
+        include FriendlyId::Finders::Base
+
         attr_reader :friendly_ids, :results, :unfriendly_ids
 
         def initialize(ids, model_class, options={})
