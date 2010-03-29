@@ -4,6 +4,11 @@ module FriendlyId
 
     module Base
 
+      extend Forwardable
+
+      def_delegators :model_class, :base_class, :friendly_id_config,
+        :primary_key, :quoted_table_name, :sanitize_sql, :table_name
+
       # Is the id friendly or numeric? Not that the return value here is
       # +false+ if the +id+ is definitely not friendly, and +nil+ if it can
       # not be determined.
@@ -36,10 +41,6 @@ module FriendlyId
         self.options = options
         self.model_class = model_class
         self.scope = options.delete :scope
-      end
-
-      def method_missing(*args, &block)
-        model_class.send(*args, &block)
       end
 
       # An array of ids; can be both friendly and unfriendly.

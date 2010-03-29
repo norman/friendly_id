@@ -23,7 +23,7 @@ module FriendlyId
         attr_reader :slugs
 
         def find
-          @results = with_scope(:find => find_options) { all options }.uniq
+          @results = model_class.scoped(find_options).all(options).uniq
           raise ::ActiveRecord::RecordNotFound, error_message if @results.size != expected_size
           @results.each {|result| result.friendly_id_status.name = slug_for(result)}
         end

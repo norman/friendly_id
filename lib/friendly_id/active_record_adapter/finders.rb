@@ -16,20 +16,20 @@ module FriendlyId
       # a cached or uncached finder.
       class FinderProxy
 
+        extend Forwardable
+
         attr_reader :finder
         attr :finder_class
         attr :ids
         attr :model_class
         attr :options
 
+        def_delegators :finder, :find, :unfriendly?
+
         def initialize(model_class, *args, &block)
           @model_class = model_class
           @ids = args.shift
           @options = args.first.kind_of?(Hash) ? args.first : {}
-        end
-
-        def method_missing(symbol, *args)
-          finder.send(symbol, *args)
         end
 
         # Perform the find query.

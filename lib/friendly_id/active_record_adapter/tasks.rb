@@ -1,9 +1,13 @@
 module FriendlyId
   class TaskRunner
 
+    extend Forwardable
+
     attr_accessor :days
     attr_accessor :klass
     attr_accessor :task_options
+
+    def_delegators :klass, :find, :friendly_id_config, :update_all
 
     OLD_SLUG_DAYS = 45
 
@@ -12,16 +16,12 @@ module FriendlyId
       self.days  = ENV["DAYS"]
     end
 
-    def method_missing(*args)
-      klass.send(*args)
-    end
-
     def days=(days)
-      @days = days.blank? ? OLD_SLUG_DAYS : days.to_i
+      @days ||= days.blank? ? OLD_SLUG_DAYS : days.to_i
     end
 
     def klass=(klass)
-      @klass = klass.to_s.classify.constantize unless klass.blank?
+      @klass ||= klass.to_s.classify.constantize unless klass.blank?
     end
 
     def make_slugs
