@@ -172,9 +172,10 @@ module FriendlyId
 
       test "should remain findable by previous slugs" do
         old_friendly_id = instance.friendly_id
-        instance.update_attributes :name => "#{old_friendly_id} updated"
+        instance.name = "#{old_friendly_id} updated"
+        instance.send(save_method)
         assert_not_equal old_friendly_id, instance.friendly_id
-        assert_equal instance, klass.find(old_friendly_id)
+        assert_equal instance, klass.send(find_method, old_friendly_id)
       end
 
       test "should not create a slug when allow_nil is true and friendy_id text is blank" do
