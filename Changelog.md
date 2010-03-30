@@ -6,15 +6,12 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.0.0 (NOT RELEASED YET)
+## 3.0.0 (2010-03-30)
 
 * Rails 3 support.
 * Removed features deprecated in FriendlyId 2.3.
-
-## 2.3.5 (NOT RELEASED YET)
-
 * Fixed searching by numeric friendly_id in non-slugged models.
-* Added allow_nil option (Andre Duffeck and Norman Clarke)
+* Added :allow_nil config option (Andre Duffeck and Norman Clarke)
 
 ## 2.3.4 (2010-03-22)
 
