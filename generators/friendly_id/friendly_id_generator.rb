@@ -1,6 +1,6 @@
 class FriendlyIdGenerator < Rails::Generator::Base
 
-  RAKE_TASKS = File.join(File.dirname(__FILE__), "..", "..", "lib", "tasks", "friendly_id.rake")
+  RAKE_TASKS = File.join("..", "..", "..", "lib", "tasks", "friendly_id.rake")
 
   def manifest
     record do |m|

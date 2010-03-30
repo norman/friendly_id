@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.1 (2010-03-30)
+
+* Fixed bad path in Rails 2.x generator.
+
 ## 3.0.0 (2010-03-30)
 
 * Rails 3 support.
