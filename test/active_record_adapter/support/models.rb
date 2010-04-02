@@ -20,8 +20,9 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
       t.string :my_slug
       t.integer :population
-      t.index :my_slug, :unique => true
     end
+    add_index :cities, :my_slug, :unique => true
+
 
     create_table :countries do |t|
       t.string :name
@@ -31,8 +32,8 @@ class CreateSupportModels < ActiveRecord::Migration
       t.string :name
       t.string :note
       t.string :cached_slug
-      t.index :cached_slug, :unique => true
     end
+    add_index :districts, :cached_slug, :unique => true
 
     create_table :events do |t|
       t.string :name
@@ -67,8 +68,8 @@ class CreateSupportModels < ActiveRecord::Migration
 
     create_table :users do |t|
       t.string :name
-      t.index :name, :unique => true
     end
+    add_index :users, :name, :unique => true
 
   end
 
