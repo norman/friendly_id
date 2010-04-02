@@ -9,3 +9,4 @@ coverage
 test/support/database.yml
 Gemfile
 Gemfile.lock
+.bundle
