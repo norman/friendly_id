@@ -49,6 +49,22 @@ module FriendlyId
         return RuntimeError
       end
 
+      def assert_validation_error
+        if validation_exceptions
+          assert_raise(*[validation_exceptions].flatten) do
+            yield
+          end
+        else  # DataMapper does not raise Validation Errors
+          i = yield
+          if i.kind_of?(TrueClass) || i.kind_of?(FalseClass)
+            assert !i
+          else
+            instance = i
+            assert_not_empty instance.errors
+          end
+        end
+      end
+
       test "models should have a friendly id config" do
         assert_not_nil klass.friendly_id_config
       end
@@ -79,25 +95,25 @@ module FriendlyId
       end
 
       test "creation should raise an error if the friendly_id text is reserved" do
-        assert_raise(*[validation_exceptions].flatten) do
+        assert_validation_error do
           klass.send(create_method, :name => "new")
         end
       end
 
       test "creation should raise an error if the friendly_id text is an empty string" do
-        assert_raise(*[validation_exceptions].flatten) do
+        assert_validation_error do
           klass.send(create_method, :name => "")
         end
       end
 
       test "creation should raise an error if the friendly_id text is a blank string" do
-        assert_raise(*[validation_exceptions].flatten) do
+        assert_validation_error do
           klass.send(create_method, :name => "   ")
         end
       end
 
       test "creation should raise an error if the friendly_id text is nil and allow_nil is false" do
-        assert_raise(*[validation_exceptions].flatten) do
+        assert_validation_error do
           klass.send(create_method, :name => nil)
         end
       end
@@ -142,7 +158,12 @@ module FriendlyId
       test "should make a new slug if the friendly_id method value has changed" do
         instance.name = "Changed title"
         instance.send save_method
-        assert_equal 2, instance.slugs(true).size
+        slugs = if instance.slugs.respond_to?(:reload)
+          instance.slugs.reload
+        else
+          instance.slugs(true)
+        end
+        assert_equal 2, slugs.size
       end
 
       test "should be able to reuse an old friendly_id without incrementing the sequence" do
@@ -197,7 +218,7 @@ module FriendlyId
         instance = klass.send(create_method, :name => "hello")
         assert instance.friendly_id
         instance.name = nil
-        assert_raise(*[validation_exceptions].flatten) do
+        assert_validation_error do
           instance.send(save_method)
         end
       end
@@ -300,10 +321,14 @@ module FriendlyId
 
       test "should raise an error if the friendly_id text is reserved" do
         klass.friendly_id_config.stubs(:reserved_words).returns(["JOE"])
-        assert_raise(*[validation_exceptions].flatten) do
-          klass.send(create_method, :name => "Joe")
+        if validation_exceptions
+          assert_raise(*[validation_exceptions].flatten) do
+            klass.send(create_method, :name => "Joe")
+          end
+        else  # DataMapper does not raise Validation Errors
+          instance = klass.send(create_method, :name => "Joe")
+          assert !instance.errors.empty?
         end
-
       end
 
     end
