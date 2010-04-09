@@ -52,8 +52,21 @@ module FriendlyId
         end
 
         class BasicTest < ::Test::Unit::TestCase
-          include Core
+          include FriendlyId::Test::Generic
+          include FriendlyId::Test::Simple
+          include FriendlyId::Test::ActiveRecordAdapter::Core
           include SimpleTest
+
+          test "status should be friendly when found using friendly id" do
+            record = klass.send(find_method, instance.friendly_id)
+            assert record.friendly_id_status.friendly?
+          end
+
+          test "status should not be friendly when found using numeric id" do
+            record = klass.send(find_method, instance.id)
+            assert !record.friendly_id_status.friendly?
+          end
+
         end
 
       end
