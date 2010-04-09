@@ -12,6 +12,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Added backported `tidy_bytes` implementation from [utf8_utils](http://github.com/norman/utf8_utils)
 * Removed dependency on Rubygems 1.3.6; this blocked deploy on Heroku (thanks Steven Noble)
 * Replaced File.dirname calls with File.expand_path, which should allow compatibility with Ruby 1.9.2
+* Cleanups and some improvements to tests.
 
 ## 3.0.1 (2010-03-30)
 
