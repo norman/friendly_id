@@ -1,4 +1,4 @@
-require File.expand_path('../test_helper', __FILE__)
+require File.expand_path('../ar_test_helper', __FILE__)
 require File.expand_path('../../../lib/friendly_id/active_record_adapter/tasks', __FILE__)
 
 class TasksTest < Test::Unit::TestCase

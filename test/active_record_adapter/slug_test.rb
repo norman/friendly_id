@@ -1,5 +1,5 @@
 # encoding: utf-8
-require File.dirname(__FILE__) + '/test_helper'
+require File.expand_path("../ar_test_helper", __FILE__)
 
 module FriendlyId
   module Test
