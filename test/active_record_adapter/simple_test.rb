@@ -21,10 +21,11 @@ module FriendlyId
 
         class StatusTest < ::Test::Unit::TestCase
 
-          include FriendlyId::Test::Generic
-          include FriendlyId::Test::Simple
-          include FriendlyId::Test::ActiveRecordAdapter::Core
           include SimpleTest
+
+          def setup
+            User.delete_all
+          end
 
           test "should default to not friendly" do
             assert !status.friendly?
