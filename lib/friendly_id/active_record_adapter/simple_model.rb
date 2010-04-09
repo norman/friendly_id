@@ -24,7 +24,7 @@ module FriendlyId
         include SimpleFinder
 
         def find
-          @results = model_class.scoped(:conditions => conditions).scoped(options).all(options)
+          @results = model_class.scoped(:conditions => conditions).all(options).uniq
           raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
           friendly_results.each { |result| result.friendly_id_status.name = result.to_param }
           @results

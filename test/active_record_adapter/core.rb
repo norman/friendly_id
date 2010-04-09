@@ -44,26 +44,31 @@ module FriendlyId
 
         test "instances should be findable by an array of friendly_ids" do
           second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
           assert_equal 2, klass.find([instance.friendly_id, second.friendly_id]).size
         end
 
         test "instances should be findable by an array of numeric ids" do
           second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
           assert_equal 2, klass.find([instance.id.to_i, second.id.to_i]).size
         end
 
         test "instances should be findable by an array of numeric ids as strings" do
           second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
           assert_equal 2, klass.find([instance.id.to_s, second.id.to_s]).size
         end
 
         test "instances should be findable by an array of instances" do
           second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
           assert_equal 2, klass.find([instance, second]).size
         end
 
         test "instances should be findable by an array of mixed types" do
           second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
           assert_equal 2, klass.find([instance.friendly_id, second]).size
         end
 
