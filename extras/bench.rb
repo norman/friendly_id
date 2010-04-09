@@ -1,59 +1,36 @@
-#!/usr/bin/env ruby -KU
-require File.dirname(__FILE__) + '/extras'
+require File.expand_path('../extras', __FILE__)
 require 'rbench'
-FACTOR = 100
+FACTOR = 10
+
 RBench.run(TIMES) do
 
   column :times
-  column :ar
+  column :default
+  column :no_slug
+  column :slug
+  column :cached_slug
 
-  report 'find model using id', (TIMES * FACTOR).ceil do
-    ar { User.find(get_id) }
+  report 'find model by id', (TIMES * FACTOR).ceil do
+    default { User.find(get_id) }
+    no_slug { User.find(USERS.rand) }
+    slug { Post.find(POSTS.rand) }
+    cached_slug { District.find(DISTRICTS.rand) }
   end
 
   report 'find model using array of ids', (TIMES * FACTOR).ceil do
-    ar { User.find([get_id, get_id]) }
-  end
-
-  report 'find unslugged model using friendly id', (TIMES * FACTOR).ceil do
-    ar { User.find(USERS.rand) }
-  end
-
-  report 'find unslugged model using array of friendly ids', (TIMES * FACTOR).ceil do
-    ar { User.find([USERS.rand, USERS.rand]) }
-  end
-
-  report 'find slugged model using friendly id', (TIMES * FACTOR).ceil do
-    ar { Post.find(POSTS.rand) }
-  end
-
-  report 'find slugged model using array of friendly ids', (TIMES * FACTOR).ceil do
-    ar { Post.find([POSTS.rand, POSTS.rand]) }
-  end
-
-  report 'find cached slugged model using friendly id', (TIMES * FACTOR).ceil do
-    ar { District.find(DISTRICTS.rand) }
-  end
-
-  report 'find cached slugged model using array of friendly ids', (TIMES * FACTOR).ceil do
-    ar { District.find([DISTRICTS.rand, DISTRICTS.rand]) }
+    default { User.find(get_id(2)) }
+    no_slug { User.find(USERS.rand(2)) }
+    slug { Post.find(POSTS.rand(2)) }
+    cached_slug { District.find(DISTRICTS.rand(2)) }
   end
 
   report 'find model using id, then to_param', (TIMES * FACTOR).ceil do
-    ar { User.find(get_id).to_param }
+    default { User.find(get_id).to_param }
+    no_slug { User.find(USERS.rand).to_param }
+    slug { Post.find(POSTS.rand).to_param }
+    cached_slug { District.find(DISTRICTS.rand).to_param }
   end
-
-  report 'find unslugged model using friendly id, then to_param', (TIMES * FACTOR).ceil do
-    ar { User.find(USERS.rand).to_param }
-  end
-
-  report 'find slugged model using friendly id, then to_param', (TIMES * FACTOR).ceil do
-    ar { Post.find(POSTS.rand).to_param }
-  end
-
-  report 'find cached slugged model using friendly id, then to_param', (TIMES * FACTOR).ceil do
-    ar { District.find(DISTRICTS.rand).to_param }
-   end
 
   summary 'Total'
+
 end

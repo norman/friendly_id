@@ -11,7 +11,7 @@ USERS     = []
 User.delete_all
 Post.delete_all
 District.delete_all
-(Slug or Slug).delete_all
+Slug.delete_all
 
 100.times do
   name = Faker::Name.name
@@ -20,12 +20,19 @@ District.delete_all
   DISTRICTS << (District.create! :name => name).friendly_id
 end
 
-def get_id
-  rand(99) + 1
+def get_id(returns = 1)
+  (1..100).to_a.rand(returns)
 end
 
 class Array
-  def rand
-    self[Kernel.rand(length)]
+  def rand(returns = 1)
+    @return = []
+    returns.times do
+      until @return.length == returns do
+        val = self[Kernel.rand(length)]
+        @return << val unless @return.include? val
+      end
+    end
+    return returns == 1 ? @return.first : @return
   end
 end
