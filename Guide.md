@@ -517,7 +517,7 @@ any time.
 FriendlyId uses [Bundler](http://github.com/carlhuda/bundler) to manage its gem
 dependencies. To run the tests, first make sure you have bundler installed.
 Then, copy Gemfile.default to Gemfile. If you wish to test against different gem
-versions than the ones specifed in the Gemfile (for example, to test with
+versions than the ones specified in the Gemfile (for example, to test with
 Postgres or MySQL rather than SQLite3, or to test against different versions of
 ActiveRecord), then simply modify the Gemfile to suit your dependencies.
 
