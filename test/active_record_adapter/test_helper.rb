@@ -1,16 +1,17 @@
-require File.dirname(__FILE__) + "/../test_helper"
+require File.expand_path('../../test_helper', __FILE__)
 
 require "active_record"
 require "active_support"
 
-require File.dirname(__FILE__) + "/../../lib/friendly_id/active_record.rb"
-require File.dirname(__FILE__) + "/../../generators/friendly_id/templates/create_slugs"
-require File.dirname(__FILE__) + "/support/models"
-require File.dirname(__FILE__) + '/core'
-require File.dirname(__FILE__) + '/slugged'
+require File.expand_path("../../../lib/friendly_id/active_record", __FILE__)
+require File.expand_path("../../../generators/friendly_id/templates/create_slugs", __FILE__)
+require File.expand_path("../support/models", __FILE__)
+require File.expand_path('../core', __FILE__)
+require File.expand_path('../slugged', __FILE__)
 
-local_db_settings = File.dirname(__FILE__) + "/support/database.yml"
-default_db_settings = File.dirname(__FILE__) + "/support/database.sqlite3.yml"
+local_db_settings   = File.expand_path("../support/database.yml", __FILE__)
+default_db_settings = File.expand_path("../support/database.sqlite3.yml", __FILE__)
+
 db_settings = File.exists?(local_db_settings) ? local_db_settings : default_db_settings
 ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings)))
 
