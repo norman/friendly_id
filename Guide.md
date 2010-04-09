@@ -535,19 +535,25 @@ enabled. But if it is, then your patches would be very welcome!
 
     ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
     activerecord (2.3.5)
-    friendly_id (2.3.0)
+    friendly_id (2.3.2)
     sqlite3 3.6.19 in-memory database
+                                                       | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
     ------------------------------------------------------------------------------------------------
-    find model using id                                                 x10000 |   2.948 |       0 |
-    find model using array of ids                                       x10000 |   6.020 |       0 |
-    find unslugged model using friendly id                              x10000 |   4.474 |     52% |
-    find unslugged model using array of friendly ids                    x10000 |   6.498 |      7% |
-    find slugged model using friendly id                                x10000 |   7.536 |    155% |
-    find slugged model using array of friendly ids                      x10000 |  18.020 |    200% |
-    find cached slugged model using friendly id                         x10000 |   4.791 |     63% |
-    find cached slugged model using array of friendly ids               x10000 |   7.275 |     21% |
-    find model using id, then to_param                                  x10000 |   2.974 |       0 |
-    find unslugged model using friendly id, then to_param               x10000 |   4.608 |     55% |
-    find slugged model using friendly id, then to_param                 x10000 |  12.589 |    323% |
-    find cached slugged model using friendly id, then to_param          x10000 |   5.037 |     69% |
+    find model by id                             x1000 |   0.274 |   0.426 |   0.780 |       0.489 |
+    find model using array of ids                x1000 |   0.517 |   0.525 |   1.692 |       0.623 |
+    find model using id, then to_param           x1000 |   0.279 |   0.431 |   1.253 |       0.498 |
+    ================================================================================================
+    Total                                              |   1.071 |   1.382 |   3.725 |       1.610 |
+
+    ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
+    activerecord (3.0.0.beta1)
+    friendly_id (2.3.2)
+    sqlite3 3.6.19 in-memory database
+
+                                                       | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
     ------------------------------------------------------------------------------------------------
+    find model by id                             x1000 |   0.557 |   1.135 |   6.491 |       1.398 |
+    find model using array of ids                x1000 |   0.862 |   0.882 |   6.152 |       1.919 |
+    find model using id, then to_param           x1000 |   0.658 |   2.200 |   8.398 |       1.539 |
+    ================================================================================================
+    Total                                              |   2.077 |   4.217 |  21.041 |       4.856 |
