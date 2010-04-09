@@ -45,7 +45,7 @@ namespace :test do
   end
   Rake::TestTask.new(:friendly_id) { |t| t.pattern = "test/*_test.rb" }
   Rake::TestTask.new(:ar) { |t| t.pattern = "test/active_record_adapter/*_test.rb" }
-  
+
   namespace :rails do
     task :plugin do
       rm_rf "fid"

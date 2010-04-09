@@ -73,8 +73,14 @@ module FriendlyId
           assert_equal "検-索", SlugString.new("検 索").with_dashes
         end
 
-        test "to_ascii should work with invalid UTF-8 strings" do
-          assert_equal "abc", SlugString.new("\x93abc").to_ascii.to_s
+        test "should work with invalid UTF-8 strings" do
+          %w[approximate_ascii clean downcase word_chars normalize to_ascii upcase with_dashes].each do |method|
+            string = SlugString.new("\x93abc")
+            assert_nothing_raised do
+              method == "truncate" ? string.send(method, 32) : string.send(method)
+            end
+          end
+
         end
 
     end
