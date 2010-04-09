@@ -4,8 +4,9 @@ require "rake/gempackagetask"
 require "rake/rdoctask"
 require "rake/clean"
 
-CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
+task :default => :test
 
+CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
 Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
 Rake::RDocTask.new do |r|
   r.rdoc_dir = "doc"
@@ -32,10 +33,7 @@ rescue LoadError
 end
 
 
-task :test do
-  Rake::Task["test:friendly_id"].invoke
-  Rake::Task["test:ar"].invoke
-end
+Rake::TestTask.new(:test) { |t| t.pattern = "test/**/*_test.rb" }
 
 namespace :test do
   task :rails do

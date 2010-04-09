@@ -1,4 +1,4 @@
-require "lib/friendly_id/version"
+require File.expand_path("../lib/friendly_id/version", __FILE__)
 
 spec = Gem::Specification.new do |s|
   s.name              = "friendly_id"
