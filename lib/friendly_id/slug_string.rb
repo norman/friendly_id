@@ -312,12 +312,6 @@ module FriendlyId
         @wrapped_string = bytes.empty? ? "" : bytes.flatten.compact.pack("C*").unpack("U*").pack("U*")
       end
 
-      # Truncate the string to +max+ length.
-      # @return String
-      def truncate!(max)
-        @wrapped_string = self[0...max].to_s if length > max
-      end
-
       # Delete any non-ascii characters.
       # @return String
       def to_ascii!
@@ -327,6 +321,12 @@ module FriendlyId
         else
           @wrapped_string = tidy_bytes.normalize_utf8(:c).unpack("U*").reject {|char| char > 127}.pack("U*")
         end
+      end
+
+      # Truncate the string to +max+ length.
+      # @return String
+      def truncate!(max)
+        @wrapped_string = self[0...max].to_s if length > max
       end
 
       # Upper-cases the string. Note that this works for Unicode strings,
