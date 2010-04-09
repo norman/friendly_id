@@ -6,6 +6,13 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.2 (2010-04-09)
+
+* Fixed finding non-slugged models by an array of ids.
+* Added backported `tidy_bytes` implementation from [utf8_utils](http://github.com/norman/utf8_utils)
+* Removed dependency on Rubygems 1.3.6; this blocked deploy on Heroku (thanks Steven Noble)
+* Replaced File.dirname calls with File.expand_path, which should allow compatibility with Ruby 1.9.2
+
 ## 3.0.1 (2010-03-30)
 
 * Fixed bad path in Rails 2.x generator.
@@ -15,7 +22,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Rails 3 support.
 * Removed features deprecated in FriendlyId 2.3.
 * Fixed searching by numeric friendly_id in non-slugged models.
-* Added :allow_nil config option (Andre Duffeck and Norman Clarke)
+* Added `:allow_nil` config option (Andre Duffeck and Norman Clarke)
 
 ## 2.3.4 (2010-03-22)
 
