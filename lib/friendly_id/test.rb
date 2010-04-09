@@ -198,6 +198,7 @@ module FriendlyId
 
     # Tests for FriendlyId::Status.
     module Status
+
       test "should default to not friendly" do
         assert !status.friendly?
       end
