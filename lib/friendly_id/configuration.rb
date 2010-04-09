@@ -86,10 +86,6 @@ module FriendlyId
       yield self if block_given?
     end
 
-    def forbid_nil?
-      !allow_nil?
-    end
-
     def reserved_words=(*words)
       @reserved_words = words.flatten.uniq
     end

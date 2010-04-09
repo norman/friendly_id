@@ -62,10 +62,6 @@ module FriendlyId
           slugs.detect {|slug| result.id == slug.sluggable_id}
         end
 
-        def unfriendly_ids?
-          ! unfriendly_ids.empty?
-        end
-
       end
 
       # Performs a find a single friendly_id using the cached_slug column,

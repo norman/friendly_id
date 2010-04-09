@@ -33,10 +33,6 @@ module FriendlyId
         @custom_cache_column = cache_column
       end
 
-      def cache_finders?
-        !! cache_column
-      end
-
       def child_scopes
         @child_scopes ||= associated_friendly_classes.select { |klass| klass.friendly_id_config.scopes_over?(configured_class) }
       end

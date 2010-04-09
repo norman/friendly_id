@@ -206,6 +206,7 @@ module FriendlyId
       test "should default to numeric" do
         assert status.numeric?
       end
+
     end
 
     # Tests for FriendlyId::Status for a model that uses slugs.
