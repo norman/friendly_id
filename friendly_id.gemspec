@@ -15,7 +15,6 @@ spec = Gem::Specification.new do |s|
   EOM
 
   s.platform                  = Gem::Platform::RUBY
-  s.required_rubygems_version = ">= 1.3.6"
 
   s.has_rdoc         = true
   s.test_files       = Dir.glob "test/**/*_test.rb"
