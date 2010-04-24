@@ -106,3 +106,14 @@ end
 class Question < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
+
+# A model to test polymorphic associations
+class Site < ActiveRecord::Base
+  belongs_to :owner, :polymorphic => true
+  has_friendly_id :name, :use_slug => true
+end
+
+# A model used as a polymorphic owner
+class Company < ActiveRecord::Base
+  has_many :sites, :as => :owner
+end

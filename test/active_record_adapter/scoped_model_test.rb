@@ -17,6 +17,8 @@ module FriendlyId
         @canada = Country.create!(:name => "Canada")
         @resident = Resident.create!(:name => "John Smith", :country => @usa)
         @resident2 = Resident.create!(:name => "John Smith", :country => @canada)
+        @owner = Company.create!(:name => "Acme Events")
+        @site = Site.create!(:name => "Downtown Venue", :owner => @owner)
       end
 
       def teardown
@@ -104,6 +106,11 @@ module FriendlyId
         rescue ActiveRecord::RecordNotFound => e
           assert_match(/scope: badscope/, e.message)
         end
+      end
+      
+      test "should update the sluggable field when a polymorphic relationship exists" do
+        @site.update_attributes(:name => "Uptown Venue")
+        assert_equal "Uptown Venue", @site.name
       end
 
     end

@@ -71,6 +71,15 @@ class CreateSupportModels < ActiveRecord::Migration
     end
     add_index :users, :name, :unique => true
 
+    create_table :sites do |t|
+      t.string :name
+      t.integer :owner_id
+      t.string :owner_type
+    end
+    
+    create_table :companies do |t|
+      t.string :name
+    end
   end
 
   def self.down
