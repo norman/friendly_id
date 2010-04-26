@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.3 (2010-04-26)
+
+* Fixed scope update when models use polymorphic relations.
+
 ## 3.0.2 (2010-04-09)
 
 * Fixed finding non-slugged models by an array of ids.

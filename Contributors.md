@@ -24,13 +24,15 @@ community, in particular from the following people:
 * Josh Nichols
 * Juan Schwindt
 * Kamal Fariz Mahyuddin
+* Laurence A. Lee
 * Louis T.
 * Mikhail Shirkov
-* Nathan Phelps
 * Nash Kabbara
+* Nathan Phelps
 * Ramon Soares
 * Rdavila
 * Rob Ingram
+* Ryan Wood
 * Sean Abrahams
 * Steve Luscher
 * Steven Noble
