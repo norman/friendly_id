@@ -1,6 +1,11 @@
 require "forwardable"
 require "active_support/core_ext/class/attribute_accessors"
-require "active_support/core_ext/object/blank"
+begin
+  require "active_support/core_ext/object/blank"
+rescue MissingSourceFile
+  # support for ActiveSupport < 2.3.5
+  require "active_support/core_ext/blank"
+end
 
 require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
 require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
