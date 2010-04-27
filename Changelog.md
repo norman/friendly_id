@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.4 (2010-04-27)
+
+* Fixed backwards-compatiblity with ActiveSupport 2.3.4 (Thanks Juergen Fesslmeier).
+
 ## 3.0.3 (2010-04-26)
 
 * Fixed scope update when models use polymorphic relations.
