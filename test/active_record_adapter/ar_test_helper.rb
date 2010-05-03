@@ -31,6 +31,15 @@ class District < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
 
+# A model with optimistic locking enabled
+class Region < ActiveRecord::Base
+  has_friendly_id :name, :use_slug => true
+  after_create do |obj|
+    other_instance = find obj.id
+    other_instance.update_attributes :note => name + "!"
+  end
+end
+
 # A model that specifies a custom cached slug column
 class City < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true, :cache_column => "my_slug"

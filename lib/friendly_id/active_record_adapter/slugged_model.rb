@@ -198,8 +198,13 @@ module FriendlyId
       # Reset the cached friendly_id.
       def set_slug_cache
         if new_cache_needed?
-          send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
-          send :update_without_callbacks
+          begin
+            send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
+            send :update_without_callbacks
+          rescue ActiveRecord::StaleObjectError
+            reload
+            retry
+          end
         end
       end
 

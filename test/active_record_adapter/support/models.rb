@@ -23,6 +23,13 @@ class CreateSupportModels < ActiveRecord::Migration
     end
     add_index :cities, :my_slug, :unique => true
 
+    create_table :regions do |t|
+      t.string :name
+      t.string :cached_slug
+      t.string :note
+      t.integer :lock_version, :null => false, :default => 0
+    end
+    add_index :regions, :cached_slug, :unique => true
 
     create_table :countries do |t|
       t.string :name
@@ -76,7 +83,7 @@ class CreateSupportModels < ActiveRecord::Migration
       t.integer :owner_id
       t.string :owner_type
     end
-    
+
     create_table :companies do |t|
       t.string :name
     end
