@@ -77,7 +77,7 @@ with Rails 2.2.x, 2.3.x. and 3.0.
 After installing the gem, add an entry in environment.rb:
 
     config.gem "friendly_id", :version => "~> 2.3"
-    
+
 ### Rails 3.0
 
 After installing the gem, add an entry in the Gemfile:
@@ -349,11 +349,13 @@ Checking the slugs table all the time has an impact on performance, so as of
 ### Automatic setup
 
 To enable slug caching, simply add a column named "cached_slug" to your model.
+Is also advised to index this column for performance reason.
 FriendlyId will automatically use this column if it detects it:
 
     class AddCachedSlugToUsers < ActiveRecord::Migration
       def self.up
         add_column :users, :cached_slug, :string
+        add_index  :users, :cached_slug
       end
 
       def self.down
