@@ -31,7 +31,7 @@ module FriendlyId
       while records = find(:all, options) do
         break if records.size == 0
         records.each do |record|
-          record.save!
+          record.save(:validate => false)
           yield(record) if block_given?
         end
         options[:conditions] = cond + " and #{klass.table_name}.id > #{records.last.id}"
