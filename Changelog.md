@@ -6,6 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.5 NOT RELEASED YET
+
+* Made rake tasks skip validations.
+* Made slug an explicit has_one relation to enable eager-loading via :include => :slug
+
 ## 3.0.4 (2010-04-27)
 
 * Fixed backwards-compatiblity with ActiveSupport 2.3.4 (Thanks Juergen Fesslmeier).
