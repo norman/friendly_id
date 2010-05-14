@@ -136,7 +136,8 @@ module FriendlyId
       def self.included(base)
         base.class_eval do
           has_many :slugs, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
-          before_save :build_slug
+          has_one :slug, :order => 'id DESC', :as => :sluggable, :dependent => :destroy
+          before_save :build_a_slug
           after_save :set_slug_cache
           after_update :update_scope
           after_update :update_dependent_scopes
@@ -149,18 +150,6 @@ module FriendlyId
 
       def find_slug(name, sequence)
         slugs.find_by_name_and_sequence(name, sequence)
-      end
-
-      # The model instance's current {FriendlyId::ActiveRecordAdapter::Slug slug}.
-      def slug
-        return @slug if new_record?
-        @slug ||= slugs.first(:order => "id DESC")
-      end
-
-      # Set the slug.
-      def slug=(slug)
-        @new_friendly_id = slug.to_friendly_id unless slug.nil?
-        super
       end
 
       # Returns the friendly id, or if none is available, the numeric id.
@@ -185,9 +174,10 @@ module FriendlyId
       end
 
       # Build the new slug using the generated friendly id.
-      def build_slug
+      def build_a_slug
         return unless new_slug_needed?
-        self.slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self)
+        @slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self)
+        @new_friendly_id = @slug.to_friendly_id
       end
 
       # Reset the cached friendly_id?

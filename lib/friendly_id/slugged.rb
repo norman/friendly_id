@@ -96,7 +96,6 @@ module FriendlyId
           !slug? || slug_text_changed?
         end
       end
-
     end
   end
 end

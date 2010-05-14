@@ -141,7 +141,7 @@ module FriendlyId
       test "should make a new slug if the friendly_id method value has changed" do
         instance.name = "Changed title"
         instance.send save_method
-        assert_equal 2, instance.slugs.size
+        assert_equal 2, instance.slugs(true).size
       end
 
       test "should be able to reuse an old friendly_id without incrementing the sequence" do

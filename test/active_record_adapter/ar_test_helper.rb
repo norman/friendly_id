@@ -1,7 +1,10 @@
 require File.expand_path('../../test_helper', __FILE__)
 
+require "logger"
 require "active_record"
 require "active_support"
+
+# ActiveRecord::Base.logger = Logger.new($stdout)
 
 require File.expand_path("../../../lib/friendly_id/active_record", __FILE__)
 require File.expand_path("../../../generators/friendly_id/templates/create_slugs", __FILE__)
