@@ -191,7 +191,7 @@ module FriendlyId
       # @param *args <Symbol>
       # @return String
       def approximate_ascii!(*args)
-        @maps = (self.class.approximations + args + [:common]).flatten.uniq
+        @maps = (self.class.approximations + args.flatten + [:common]).flatten.uniq
         @wrapped_string = normalize_utf8(:c).unpack("U*").map { |char| approx_char(char) }.flatten.pack("U*")
       end
 
@@ -235,7 +235,7 @@ module FriendlyId
       # @param config [FriendlyId::Configuration]
       # @return String
       def normalize_for!(config)
-        approximate_ascii! if config.approximate_ascii?
+        approximate_ascii!(config.ascii_approximation_options) if config.approximate_ascii?
         to_ascii! if config.strip_non_ascii?
         normalize!
       end

@@ -194,6 +194,19 @@ module FriendlyId
         end
       end
 
+      test "should approximate ascii if configured" do
+        klass.friendly_id_config.stubs(:approximate_ascii?).returns(true)
+        instance = klass.send(create_method, :name => "Cañón")
+        assert_equal "canon", instance.friendly_id
+      end
+
+      test "should approximate ascii with options if configured" do
+        klass.friendly_id_config.stubs(:approximate_ascii?).returns(true)
+        klass.friendly_id_config.stubs(:ascii_approximation_options).returns(:spanish)
+        instance = klass.send(create_method, :name => "Cañón")
+        assert_equal "cannon", instance.friendly_id
+      end
+
     end
 
     # Tests for FriendlyId::Status.
