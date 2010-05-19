@@ -190,7 +190,7 @@ module FriendlyId
         if new_cache_needed?
           begin
             send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
-            send :update_without_callbacks
+            update_without_callbacks
           rescue ActiveRecord::StaleObjectError
             reload
             retry
@@ -219,6 +219,13 @@ module FriendlyId
       # Does the model use slug caching?
       def uses_slug_cache?
         friendly_id_config.cache_column?
+      end
+
+      # This method was removed in ActiveRecord 3.0.
+      if !ActiveRecord::Base.private_method_defined? :update_without_callbacks
+        def update_without_callbacks
+          save :callbacks => false
+        end
       end
 
     end
