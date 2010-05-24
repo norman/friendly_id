@@ -171,6 +171,13 @@ module FriendlyId
         assert instance2.friendly_id_status.best?
       end
 
+      test "should indicate correct status when found by a numeric friendly_id" do
+        instance = klass.send(create_method, :name => "100")
+        instance2 = klass.send(find_method, "100")
+        assert instance2.friendly_id_status.best?, "status expected to be best but isn't."
+        assert instance2.friendly_id_status.current?, "status expected to be current but isn't."
+      end
+
       test "should remain findable by previous slugs" do
         old_friendly_id = instance.friendly_id
         instance.name = "#{old_friendly_id} updated"
