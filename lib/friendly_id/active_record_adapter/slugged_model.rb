@@ -82,7 +82,7 @@ module FriendlyId
 
         def find
           @result = model_class.scoped(find_options).first(options)
-          handle_friendly_result if friendly?
+          handle_friendly_result if @result or friendly_id_config.scope?
           @result
         rescue ::ActiveRecord::RecordNotFound => @error
           friendly_id_config.scope? ? raise_scoped_error : (raise @error)
@@ -120,9 +120,17 @@ module FriendlyId
 
         def find
           @result = model_class.scoped(find_options).first(options)
-          handle_friendly_result if friendly?
-          @result
+          if @result
+            handle_friendly_result
+            @result
+          else
+            uncached_find
+          end
         rescue ActiveRecord::RecordNotFound
+          uncached_find
+        end
+
+        def uncached_find
           SingleFinder.new(id, model_class, options).find
         end
 
