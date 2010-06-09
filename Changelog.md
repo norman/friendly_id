@@ -8,7 +8,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 3.0.5 NOT RELEASED YET
 
-* Made rake tasks skip validations.
+* Fixed support for Rails 3.0 beta4 (Bruno Michel)
+* Made rake tasks skip validations (Emilio Tagua).
 * Made slug an explicit has_one relation to enable eager-loading via :include => :slug
 
 ## 3.0.4 (2010-04-27)
