@@ -6,10 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.0.5 NOT RELEASED YET
+## 3.0.5 (2010-06-10)
 
 * Fixed support for Rails 3.0 beta4 (Bruno Michel)
 * Made rake tasks skip validations (Emilio Tagua).
+* Fixed incorrect status of records found with a numeric friendly_id.
 * Made slug an explicit has_one relation to enable eager-loading via :include => :slug
 
 ## 3.0.4 (2010-04-27)
