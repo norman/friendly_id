@@ -11,6 +11,6 @@ end
 require "test/unit"
 require "mocha"
 require "active_support"
-require "ruby-debug"
+# require "ruby-debug"
 require File.expand_path("../../lib/friendly_id", __FILE__)
 require File.expand_path("../../lib/friendly_id/test", __FILE__)
