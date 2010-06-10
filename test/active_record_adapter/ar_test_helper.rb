@@ -38,7 +38,7 @@ end
 class Region < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
   after_create do |obj|
-    other_instance = find obj.id
+    other_instance = self.class.find obj.id
     other_instance.update_attributes :note => name + "!"
   end
 end
