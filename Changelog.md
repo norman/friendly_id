@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.0.6 (2010-06-10)
+
+* Fix bad call to apply_mapping on 2.3.
+
 ## 3.0.5 (2010-06-10)
 
 * Fixed support for Rails 3.0 beta4 (Bruno Michel)

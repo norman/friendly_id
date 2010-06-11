@@ -206,7 +206,13 @@ module FriendlyId
       # though your milage may vary with Greek and Turkic strings.
       # @return String
       def downcase!
-        @wrapped_string = ActiveSupport::Multibyte::Unicode.apply_mapping(@wrapped_string, :lowercase_mapping)
+        @wrapped_string = apply_mapping :lowercase_mapping
+      end
+
+      if defined? ActiveSupport::Multibyte::Unicode
+        def apply_mapping(*args)
+          ActiveSupport::Multibyte::Unicode.apply_mapping(@wrapped_string, *args)
+        end
       end
 
       # Remove any non-word characters.
@@ -333,7 +339,7 @@ module FriendlyId
       # though your milage may vary with Greek and Turkic strings.
       # @return String
       def upcase!
-        @wrapped_string = ActiveSupport::Multibyte::Unicode.apply_mapping(@wrapped_string, :uppercase_mapping)
+        @wrapped_string = apply_mapping :uppercase_mapping
       end
 
       # Validate that the slug string is not blank or reserved, and truncate
