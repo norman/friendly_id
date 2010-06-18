@@ -5,7 +5,7 @@ module FriendlyId
       module SluggedFinder
         # Whether :include => :slugs has been passed as an option.
         def slugs_included?
-          [*(options[:include] or [])].flatten.include?(:slugs)
+          [*(options[:include] or [])].to_a.flatten.include?(:slugs)
         end
 
         def handle_friendly_result
