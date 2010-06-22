@@ -44,8 +44,7 @@ module FriendlyId
 
       def find_one_using_slug(id)
         name, seq = id.to_s.parse_friendly_id
-        record = joins(:slugs).where(:slugs => {:name => name, :sequence => seq,
-            :scope => friendly_id_scope}).order("slugs.id DESC").first
+        record = joins(:slugs).where(:slugs => {:name => name, :sequence => seq, :scope => friendly_id_scope}).first
         if record
           record.friendly_id_status.name = name
           record.friendly_id_status.sequence = seq
