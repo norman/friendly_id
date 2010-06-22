@@ -1,14 +1,11 @@
-class ActiveRecord::Relation
-  alias original_find_one  find_one
-  alias original_find_some find_some
-end
-
 module FriendlyId
   module ActiveRecordAdapter
     module Relation
 
       attr :friendly_id_scope
 
+      # This method overrides Active Record's default in order to allow the :scope option to
+      # be passed to finds.
       def apply_finder_options(options)
         @friendly_id_scope = options.delete(:scope)
         @friendly_id_scope = @friendly_id_scope.to_param if @friendly_id_scope.respond_to?(:to_param)
@@ -34,6 +31,17 @@ module FriendlyId
         end
       end
 
+      def find_some(ids)
+        return super unless @klass.uses_friendly_id?
+        ids = ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
+        records = friendly_records(*ids.partition {|id| id.friendly_id?}).each do |record|
+          record.friendly_id_status.name = ids
+        end
+        validate_expected_size!(ids, records)
+      end
+
+      private
+
       def find_one_using_slug(id)
         name, seq = id.to_s.parse_friendly_id
         record = joins(:slugs).where(:slugs => {:name => name, :sequence => seq,
@@ -43,7 +51,7 @@ module FriendlyId
           record.friendly_id_status.sequence = seq
           record
         else
-          original_find_one(id)
+          find_one_without_friendly(id)
         end
       end
 
@@ -59,17 +67,6 @@ module FriendlyId
         end
       end
 
-      def find_some(ids)
-        return super unless @klass.uses_friendly_id?
-        ids = ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
-        records = friendly_records(*ids.partition {|id| id.friendly_id?}).each do |record|
-          record.friendly_id_status.name = ids
-        end
-        validate_expected_size!(ids, records)
-      end
-
-      private
-
       def raise_scoped_error(error)
         scope_message = friendly_id_scope || "expected, but none given"
         message = "%s, scope: %s" % [error.message, scope_message]
@@ -77,14 +74,10 @@ module FriendlyId
       end
 
       def friendly_records(friendly_ids, unfriendly_ids)
+        use_slugs  = friendly_id_config.use_slugs? and !friendly_id_config.cache_column?
         column     = friendly_id_config.cache_column || friendly_id_config.column
-        friendly   = if friendly_id_config.use_slugs? and !friendly_id_config.cache_column?
-            slugged_conditions(friendly_ids)
-          else
-            arel_table[column].in friendly_ids
-          end
+        friendly   = use_slugs ? slugged_conditions(friendly_ids) : arel_table[column].in(friendly_ids)
         unfriendly = arel_table[primary_key].in unfriendly_ids
-        clause = nil
         if friendly_ids.present? && unfriendly_ids.present?
           clause = friendly.or(unfriendly)
         elsif friendly_ids.present?
@@ -92,24 +85,17 @@ module FriendlyId
         elsif unfriendly_ids.present?
           clause = unfriendly
         end
-        if friendly_id_config.use_slugs? and !friendly_id_config.cache_column?
-          joins(:slugs).where(clause)
-        else
-          where(clause)
-        end
+        use_slugs ? joins(:slugs).where(clause) : where(clause)
       end
 
       def slugged_conditions(ids)
         return if ids.empty?
         slugs = Slug.arel_table
-        name, seq = ids[0].parse_friendly_id
-        clause = slugs[:name].eq(name).and(slugs[:sequence].eq(seq)).and(slugs[:scope].eq(friendly_id_scope))
-        ids.each_with_index do |id, index|
-          next if index == 0
+        conditions = lambda do |id|
           name, seq = id.parse_friendly_id
-          clause = clause.or(slugs[:name].eq(name).and(slugs[:sequence].eq(seq)))
+          slugs[:name].eq(name).and(slugs[:sequence].eq(seq)).and(slugs[:scope].eq(friendly_id_scope))
         end
-        clause
+        ids.inject(nil) {|clause, id| clause ? clause.or(conditions.call(id)) : conditions.call(id) }
       end
 
       def validate_expected_size!(ids, result)
