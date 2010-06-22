@@ -90,7 +90,7 @@ module FriendlyId
         attr_reader :friendly_ids, :results, :unfriendly_ids
 
         def initialize(ids, model_class, options={})
-          @friendly_ids, @unfriendly_ids = ids.partition {|id| FriendlyId::Finders::Base.friendly?(id) }
+          @friendly_ids, @unfriendly_ids = ids.partition {|id| id.friendly_id? }
           @unfriendly_ids = @unfriendly_ids.map {|id| id.class.respond_to?(:friendly_id_config) ? id.id : id}
           super
         end

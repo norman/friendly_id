@@ -9,31 +9,12 @@ module FriendlyId
       def_delegators :model_class, :base_class, :friendly_id_config,
         :primary_key, :quoted_table_name, :sanitize_sql, :table_name
 
-      # Is the id friendly or numeric? Not that the return value here is
-      # +false+ if the +id+ is definitely not friendly, and +nil+ if it can
-      # not be determined.
-      # The return value will be:
-      # * +true+ - if the id is definitely friendly (i.e., any string with non-numeric characters)
-      # * +false+ - if the id is definitely unfriendly (i.e., an Integer, a model instance, etc.)
-      # * +nil+ - if it can not be determined (i.e., a numeric string like "206".)
-      # @return [true, false, nil]
-      # @see #unfriendly?
-      def self.friendly?(id)
-        if id.is_a?(Integer) or id.is_a?(Symbol) or id.class.respond_to? :friendly_id_config
-          return false
-        elsif id.to_i.to_s != id.to_s
-          return true
-        else
-          return nil
-        end
+      def friendly?
+        ids.length == 1 && id.friendly_id?
       end
 
-      # Is the id numeric?
-      # @return [true, false, nil] +true+ if definitely unfriendly, +false+ if
-      #   definitely friendly, else +nil+.
-      # @see #friendly?
-      def self.unfriendly?(id)
-        !friendly?(id) unless friendly?(id) == nil
+      def unfriendly?
+        ids.length == 1 && id.unfriendly_id?
       end
 
       def initialize(ids, model_class, options={})
@@ -75,18 +56,6 @@ module FriendlyId
     end
 
     module Single
-      # Is the id definitely friendly?
-      # @see Finder::friendly?
-      def friendly?
-        Base.friendly?(id)
-      end
-
-      # Is the id definitely unfriendly?
-      # @see Finder::unfriendly?
-      def unfriendly?
-        Base.unfriendly?(id)
-      end
-
       private
 
       # The id (numeric or friendly).
@@ -104,6 +73,5 @@ module FriendlyId
         id.to_s.parse_friendly_id(friendly_id_config.sequence_separator)[1]
       end
     end
-
   end
 end
