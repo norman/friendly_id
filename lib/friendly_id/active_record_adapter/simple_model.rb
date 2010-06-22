@@ -70,9 +70,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          if ActiveRecord::VERSION::STRING < "3"
-            extend FriendlyId::ActiveRecordAdapter::FinderMethods
-          end
+          extend FriendlyId::ActiveRecordAdapter::FinderMethods unless FriendlyId.on_ar3?
         end
       end
 

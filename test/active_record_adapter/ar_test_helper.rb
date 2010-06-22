@@ -101,7 +101,8 @@ end
 # A model that uses default slug settings and has a named scope
 class Post < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
-  send FriendlyId::ActiveRecordAdapter::Compat.scope_method, :published, :conditions => { :published => true }
+  def self.named_scope(*args) scope(*args) end if FriendlyId.on_ar3?
+  named_scope :published, :conditions => { :published => true }
 end
 
 # Model that uses a custom table name

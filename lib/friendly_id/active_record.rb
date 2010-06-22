@@ -1,12 +1,11 @@
 module FriendlyId
 
-  module ActiveRecordAdapter
+  # Are we running on ActiveRecord 3 or higher?
+  def self.on_ar3?
+    ActiveRecord::VERSION::STRING >= "3"
+  end
 
-    module Compat
-      def self.scope_method
-        ActiveRecord::VERSION::STRING >= "3" ? :scope : :named_scope
-      end
-    end
+  module ActiveRecordAdapter
 
     include FriendlyId::Base
 
