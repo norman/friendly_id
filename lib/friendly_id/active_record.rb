@@ -40,8 +40,10 @@ module FriendlyId
   end
 end
 
-class ActiveRecord::Base
-  extend FriendlyId::ActiveRecordAdapter
+ActiveRecord::Base.extend FriendlyId::ActiveRecordAdapter
+if ActiveRecord::VERSION::STRING >= "3"
+  require File.join(File.dirname(__FILE__), "active_record_adapter", "relation")
+  ActiveRecord::Relation.send :include, FriendlyId::ActiveRecordAdapter::Relation
 end
 
 require File.join(File.dirname(__FILE__), "active_record_adapter", "configuration")
