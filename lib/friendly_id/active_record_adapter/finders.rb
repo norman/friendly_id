@@ -137,10 +137,8 @@ module FriendlyId
 
     end
 
-    # The methods in this module override ActiveRecord's +find_one+ and
-    # +find_some+ to add FriendlyId's features.
+    # The methods in this module override ActiveRecord's +find+ to add FriendlyId's features.
     module FinderMethods
-
       def find(*args, &block)
         finder = Finders::FinderProxy.new(self, *args, &block)
         if finder.multiple?
@@ -149,8 +147,6 @@ module FriendlyId
           finder.unfriendly? ? super : finder.find or super
         end
       end
-
     end
-
   end
 end
