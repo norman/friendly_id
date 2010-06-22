@@ -40,15 +40,24 @@ module FriendlyId
   end
 end
 
-ActiveRecord::Base.extend FriendlyId::ActiveRecordAdapter
-if ActiveRecord::VERSION::STRING >= "3"
-  require File.join(File.dirname(__FILE__), "active_record_adapter", "relation")
-  ActiveRecord::Relation.send :include, FriendlyId::ActiveRecordAdapter::Relation
-end
+require "friendly_id/active_record_adapter/relation"
+require "friendly_id/active_record_adapter/configuration"
+require "friendly_id/active_record_adapter/finders"
+require "friendly_id/active_record_adapter/simple_model"
+require "friendly_id/active_record_adapter/slugged_model"
+require "friendly_id/active_record_adapter/slug"
+require "friendly_id/active_record_adapter/tasks"
 
-require File.join(File.dirname(__FILE__), "active_record_adapter", "configuration")
-require File.join(File.dirname(__FILE__), "active_record_adapter", "finders")
-require File.join(File.dirname(__FILE__), "active_record_adapter", "simple_model")
-require File.join(File.dirname(__FILE__), "active_record_adapter", "slugged_model")
-require File.join(File.dirname(__FILE__), "active_record_adapter", "slug")
-require File.join(File.dirname(__FILE__), "active_record_adapter", "tasks")
+module ActiveRecord
+  class Base
+    extend FriendlyId::ActiveRecordAdapter
+  end
+
+  if defined? Relation
+    class Relation
+      alias find_one_without_friendly  find_one
+      alias find_some_without_friendly find_some
+      include FriendlyId::ActiveRecordAdapter::Relation
+    end
+  end
+end

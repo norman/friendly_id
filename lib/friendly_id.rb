@@ -7,11 +7,11 @@ rescue MissingSourceFile
   require "active_support/core_ext/blank"
 end
 
-require File.join(File.dirname(__FILE__), "friendly_id", "slug_string")
-require File.join(File.dirname(__FILE__), "friendly_id", "configuration")
-require File.join(File.dirname(__FILE__), "friendly_id", "status")
-require File.join(File.dirname(__FILE__), "friendly_id", "finders")
-require File.join(File.dirname(__FILE__), "friendly_id", "slugged")
+require "friendly_id/slug_string"
+require "friendly_id/configuration"
+require "friendly_id/status"
+require "friendly_id/finders"
+require "friendly_id/slugged"
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
 # ActiveRecord.
@@ -98,4 +98,4 @@ class Object
   end
 end
 
-require File.join(File.dirname(__FILE__), "friendly_id", "railtie") if defined?(Rails) && Rails.version >= "3"
+require "friendly_id/railtie" if defined?(Rails) && Rails.version >= "3"

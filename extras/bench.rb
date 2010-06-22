@@ -1,4 +1,8 @@
-require File.expand_path('../extras', __FILE__)
+$:.unshift File.expand_path("../lib", File.dirname(__FILE__))
+$:.unshift File.expand_path(File.dirname(__FILE__))
+$:.uniq!
+
+require "extras"
 require 'rbench'
 FACTOR = 10
 

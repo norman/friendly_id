@@ -15,8 +15,7 @@ if ENV["LOG"]
   end
 end
 
-
-require File.expand_path("../../../lib/friendly_id/active_record", __FILE__)
+require "friendly_id/active_record"
 require File.expand_path("../../../generators/friendly_id/templates/create_slugs", __FILE__)
 require File.expand_path("../support/models", __FILE__)
 require File.expand_path('../core', __FILE__)
