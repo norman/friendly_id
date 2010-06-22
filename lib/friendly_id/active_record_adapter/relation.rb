@@ -3,7 +3,6 @@ class ActiveRecord::Relation
   alias original_find_some find_some
 end
 
-
 module FriendlyId
   module ActiveRecordAdapter
     module Relation
@@ -19,19 +18,44 @@ module FriendlyId
       protected
 
       def find_one(id)
-        return super if !@klass.uses_friendly_id? or id.unfriendly_id?
-        return slugged_find_one(id) if friendly_id_config.use_slugs? && !friendly_id_config.cache_column?
-        column = friendly_id_config.cache_column or friendly_id_config.column
-        record = where(column => id).first
+        begin
+          return super if !@klass.uses_friendly_id? or id.unfriendly_id?
+          return find_one_using_cached_slug(id) if friendly_id_config.cache_column?
+          return find_one_using_slug(id) if friendly_id_config.use_slugs?
+          record = where(friendly_id_config.column => id).first
+          if record
+            record.friendly_id_status.name = name
+            record
+          else
+            super
+          end
+        rescue ActiveRecord::RecordNotFound => error
+          friendly_id_config.scope? ? raise_scoped_error(error) : raise(error)
+        end
+      end
+
+      def find_one_using_slug(id)
+        name, seq = id.to_s.parse_friendly_id
+        record = joins(:slugs).where(:slugs => {:name => name, :sequence => seq,
+            :scope => friendly_id_scope}).order("slugs.id DESC").first
+        if record
+          record.friendly_id_status.name = name
+          record.friendly_id_status.sequence = seq
+          record
+        else
+          original_find_one(id)
+        end
+      end
+
+      def find_one_using_cached_slug(id)
+        record = where(friendly_id_config.cache_column => id).first
         if record
           name, seq = id.to_s.parse_friendly_id
           record.friendly_id_status.name = name
           record.friendly_id_status.sequence = seq
           record
-        elsif friendly_id_config.use_slugs?
-          slugged_find_one(id)
         else
-          super
+          find_one_using_slug(id)
         end
       end
 
@@ -44,22 +68,16 @@ module FriendlyId
         validate_expected_size!(ids, records)
       end
 
-      def slugged_find_one(id)
-        name, seq = id.to_s.parse_friendly_id
-        record = joins(:slugs).where(:slugs => {:name => name, :sequence => seq, :scope => friendly_id_scope}).order("slugs.id DESC").first
-        if record
-          record.friendly_id_status.name = name
-          record.friendly_id_status.sequence = seq
-          record
-        else
-          original_find_one(id)
-        end
-      end
-
       private
 
+      def raise_scoped_error(error)
+        scope_message = friendly_id_scope || "expected, but none given"
+        message = "%s, scope: %s" % [error.message, scope_message]
+        raise ::ActiveRecord::RecordNotFound, message
+      end
+
       def friendly_records(friendly_ids, unfriendly_ids)
-        column     = friendly_id_config.cache_column or friendly_id_config.column
+        column     = friendly_id_config.cache_column || friendly_id_config.column
         friendly   = if friendly_id_config.use_slugs? and !friendly_id_config.cache_column?
             slugged_conditions(friendly_ids)
           else
@@ -80,7 +98,7 @@ module FriendlyId
           where(clause)
         end
       end
-      
+
       def slugged_conditions(ids)
         return if ids.empty?
         slugs = Slug.arel_table
