@@ -1,5 +1,8 @@
-#!/usr/bin/env ruby -KU
-require File.dirname(__FILE__) + '/extras'
+$:.unshift File.expand_path("../lib", File.dirname(__FILE__))
+$:.unshift File.expand_path(File.dirname(__FILE__))
+$:.uniq!
+
+require "extras"
 require 'ruby-prof'
 
 # RubyProf.measure_mode = RubyProf::MEMORY
@@ -10,5 +13,7 @@ RubyProf.start
 end
 result = RubyProf.stop
 GC.enable
-printer = RubyProf::CallTreePrinter.new(result)
-printer.print(File.new("prof.txt", "w"))
+# printer = RubyProf::CallTreePrinter.new(result)
+printer = RubyProf::GraphPrinter.new(result)
+version = ActiveRecord::VERSION::STRING.gsub(".", "")
+printer.print(File.new("prof#{version}.txt", "w"))
