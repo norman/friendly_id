@@ -75,7 +75,7 @@ module FriendlyId
       end
 
       def friendly_records(friendly_ids, unfriendly_ids)
-        use_slugs  = friendly_id_config.use_slugs? and !friendly_id_config.cache_column?
+        use_slugs  = friendly_id_config.use_slugs? && !friendly_id_config.cache_column?
         column     = friendly_id_config.cache_column || friendly_id_config.column
         friendly   = use_slugs ? slugged_conditions(friendly_ids) : arel_table[column].in(friendly_ids)
         unfriendly = arel_table[primary_key].in unfriendly_ids
