@@ -1,17 +1,12 @@
 require "rake"
 require "rake/testtask"
 require "rake/gempackagetask"
-require "rake/rdoctask"
 require "rake/clean"
 
 task :default => :test
 
 CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
 Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
-Rake::RDocTask.new do |r|
-  r.rdoc_dir = "doc"
-  r.rdoc_files.include "lib/**/*.rb"
-end
 
 begin
   require "yard"
