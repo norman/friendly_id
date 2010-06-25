@@ -5,15 +5,7 @@ require "active_record"
 require "active_support"
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
-if ENV["LOG"]
-  ActiveRecord::Base.logger = Logger.new($stdout)
-  if ActiveRecord::VERSION::STRING >= "3"
-    require "rails/log_subscriber/test_helper"
-    require "active_record/railties/log_subscriber"
-    ActiveRecord::Base.logger.level = Logger::DEBUG
-    Rails::LogSubscriber.add(:active_record, ActiveRecord::Railties::LogSubscriber.new)
-  end
-end
+ActiveRecord::Base.logger = Logger.new($stdout) if ENV["LOG"]
 
 require "friendly_id/active_record"
 require File.expand_path("../../../generators/friendly_id/templates/create_slugs", __FILE__)
