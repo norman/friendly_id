@@ -212,7 +212,7 @@ module FriendlyId
         klass.friendly_id_config.stubs(:approximate_ascii?).returns(true)
         klass.friendly_id_config.stubs(:ascii_approximation_options).returns(:spanish)
         instance = klass.send(create_method, :name => "Cañón")
-        assert_equal "cannon", instance.friendly_id
+        assert_equal "canion", instance.friendly_id
       end
 
     end

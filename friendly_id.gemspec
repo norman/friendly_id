@@ -22,7 +22,7 @@ spec = Gem::Specification.new do |s|
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*" ]
 
-  s.add_dependency "activerecord", ">= 2.2"
-  s.add_dependency "activesupport", ">= 2.2"
+  s.add_dependency "activerecord", ">= 2.3"
+  s.add_dependency "babosa", ">= 0.1.0"
 
 end

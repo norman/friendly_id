@@ -131,9 +131,9 @@ for {FriendlyId::Configuration}.
 
 ## FriendlyId Strings
 
-FriendlyId comes with {FriendlyId::SlugString excellent support for Unicode
-strings}. When using slugs, FriendlyId will automatically modify the slug text
-to make it more suitable for use in a URL:
+FriendlyId uses the [Babosa](http://github.com/norman/babosa) library for
+generating slug strings. When using slugs, FriendlyId/Babosa will automatically
+modify the slug text to make it more suitable for use in a URL:
 
     class City < ActiveRecord::Base
       has_friendly_id :name, :use_slug => true
@@ -180,15 +180,9 @@ There are special options for some languages:
     @post.create(:title => "¡Feliz año!")
     @post.title  # will be "feliz-anno"
 
-### Approximations for Other Languages
-
-You can add custom approximations for your language by adding Hash of
-approximations to {FriendlyId::SlugString::APPROXIMATIONS}. The approximations
-must be listed as Unicode decimal numbers, and arrays of numbers.
-
 ### Unicode Slugs
 
-By default, any character outside the Unicode Western character sets will be
+By default, any character outside the Unicode Latin character range will be
 passed through untouched, allowing you to have slugs in Arabic, Japanese,
 Greek, etc:
 
