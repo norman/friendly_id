@@ -1,17 +1,15 @@
-source :gemcutter
+source :rubygems
 
-gem "activesupport", "3.0.0.beta4"
 gem "activerecord", "3.0.0.beta4"
-
-# gem "activesupport", "~> 2.3"
 # gem "activerecord", "~> 2.3"
 
-# gem "activesupport", "~> 2.2"
-# gem "activerecord", "~> 2.2"
-
 gem "sqlite3-ruby"
+gem "mocha"
 
 # gem "jdbc-sqlite3"
 # gem "activerecord-jdbcsqlite3-adapter"
+# gem "mysql"
+# gem "pg"
+# gem "ffaker"
+# gem "rbench"
 
-gem "mocha"
