@@ -6,7 +6,7 @@ docs
 pkg
 coverage
 *.swp
-test/support/database.yml
+test/active_record_adapter/support/database.yml
 Gemfile
 Gemfile.lock
 .bundle
