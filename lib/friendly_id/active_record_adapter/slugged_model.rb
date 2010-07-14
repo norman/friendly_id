@@ -210,9 +210,14 @@ module FriendlyId
 
       def update_scope
         return unless slug && scope_changed?
-        slug.update_attributes :scope => send(friendly_id_config.scope).to_param
-      rescue ActiveRecord::StatementInvalid
-        slug.update_attributes :sequence => Slug.similar_to(slug).first.sequence.succ
+        self.class.transaction do
+          slug.scope = send(friendly_id_config.scope).to_param
+          similar = Slug.similar_to(slug)
+          if !similar.empty?
+            slug.sequence = similar.first.sequence.succ
+          end
+          slug.save!
+        end
       end
 
       # Update the slugs for any model that is using this model as its
