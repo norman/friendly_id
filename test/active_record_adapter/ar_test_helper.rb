@@ -72,7 +72,7 @@ class Country < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
 end
 
-# A model that doesn"t use slugs
+# A model that doesn't use slugs
 class User < ActiveRecord::Base
   has_friendly_id :name
   has_many :houses

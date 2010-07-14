@@ -54,6 +54,16 @@ module FriendlyId
           assert_match(/2\z/, instance_2.send(cache_column))
         end
 
+        test "#friendly_id should check the cached value by default" do
+          instance.expects(:slug).never
+          instance.friendly_id
+        end
+
+        test "#friendly_id should skip the cache if invoked with true" do
+          instance.expects(:slug)
+          instance.friendly_id(true)
+        end
+
       end
     end
   end

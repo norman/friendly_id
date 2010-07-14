@@ -54,8 +54,12 @@ module FriendlyId
       end
 
       # The friendly id.
-      def friendly_id
-        slug.to_friendly_id if slug?
+      # @param
+      def friendly_id(skip_cache = false)
+        if friendly_id_config.cache_column? && !skip_cache
+          friendly_id = send(friendly_id_config.cache_column)
+        end
+        friendly_id || (slug.to_friendly_id if slug?)
       end
 
       # Clean up the string before setting it as the friendly_id. You can override
