@@ -1,153 +1,160 @@
+module ActiveRecord
+  class Base
+    class << self
+      VALID_FIND_OPTIONS << :scope
+    end
+  end
+end
+
 module FriendlyId
-
-  # The adapter for Ruby on Rails's ActiveRecord. Compatible with AR 2.2.x -
-  # 2.3.x.
   module ActiveRecordAdapter
-
-    # The classes in this module are used internally by FriendlyId, and exist
-    # largely to avoid polluting the ActiveRecord models with too many
-    # FriendlyId-specific methods.
     module Finders
 
-      # FinderProxy is used to choose which finder class to instantiate;
-      # depending on the model_class's +friendly_id_config+ and the options
-      # passed into the constructor, it will decide whether to use simple or
-      # slugged finder, a single or multiple finder, and in the case of slugs,
-      # a cached or uncached finder.
-      class FinderProxy
+      class Find
 
-        extend Forwardable
-
-        attr_reader :finder
-        attr :finder_class
-        attr :ids
-        attr :model_class
+        attr :klass
+        attr :id
         attr :options
+        attr :fid_scope
 
-        def_delegators :finder, :find, :unfriendly?
-
-        def initialize(model_class, *args, &block)
-          @model_class = model_class
-          @ids = args.shift
-          @options = args.first.kind_of?(Hash) ? args.first : {}
+        def method_missing(symbol, *args, &block)
+          klass.__send__(symbol, *args, &block)
         end
 
-        # Perform the find query.
-        def finder
-          @finder ||= finder_class.new(ids, model_class, options)
+        def initialize(klass, id, options)
+          @klass   = klass
+          @id      = id
+          @options = options
+          @fid_scope   = options.delete(:scope)
+          @fid_scope   = @fid_scope.to_param if @fid_scope && @fid_scope.respond_to?(:to_param)
         end
 
-        def finder_class
-          @finder_class ||= slugged? ? slugged_finder_class : simple_finder_class
+        def find_one
+          fc = klass.friendly_id_config
+          return find_one_using_cached_slug if fc.cache_column?
+          return find_one_using_slug if fc.use_slugs?
+          record = scoped(:conditions => ["#{table_name}.#{fc.column} = ?", id]).first(options)
+          if record
+            record.friendly_id_status.name = name
+            record
+          end
         end
 
-        def multiple?
-          ids.kind_of? Array
+        def find_one_using_cached_slug
+          fc = klass.friendly_id_config
+          record = scoped(:conditions => ["#{table_name}.#{fc.cache_column} = ?", id]).first(options)
+          if record
+            name, seq = id.to_s.parse_friendly_id
+            record.friendly_id_status.name = name
+            record.friendly_id_status.sequence = seq
+            record
+          else
+            find_one_using_slug
+          end
+        end
+
+        def find_one_using_slug
+          name, seq = id.to_s.parse_friendly_id
+          slugs = Slug.table_name.to_sym
+          scope = klass.scoped(:conditions => {slugs => {:name => name, :sequence => seq}}, :joins => slugs)
+          scope = scope.scoped(:conditions => {slugs => {:scope => fid_scope}}) if friendly_id_config.scope?
+          record = scope.first(options)
+          return if !record
+          record.friendly_id_status.name = name
+          record.friendly_id_status.sequence = seq
+          record
+        end
+
+        def find_some
+          @id = id.uniq.map {|i| i.respond_to?(:friendly_id_config) ? i.id.to_i : i}
+          friendly_ids, unfriendly_ids = id.partition {|i| i.friendly_id?}
+          scope = klass.scoped(:conditions => friendly_conditions(friendly_ids, unfriendly_ids))
+          if friendly_id_config.use_slugs? && friendly_ids.present?
+            scope = scope.scoped(:joins => Slug.table_name.to_sym)
+            if friendly_id_config.scope?
+              scope = scope.scoped(:conditions => {:slugs => {:scope => fid_scope}})
+            end
+          end
+          records = scope.all(options).uniq
+          expected = expected_size
+          if records.size == expected
+            records.each { |record| record.friendly_id_status.name = id }
+          else
+            message = "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
+              name.pluralize,
+              id.join(', '),
+              sanitize_sql(options[:conditions]),
+              records.size,
+              expected
+            ]
+            raise ActiveRecord::RecordNotFound, message
+          end
+        end
+
+        def raise_error(error)
+          raise(error) unless friendly_id_config.scope?
+          scope_message = fid_scope || "expected, but none given"
+          message = "%s, scope: %s" % [error.message, scope_message]
+          raise ::ActiveRecord::RecordNotFound, message
         end
 
         private
 
-        def cache_available?
-          !! model_class.friendly_id_config.cache_column
-        end
-
-        def multiple_slugged_finder_class
-          use_cache? ? SluggedModel::CachedMultipleFinder : SluggedModel::MultipleFinder
-        end
-
-        def simple_finder_class
-          multiple? ? SimpleModel::MultipleFinder : SimpleModel::SingleFinder
-        end
-
-        def slugged?
-          !! model_class.friendly_id_config.use_slug?
-        end
-
-        def slugged_finder_class
-          multiple? ? multiple_slugged_finder_class : single_slugged_finder_class
-        end
-
-        def scoped?
-          !! options[:scope]
-        end
-
-        def single_slugged_finder_class
-          use_cache? ? SluggedModel::CachedSingleFinder : SluggedModel::SingleFinder
-        end
-
-        def use_cache?
-          cache_available? and !scoped?
-        end
-
-      end
-
-      # Wraps finds for multiple records using an array of friendly_ids.
-      # @abstract
-      module Multiple
-
-        include FriendlyId::Finders::Base
-
-        attr_reader :friendly_ids, :results, :unfriendly_ids
-
-        def initialize(ids, model_class, options={})
-          @friendly_ids, @unfriendly_ids = ids.partition {|id| id.friendly_id? }
-          @unfriendly_ids = @unfriendly_ids.map {|id| id.class.respond_to?(:friendly_id_config) ? id.id : id}
-          super
-        end
-
-        private
-
-        # An error message to use when the wrong number of results was returned.
-        def error_message
-          "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
-            model_class.name.pluralize,
-            ids.join(', '),
-            sanitize_sql(options[:conditions]),
-            results.size,
-            expected_size
-          ]
-        end
-
-        # How many results do we expect?
         def expected_size
-          limited? ? limit : offset_size
+          if options[:limit] && id.size > options[:limit]
+            options[:limit]
+          else
+            id.size
+          end
         end
 
-        # The limit option passed to the find.
-        def limit
-          options[:limit]
+        def friendly_conditions(friendly_ids, unfriendly_ids)
+          fc        = klass.friendly_id_config
+          use_slugs = fc.use_slugs? && !fc.cache_column?
+          pkey      = "#{quoted_table_name}.#{primary_key}"
+          column    = "#{table_name}.#{fc.cache_column || fc.column}"
+          if unfriendly_ids.present?
+            conditions = ["#{pkey} IN (?)", unfriendly_ids]
+            if friendly_ids.present?
+              if use_slugs
+                conditions[0] << " OR #{slugged_conditions(friendly_ids)}"
+              else
+                conditions[0] << " OR #{column} IN (?)"
+                conditions << friendly_ids
+              end
+            end
+            conditions
+          elsif friendly_ids.present?
+            use_slugs ? slugged_conditions(friendly_ids) : ["#{column} IN (?)", friendly_ids]
+          end
         end
 
-        # Is the find limited?
-        def limited?
-          offset_size > limit if limit
+        def slugged_conditions(ids)
+          return if ids.empty?
+          table = Slug.quoted_table_name
+          fragment = "(#{table}.name = %s AND #{table}.sequence = %d)"
+          conditions = lambda do |id|
+            name, seq = id.parse_friendly_id
+            fragment % [connection.quote(name), seq]
+          end
+          ids.inject(nil) {|clause, id| clause ? clause + " OR #{conditions.call(id)}" : conditions.call(id) }
         end
-
-        # The offset used for the find. If no offset was passed, 0 is returned.
-        def offset
-          options[:offset].to_i
-        end
-
-        # The number of ids, minus the offset.
-        def offset_size
-          ids.size - offset
-        end
-
       end
 
-    end
+      def find_one(id, options)
+        return super if id.blank? || id.unfriendly_id?
+        finder = Find.new(self, id, options)
+        finder.find_one or super
+      rescue ActiveRecord::RecordNotFound => error
+        finder.raise_error(error)
+      end
 
-    # The methods in this module override ActiveRecord's +find+ to add FriendlyId's features.
-    module FinderMethods
-      def find(*args, &block)
-        # Don't bother with friendly finds if the id is an empty string or array.
-        return super if (args.first.empty? rescue false)
-        finder = Finders::FinderProxy.new(self, *args, &block)
-        if finder.multiple?
-          finder.find
-        else
-          finder.unfriendly? ? super : finder.find or super
-        end
+      def find_some(ids, options)
+        return super if ids.empty?
+        finder = Find.new(self, ids, options)
+        finder.find_some
+      rescue ActiveRecord::RecordNotFound => error
+        finder.raise_error(error)
       end
     end
   end

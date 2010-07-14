@@ -3,66 +3,6 @@ module FriendlyId
 
     module SimpleModel
 
-      # Some basic methods common to {MultipleFinder} and {SingleFinder}.
-      module SimpleFinder
-
-        # The column used to store the friendly_id.
-        def column
-          "#{table_name}.#{friendly_id_config.column}"
-        end
-
-        # The model's fully-qualified and quoted primary key.
-        def primary_key
-          "#{quoted_table_name}.#{model_class.send :primary_key}"
-        end
-
-      end
-
-      class MultipleFinder
-
-        include FriendlyId::ActiveRecordAdapter::Finders::Multiple
-        include SimpleFinder
-
-        def find
-          @results = model_class.scoped(:conditions => conditions).all(options).uniq
-          raise(::ActiveRecord::RecordNotFound, error_message) if @results.size != expected_size
-          friendly_results.each { |result| result.friendly_id_status.name = result.to_param }
-          @results
-        end
-
-        private
-
-        def conditions
-          ["#{primary_key} IN (?) OR #{column} IN (?)", unfriendly_ids, friendly_ids]
-        end
-
-        def friendly_results
-          results.select { |result| friendly_ids.include? result.to_param }
-        end
-
-      end
-
-      class SingleFinder
-
-        include FriendlyId::Finders::Base
-        include FriendlyId::Finders::Single
-        include SimpleFinder
-
-        def find
-          result = model_class.scoped(find_options).first(options)
-          raise ::ActiveRecord::RecordNotFound.new if friendly? && !result
-          result.friendly_id_status.name = id if result
-          result
-        end
-
-        private
-
-        def find_options
-          @find_options ||= {:conditions => ["#{column} = ?", id]}
-        end
-
-      end
-
       def self.included(base)
         base.class_eval do
           column = friendly_id_config.column
@@ -70,7 +10,7 @@ module FriendlyId
           validates_presence_of column, :unless => :skip_friendly_id_validations
           validates_length_of column, :maximum => friendly_id_config.max_length, :unless => :skip_friendly_id_validations
           after_update :update_scopes
-          extend FriendlyId::ActiveRecordAdapter::FinderMethods unless FriendlyId.on_ar3?
+          extend FriendlyId::ActiveRecordAdapter::Finders unless FriendlyId.on_ar3?
         end
       end
 
