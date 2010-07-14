@@ -18,6 +18,7 @@ community, in particular from the following people:
 * Florian Aßmanqn
 * Harry Love
 * Ian Stewart
+* James Cropcho
 * Jesse Crouch
 * Joe Van Dyk
 * Johan Kok

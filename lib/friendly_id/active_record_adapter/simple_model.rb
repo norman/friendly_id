@@ -58,7 +58,7 @@ module FriendlyId
         private
 
         def find_options
-          @find_options ||= {:conditions => {column => id}}
+          @find_options ||= {:conditions => ["#{column} = ?", id]}
         end
 
       end

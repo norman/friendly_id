@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.0 (NOT RELEASED)
+
+* Fix quoting issue that prevented using a domain- or database-qualified column. (thanks James Cropcho)
+
 ## 3.0.6 (2010-06-10)
 
 * Fix bad call to apply_mapping on 2.3.
