@@ -214,7 +214,6 @@ module FriendlyId
         instance = klass.send(create_method, :name => "Cañón")
         assert_equal "canion", instance.friendly_id
       end
-
     end
 
     # Tests for FriendlyId::Status.

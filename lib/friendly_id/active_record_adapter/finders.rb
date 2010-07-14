@@ -140,6 +140,8 @@ module FriendlyId
     # The methods in this module override ActiveRecord's +find+ to add FriendlyId's features.
     module FinderMethods
       def find(*args, &block)
+        # Don't bother with friendly finds if the id is an empty string or array.
+        return super if (args.first.empty? rescue false)
         finder = Finders::FinderProxy.new(self, *args, &block)
         if finder.multiple?
           finder.find

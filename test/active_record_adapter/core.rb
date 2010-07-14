@@ -72,6 +72,12 @@ module FriendlyId
           assert_equal 2, klass.find([instance.friendly_id, second]).size
         end
 
+        test "should not raise error when finding with empty array" do
+          assert_nothing_raised do
+            klass.find []
+          end
+        end
+
         test "models should raise an error when not all records are found" do
           assert_raises(ActiveRecord::RecordNotFound) do
             klass.find([instance.friendly_id, 'bad-friendly-id'])
