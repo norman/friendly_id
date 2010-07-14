@@ -59,6 +59,10 @@ class Person < ActiveRecord::Base
 
 end
 
+# A model that doesn't use FriendlyId
+class Unfriendly < ActiveRecord::Base
+end
+
 # A slugged model that uses a scope
 class Resident < ActiveRecord::Base
   belongs_to :country

@@ -27,7 +27,7 @@ module FriendlyId
             super
           end
         rescue ActiveRecord::RecordNotFound => error
-          friendly_id_config.scope? ? raise_scoped_error(error) : raise(error)
+          uses_friendly_id? && friendly_id_config.scope? ? raise_scoped_error(error) : raise(error)
         end
       end
 

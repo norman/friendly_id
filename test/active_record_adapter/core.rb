@@ -30,6 +30,10 @@ module FriendlyId
           :save!
         end
 
+        def unfriendly_class
+          Unfriendly
+        end
+
         def validation_exceptions
           [ActiveRecord::RecordInvalid, FriendlyId::ReservedError, FriendlyId::BlankError]
         end
@@ -98,6 +102,11 @@ module FriendlyId
           end
         end
 
+        test "should not change failure behavior for models not using friendly_id" do
+          assert_raise ActiveRecord::RecordNotFound do
+            unfriendly_class.find(-1)
+          end
+        end
       end
     end
   end

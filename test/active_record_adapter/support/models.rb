@@ -87,6 +87,10 @@ class CreateSupportModels < ActiveRecord::Migration
     create_table :companies do |t|
       t.string :name
     end
+
+    create_table :unfriendlies do |t|
+      t.string :name
+    end
   end
 
   def self.down
