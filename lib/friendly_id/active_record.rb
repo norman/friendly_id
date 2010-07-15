@@ -50,6 +50,11 @@ require "friendly_id/active_record_adapter/tasks"
 module ActiveRecord
   class Base
     extend FriendlyId::ActiveRecordAdapter
+    unless FriendlyId.on_ar3?
+      class << self
+        VALID_FIND_OPTIONS << :scope
+      end
+    end
   end
 
   if defined? Relation

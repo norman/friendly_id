@@ -1,11 +1,3 @@
-module ActiveRecord
-  class Base
-    class << self
-      VALID_FIND_OPTIONS << :scope
-    end
-  end
-end
-
 module FriendlyId
   module ActiveRecordAdapter
     module Finders
