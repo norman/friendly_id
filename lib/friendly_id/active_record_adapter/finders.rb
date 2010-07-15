@@ -125,11 +125,14 @@ module FriendlyId
           return if ids.empty?
           table = Slug.quoted_table_name
           fragment = "(#{table}.name = %s AND #{table}.sequence = %d)"
-          conditions = lambda do |id|
+          ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            fragment % [connection.quote(name), seq]
+            if clause
+              clause + " OR #{fragment % [connection.quote(name), seq]}"
+            else
+              fragment % [connection.quote(name), seq]
+            end
           end
-          ids.inject(nil) {|clause, id| clause ? clause + " OR #{conditions.call(id)}" : conditions.call(id) }
         end
       end
 
