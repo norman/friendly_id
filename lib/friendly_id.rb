@@ -11,7 +11,6 @@ end
 require "friendly_id/slug_string"
 require "friendly_id/configuration"
 require "friendly_id/status"
-require "friendly_id/finders"
 require "friendly_id/slugged"
 
 # FriendlyId is a comprehensive Ruby library for slugging and permalinks with
