@@ -46,7 +46,7 @@ module FriendlyId
     # The class that's using the configuration.
     attr_reader :configured_class
 
-    # The maximum allowed length for a friendly_id string. This is checked *after* a
+    # The maximum allowed byte length for a friendly_id string. This is checked *after* a
     # string is processed by FriendlyId to remove spaces, special characters, etc.
     attr_accessor :max_length
 
