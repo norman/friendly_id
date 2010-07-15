@@ -4,52 +4,68 @@ module FriendlyId
 
       class Find
 
+        extend Forwardable
+        def_delegators :@klass, :scoped, :friendly_id_config, :quoted_table_name, :table_name, :primary_key,
+          :connection, :name, :sanitize_sql
+        def_delegators :fc, :use_slugs?, :cache_column, :cache_column?
+        alias fc friendly_id_config
+
         attr :klass
         attr :id
         attr :options
-        attr :fid_scope
-
-        def method_missing(symbol, *args, &block)
-          klass.__send__(symbol, *args, &block)
-        end
+        attr :scope_val
+        attr :result
+        attr :friendly_ids
+        attr :unfriendly_ids
 
         def initialize(klass, id, options)
-          @klass   = klass
-          @id      = id
-          @options = options
-          @fid_scope   = options.delete(:scope)
-          @fid_scope   = @fid_scope.to_param if @fid_scope && @fid_scope.respond_to?(:to_param)
+          @klass     = klass
+          @id        = id
+          @options   = options
+          @scope_val = options.delete(:scope)
+          @scope_val = @scope_val.to_param if @scope_val && @scope_val.respond_to?(:to_param)
         end
 
         def find_one
-          fc = klass.friendly_id_config
-          return find_one_using_cached_slug if fc.cache_column?
-          return find_one_using_slug if fc.use_slugs?
-          record = scoped(:conditions => ["#{table_name}.#{fc.column} = ?", id]).first(options)
-          if record
-            record.friendly_id_status.name = name
-            record
-          end
+          return find_one_using_cached_slug if cache_column?
+          return find_one_using_slug if use_slugs?
+          @result = scoped(:conditions => ["#{table_name}.#{fc.column} = ?", id]).first(options)
+          assign_status
         end
 
-        def find_one_using_cached_slug
-          fc = klass.friendly_id_config
-          record = scoped(:conditions => ["#{table_name}.#{fc.cache_column} = ?", id]).first(options)
-          if record
-            name, seq = id.to_s.parse_friendly_id
-            record.friendly_id_status.name = name
-            record.friendly_id_status.sequence = seq
-            record
-          else
-            find_one_using_slug
+        def find_some
+          parse_ids!
+          scope = some_friendly_scope
+          if use_slugs? && @friendly_ids.present?
+            scope = scope.scoped(:joins => Slug.table_name.to_sym)
+            if fc.scope?
+              scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}})
+            end
           end
+          @result = scope.all(options).uniq
+          validate_expected_size!
+          @result.each { |record| record.friendly_id_status.name = id }
+        end
+
+        def raise_error(error)
+          raise(error) unless fc.scope?
+          scope_message = scope_val || "expected, but none given"
+          message = "%s, scope: %s" % [error.message, scope_message]
+          raise ActiveRecord::RecordNotFound, message
+        end
+
+        private
+
+        def find_one_using_cached_slug
+          record = scoped(:conditions => ["#{table_name}.#{cache_column} = ?", id]).first(options)
+          assign_status or find_one_using_slug
         end
 
         def find_one_using_slug
           name, seq = id.to_s.parse_friendly_id
           slugs = Slug.table_name.to_sym
-          scope = klass.scoped(:conditions => {slugs => {:name => name, :sequence => seq}}, :joins => slugs)
-          scope = scope.scoped(:conditions => {slugs => {:scope => fid_scope}}) if friendly_id_config.scope?
+          scope = scoped(:conditions => {slugs => {:name => name, :sequence => seq}}, :joins => slugs)
+          scope = scope.scoped(:conditions => {slugs => {:scope => scope_val}}) if fc.scope?
           record = scope.first(options)
           return if !record
           record.friendly_id_status.name = name
@@ -57,81 +73,74 @@ module FriendlyId
           record
         end
 
-        def find_some
-          @id = id.uniq.map {|i| i.respond_to?(:friendly_id_config) ? i.id.to_i : i}
-          friendly_ids, unfriendly_ids = id.partition {|i| i.friendly_id?}
-          scope = klass.scoped(:conditions => friendly_conditions(friendly_ids, unfriendly_ids))
-          if friendly_id_config.use_slugs? && friendly_ids.present?
-            scope = scope.scoped(:joins => Slug.table_name.to_sym)
-            if friendly_id_config.scope?
-              scope = scope.scoped(:conditions => {:slugs => {:scope => fid_scope}})
+        def parse_ids!
+          @id = id.uniq.map do |member|
+            if member.respond_to?(:friendly_id_config)
+              member.id.to_i
+            else
+              member
             end
           end
-          records = scope.all(options).uniq
+          @friendly_ids, @unfriendly_ids = @id.partition {|member| member.friendly_id?}
+        end
+
+        def validate_expected_size!
           expected = expected_size
-          if records.size == expected
-            records.each { |record| record.friendly_id_status.name = id }
-          else
-            message = "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
-              name.pluralize,
-              id.join(', '),
-              sanitize_sql(options[:conditions]),
-              records.size,
-              expected
-            ]
-            raise ActiveRecord::RecordNotFound, message
-          end
+          return if @result.size == expected
+          message = "Couldn't find all %s with IDs (%s) AND %s (found %d results, but was looking for %d)" % [
+            name.pluralize,
+            id.join(', '),
+            sanitize_sql(options[:conditions]),
+            result.size,
+            expected
+          ]
+          raise ActiveRecord::RecordNotFound, message
         end
 
-        def raise_error(error)
-          raise(error) unless friendly_id_config.scope?
-          scope_message = fid_scope || "expected, but none given"
-          message = "%s, scope: %s" % [error.message, scope_message]
-          raise ::ActiveRecord::RecordNotFound, message
+        def assign_status
+          return unless @result
+          name, seq = @id.to_s.parse_friendly_id
+          @result.friendly_id_status.name = name
+          @result.friendly_id_status.sequence = seq if use_slugs?
+          @result
         end
-
-        private
 
         def expected_size
-          if options[:limit] && id.size > options[:limit]
+          if options[:limit] && @id.size > options[:limit]
             options[:limit]
           else
-            id.size
+            @id.size
           end
         end
 
-        def friendly_conditions(friendly_ids, unfriendly_ids)
-          fc        = klass.friendly_id_config
-          use_slugs = fc.use_slugs? && !fc.cache_column?
+        def some_friendly_scope
+          query_slugs = use_slugs? && !cache_column?
           pkey      = "#{quoted_table_name}.#{primary_key}"
-          column    = "#{table_name}.#{fc.cache_column || fc.column}"
-          if unfriendly_ids.present?
-            conditions = ["#{pkey} IN (?)", unfriendly_ids]
-            if friendly_ids.present?
-              if use_slugs
-                conditions[0] << " OR #{slugged_conditions(friendly_ids)}"
+          column    = "#{table_name}.#{cache_column || fc.column}"
+          if @unfriendly_ids.present?
+            conditions = ["#{pkey} IN (?)", @unfriendly_ids]
+            if @friendly_ids.present?
+              if query_slugs
+                conditions[0] << " OR #{some_slugged_conditions}"
               else
                 conditions[0] << " OR #{column} IN (?)"
-                conditions << friendly_ids
+                conditions << @friendly_ids
               end
             end
-            conditions
-          elsif friendly_ids.present?
-            use_slugs ? slugged_conditions(friendly_ids) : ["#{column} IN (?)", friendly_ids]
+          elsif @friendly_ids.present?
+            conditions = query_slugs ? some_slugged_conditions : ["#{column} IN (?)", @friendly_ids]
           end
+          scoped(:conditions => conditions)
         end
 
-        def slugged_conditions(ids)
-          return if ids.empty?
-          table = Slug.quoted_table_name
-          fragment = "(#{table}.name = %s AND #{table}.sequence = %d)"
-          ids.inject(nil) do |clause, id|
+        def some_slugged_conditions
+          return unless @friendly_ids.present?
+          slug_table = Slug.quoted_table_name
+          fragment = "(#{slug_table}.name = %s AND #{slug_table}.sequence = %d)"
+          @friendly_ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            if clause
-              clause + " OR #{fragment % [connection.quote(name), seq]}"
-            else
-              fragment % [connection.quote(name), seq]
-            end
+            string = fragment % [connection.quote(name), seq]
+            clause ? clause + " OR #{string}" : string
           end
         end
       end

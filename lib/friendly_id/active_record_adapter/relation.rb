@@ -44,7 +44,8 @@ module FriendlyId
 
       def find_one_using_slug(id)
         name, seq = id.to_s.parse_friendly_id
-        slug = Slug.where(:name => name, :sequence => seq, :scope => friendly_id_scope, :sluggable_type => @klass.base_class.to_s).first
+        slug = Slug.where(:name => name, :sequence => seq, :scope => friendly_id_scope,
+                          :sluggable_type => @klass.base_class.to_s).first
         if slug
           record = find_one(slug.sluggable_id.to_i)
           record.friendly_id_status.name = name
@@ -71,7 +72,7 @@ module FriendlyId
       def raise_scoped_error(error)
         scope_message = friendly_id_scope || "expected, but none given"
         message = "%s, scope: %s" % [error.message, scope_message]
-        raise ::ActiveRecord::RecordNotFound, message
+        raise ActiveRecord::RecordNotFound, message
       end
 
       def friendly_records(friendly_ids, unfriendly_ids)
