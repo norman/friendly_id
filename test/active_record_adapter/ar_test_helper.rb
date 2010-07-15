@@ -1,8 +1,10 @@
 require File.expand_path('../../test_helper', __FILE__)
-
 require "logger"
 require "active_record"
-require "active_support"
+begin
+  require "active_support/log_subscriber"
+rescue MissingSourceFile
+end
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
 ActiveRecord::Base.logger = Logger.new($stdout) if ENV["LOG"]
