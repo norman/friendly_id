@@ -508,15 +508,6 @@ Before removing any public or protected methods, FriendlyId will deprecate
 them through one major release cycle. Private methods may, however, change at
 any time.
 
-## Running the Tests
-
-FriendlyId uses [Bundler](http://github.com/carlhuda/bundler) to manage its gem
-dependencies. To run the tests, first make sure you have bundler installed.
-Then, copy Gemfile.default to Gemfile. If you wish to test against different gem
-versions than the ones specified in the Gemfile (for example, to test with
-Postgres or MySQL rather than SQLite3, or to test against different versions of
-ActiveRecord), then simply modify the Gemfile to suit your dependencies.
-
 ## Some Benchmarks
 
 These benchmarks can give you an idea of FriendlyId's impact on the
@@ -529,27 +520,31 @@ decide not to use FriendlyId for performance reasons, keep in mind that your
 own solution is unlikely to be any faster than FriendlyId with cached slugs
 enabled. But if it is, then your patches would be very welcome!
 
-    ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
-    activerecord (2.3.5)
-    friendly_id (2.3.2)
-    sqlite3 3.6.19 in-memory database
-                                                       | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
-    ------------------------------------------------------------------------------------------------
-    find model by id                             x1000 |   0.274 |   0.426 |   0.780 |       0.489 |
-    find model using array of ids                x1000 |   0.517 |   0.525 |   1.692 |       0.623 |
-    find model using id, then to_param           x1000 |   0.279 |   0.431 |   1.253 |       0.498 |
-    ================================================================================================
-    Total                                              |   1.071 |   1.382 |   3.725 |       1.610 |
 
-    ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
-    activerecord (3.0.0.beta1)
-    friendly_id (2.3.2)
-    sqlite3 3.6.19 in-memory database
+    activerecord (2.3.8)
+    ruby 1.9.2dev (2010-07-06 revision 28549) [x86_64-darwin10.4.0]
+    friendly_id (3.1.0)
+    sqlite3 3.6.12 in-memory database
 
                                                        | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
     ------------------------------------------------------------------------------------------------
-    find model by id                             x1000 |   0.557 |   1.135 |   6.491 |       1.398 |
-    find model using array of ids                x1000 |   0.862 |   0.882 |   6.152 |       1.919 |
-    find model using id, then to_param           x1000 |   0.658 |   2.200 |   8.398 |       1.539 |
+    find model by id                             x1000 |   0.340 |   0.468 |   0.877 |       0.534 |
+    find model using array of ids                x1000 |   0.551 |   0.592 |   0.989 |       0.893 |
+    find model using id, then to_param           x1000 |   0.340 |   0.487 |   1.310 |       0.551 |
     ================================================================================================
-    Total                                              |   2.077 |   4.217 |  21.041 |       4.856 |
+    Total                                              |   1.231 |   1.547 |   3.176 |       1.979 |
+
+
+
+    activerecord (3.0.0.beta4)
+    ruby 1.9.2dev (2010-07-06 revision 28549) [x86_64-darwin10.4.0]
+    friendly_id (3.1.0)
+    sqlite3 3.6.12 in-memory database
+
+                                                       | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
+    ------------------------------------------------------------------------------------------------
+    find model by id                             x1000 |   0.495 |   0.608 |   1.519 |       0.641 |
+    find model using array of ids                x1000 |   0.708 |   0.722 |   6.483 |       0.782 |
+    find model using id, then to_param           x1000 |   0.506 |   0.645 |   2.644 |       0.637 |
+    ================================================================================================
+    Total                                              |   1.709 |   1.976 |  10.645 |       2.061 |

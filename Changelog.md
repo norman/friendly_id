@@ -8,7 +8,13 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 3.1.0 (NOT RELEASED)
 
+* Refactored/simplified Active Record 2 and 3 query code.
+* Better support for Active Record 3 finds and scopes.
+* Extract slug handling code into separate gem, [Babosa](http://github.com/norman/babosa).
+* :max-length option now uses bytes rather than characters.
 * Fix quoting issue that prevented using a domain- or database-qualified column. (thanks James Cropcho)
+* Support for Active Record 2.2.x dropped; 2.3 or above is now required.
+* Fixed a few small errors on Postgres.
 
 ## 3.0.6 (2010-06-10)
 
