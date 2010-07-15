@@ -27,8 +27,8 @@ module FriendlyId
     # wish to use +attr_accessible+, you must invoke it BEFORE you invoke
     # {#has_friendly_id} in your class.
     def protect_friendly_id_attributes
-      # only protect the column if the class is not already using attributes_accessible
-      if !accessible_attributes
+      # only protect the column if the class is not already using attr_accessible
+      unless accessible_attributes.present?
         if friendly_id_config.custom_cache_column?
           attr_protected friendly_id_config.cache_column
         end
