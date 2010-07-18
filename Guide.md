@@ -489,6 +489,26 @@ slugs older than 45 days.
 
 # Misc tips
 
+## Default Scopes
+
+Whether you're using FriendlyId or not, a good rule of thumb for default scopes
+is to always use your model's table name. Otherwise any time you do a join, you
+risk having queries fail because of duplicate column names - particularly for a
+default scope like this one:
+
+    default_scope :order => "created_at DESC"
+
+Instead, do this:
+
+    default_scope :order => = "#{quoted_table_name}.created_at DESC"
+
+Or even better, unless you're using a custom primary key:
+
+    default_scope :order => = "#{quoted_table_name}.id DESC"
+
+because sorting by a unique integer column is faster than sorting by a date
+column.
+
 ## MySQL 5.0 or less
 
 Currently, the default FriendlyId migration will not work with MySQL 5.0 or less

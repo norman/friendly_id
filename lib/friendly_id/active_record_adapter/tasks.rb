@@ -63,7 +63,5 @@ module FriendlyId
     rescue NoMethodError
       raise "Class '%s' doesn't use FriendlyId" % klass.to_s
     end
-
   end
-
 end
