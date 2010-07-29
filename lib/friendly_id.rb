@@ -1,13 +1,5 @@
 require "babosa"
 require "forwardable"
-require "active_support/core_ext/class/attribute_accessors"
-begin
-  require "active_support/core_ext/object/blank"
-rescue MissingSourceFile
-  # support for ActiveSupport < 2.3.5
-  require "active_support/core_ext/blank"
-end
-
 require "friendly_id/slug_string"
 require "friendly_id/configuration"
 require "friendly_id/status"
