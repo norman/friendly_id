@@ -11,7 +11,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Refactored/simplified Active Record 2 and 3 query code.
 * Better support for Active Record 3 finds and scopes.
 * Extract slug handling code into separate gem, [Babosa](http://github.com/norman/babosa).
-* :max-length option now uses bytes rather than characters.
+* `:max-length` option now uses bytes rather than characters.
 * Fix quoting issue that prevented using a domain- or database-qualified column. (thanks James Cropcho)
 * Support for Active Record 2.2.x dropped; 2.3 or above is now required.
 * Fixed a few small errors on Postgres.
@@ -93,7 +93,7 @@ fork, then this upgrade may causes issues.
 **Changes:**
 
 * Sequence separator can now be configured to something other than "--".
-* New option to pass arguments to {FriendlyId::SlugString#approximate_ascii!},
+* New option to pass arguments to `FriendlyId::SlugString#approximate_ascii!`,
   allowing custom approximations specific to German or Spanish.
 * FriendlyId now queries against the cached_slug column, which improves performance.
 * {FriendlyId::SlugString} class added, allowing finer-grained control over

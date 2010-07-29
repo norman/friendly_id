@@ -2,7 +2,7 @@
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URL's and work with
-human-friendly strings as if they were numeric ids for ActiveRecord models.
+human-friendly strings as if they were numeric ids for Active Record models.
 
 Using FriendlyId, it's easy to make your application use URL's like:
 
@@ -19,7 +19,7 @@ versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
 please see the {http://norman.github.com/friendly_id/file.Guide.html FriendlyId Guide}.
 
-FriendlyId is compatible with Rails 2.3.x and 3.0.
+FriendlyId is compatible with Active Record 2.3.x and 3.0.
 
 ## Rails Quickstart
 
@@ -47,6 +47,14 @@ FriendlyId is compatible with Rails 2.3.x and 3.0.
     ./script/server
 
     GET http://0.0.0.0:3000/users/joe-schmoe
+
+## Sequel and DataMapper, too
+
+FriendlyId has experimental support for Sequel. Support for Datamapper is
+in progress. To find out more, check out the Github projects:
+
+* [http://github.com/norman/friendly_id_sequel](http://github.com/norman/friendly_id_sequel)
+* [http://github.com/myabc/friendly_id_datamapper](http://github.com/myabc/friendly_id_datamapper)
 
 ## Docs, Info and Support
 

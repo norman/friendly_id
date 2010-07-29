@@ -6,7 +6,7 @@
 ## Overview
 
 FriendlyId is a Ruby gem which allows you to work with human-friendly strings
-as if they were numeric ids for ActiveRecord models. This facilitates replacing
+as if they were numeric ids for Active Record models. This facilitates replacing
 "unfriendly" URL's like
 
     http://example.com/states/4323454
@@ -66,13 +66,13 @@ These features are explained in detail {file:Guide.md#features below}.
 ## Installation
 
 FriendlyId can be installed as a gem, or as a Rails plugin. It is compatible
-with Rails 2.2.x, 2.3.x. and 3.0.
+with Rails 2.3.x. and 3.0.
 
 ### As a Gem
 
     gem install friendly_id
 
-#### Rails 2.2.x - 2.3.x
+#### Rails 2.3.x
 
 After installing the gem, add an entry in environment.rb:
 
@@ -142,9 +142,8 @@ modify the slug text to make it more suitable for use in a URL:
     @city.create :name => "Viña del Mar"
     @city.friendly_id  # will be "viña-del-mar"
 
-By default, the string is {FriendlyId::SlugString#downcase! downcased} and
-{FriendlyId::SlugString#clean! stripped}, {FriendlyId::SlugString#with_dashes! spaces are replaced with dashes},
-and {FriendlyId::SlugString#word_chars! non-word characters are removed}.
+By default, the string is downcased and stripped, spaces are replaced with
+dashes, and non-word characters other than "-" are removed.
 
 ### Replacing Accented Characters
 
@@ -361,8 +360,8 @@ Then, redo the slugs:
 
     rake friendly_id:redo_slugs MODEL=User
 
-FriendlyId will also query against the cache column if it's available, which
-can significantly improve the performance of many queries, particularly when
+FriendlyId will automatically query against the cache column if it's available,
+which significantly improves the performance of many queries, particularly when
 passing an array of friendly ids to #find.
 
 A few warnings when using this feature:
@@ -396,9 +395,13 @@ You can choose to allow `nil` friendly_ids via the `:allow_nil` config option:
 
 This works whether the model uses slugs or not.
 
-For slugged models, if the friendly_id text is `nil`, no slug will be created. This can be useful, for example, to only create slugs for published articles and avoid creating many slugs with sequences.
+For slugged models, if the friendly_id text is `nil`, no slug will be created.
+This can be useful, for example, to only create slugs for published articles
+and avoid creating many slugs with sequences.
 
-For models that don't use slugs, this will make FriendlyId skip all its validations when the friendly_id text is `nil`. This can be useful, for example, if you wish to add the friendly_id value in an `:after_save` callback.
+For models that don't use slugs, this will make FriendlyId skip all its
+validations when the friendly_id text is `nil`. This can be useful, for
+example, if you wish to add the friendly_id value in an `:after_save` callback.
 
 For non-slugged models, if you simply wish to skip friendly_ids's validations
 for some reason, you can override the `skip_friendly_id_validations` method.
