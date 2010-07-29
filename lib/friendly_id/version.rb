@@ -3,7 +3,7 @@ module FriendlyId
     MAJOR = 3
     MINOR = 1
     TINY = 0
-    BUILD = "pre"
+    BUILD = nil
     STRING = [MAJOR, MINOR, TINY, BUILD].compact.join('.')
   end
 end

@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.1.0 (NOT RELEASED)
+## 3.1.0 (2010-07-29)
 
 * Refactored/simplified Active Record 2 and 3 query code.
 * Better support for Active Record 3 finds and scopes.
@@ -15,6 +15,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Fix quoting issue that prevented using a domain- or database-qualified column. (thanks James Cropcho)
 * Support for Active Record 2.2.x dropped; 2.3 or above is now required.
 * Fixed a few small errors on Postgres.
+* Improved porability for Sequel and in-progress DataMapper adapter.
 
 ## 3.0.6 (2010-06-10)
 
