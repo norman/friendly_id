@@ -86,6 +86,11 @@ module FriendlyId
       yield self if block_given?
     end
 
+    # This should be overridden by adapters that implement caching.
+    def cache_column?
+      false
+    end
+
     def reserved_words=(*words)
       @reserved_words = words.flatten.uniq
     end
