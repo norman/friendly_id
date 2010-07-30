@@ -3,7 +3,6 @@ module FriendlyId
     module Finders
 
       class Find
-
         extend Forwardable
         def_delegators :@klass, :scoped, :friendly_id_config, :quoted_table_name, :table_name, :primary_key,
           :connection, :name, :sanitize_sql
@@ -147,7 +146,7 @@ module FriendlyId
         finder = Find.new(self, id, options)
         finder.find_one or super
       rescue ActiveRecord::RecordNotFound => error
-        finder.raise_error(error)
+        finder ? finder.raise_error(error) : raise(error)
       end
 
       def find_some(ids, options)
@@ -155,7 +154,7 @@ module FriendlyId
         finder = Find.new(self, ids, options)
         finder.find_some
       rescue ActiveRecord::RecordNotFound => error
-        finder.raise_error(error)
+        finder ? finder.raise_error(error) : raise(error)
       end
     end
   end

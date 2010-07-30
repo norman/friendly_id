@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.1 (2010-07-30)
+
+* Fixed call to method on nil value for failing unfriendly finds (thanks [jlippiner](http://github.com/jlippiner))
+
 ## 3.1.0 (2010-07-29)
 
 * Refactored/simplified Active Record 2 and 3 query code.

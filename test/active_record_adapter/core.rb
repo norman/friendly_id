@@ -52,6 +52,12 @@ module FriendlyId
           assert_equal 2, klass.find([instance.friendly_id, second.friendly_id]).size
         end
 
+        test "failing finds with array of unfriendly_id should raise errors normally" do
+          assert_raise ActiveRecord::RecordNotFound do
+            klass.find([0, -1])
+          end
+        end
+
         test "instances should be findable by an array of numeric ids" do
           second = klass.create!(:name => "second_instance")
           third = klass.create!(:name => "third_instance")

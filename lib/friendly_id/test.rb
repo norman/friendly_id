@@ -94,6 +94,12 @@ module FriendlyId
         assert_equal instance, klass.send(find_method, "206")
       end
 
+      test "failing finds with unfriendly_id should raise errors normally" do
+        assert_raise ActiveRecord::RecordNotFound do
+          klass.send(find_method, 0)
+        end
+      end
+
       test "creation should raise an error if the friendly_id text is reserved" do
         assert_validation_error do
           klass.send(create_method, :name => "new")
