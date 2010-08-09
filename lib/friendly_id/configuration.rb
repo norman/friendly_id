@@ -64,7 +64,7 @@ module FriendlyId
     attr_accessor :reserved_words
 
     # The method or relation to use as the friendly_id's scope.
-    attr_accessor :scope
+    attr_reader :scope
 
     # The string that separates slug names from slug sequences. Defaults to "--".
     attr_accessor :sequence_separator
@@ -100,6 +100,24 @@ module FriendlyId
 
     def reserved_error_message(word)
       [method, reserved_message % word] if reserved? word
+    end
+
+    def scope=(scope)
+      self.class.scopes_used = true
+      @scope = scope
+    end
+
+    # This will be set if FriendlyId's scope feature is used in any model. It is here
+    # to provide a way to avoid invoking costly scope lookup methods when the scoped
+    # slug feature is not being used by any models.
+    def self.scopes_used=(val)
+      @scopes_used = !!val
+    end
+
+    # Are scoped slugs being used by any model?
+    # @see Configuration.scoped_used=
+    def self.scopes_used?
+      @scopes_used
     end
 
     %w[approximate_ascii scope strip_non_ascii use_slug].each do |method|

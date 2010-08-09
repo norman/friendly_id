@@ -84,6 +84,7 @@ module FriendlyId
       # Update the slugs for any model that is using this model as its
       # FriendlyId scope.
       def update_dependent_scopes
+        return unless friendly_id_config.class.scopes_used?
         if slugs(true).size > 1 && @new_friendly_id
           friendly_id_config.child_scopes.each do |klass|
             Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?",

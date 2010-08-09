@@ -121,7 +121,6 @@ module FriendlyId
           Resident.friendly_id_config.send(:associated_friendly_classes)
         end
       end
-
     end
   end
 end
