@@ -39,8 +39,7 @@ module FriendlyId
     # Strip diacritics from Western characters.
     attr_accessor :approximate_ascii
 
-    # Locale-type options for ASCII approximations. These currently be
-    # +:german+ or +:spanish+.
+    # Locale-type options for ASCII approximations.
     attr_accessor :ascii_approximation_options
 
     # The class that's using the configuration.

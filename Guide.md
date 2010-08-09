@@ -159,8 +159,6 @@ accents and other diacritics:
 
 There are special options for some languages:
 
-### German Approximations
-
     class Person < ActiveRecord::Base
       has_friendly_id :name, :use_slug => true, :approximate_ascii => true,
         :ascii_approximation_options => :german
@@ -169,15 +167,9 @@ There are special options for some languages:
     @person.create :name => "Jürgen Müller"
     @person.friendly_id  # will be "juergen-mueller"
 
-### Spanish Approximations
-
-    class Post < ActiveRecord::Base
-      has_friendly_id :title, :use_slug => true, :approximate_ascii => true,
-        :ascii_approximation_options => :spanish
-    end
-
-    @post.create(:title => "¡Feliz año!")
-    @post.title  # will be "feliz-anno"
+FriendlyId supports whatever languages are supported by
+[Babosa](https://github.com/norman/babosa); at the time of writing, this
+includes German, Spanish and Serbian.
 
 ### Unicode Slugs
 
