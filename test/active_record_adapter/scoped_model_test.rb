@@ -107,10 +107,19 @@ module FriendlyId
           assert_match(/scope: badscope/, e.message)
         end
       end
-      
+
       test "should update the sluggable field when a polymorphic relationship exists" do
         @site.update_attributes(:name => "Uptown Venue")
         assert_equal "Uptown Venue", @site.name
+      end
+
+      test "should not assume that AR's reflect_on_all_associations with return AR classes" do
+        reflections = Resident.reflect_on_all_associations
+        reflections << Struct.new("Dummy", :options, :klass).new(:options => [], :klass => Struct)
+        Resident.expects(:reflect_on_all_associations).returns(reflections)
+        assert_nothing_raised do
+          Resident.friendly_id_config.send(:associated_friendly_classes)
+        end
       end
 
     end

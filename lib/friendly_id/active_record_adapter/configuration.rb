@@ -34,7 +34,9 @@ module FriendlyId
       end
 
       def child_scopes
-        @child_scopes ||= associated_friendly_classes.select { |klass| klass.friendly_id_config.scopes_over?(configured_class) }
+        @child_scopes ||= associated_friendly_classes.select do |klass|
+          klass.friendly_id_config.scopes_over?(configured_class)
+        end
       end
 
       def custom_cache_column?
@@ -56,13 +58,10 @@ module FriendlyId
       end
 
       def associated_friendly_classes
-        configured_class.reflect_on_all_associations.select { |assoc|
-          assoc &&
-          !assoc.options[:polymorphic] &&
-          assoc.klass.uses_friendly_id?
+        configured_class.reflect_on_all_associations.compact.select { |assoc|
+          !assoc.options[:polymorphic] && assoc.klass.respond_to?(:friendly_id_config)
         }.map(&:klass)
       end
-
     end
   end
 end
