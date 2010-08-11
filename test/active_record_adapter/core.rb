@@ -114,6 +114,12 @@ module FriendlyId
           end
         end
 
+        test "failing finds with unfriendly_id should raise errors normally" do
+          assert_raise ActiveRecord::RecordNotFound do
+            klass.send(find_method, 0)
+          end
+        end
+
         test "instances found by a single id should not be read-only" do
           i = klass.find(instance.friendly_id)
           assert !i.readonly?, "expected instance not to be readonly"
