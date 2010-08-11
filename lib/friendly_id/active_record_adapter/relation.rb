@@ -87,7 +87,7 @@ module FriendlyId
         elsif unfriendly_ids.present?
           clause = unfriendly
         end
-        use_slugs ? joins(:slugs).where(clause) : where(clause)
+        use_slugs ? includes(:slugs).where(clause) : where(clause)
       end
 
       def slugged_conditions(ids)

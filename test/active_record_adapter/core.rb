@@ -113,6 +113,19 @@ module FriendlyId
             unfriendly_class.find(-1)
           end
         end
+
+        test "instances found by a single id should not be read-only" do
+          i = klass.find(instance.friendly_id)
+          assert !i.readonly?, "expected instance not to be readonly"
+        end
+
+        test "instances found by an array of ids should not be read-only" do
+          second = klass.create!(:name => "second_instance")
+          third = klass.create!(:name => "third_instance")
+          klass.find([instance.friendly_id, second.friendly_id]).each do |record|
+            assert !record.readonly?, "expected instance not to be readonly"
+          end
+        end
       end
     end
   end

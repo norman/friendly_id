@@ -36,7 +36,7 @@ module FriendlyId
           parse_ids!
           scope = some_friendly_scope
           if use_slugs? && @friendly_ids.present?
-            scope = scope.scoped(:joins => Slug.table_name.to_sym)
+            scope = scope.scoped(:include => :slugs)
             if fc.scope?
               scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}})
             end
@@ -62,9 +62,8 @@ module FriendlyId
 
         def find_one_using_slug
           name, seq = id.to_s.parse_friendly_id
-          slugs = Slug.table_name.to_sym
-          scope = scoped(:conditions => {slugs => {:name => name, :sequence => seq}}, :joins => slugs)
-          scope = scope.scoped(:conditions => {slugs => {:scope => scope_val}}) if fc.scope?
+          scope = scoped(:include => :slugs, :conditions => {:slugs => {:name => name, :sequence => seq}})
+          scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}}) if fc.scope?
           @result = scope.first(options)
           assign_status
         end
