@@ -6,6 +6,12 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.3 (2010-08-11)
+
+* Reverted approach to read-only fix from previous release.
+  See [this commit](http://github.com/norman/friendly_id/commit/e263f74e446c1e4d95901e9e8d7d6713c078c38e)
+  for details.
+
 ## 3.1.2 (2010-08-11)
 
 * Fixed records being returned read-only. (Thanks Luis Lavena)
