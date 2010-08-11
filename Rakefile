@@ -51,11 +51,10 @@ end
 
 task :pushdocs do
   branch = `git branch | grep "*"`.chomp.gsub("* ", "")
-  sh "git stash"
   sh "git checkout gh-pages"
+  sh "rm -rf FriendlyId ActiveRecord css js *.html"
   sh "cp -rp doc/* ."
   sh 'git commit -a -m "Regenerated docs"'
   sh "git push origin gh-pages"
   sh "git checkout #{branch}"
-  sh "git stash apply"
 end
