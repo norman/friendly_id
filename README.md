@@ -17,7 +17,7 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
-please see the {http://norman.github.com/friendly_id/file.Guide.html FriendlyId Guide}.
+please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html).
 
 FriendlyId is compatible with Active Record 2.3.x and 3.0.
 
@@ -82,5 +82,13 @@ and add a test that reproduces the error you are experiencing.
 ## Credits:
 
 FriendlyId was created by Norman Clarke, Adrian Mugnolo, and Emilio Tagua.
+
+If you like FriendlyId, please recommend us on Working With Rails:
+
+* [http://bit.ly/recommend-norman](http://bit.ly/recommend-norman)
+* [http://bit.ly/recommend-emilio](http://bit.ly/recommend-emilio)
+* [http://bit.ly/recommend-adrian](http://bit.ly/recommend-adrian)
+
+Thanks!
 
 Copyright (c) 2008-2010, released under the MIT license.
