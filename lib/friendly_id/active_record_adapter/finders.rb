@@ -36,11 +36,12 @@ module FriendlyId
           parse_ids!
           scope = some_friendly_scope
           if use_slugs? && @friendly_ids.present?
-            scope = scope.scoped(:include => :slugs)
+            scope = scope.scoped(:joins => :slugs)
             if fc.scope?
               scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}})
             end
           end
+          options[:readonly] = false unless options[:readonly]
           @result = scope.all(options).uniq
           validate_expected_size!
           @result.each { |record| record.friendly_id_status.name = id }
@@ -62,8 +63,9 @@ module FriendlyId
 
         def find_one_using_slug
           name, seq = id.to_s.parse_friendly_id
-          scope = scoped(:include => :slugs, :conditions => {:slugs => {:name => name, :sequence => seq}})
+          scope = scoped(:joins => :slugs, :conditions => {:slugs => {:name => name, :sequence => seq}})
           scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}}) if fc.scope?
+          options[:readonly] = false unless options[:readonly]
           @result = scope.first(options)
           assign_status
         end
