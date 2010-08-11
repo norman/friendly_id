@@ -6,6 +6,15 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.2 (2010-08-11)
+
+* Fixed records being returned read-only. (Thanks Luis Lavena)
+* Don't assume relations are subclasses of ActiveRecord::Base. This fixes using
+  FriendlyId with [Static Model](http://github.com/quirkey/static_model). (Thanks
+  Luis Lavena)
+* Avoid checking for dependent scopes when no models are using the scopes feature.
+
+
 ## 3.1.1 (2010-07-30)
 
 * Fixed call to method on nil value for failing unfriendly finds (thanks [jlippiner](http://github.com/jlippiner))
