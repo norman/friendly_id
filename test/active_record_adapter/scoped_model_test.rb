@@ -77,7 +77,7 @@ module FriendlyId
       end
 
       test "should find a single scoped record with a scope as a string" do
-        assert Resident.find(@resident.friendly_id, :scope => @resident.country)
+        assert Resident.find(@resident.friendly_id, :scope => @resident.country.to_param)
       end
 
       test "should find a single scoped record with a scope" do
