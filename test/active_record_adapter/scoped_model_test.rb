@@ -84,6 +84,14 @@ module FriendlyId
         assert Resident.find(@resident.friendly_id, :scope => @resident.country)
       end
 
+      test "should find a multiple scoped records with a scope" do
+        r1 = Resident.create!(:name => "John Smith", :country => @usa)
+        r2 = Resident.create!(:name => "Jane Smith", :country => @usa)
+        result = Resident.find([r1, r2].map(&:friendly_id), :scope => @resident.country)
+        assert_equal 2, result.size
+      end
+
+
       test "should raise an error when finding a single scoped record with no scope" do
         assert_raises ActiveRecord::RecordNotFound do
           Resident.find(@resident.friendly_id)
