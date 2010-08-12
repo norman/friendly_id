@@ -34,7 +34,9 @@ module FriendlyId
       def find_some(ids)
         return super unless @klass.uses_friendly_id?
         ids = ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
-        records = friendly_records(*ids.partition {|id| id.friendly_id?}).each do |record|
+        friendly_ids, unfriendly_ids = ids.partition {|id| id.friendly_id?}
+        return super if friendly_ids.empty?
+        records = friendly_records(friendly_ids, unfriendly_ids).each do |record|
           record.friendly_id_status.name = ids
         end
         validate_expected_size!(ids, records)
@@ -76,28 +78,40 @@ module FriendlyId
       end
 
       def friendly_records(friendly_ids, unfriendly_ids)
-        use_slugs  = friendly_id_config.use_slugs? && !friendly_id_config.cache_column?
+        return find_some_using_slug(friendly_ids, unfriendly_ids) if should_use_slugs?
         column     = friendly_id_config.cache_column || friendly_id_config.column
-        friendly   = use_slugs ? slugged_conditions(friendly_ids) : arel_table[column].in(friendly_ids)
+        friendly   = arel_table[column].in(friendly_ids)
         unfriendly = arel_table[primary_key].in unfriendly_ids
         if friendly_ids.present? && unfriendly_ids.present?
-          clause = friendly.or(unfriendly)
-        elsif friendly_ids.present?
-          clause = friendly
-        elsif unfriendly_ids.present?
-          clause = unfriendly
+          where(friendly.or(unfriendly))
+        else
+          where(friendly)
         end
-        use_slugs ? includes(:slugs).where(clause) : where(clause)
       end
 
-      def slugged_conditions(ids)
-        return if ids.empty?
-        slugs = Slug.arel_table
-        conditions = lambda do |id|
+      def should_use_slugs?
+        friendly_id_config.use_slugs? && (friendly_id_scope || !friendly_id_config.cache_column?)
+      end
+
+      def find_some_using_slug(friendly_ids, unfriendly_ids)
+        ids = [unfriendly_ids + sluggable_ids_for(friendly_ids)].flatten.uniq
+        where(arel_table[primary_key].in(ids))
+      end
+
+      def sluggable_ids_for(ids)
+        return [] unless ids.present?
+        fragment = "(slugs.name = %s AND slugs.sequence = %d)"
+        conditions = ids.inject(nil) do |clause, id|
           name, seq = id.parse_friendly_id
-          slugs[:name].eq(name).and(slugs[:sequence].eq(seq)).and(slugs[:scope].eq(friendly_id_scope))
+          string = fragment % [connection.quote(name), seq]
+          clause ? clause + " OR #{string}" : string
         end
-        ids.inject(nil) {|clause, id| clause ? clause.or(conditions.call(id)) : conditions.call(id) }
+        if friendly_id_scope
+          scope = connection.quote(friendly_id_scope)
+          conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
+        end
+        sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
+        connection.execute(sql).map {|r| r[0]}
       end
 
       def validate_expected_size!(ids, result)
