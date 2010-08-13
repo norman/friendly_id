@@ -3,24 +3,27 @@ module FriendlyId
     module Relation
 
       class Find
+        extend Forwardable
 
         attr :relation
         attr :ids
         alias id ids
+
+        def_delegators :relation, :arel, :arel_table, :friendly_id_scope,
+                       :klass, :limit_value, :offset_value, :where
+        def_delegators :klass, :connection, :friendly_id_config
+
+        alias fc friendly_id_config
 
         def initialize(relation, ids)
           @relation = relation
           @ids = ids
         end
 
-        def friendly_id_config
-          relation.klass.friendly_id_config
-        end
-
         def find_one
-          if friendly_id_config.cache_column?
+          if fc.cache_column?
             find_one_with_cached_slug
-          elsif friendly_id_config.use_slugs?
+          elsif fc.use_slugs?
             find_one_with_slug
           else
             find_one_without_slug
@@ -28,14 +31,14 @@ module FriendlyId
         end
 
         def find_one_without_slug
-          record = relation.where(friendly_id_config.column => id).first and begin
+          record = where(fc.column => id).first and begin
             record.friendly_id_status.name = id
             record
           end
         end
 
         def find_one_with_cached_slug
-          record = relation.where(friendly_id_config.cache_column => id).first
+          record = where(fc.cache_column => id).first
           if record
             name, seq = id.to_s.parse_friendly_id
             record.friendly_id_status.name = name
@@ -48,16 +51,20 @@ module FriendlyId
 
         def find_one_with_slug
           name, seq = id.to_s.parse_friendly_id
-          slug = Slug.where(:name => name, :sequence => seq, :scope => relation.friendly_id_scope,
-                            :sluggable_type => relation.klass.base_class.to_s).first
+          slug = Slug.where(
+            :name           => name,
+            :sequence       => seq,
+            :scope          => friendly_id_scope,
+            :sluggable_type => klass.base_class.to_s
+          ).first
           if slug
-            record = relation.send :find_one_without_friendly, slug.sluggable_id
-            record.friendly_id_status.name = name
+            record = relation.send(:find_one_without_friendly, slug.sluggable_id)
+            record.friendly_id_status.name     = name
             record.friendly_id_status.sequence = seq
-            record.friendly_id_status.slug = slug
+            record.friendly_id_status.slug     = slug
             record
           else
-            relation.send :find_one_without_friendly, id
+            relation.send(:find_one_without_friendly, id)
           end
         end
 
@@ -71,76 +78,74 @@ module FriendlyId
           validate_expected_size!(ids, records)
         end
 
-        def raise_scoped_error(error)
-          scope_message = relation.friendly_id_scope || "expected, but none given"
+        def raise_error(error)
+          raise(error) unless fc.scope
+          scope_message = friendly_id_scope || "expected, but none given"
           message = "%s, scope: %s" % [error.message, scope_message]
           raise ActiveRecord::RecordNotFound, message
         end
 
         def friendly_records(friendly_ids, unfriendly_ids)
           return find_some_using_slug(friendly_ids, unfriendly_ids) if should_use_slugs?
-          column     = friendly_id_config.cache_column || friendly_id_config.column
-          friendly   = relation.arel_table[column].in(friendly_ids)
-          unfriendly = relation.arel_table[relation.primary_key].in unfriendly_ids
+          column     = fc.cache_column || fc.column
+          friendly   = arel_table[column].in(friendly_ids)
+          unfriendly = arel_table[relation.primary_key].in unfriendly_ids
           if friendly_ids.present? && unfriendly_ids.present?
-            relation.where(friendly.or(unfriendly))
+            where(friendly.or(unfriendly))
           else
-            relation.where(friendly)
+            where(friendly)
           end
         end
 
         def should_use_slugs?
-          friendly_id_config.use_slugs? && (relation.friendly_id_scope || !friendly_id_config.cache_column?)
+          fc.use_slugs? && (friendly_id_scope || !fc.cache_column?)
         end
 
         def find_some_using_slug(friendly_ids, unfriendly_ids)
           ids = [unfriendly_ids + sluggable_ids_for(friendly_ids)].flatten.uniq
-          relation.where(relation.arel_table[relation.primary_key].in(ids))
+          where(arel_table[relation.primary_key].in(ids))
         end
 
         def sluggable_ids_for(ids)
-          return [] unless ids.present?
+          return [] if ids.empty?
           fragment = "(slugs.name = %s AND slugs.sequence = %d)"
           conditions = ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            string = fragment % [relation.connection.quote(name), seq]
+            string = fragment % [connection.quote(name), seq]
             clause ? clause + " OR #{string}" : string
           end
-          if relation.friendly_id_scope
-            scope = relation.connection.quote(relation.friendly_id_scope)
+          if friendly_id_scope
+            scope = connection.quote(friendly_id_scope)
             conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
           end
           sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
-          relation.connection.execute(sql).map {|r| r[0]}
+          connection.execute(sql).map {|r| r[0]}
         end
 
         def validate_expected_size!(ids, result)
           expected_size =
-            if @limit_value && ids.size > @limit_value
-              @limit_value
+            if limit_value && ids.size > limit_value
+              limit_value
             else
               ids.size
             end
 
           # 11 ids with limit 3, offset 9 should give 2 results.
-          if @offset_value && (ids.size - @offset_value < expected_size)
-            expected_size = ids.size - @offset_value
+          if offset_value && (ids.size - offset_value < expected_size)
+            expected_size = ids.size - offset_value
           end
 
           if result.size == expected_size
             result
           else
-            conditions = relation.arel.send(:where_clauses).join(', ')
+            conditions = arel.send(:where_clauses).join(', ')
             conditions = " [WHERE #{conditions}]" if conditions.present?
-
-            error = "Couldn't find all #{relation.klass.name.pluralize} with IDs "
+            error = "Couldn't find all #{klass.name.pluralize} with IDs "
             error << "(#{ids.join(", ")})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
             raise ActiveRecord::RecordNotFound, error
           end
         end
       end
-
-
 
       attr :friendly_id_scope
 
@@ -156,17 +161,19 @@ module FriendlyId
 
       def find_one(id)
         begin
-          return super if !@klass.uses_friendly_id? or id.unfriendly_id?
+          return super if !klass.uses_friendly_id? or id.unfriendly_id?
           find = Find.new(self, id)
           find.find_one or super
         rescue ActiveRecord::RecordNotFound => error
-          uses_friendly_id? && friendly_id_config.scope? ? find.raise_scoped_error(error) : raise(error)
+          find ? find.raise_error(error) : raise(error)
         end
       end
 
       def find_some(ids)
-        return super unless @klass.uses_friendly_id?
+        return super unless klass.uses_friendly_id?
         Find.new(self, ids).find_some or super
+      rescue ActiveRecord::RecordNotFound => error
+        find ? find.raise_error(error) : raise(error)
       end
 
     end
