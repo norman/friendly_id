@@ -12,7 +12,6 @@ module FriendlyId
         def_delegators :relation, :arel, :arel_table, :friendly_id_scope,
                        :klass, :limit_value, :offset_value, :where
         def_delegators :klass, :connection, :friendly_id_config
-
         alias fc friendly_id_config
 
         def initialize(relation, ids)
@@ -30,23 +29,41 @@ module FriendlyId
           end
         end
 
-        def find_one_without_slug
-          record = where(fc.column => id).first and begin
-            record.friendly_id_status.name = id
-            record
+        def find_some
+          ids = @ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
+          friendly_ids, unfriendly_ids = ids.partition {|id| id.friendly_id?}
+          return if friendly_ids.empty?
+          records = friendly_records(friendly_ids, unfriendly_ids).each do |record|
+            record.friendly_id_status.name = ids
           end
+          validate_expected_size!(ids, records)
+        end
+
+        def raise_error(error)
+          raise(error) unless fc.scope
+          scope_message = friendly_id_scope || "expected, but none given"
+          message = "%s, scope: %s" % [error.message, scope_message]
+          raise ActiveRecord::RecordNotFound, message
+        end
+
+        private
+
+        def assign_status
+          return unless @result
+          name, seq = id.to_s.parse_friendly_id
+          @result.friendly_id_status.name = name
+          @result.friendly_id_status.sequence = seq if fc.use_slugs?
+          @result
+        end
+
+        def find_one_without_slug
+          @result = where(fc.column => id).first
+          assign_status
         end
 
         def find_one_with_cached_slug
-          record = where(fc.cache_column => id).first
-          if record
-            name, seq = id.to_s.parse_friendly_id
-            record.friendly_id_status.name = name
-            record.friendly_id_status.sequence = seq
-            record
-          else
-            find_one_with_slug
-          end
+          @result = where(fc.cache_column => id).first
+          assign_status or find_one_with_slug
         end
 
         def find_one_with_slug
@@ -68,25 +85,9 @@ module FriendlyId
           end
         end
 
-        def find_some
-          ids = @ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
-          friendly_ids, unfriendly_ids = ids.partition {|id| id.friendly_id?}
-          return if friendly_ids.empty?
-          records = friendly_records(friendly_ids, unfriendly_ids).each do |record|
-            record.friendly_id_status.name = ids
-          end
-          validate_expected_size!(ids, records)
-        end
-
-        def raise_error(error)
-          raise(error) unless fc.scope
-          scope_message = friendly_id_scope || "expected, but none given"
-          message = "%s, scope: %s" % [error.message, scope_message]
-          raise ActiveRecord::RecordNotFound, message
-        end
-
         def friendly_records(friendly_ids, unfriendly_ids)
-          return find_some_using_slug(friendly_ids, unfriendly_ids) if should_use_slugs?
+          use_slugs_table =  fc.use_slugs? && (friendly_id_scope || !fc.cache_column?)
+          return find_some_using_slug(friendly_ids, unfriendly_ids) if use_slugs_table
           column     = fc.cache_column || fc.column
           friendly   = arel_table[column].in(friendly_ids)
           unfriendly = arel_table[relation.primary_key].in unfriendly_ids
@@ -95,10 +96,6 @@ module FriendlyId
           else
             where(friendly)
           end
-        end
-
-        def should_use_slugs?
-          fc.use_slugs? && (friendly_id_scope || !fc.cache_column?)
         end
 
         def find_some_using_slug(friendly_ids, unfriendly_ids)

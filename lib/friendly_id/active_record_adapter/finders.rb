@@ -26,8 +26,8 @@ module FriendlyId
         end
 
         def find_one
-          return find_one_using_cached_slug if cache_column?
-          return find_one_using_slug if use_slugs?
+          return find_one_with_cached_slug if cache_column?
+          return find_one_with_slug if use_slugs?
           @result = scoped(:conditions => ["#{table_name}.#{fc.column} = ?", id]).first(options)
           assign_status
         end
@@ -56,12 +56,12 @@ module FriendlyId
 
         private
 
-        def find_one_using_cached_slug
+        def find_one_with_cached_slug
           @result = scoped(:conditions => ["#{table_name}.#{cache_column} = ?", id]).first(options)
-          assign_status or find_one_using_slug
+          assign_status or find_one_with_slug
         end
 
-        def find_one_using_slug
+        def find_one_with_slug
           name, seq = id.to_s.parse_friendly_id
           scope = scoped(:joins => :slugs, :conditions => {:slugs => {:name => name, :sequence => seq}})
           scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}}) if fc.scope?
