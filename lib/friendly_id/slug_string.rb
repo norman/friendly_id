@@ -1,14 +1,12 @@
 # encoding: utf-8
 module FriendlyId
 
-  class SlugString < Babosa::SlugString
+  class SlugString < Babosa::Identifier
     # Normalize the string for a given {FriendlyId::Configuration}.
     # @param config [FriendlyId::Configuration]
     # @return String
     def normalize_for!(config)
-      approximate_ascii!(config.ascii_approximation_options) if config.approximate_ascii?
-      to_ascii! if config.strip_non_ascii?
-      normalize!
+      normalize!(config.babosa_options)
     end
 
     # Validate that the slug string is not blank or reserved, and truncate

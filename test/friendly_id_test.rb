@@ -1,7 +1,34 @@
+# encoding: utf-8
 require File.expand_path('../test_helper', __FILE__)
 
 module FriendlyId
   module Test
+
+    class SlugStringTest < ::Test::Unit::TestCase
+      test "should not transliterate by default" do
+        s = SlugString.new("über")
+        assert_equal "über", s.normalize_for!(Configuration.new(nil, :name))
+      end
+
+      test "should transliterate if specified" do
+        s = SlugString.new("über")
+        options = {:approximate_ascii => true}
+        assert_equal "uber", s.normalize_for!(Configuration.new(nil, :name, options))
+      end
+
+      test "should strip non-ascii if specified" do
+        s = SlugString.new("über")
+        options = {:strip_non_ascii => true}
+        assert_equal "ber", s.normalize_for!(Configuration.new(nil, :name, options))
+      end
+
+      test "should use transliterations if given" do
+        s = SlugString.new("über")
+        options = {:approximate_ascii => true, :ascii_approximation_options => :german}
+        assert_equal "ueber", s.normalize_for!(Configuration.new(nil, :name, options))
+      end
+    end
+
     class FriendlyIdTest < ::Test::Unit::TestCase
       test "should parse a friendly_id name and sequence" do
         assert_equal ["test", 2], "test--2".parse_friendly_id

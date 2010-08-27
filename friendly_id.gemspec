@@ -22,6 +22,6 @@ spec = Gem::Specification.new do |s|
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*" ]
 
-  s.add_dependency "babosa", ">= 0.1.0"
+  s.add_dependency "babosa", "~> 0.2.0"
 
 end

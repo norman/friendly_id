@@ -130,6 +130,13 @@ module FriendlyId
 
     alias :use_slugs? :use_slug?
 
+    def babosa_options
+      {
+        :to_ascii         => strip_non_ascii?,
+        :transliterate    => approximate_ascii?,
+        :transliterations => ascii_approximation_options,
+        :max_length       => max_length
+      }
+    end
   end
-
 end
