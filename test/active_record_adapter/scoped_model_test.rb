@@ -5,20 +5,15 @@ module FriendlyId
 
     class ScopedModelTest < ::Test::Unit::TestCase
 
-      include FriendlyId::Test::Generic
-      include FriendlyId::Test::Slugged
-      include FriendlyId::Test::ActiveRecordAdapter::Slugged
-      include FriendlyId::Test::ActiveRecordAdapter::Core
-
       def setup
-        @user = User.create!(:name => "john")
-        @house = House.create!(:name => "123 Main", :user => @user)
-        @usa = Country.create!(:name => "USA")
-        @canada = Country.create!(:name => "Canada")
-        @resident = Resident.create!(:name => "John Smith", :country => @usa)
+        @user      = User.create!(:name => "john")
+        @house     = House.create!(:name => "123 Main", :user => @user)
+        @usa       = Country.create!(:name => "USA")
+        @canada    = Country.create!(:name => "Canada")
+        @resident  = Resident.create!(:name => "John Smith", :country => @usa)
         @resident2 = Resident.create!(:name => "John Smith", :country => @canada)
-        @owner = Company.create!(:name => "Acme Events")
-        @site = Site.create!(:name => "Downtown Venue", :owner => @owner)
+        @owner     = Company.create!(:name => "Acme Events")
+        @site      = Site.create!(:name => "Downtown Venue", :owner => @owner)
       end
 
       def teardown
