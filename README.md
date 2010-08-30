@@ -21,7 +21,7 @@ please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guid
 
 FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
-## Rails Quickstart (3.0)
+## Rails Quickstart
 
     gem install friendly_id
 
