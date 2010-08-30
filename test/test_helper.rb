@@ -5,11 +5,9 @@ $:.uniq!
 $KCODE = "UTF8" if RUBY_VERSION < "1.9"
 $VERBOSE = false
 require "rubygems"
-require "bundler"
-Bundler.setup
+require "bundler/setup"
 require "test/unit"
 require "mocha"
 require "active_support"
-# require "ruby-debug"
 require "friendly_id"
 require "friendly_id/test"
