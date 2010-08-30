@@ -35,6 +35,11 @@ CreateSupportModels.up
 # A model that uses the automagically configured "cached_slug" column
 class District < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true
+  before_save :say_hello
+
+  def say_hello
+    @said_hello = true
+  end
 end
 
 # A model with optimistic locking enabled

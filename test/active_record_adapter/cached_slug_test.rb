@@ -64,6 +64,11 @@ module FriendlyId
           instance.friendly_id(true)
         end
 
+        test "should not fire callbacks when updating slug cache" do
+          instance.expects(:say_hello).once
+          instance.update_attributes(:name => "new name")
+          assert_equal instance.slug.to_friendly_id, cached_slug
+        end
       end
     end
   end
