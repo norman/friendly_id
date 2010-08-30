@@ -109,8 +109,7 @@ module FriendlyId
             scope = connection.quote(friendly_id_scope)
             conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
           end
-          sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
-          connection.execute(sql).map {|r| r[0]}
+          connection.select_values "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
         end
 
         def validate_expected_size!(ids, result)
