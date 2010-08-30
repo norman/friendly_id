@@ -76,13 +76,13 @@ with Rails 2.3.x. and 3.0.
 
 After installing the gem, add an entry in environment.rb:
 
-    config.gem "friendly_id", :version => "~> 2.3"
+    config.gem "friendly_id", :version => "~> 3.1"
 
 ### Rails 3.0
 
 After installing the gem, add an entry in the Gemfile:
 
-    gem "friendly_id", "~> 3.0"
+    gem "friendly_id", "~> 3.1"
 
 ### As a Plugin
 
@@ -147,7 +147,7 @@ dashes, and non-word characters other than "-" are removed.
 
 ### Replacing Accented Characters
 
-If your strings use Western characters, you can use the `:approximate_ascii` option to remove
+If your strings use Latin characters, you can use the `:approximate_ascii` option to remove
 accents and other diacritics:
 
     class City < ActiveRecord::Base
@@ -169,7 +169,7 @@ There are special options for some languages:
 
 FriendlyId supports whatever languages are supported by
 [Babosa](https://github.com/norman/babosa); at the time of writing, this
-includes German, Spanish and Serbian.
+includes German, Spanish, Serbian and Danish.
 
 ### Unicode Slugs
 

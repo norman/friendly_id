@@ -19,13 +19,13 @@ versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
 please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html).
 
-FriendlyId is compatible with Active Record 2.3.x and 3.0.
+FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
-## Rails Quickstart
+## Rails Quickstart (3.0)
 
     gem install friendly_id
 
-    rails my_app
+    rails new my_app
 
     cd my_app
 
@@ -44,7 +44,7 @@ FriendlyId is compatible with Active Record 2.3.x and 3.0.
 
     User.create! :name => "Joe Schmoe"
 
-    ./script/server
+    rails server
 
     GET http://0.0.0.0:3000/users/joe-schmoe
 
