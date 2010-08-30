@@ -121,7 +121,7 @@ module FriendlyId
     end
 
     %w[approximate_ascii scope strip_non_ascii use_slug].each do |method|
-      class_eval(<<-EOM)
+      class_eval(<<-EOM, __FILE__, __LINE__ +1)
         def #{method}?
           !! #{method}
         end
