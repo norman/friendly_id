@@ -67,18 +67,12 @@ module FriendlyId
         end
 
         def find_one_with_slug
-          name, seq = id.to_s.parse_friendly_id
-          slug = Slug.where(
-            :name           => name,
-            :sequence       => seq,
-            :scope          => friendly_id_scope,
-            :sluggable_type => klass.base_class.to_s
-          ).first
-          if slug
-            record = relation.send(:find_one_without_friendly, slug.sluggable_id)
+          sluggable_id = sluggable_ids_for([id]).first
+          if sluggable_id
+            name, seq = id.to_s.parse_friendly_id
+            record = relation.send(:find_one_without_friendly, sluggable_id)
             record.friendly_id_status.name     = name
             record.friendly_id_status.sequence = seq
-            record.friendly_id_status.slug     = slug
             record
           else
             relation.send(:find_one_without_friendly, id)
@@ -111,7 +105,7 @@ module FriendlyId
             string = fragment % [connection.quote(name), seq]
             clause ? clause + " OR #{string}" : string
           end
-          if friendly_id_scope
+          if fc.scope?
             scope = connection.quote(friendly_id_scope)
             conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
           end
