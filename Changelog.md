@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.5 (2010-09-01)
+
+* Fix invalid empty symbol with 1.8.x.
+
 ## 3.1.4 (2010-09-01)
 
 * Significantly improve performance of queries using slugs with no cache on AR3.

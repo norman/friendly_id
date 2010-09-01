@@ -87,7 +87,7 @@ module FriendlyId
 
     def cache_column=(value)
       @cache_column = value.to_s.strip.to_sym
-      if [:slug, :slugs, :""].include?(@cache_column)
+      if value =~ /\s/ || [:slug, :slugs].include?(@cache_column)
         raise ArgumentError, "FriendlyId cache column can not be named '#{value}'"
       end
       @cache_column
