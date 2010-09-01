@@ -5,15 +5,19 @@
 
 ## Overview
 
-FriendlyId is a Ruby gem which allows you to work with human-friendly strings
-as if they were numeric ids for Active Record models. This facilitates replacing
-"unfriendly" URL's like
+FriendlyId is an ORM-centric Ruby library that lets you work with human-friendly
+strings as if they were numeric ids. Among other things, this facilitates
+replacing "unfriendly" URL's like:
 
     http://example.com/states/4323454
 
 with "friendly" ones such as:
 
     http://example.com/states/washington
+
+FriendlyId is typically used with Rails and Active Record, but can also be used in
+non-Rails applications, and with [Sequel](http://github.com/norman/friendly_id_sequel) and
+[DataMapper](http://github.com/myabc/friendly_id_datamapper).
 
 ## Simple Models
 
@@ -30,9 +34,9 @@ updated. The most common example of this is a user name or login column:
     @user.to_param            # returns "joe"
     redirect_to @user         # the URL will be /users/joe
 
-In this case, FriendlyId assumes you want to use the column as-is; FriendlyId
-will never modify the value of the column, and your application must ensure
-that the value is admissible in a URL:
+In this case, FriendlyId assumes you want to use the column as-is; it will never
+modify the value of the column, and your application should ensure that the value
+is admissible in a URL:
 
     class City < ActiveRecord::Base
       has_friendly_id :name
@@ -60,8 +64,8 @@ wish to modify to make them more suitable for use in URL's.
     redirect_to @post   # the URL will be /posts/this-is-the-first-post
 
 If you are unsure whether to use slugs, then your best bet is to use them,
-because FriendlyId provides many useful features that only work with slugs.
-These features are explained in detail {file:Guide.md#features below}.
+because FriendlyId provides many useful features that only work with this
+feature. These features are explained in detail {file:Guide.md#features below}.
 
 ## Installation
 
@@ -94,17 +98,24 @@ However, installing as a gem offers simpler version control than plugin
 installation. Whenever possible, install as a gem instead. Plugin support may
 eventually be removed in a future version.
 
+### Future Compatibility
+
+FriendlyId will always remain compatible with the current release of Rails, and
+at least one stable release behind. That means that support for 2.3.x will not be
+dropped until a stable release of 3.1 is out, or possibly longer.
+
 ### Setup
 
 After installing either as a gem or plugin, run:
 
-    ./script/generate friendly_id
+
+    rails generate friendly_id
     rake db:migrate
 
 This will install the Rake tasks and slug migration for FriendlyId. If you are
-not going to use slugs, you can do:
+not going to use slugs, you can use the `skip-migration` option:
 
-    ./script/generate friendly_id --skip-migration
+    rails generate friendly_id --skip-migration
 
 FriendlyId is now set up and ready for you to use.
 
@@ -169,7 +180,7 @@ There are special options for some languages:
 
 FriendlyId supports whatever languages are supported by
 [Babosa](https://github.com/norman/babosa); at the time of writing, this
-includes German, Spanish, Serbian and Danish.
+includes Danish, German, Serbian and Spanish.
 
 ### Unicode Slugs
 
@@ -334,13 +345,12 @@ Checking the slugs table all the time has an impact on performance, so as of
 ### Automatic setup
 
 To enable slug caching, simply add a column named "cached_slug" to your model.
-Is also advised to index this column for performance reason.
 FriendlyId will automatically use this column if it detects it:
 
     class AddCachedSlugToUsers < ActiveRecord::Migration
       def self.up
         add_column :users, :cached_slug, :string
-        add_index  :users, :cached_slug
+        add_index  :users, :cached_slug, :unique => true
       end
 
       def self.down
@@ -353,8 +363,7 @@ Then, redo the slugs:
     rake friendly_id:redo_slugs MODEL=User
 
 FriendlyId will automatically query against the cache column if it's available,
-which significantly improves the performance of many queries, particularly when
-passing an array of friendly ids to #find.
+which will <a href="#some_benchmarks">improve the performance</a> of many queries.
 
 A few warnings when using this feature:
 
@@ -376,6 +385,8 @@ You can also use a different name for the column if you choose, via the
       has_friendly_id :name, :use_slug => true, :cache_column => 'my_cached_slug'
     end
 
+Don't use "slug" or "slugs" because FriendlyId needs those names for its own
+purposes.
 
 ## Nil slugs and skipping validations
 
@@ -504,10 +515,10 @@ Or even better, unless you're using a custom primary key:
 because sorting by a unique integer column is faster than sorting by a date
 column.
 
-## MySQL 5.0 or less
+## MySQL MyISAM tables
 
-Currently, the default FriendlyId migration will not work with MySQL 5.0 or less
-because it creates and index that's too large. The easiest way to work around
+Currently, the default FriendlyId migration will not work with MyISAM tables
+because it creates an index that's too large. The easiest way to work around
 this is to change the generated migration to add limits on some column lengths.
 Please see [this issue](http://github.com/norman/friendly_id/issues#issue/50) in
 the FriendlyId issue tracker for more information.
@@ -537,29 +548,31 @@ enabled. But if it is, then your patches would be very welcome!
 
 
     activerecord (2.3.8)
-    ruby 1.9.2dev (2010-07-06 revision 28549) [x86_64-darwin10.4.0]
-    friendly_id (3.1.0)
+    ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-darwin10.4.0]
+    friendly_id (3.1.4)
+    sqlite3-ruby (1.3.1)
     sqlite3 3.6.12 in-memory database
 
                                                        | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
     ------------------------------------------------------------------------------------------------
-    find model by id                             x1000 |   0.340 |   0.468 |   0.877 |       0.534 |
-    find model using array of ids                x1000 |   0.551 |   0.592 |   0.989 |       0.893 |
-    find model using id, then to_param           x1000 |   0.340 |   0.487 |   1.310 |       0.551 |
+    find model by id                             x1000 |   0.370 |   0.503 |   0.940 |       0.562 |
+    find model using array of ids                x1000 |   0.612 |   0.615 |   1.054 |       0.957 |
+    find model using id, then to_param           x1000 |   0.374 |   0.535 |   1.396 |       0.567 |
     ================================================================================================
-    Total                                              |   1.231 |   1.547 |   3.176 |       1.979 |
+    Total                                              |   1.356 |   1.653 |   3.390 |       2.086 |
 
 
-
-    activerecord (3.0.0.beta4)
-    ruby 1.9.2dev (2010-07-06 revision 28549) [x86_64-darwin10.4.0]
-    friendly_id (3.1.0)
+    activerecord (3.0.0)
+    ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-darwin10.4.0]
+    friendly_id (3.1.4)
+    sqlite3-ruby (1.3.1)
     sqlite3 3.6.12 in-memory database
 
                                                        | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
     ------------------------------------------------------------------------------------------------
-    find model by id                             x1000 |   0.495 |   0.608 |   1.519 |       0.641 |
-    find model using array of ids                x1000 |   0.708 |   0.722 |   6.483 |       0.782 |
-    find model using id, then to_param           x1000 |   0.506 |   0.645 |   2.644 |       0.637 |
+    find model by id                             x1000 |   0.286 |   0.365 |   0.518 |       0.393 |
+    find model using array of ids                x1000 |   0.329 |   0.441 |   0.709 |       0.475 |
+    find model using id, then to_param           x1000 |   0.321 |   0.332 |   0.976 |       0.399 |
     ================================================================================================
-    Total                                              |   1.709 |   1.976 |  10.645 |       2.061 |
+    Total                                              |   0.936 |   1.138 |   2.203 |       1.266 |
+

@@ -21,6 +21,14 @@ please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guid
 
 FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
+## Docs, Info and Support
+
+* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
+* [API Docs](http://norman.github.com/friendly_id)
+* [Google Group](http://groups.google.com/group/friendly_id)
+* [Source Code](http://github.com/norman/friendly_id/)
+* [Issue Tracker](http://github.com/norman/friendly_id/issues)
+
 ## Rails Quickstart
 
     gem install friendly_id
@@ -56,15 +64,7 @@ in progress. To find out more, check out the Github projects:
 * [http://github.com/norman/friendly_id_sequel](http://github.com/norman/friendly_id_sequel)
 * [http://github.com/myabc/friendly_id_datamapper](http://github.com/myabc/friendly_id_datamapper)
 
-## Docs, Info and Support
-
-* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
-* [API Docs](http://norman.github.com/friendly_id)
-* [Google Group](http://groups.google.com/group/friendly_id)
-* [Source Code](http://github.com/norman/friendly_id/)
-* [Issue Tracker](http://github.com/norman/friendly_id/issues)
-
-## Bugs:
+## Bugs
 
 Please report them on the [Github issue tracker](http://github.com/norman/friendly_id/issues)
 for this project.
@@ -79,7 +79,7 @@ If you have a bug to report, please include the following information:
 If you are able to, it helps even more if you can fork FriendlyId on Github,
 and add a test that reproduces the error you are experiencing.
 
-## Credits:
+## Credits
 
 FriendlyId was created by Norman Clarke, Adrian Mugnolo, and Emilio Tagua.
 
