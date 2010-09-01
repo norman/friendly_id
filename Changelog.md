@@ -6,10 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.1.4 (2010-08-30)
+## 3.1.4 (2010-09-01)
 
 * Significantly improve performance of queries using slugs with no cache on AR3.
 * Fix callbacks being invoked after setting cached slugs.
+* Add validations to some configuration params.
 
 ## 3.1.3 (2010-08-11)
 
