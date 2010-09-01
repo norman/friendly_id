@@ -4,6 +4,24 @@ require File.expand_path('../test_helper', __FILE__)
 module FriendlyId
   module Test
 
+    class ConfigurationTest < ::Test::Unit::TestCase
+      test "should validate sequence separator name" do
+        ["-", " ", "\n", "\t"].each do |string|
+          assert_raise ArgumentError do
+            Configuration.new(NilClass, :hello, :sequence_separator => string)
+          end
+        end
+      end
+
+      test "should validate cached slug name" do
+        ["slug", "slugs", " "].each do |string|
+          assert_raise ArgumentError do
+            Configuration.new(NilClass, :hello, :cache_column => string)
+          end
+        end
+      end
+    end
+
     class SlugStringTest < ::Test::Unit::TestCase
       test "should not transliterate by default" do
         s = SlugString.new("über")

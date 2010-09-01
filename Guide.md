@@ -289,8 +289,8 @@ unique if necessary:
     ...
     etc.
 
-Note that the number is preceded by "--" to distinguish it from the
-rest of the slug. This is important to enable having slugs like:
+Note that the number is preceded by "--" rather than "-" to distinguish it from
+the rest of the slug. This is important to enable having slugs like:
 
     /cars/peugeot-206
     /cars/peugeot-206--2
@@ -298,7 +298,7 @@ rest of the slug. This is important to enable having slugs like:
 You can configure the separator string used by your model by setting the
 `:sequence_separator` option in `has_friendly_id`:
 
-    has_friendly_id :title, :use_slug => true, :sequence_separator => ";"
+    has_friendly_id :title, :use_slug => true, :sequence_separator => ":"
 
 You can also override the default used in
 {FriendlyId::Configuration::DEFAULTS} to set the value for any model using

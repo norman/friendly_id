@@ -85,6 +85,14 @@ module FriendlyId
       yield self if block_given?
     end
 
+    def cache_column=(value)
+      @cache_column = value.to_s.strip.to_sym
+      if [:slug, :slugs, :""].include?(@cache_column)
+        raise ArgumentError, "FriendlyId cache column can not be named '#{value}'"
+      end
+      @cache_column
+    end
+
     # This should be overridden by adapters that implement caching.
     def cache_column?
       false
@@ -105,6 +113,13 @@ module FriendlyId
     def scope=(scope)
       self.class.scopes_used = true
       @scope = scope
+    end
+
+    def sequence_separator=(string)
+      if string == "-" || string =~ /\s/
+        raise ArgumentError, "FriendlyId sequence_separator can not be '#{string}'"
+      end
+      @sequence_separator = string
     end
 
     # This will be set if FriendlyId's scope feature is used in any model. It is here
