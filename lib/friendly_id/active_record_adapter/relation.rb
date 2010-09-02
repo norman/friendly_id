@@ -99,18 +99,19 @@ module FriendlyId
 
         def sluggable_ids_for(ids)
           return [] if ids.empty?
-          fragment = "(slugs.name = %s AND slugs.sequence = %d)"
+          fragment = "(slugs.sluggable_type = %s AND slugs.name = %s AND slugs.sequence = %d)"
           conditions = ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            string = fragment % [connection.quote(name), seq]
+            string = fragment % [connection.quote(klass.base_class), connection.quote(name), seq]
             clause ? clause + " OR #{string}" : string
           end
           if fc.scope?
             scope = connection.quote(friendly_id_scope)
             conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
           end
-          connection.select_values "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
-        end
+          sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
+          connection.select_values sql
+       end
 
         def validate_expected_size!(ids, result)
           expected_size =
