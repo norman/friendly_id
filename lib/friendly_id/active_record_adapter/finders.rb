@@ -26,7 +26,7 @@ module FriendlyId
         end
 
         def find_one
-          return find_one_with_cached_slug if cache_column?
+          return find_one_with_cached_slug if !fc.scope? && cache_column?
           return find_one_with_slug if use_slugs?
           @result = scoped(:conditions => ["#{table_name}.#{fc.column} = ?", id]).first(options)
           assign_status

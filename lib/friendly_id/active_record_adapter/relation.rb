@@ -20,7 +20,7 @@ module FriendlyId
         end
 
         def find_one
-          if fc.cache_column?
+          if fc.cache_column? && !fc.scope?
             find_one_with_cached_slug
           elsif fc.use_slugs?
             find_one_with_slug
@@ -80,7 +80,7 @@ module FriendlyId
         end
 
         def friendly_records(friendly_ids, unfriendly_ids)
-          use_slugs_table =  fc.use_slugs? && (friendly_id_scope || !fc.cache_column?)
+          use_slugs_table =  fc.use_slugs? && (fc.scope? || !fc.cache_column?)
           return find_some_using_slug(friendly_ids, unfriendly_ids) if use_slugs_table
           column     = fc.cache_column || fc.column
           friendly   = arel_table[column].in(friendly_ids)

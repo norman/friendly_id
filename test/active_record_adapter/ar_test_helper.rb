@@ -76,6 +76,12 @@ class Resident < ActiveRecord::Base
   has_friendly_id :name, :use_slug => true, :scope => :country
 end
 
+# Like resident, but has a cached slug
+class Tourist < ActiveRecord::Base
+  belongs_to :country
+  has_friendly_id :name, :use_slug => true, :scope => :country
+end
+
 # A slugged model used as a scope
 class Country < ActiveRecord::Base
   has_many :people

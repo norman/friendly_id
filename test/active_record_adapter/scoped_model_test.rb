@@ -22,6 +22,13 @@ module FriendlyId
         User.delete_all
         House.delete_all
         Slug.delete_all
+        Tourist.delete_all
+      end
+
+      test "should not use cached slug column with scopes" do
+        @tourist  = Tourist.create!(:name => "John Smith", :country => @usa)
+        @tourist2 = Tourist.create!(:name => "John Smith", :country => @canada)
+        assert_equal @canada, Tourist.find(@tourist2.friendly_id, :scope => @canada).country
       end
 
       test "a slugged model should auto-detect that it is being used as a parent scope" do

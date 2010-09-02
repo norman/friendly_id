@@ -73,6 +73,12 @@ class CreateSupportModels < ActiveRecord::Migration
       t.integer :country_id
     end
 
+    create_table :tourists do |t|
+      t.string :name
+      t.integer :country_id
+      t.string  :cached_slug
+    end
+
     create_table :users do |t|
       t.string :name
     end
