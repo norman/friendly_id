@@ -6,6 +6,13 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.6 (2010-09-02)
+
+* Fix missing sluggable type in AR3 slug query. This was a fairly major oversight, and if you
+  are using 3.1.4 or 3.1.5, you should update right away.
+* Fix scoped queries when the model has a cached slug column. Bascially, the cached slug
+  is now completely ignored when a scope is configured.
+
 ## 3.1.5 (2010-09-01)
 
 * Fix invalid empty symbol with 1.8.x.
