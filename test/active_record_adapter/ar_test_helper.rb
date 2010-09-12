@@ -3,7 +3,7 @@ require "logger"
 require "active_record"
 begin
   require "active_support/log_subscriber"
-rescue MissingSourceFile
+rescue LoadError
 end
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
