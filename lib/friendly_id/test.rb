@@ -286,7 +286,7 @@ module FriendlyId
 
       [:record, :name].each do |symbol|
         test "should have #{symbol} after find using friendly_id" do
-          instance2 = klass.find(instance.friendly_id)
+          instance2 = klass.send(find_method, instance.friendly_id)
           assert_not_nil instance2.friendly_id_status.send(symbol)
         end
       end
