@@ -18,8 +18,11 @@ module FriendlyId
           @instance ||= klass.create! :name => "hello world"
         end
 
+        def find_method
+          :find
+        end
+
       end
     end
   end
 end
-
