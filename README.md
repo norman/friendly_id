@@ -58,11 +58,13 @@ FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
 ## Sequel and DataMapper, too
 
-FriendlyId has experimental support for Sequel. Support for Datamapper is
-in progress. To find out more, check out the Github projects:
+[Alex Coles](http://github.com/myabc) maintains an implemntation of
+[FriendlyId for DataMapper](http://github.com/myabc/friendly_id_datamapper) that supports almost
+all the features of the Active Record version.
 
-* [http://github.com/norman/friendly_id_sequel](http://github.com/norman/friendly_id_sequel)
-* [http://github.com/myabc/friendly_id_datamapper](http://github.com/myabc/friendly_id_datamapper)
+Norman Clarke maintains an implementation of
+[FriendlyId forSequel](http://github.com/norman/friendly_id_sequel) with some of the features
+of the Active Record version.
 
 ## Bugs
 

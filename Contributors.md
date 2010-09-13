@@ -2,6 +2,7 @@ We are grateful for many contributions from the Ruby and Rails
 community, in particular from the following people:
 
 * Adam Cigánek
+* Alex Coles
 * Alexander Gräfe
 * Alistair Holt
 * Andre Duffeck

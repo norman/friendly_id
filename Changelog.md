@@ -11,6 +11,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Fix broken SQL when finding with a nil scope on AR3 (Tony Primerano)
 * Slug#sluggable now works around default scopes (Cyrille Stepanyk)
 * Explicitly make slug attributes accessible (William Melody)
+* Improve abstraction support for DataMapper and Sequel (Alex Coles).
 
 ## 3.1.6 (2010-09-02)
 
