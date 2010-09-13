@@ -60,7 +60,7 @@ module FriendlyId
             assert !i
           else
             instance = i
-            assert_not_empty instance.errors
+            assert !instance.errors.empty?
           end
         end
       end
