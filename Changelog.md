@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.7 (NOT RELEASED YET)
+
+* Slug#sluggable now works around default scopes (thanks Cyrille Stepanyk)
+
 ## 3.1.6 (2010-09-02)
 
 * Fix missing sluggable type in AR3 slug query. This was a fairly major oversight, and if you

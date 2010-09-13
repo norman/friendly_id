@@ -1,9 +1,8 @@
 # A Slug is a unique, human-friendly identifier for an ActiveRecord.
 class Slug < ::ActiveRecord::Base
-
+  attr_writer :sluggable
   def self.named_scope(*args, &block) scope(*args, &block) end if FriendlyId.on_ar3?
   table_name = "slugs"
-  belongs_to :sluggable, :polymorphic => true
   before_save :enable_name_reversion, :set_sequence
   validate :validate_name
   named_scope :similar_to, lambda {|slug| {:conditions => {
@@ -14,6 +13,16 @@ class Slug < ::ActiveRecord::Base
       :order => "sequence ASC"
     }
   }
+
+  def sluggable
+    sluggable_id && !@sluggable and begin
+      klass = sluggable_type.constantize
+      klass.send(:with_exclusive_scope) do
+        @sluggable = klass.find(sluggable_id.to_i)
+      end
+    end
+    @sluggable
+  end
 
   # Whether this slug is the most recent of its owner's slugs.
   def current?
