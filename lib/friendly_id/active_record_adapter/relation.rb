@@ -107,7 +107,11 @@ module FriendlyId
           end
           if fc.scope?
             scope = connection.quote(friendly_id_scope)
-            conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
+            if scope == 'NULL'  # CHECK FOR NULL SCOPE ID
+              conditions = "slugs.scope IS NULL AND (%s)" % [conditions]
+            else
+              conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
+            end 
           end
           sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
           connection.select_values sql
