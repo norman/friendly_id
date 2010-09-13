@@ -11,6 +11,7 @@ community, in particular from the following people:
 * Brian Collins
 * Bruno Michel
 * Chris Nolan
+* Cyrille Stepanyk
 * David Ramalho
 * Diego Carrion
 * Diego R. V.
@@ -38,3 +39,4 @@ community, in particular from the following people:
 * Steve Luscher
 * Steven Noble
 * Tim Kadom
+* William Melody
