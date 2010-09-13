@@ -15,11 +15,9 @@ require File.expand_path("../support/models", __FILE__)
 require File.expand_path('../core', __FILE__)
 require File.expand_path('../slugged', __FILE__)
 
-local_db_settings   = File.expand_path("../support/database.yml", __FILE__)
-default_db_settings = File.expand_path("../support/database.sqlite3.yml", __FILE__)
-
-db_settings = File.exists?(local_db_settings) ? local_db_settings : default_db_settings
-ActiveRecord::Base.establish_connection(YAML::load(File.open(db_settings)))
+driver = (ENV["DB"] or "sqlite3").downcase
+db_yaml = File.expand_path("../support/database.#{driver}.yml", __FILE__)
+ActiveRecord::Base.establish_connection(YAML::load(File.open(db_yaml)))
 
 class ActiveRecord::Base
   def log_protected_attribute_removal(*args) end
@@ -148,3 +146,5 @@ end
 class Company < ActiveRecord::Base
   has_many :sites, :as => :owner
 end
+
+puts "Using: #{RUBY_VERSION}, #{driver}, AR#{ENV["AR"] or 3}"
