@@ -85,7 +85,8 @@ module FriendlyId
       test "should find a single scoped record with a scope" do
         assert Resident.find(@resident.friendly_id, :scope => @resident.country)
       end
-      test "should find a single scoped record with a scope that is nil" do
+
+      test "should find a single scoped record with a nil scope" do
         nomad  = Resident.create!(:name => "Homer", :country => nil)
         assert Resident.find(nomad.friendly_id, :scope => nil)
       end

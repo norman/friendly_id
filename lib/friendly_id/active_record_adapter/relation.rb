@@ -106,16 +106,16 @@ module FriendlyId
             clause ? clause + " OR #{string}" : string
           end
           if fc.scope?
-            scope = connection.quote(friendly_id_scope)
-            if scope == 'NULL'  # CHECK FOR NULL SCOPE ID
-              conditions = "slugs.scope IS NULL AND (%s)" % [conditions]
+            conditions = if friendly_id_scope
+              scope = connection.quote(friendly_id_scope)
+              "slugs.scope = %s AND (%s)" % [scope, conditions]
             else
-              conditions = "slugs.scope = %s AND (%s)" % [scope, conditions]
-            end 
+              "slugs.scope IS NULL AND (%s)" % [conditions]
+            end
           end
           sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
           connection.select_values sql
-       end
+        end
 
         def validate_expected_size!(ids, result)
           expected_size =
