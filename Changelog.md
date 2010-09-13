@@ -8,8 +8,9 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 3.1.7 (NOT RELEASED YET)
 
-* Slug#sluggable now works around default scopes (thanks Cyrille Stepanyk)
-* Explicitly ake slug attributes accessible (thanks William Melody)
+* Fix broken SQL when finding with a nil scope on AR3 (Tony Primerano)
+* Slug#sluggable now works around default scopes (Cyrille Stepanyk)
+* Explicitly make slug attributes accessible (William Melody)
 
 ## 3.1.6 (2010-09-02)
 
