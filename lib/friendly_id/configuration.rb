@@ -9,16 +9,16 @@ module FriendlyId
   # attributes below for information on the possible options.
   #
   # @example
-  # has_friendly_id :name,
-  #  :use_slug => true,
-  #  :max_length => 150,
-  #  :approximate_ascii => true,
-  #  :ascii_approximation_options => :german,
-  #  :sequence_separator => ":",
-  #  :reserved_words => ["reserved", "words"],
-  #  :scope => :country,
-  #  :cache_column => :my_cache_column_name
-  #  # etc.
+  #   has_friendly_id :name,
+  #    :use_slug => true,
+  #    :max_length => 150,
+  #    :approximate_ascii => true,
+  #    :ascii_approximation_options => :german,
+  #    :sequence_separator => ":",
+  #    :reserved_words => ["reserved", "words"],
+  #    :scope => :country,
+  #    :cache_column => :my_cache_column_name
+  #    # etc.
   class Configuration
 
     DEFAULTS = {
