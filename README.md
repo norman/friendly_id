@@ -31,6 +31,9 @@ FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
 ## Rails Quickstart
 
+Note that the example below uses Rails 3. But don't worry: FriendlyId will
+continue to support 2.3.x until Rails 3.1 is released.
+
     gem install friendly_id
 
     rails new my_app

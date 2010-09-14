@@ -110,6 +110,7 @@ After installing either as a gem or plugin, run:
 
 
     rails generate friendly_id
+    # or "./script generate friendly_id" on Rails 2.3
     rake db:migrate
 
 This will install the Rake tasks and slug migration for FriendlyId. If you are
@@ -128,9 +129,9 @@ FriendlyId is configured in your model using the `has_friendly_id` method:
     class Post < ActiveRecord::Base
       # use the "title" column as the basis of the friendly_id, and use slugs
       has_friendly_id :title, :use_slug => true,
-        # remove accents and other diacritics from Western characters
+        # remove accents and other diacritics from Latin characters
         :approximate_ascii => true,
-        # don't use slugs longer than 50 chars
+        # don't use slugs larger than 50 bytes
         :max_length => 50
     end
 
@@ -193,7 +194,7 @@ Greek, etc:
 
 ### ASCII Slugs
 
-You can also configure FriendlyId using `:strip_non_ascii` to completely delete
+You can also configure FriendlyId using `:strip_non_ascii` to simply delete
 any non-ascii characters:
 
     class Post < ActiveRecord::Base
@@ -244,14 +245,13 @@ order to fine-tune the output:
     end
 
 The normalize_friendly_id method takes a single argument and receives an
-instance of {FriendlyId::SlugString}, a class which wraps a regular Ruby
-string with some additional formatting options inherits Multibyte support from
-ActiveSupport::Multibyte::Chars.
+instance of {FriendlyId::SlugString}, a class which wraps a regular Ruby string
+with additional formatting options.
 
-### Converting non-Western characters to ASCII with Stringex
+### Converting non-Latin characters to ASCII with Stringex
 
 Stringex is a library which provides some interesting options for transliterating
-non-Western strings to ASCII:
+non-Latin strings to ASCII:
 
     "你好".to_url => "ni-hao"
 
@@ -260,12 +260,20 @@ the `stringex` gem, and overriding the `normalize_friendly_id` method in your
 model:
 
     class City < ActiveRecord::Base
-
       def normalize_friendly_id(text)
         text.to_url
       end
-
     end
+
+However, be aware of some limitations of Stringex - it just does a context-free
+character-by-character approximation for Unicode strings without sensitivity to
+the string's language. This means, for example, that the Han characters used by
+Japanese, Mandarin, Cantonese, and other languages are all replaced with the
+same ASCII text. For Han characters, Stringex uses Mandarin, which makes its
+output on Japanese text useless. You can read more about the limitations of
+Stringex in [the documentation for
+Unidecoder](http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm#DESIGN_GOALS_AND_CONSTRAINTS),
+the Perl library upon which Stringex is based.
 
 ## Redirecting to the Current Friendly URL
 
@@ -315,6 +323,9 @@ You can also override the default used in
 {FriendlyId::Configuration::DEFAULTS} to set the value for any model using
 FriendlyId. If you change this value in an existing application, be sure to
 {file:Guide.md#regenerating_slugs regenerate the slugs} afterwards.
+
+For reasons I hope are obvious, you can't change this value to "-". If you try,
+FriendlyId will raise an error.
 
 ## Reserved Words
 
@@ -372,9 +383,8 @@ A few warnings when using this feature:
   unless you have already invoked `attr_accessible`. If you wish to use
   `attr_accessible`, you must invoke it BEFORE you invoke `has_friendly_id` in
   your class.
-* FriendlyId can not query against the slug cache when you pass a :scope
-  argument to #find. Try to avoid passing an array of friendly id's and a
-  scope to #find, as this will result in weak performance.
+* Cached slugs [are incompatible with scopes](#scoped_models_and_cached_slugs) and
+  are ignored if your model uses the `:scope option`.
 
 ### Using a custom column name
 
@@ -465,6 +475,15 @@ this up:
     # in controllers
     @restaurant = Restaurant.find(params[:id], :scope => params[:scope])
 
+### Scoped Models and Cached Slugs
+
+Be aware that you can't use cached slugs with scoped models. This is because in
+order to uniquely identify a scoped model, you need to consult two fields rather
+than one. I've considered adding a "cached scope" column as well as one for the
+cached slug, but I'm not convinced this is a good idea. FriendlyId 3.1.6 and
+above included significant performance optimizations for models that don't use
+cached slugs, so in practice this ends up being [less of a performance problem
+than you may imagine](#some_benchmarks).
 
 ## FriendlyId Rake Tasks
 
