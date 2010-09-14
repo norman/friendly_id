@@ -98,12 +98,21 @@ module FriendlyId
       false
     end
 
-    def reserved_words=(*words)
-      @reserved_words = words.flatten.uniq
+    def reserved_words=(*args)
+      if args.first.kind_of?(Regexp)
+        @reserved_words = args.first
+      else
+        @reserved_words = args.flatten.uniq
+      end
     end
 
     def reserved?(word)
-      reserved_words.include? word.to_s
+      word = word.to_s
+      if reserved_words.kind_of?(Regexp)
+        reserved_words =~ word
+      else
+        reserved_words.include?(word)
+      end
     end
 
     def reserved_error_message(word)
@@ -136,7 +145,7 @@ module FriendlyId
     end
 
     %w[approximate_ascii scope strip_non_ascii use_slug].each do |method|
-      class_eval(<<-EOM, __FILE__, __LINE__ +1)
+      class_eval(<<-EOM, __FILE__, __LINE__ + 1)
         def #{method}?
           !! #{method}
         end

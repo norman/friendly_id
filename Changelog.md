@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 3.1.7 (NOT RELEASED YET)
 
+* Reserved words can now be regular expressions.
 * Fix broken SQL when finding with a nil scope on AR3 (Tony Primerano)
 * Slug#sluggable now works around default scopes (Cyrille Stepanyk)
 * Explicitly make slug attributes accessible (William Melody)

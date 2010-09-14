@@ -128,6 +128,20 @@ module FriendlyId
         assert_equal other_instance.friendly_id, instance.friendly_id
       end
 
+      test "reserved words can be specified as a regular expression" do
+        klass.friendly_id_config.stubs(:reserved_words).returns(/jo/)
+        assert_validation_error do
+          klass.send(create_method, :name => "joe")
+        end
+      end
+
+      test "should not raise reserved error unless regexp matches" do
+        klass.friendly_id_config.stubs(:reserved_words).returns(/ddsadad/)
+        assert_nothing_raised do
+          klass.send(create_method, :name => "joe")
+        end
+      end
+
     end
 
     module Simple

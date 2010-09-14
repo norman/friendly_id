@@ -342,6 +342,9 @@ Reserved words are configured using the `:reserved_words` option:
       has_friendly_id :name, :use_slug => true, :reserved_words => ["my", "values"]
     end
 
+The reserved words can be specified as an array or (since 3.1.7) as a regular
+expression.
+
 The strings "new" and "index" are reserved by default. When you attempt to
 store a reserved value, FriendlyId raises a
 {FriendlyId::ReservedError}. You can also override the default
