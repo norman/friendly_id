@@ -434,7 +434,7 @@ the slug "joes-diner" if it's located in a different city:
 
     Restaurant.find("joes-diner", :scope => "seattle")  # returns 1 record
     Restaurant.find("joes-diner", :scope => "chicago")  # returns 1 record
-    Restaurant.find("joes-diner")                       # returns both records
+    Restaurant.find(:all, "joes-diner")                 # returns both records
 
 The value for the `:scope` key in your model can be a custom method you
 define, or the name of a relation. If it's the name of a relation, then the
