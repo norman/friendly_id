@@ -12,6 +12,7 @@ module FriendlyId
         @canada    = Country.create!(:name => "Canada")
         @resident  = Resident.create!(:name => "John Smith", :country => @usa)
         @resident2 = Resident.create!(:name => "John Smith", :country => @canada)
+        @resident3 = Resident.create!(:name => "Jim Beam", :country => @canada)
         @owner     = Company.create!(:name => "Acme Events")
         @site      = Site.create!(:name => "Downtown Venue", :owner => @owner)
       end
@@ -75,7 +76,9 @@ module FriendlyId
       end
 
       test "should find all scoped records without scope" do
-        assert_equal 2, Resident.find(:all, @resident.friendly_id).size
+        name, sequence = @resident.friendly_id.parse_friendly_id
+        assert_equal 2, Resident.find(:all, :joins => :slugs, :conditions => {
+            :slugs => {:name => name, :sequence => sequence}}).size
       end
 
       test "should find a single scoped record with a scope as a string" do
