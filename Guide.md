@@ -447,13 +447,20 @@ the slug "joes-diner" if it's located in a different city:
 
     Restaurant.find("joes-diner", :scope => "seattle")  # returns 1 record
     Restaurant.find("joes-diner", :scope => "chicago")  # returns 1 record
-    Restaurant.find(:all, "joes-diner")                 # returns both records
 
 The value for the `:scope` key in your model can be a custom method you
 define, or the name of a relation. If it's the name of a relation, then the
 scope's text value will be the result of calling `to_param` on the related
 model record. In the example above, the city model also uses FriendlyId and so
 its `to_param` method returns its friendly_id: "chicago" or "seattle".
+
+If you want to find all records with a partular friendly\_id regardless of scope,
+this is a slightly more complicated, but doable:
+
+    name, sequence = params[:id].parse_friendly_id
+    Restaurant.find(:all, :joins => :slugs, :conditions => {
+      :slugs => {:name => name, :sequence => sequence}
+    })
 
 ### Updating a Relation's Scoped Slugs
 
