@@ -517,6 +517,14 @@ slugs older than 45 days.
 
 # Misc tips
 
+## Allowing Users to Override/Control Slugs
+
+Would you like to mostly use default slugs, but allow the option of a
+custom user-chosen slug in your application? If so, then you're not the first to
+want this. Here's a [demo
+application](http://github.com/norman/friendly_id_manual_slug_demo) showing how
+it can be done.
+
 ## Default Scopes
 
 Whether you're using FriendlyId or not, a good rule of thumb for default scopes

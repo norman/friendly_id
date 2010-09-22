@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.1.7 (NOT RELEASED YET)
+## 3.1.7 (2010-09-22)
 
 * Reserved words can now be regular expressions.
 * Fix broken SQL when finding with a nil scope on AR3 (Tony Primerano)

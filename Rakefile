@@ -41,6 +41,7 @@ namespace :test do
   Rake::TestTask.new(:friendly_id) { |t| t.pattern = "test/*_test.rb" }
   Rake::TestTask.new(:ar) { |t| t.pattern = "test/active_record_adapter/*_test.rb" }
 
+  desc "Test against lots of versions"
   task :pre_release do
     ["ree-1.8.7-2010.02", "ruby-1.9.2-p0"].each do |ruby|
       ["sqlite3", "mysql", "postgres"].each do |driver|
