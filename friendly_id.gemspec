@@ -19,5 +19,8 @@ Gem::Specification.new do |s|
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.test_files        = Dir.glob "test/**/*_test.rb"
   s.version           = FriendlyId::Version::STRING
+  s.add_dependency "activerecord", "~> 3.0.0"
   s.add_dependency "babosa", "~> 0.2.0"
+  s.add_development_dependency "sqlite3-ruby", "~> 1"
+  s.add_development_dependency "mocha", "~> 0.9"
 end
