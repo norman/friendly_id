@@ -1,6 +1,7 @@
 source :rubygems
 
 gem "activerecord", "~> 3.0.0"
+gem "babosa"
 # gem "activerecord", "~> 2.3"
 
 gem "sqlite3-ruby"
