@@ -7,7 +7,7 @@
 
 FriendlyId is an ORM-centric Ruby library that lets you work with human-friendly
 strings as if they were numeric ids. Among other things, this facilitates
-replacing "unfriendly" URL's like:
+replacing "unfriendly" URLs like:
 
     http://example.com/states/4323454
 
@@ -53,7 +53,7 @@ column.
 FriendlyId uses a separate table to store slugs for models which require some
 processing of the friendly_id text. The most common example is a blog post's
 title, which may have spaces, uppercase characters, or other attributes you
-wish to modify to make them more suitable for use in URL's.
+wish to modify to make them more suitable for use in URLs.
 
     class Post < ActiveRecord::Base
       has_friendly_id :title, :use_slug => true
@@ -278,9 +278,9 @@ the Perl library upon which Stringex is based.
 ## Redirecting to the Current Friendly URL
 
 FriendlyId maintains a history of your record's older slugs, so if your
-record's friendly_id changes, your URL's won't break. It offers several
+record's friendly_id changes, your URLs won't break. It offers several
 methods to determine whether the model instance was found using the most
-recent friendly_id. This helps you redirect to your "unfriendly" URL's to your
+recent friendly_id. This helps you redirect to your "unfriendly" URLs to your
 new "friendly" ones when adding FriendlyId to an existing application:
 
     class PostsController < ApplicationController

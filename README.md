@@ -1,10 +1,10 @@
 # FriendlyId
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
-Ruby on Rails. It allows you to create pretty URL's and work with
+Ruby on Rails. It allows you to create pretty URLs and work with
 human-friendly strings as if they were numeric ids for Active Record models.
 
-Using FriendlyId, it's easy to make your application use URL's like:
+Using FriendlyId, it's easy to make your application use URLs like:
 
     http://example.com/states/washington
 
