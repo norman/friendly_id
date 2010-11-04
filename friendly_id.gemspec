@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.authors           = ["Norman Clarke", "Adrian Mugnolo", "Emilio Tagua"]
   s.description       = <<-EOM
     FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins
-    for Ruby on Rails. It allows you to create pretty URL’s and work with
+    for Ruby on Rails. It allows you to create pretty URL's and work with
     human-friendly strings as if they were numeric ids for ActiveRecord models.
   EOM
   s.email             = ["norman@njclarke.com", "adrian@mugnolo.com", "miloops@gmail.com"]
