@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.8 (2010-11-22)
+
+* Fix compatibility with Active Record 3.0.3.
+
 ## 3.1.7 (2010-09-22)
 
 * Reserved words can now be regular expressions.

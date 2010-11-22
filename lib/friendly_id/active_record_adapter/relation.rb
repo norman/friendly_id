@@ -84,7 +84,7 @@ module FriendlyId
           return find_some_using_slug(friendly_ids, unfriendly_ids) if use_slugs_table
           column     = fc.cache_column || fc.column
           friendly   = arel_table[column].in(friendly_ids)
-          unfriendly = arel_table[relation.primary_key].in unfriendly_ids
+          unfriendly = arel_table[relation.primary_key.name].in unfriendly_ids
           if friendly_ids.present? && unfriendly_ids.present?
             where(friendly.or(unfriendly))
           else
@@ -94,7 +94,7 @@ module FriendlyId
 
         def find_some_using_slug(friendly_ids, unfriendly_ids)
           ids = [unfriendly_ids + sluggable_ids_for(friendly_ids)].flatten.uniq
-          where(arel_table[relation.primary_key].in(ids))
+          where(arel_table[relation.primary_key.name].in(ids))
         end
 
         def sluggable_ids_for(ids)
@@ -166,7 +166,12 @@ module FriendlyId
 
       def find_some(ids)
         return super unless klass.uses_friendly_id?
-        Find.new(self, ids).find_some or super
+        Find.new(self, ids).find_some or begin
+          # A change in Arel 2.0.x causes find_some to fail with arrays of instances; not sure why.
+          # This is an emergency, temporary fix.
+          ids = ids.map {|id| (id.respond_to?(:friendly_id_config) ? id.id : id).to_i}
+          super
+        end
       rescue ActiveRecord::RecordNotFound => error
         find ? find.raise_error(error) : raise(error)
       end
