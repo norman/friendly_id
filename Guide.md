@@ -445,8 +445,8 @@ the slug "joes-diner" if it's located in a different city:
     http://example.org/cities/seattle/restaurants/joes-diner
     http://example.org/cities/chicago/restaurants/joes-diner
 
-    Restaurant.find("joes-diner", :scope => "seattle")  # returns 1 record
-    Restaurant.find("joes-diner", :scope => "chicago")  # returns 1 record
+    City.find("seattle").restaurants.find("joes-diner")  # returns 1 record
+    City.find("chicago").restaurants.find("joes-diner")  # returns 1 record
 
 The value for the `:scope` key in your model can be a custom method you
 define, or the name of a relation. If it's the name of a relation, then the
@@ -454,15 +454,45 @@ scope's text value will be the result of calling `to_param` on the related
 model record. In the example above, the city model also uses FriendlyId and so
 its `to_param` method returns its friendly_id: "chicago" or "seattle".
 
+### Complications with Scoped Slugs
+
+#### Finding Records by friendly\_id
+
+If you are using scopes your friendly ids may not be unique, so a simple find like
+
+    Restaurant.find("joes-diner")
+
+may return the wrong record. In these cases when you want to use the friendly\_id for queries,
+either query as a relation, or specify the scope in your query conditions:
+
+    # will only return restaurants named "Joe's Diner" in the given city
+    @city.restaurants.find("joes-diner")
+
+    # or
+
+    Restaurants.find("joes-diner", :include => :slugs, :conditions => {:slugs => {:scope => @city.to_param}})
+
+
+#### Finding All Records That Match a Scoped ID
+
 If you want to find all records with a particular friendly\_id regardless of scope,
-this is a slightly more complicated, but doable:
+the easiest way is to use cached slugs and query this column directly:
+
+    Restaurant.find_all_by_cached_slug("joes-diner")
+    # Another option, with Active Record 3.x
+    Restaurant.where(:cached_slug => "joes-diner")
+
+
+If you're not using cached slugs, then this is slightly more complicated, but
+still doable:
 
     name, sequence = params[:id].parse_friendly_id
-    Restaurant.find(:all, :joins => :slugs, :conditions => {
+    Restaurant.all(:include => :slugs, :conditions => {
       :slugs => {:name => name, :sequence => sequence}
     })
 
-### Updating a Relation's Scoped Slugs
+
+#### Updating a Relation's Scoped Slugs
 
 When using a relation as the scope, updating the relation will update the
 slugs, but only if both models have specified the relationship. In the above
@@ -477,23 +507,26 @@ this up:
 
     # in routes.rb
     map.resources :restaurants
-    map.restaurant "/restaurants/:scope/:id", :controller => "restaurants"
+    map.restaurant "/restaurants/:city_id/:id", :controller => "restaurants"
 
     # in views
     link_to 'Show', restaurant_path(restaurant.city, restaurant)
 
     # in controllers
-    @restaurant = Restaurant.find(params[:id], :scope => params[:scope])
+    @city = City.find(params[:city_id])
+    @restaurant = @city.resaturants.find(params[:id])
 
 ### Scoped Models and Cached Slugs
 
-Be aware that you can't use cached slugs with scoped models. This is because in
-order to uniquely identify a scoped model, you need to consult two fields rather
-than one. I've considered adding a "cached scope" column as well as one for the
-cached slug, but I'm not convinced this is a good idea. FriendlyId 3.1.6 and
-above included significant performance optimizations for models that don't use
-cached slugs, so in practice this ends up being [less of a performance problem
-than you may imagine](#some_benchmarks).
+If you want to use cached slugs with scoped models, be sure not to create a unique index on the
+`cached_slug` column.
+
+### Scoped Models in FriendyId Before 3.2.0
+
+In older versions of FriendlyId, you could specify a non-standard `:scope`
+argument to finds. This feature has been removed in 3.2.0 in favor of the query
+stategies described above.
+
 
 ## FriendlyId Rake Tasks
 

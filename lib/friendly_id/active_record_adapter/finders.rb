@@ -12,7 +12,6 @@ module FriendlyId
         attr :klass
         attr :id
         attr :options
-        attr :scope_val
         attr :result
         attr :friendly_ids
         attr :unfriendly_ids
@@ -21,8 +20,6 @@ module FriendlyId
           @klass     = klass
           @id        = id
           @options   = options
-          @scope_val = options.delete(:scope)
-          @scope_val = @scope_val.to_param if @scope_val && @scope_val.respond_to?(:to_param)
         end
 
         def find_one
@@ -37,21 +34,11 @@ module FriendlyId
           scope = some_friendly_scope
           if use_slugs? && @friendly_ids.present?
             scope = scope.scoped(:joins => :slugs)
-            if fc.scope?
-              scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}})
-            end
           end
           options[:readonly] = false unless options[:readonly]
           @result = scope.all(options).uniq
           validate_expected_size!
           @result.each { |record| record.friendly_id_status.name = id }
-        end
-
-        def raise_error(error)
-          raise(error) unless fc.scope?
-          scope_message = scope_val || "expected, but none given"
-          message = "%s, scope: %s" % [error.message, scope_message]
-          raise ActiveRecord::RecordNotFound, message
         end
 
         private
@@ -64,7 +51,6 @@ module FriendlyId
         def find_one_with_slug
           name, seq = id.to_s.parse_friendly_id
           scope = scoped(:joins => :slugs, :conditions => {:slugs => {:name => name, :sequence => seq}})
-          scope = scope.scoped(:conditions => {:slugs => {:scope => scope_val}}) if fc.scope?
           options[:readonly] = false unless options[:readonly]
           @result = scope.first(options)
           assign_status
@@ -146,16 +132,12 @@ module FriendlyId
         return super if id.blank? || id.unfriendly_id?
         finder = Find.new(self, id, options)
         finder.find_one or super
-      rescue ActiveRecord::RecordNotFound => error
-        finder ? finder.raise_error(error) : raise(error)
       end
 
       def find_some(ids, options)
         return super if ids.empty?
         finder = Find.new(self, ids, options)
         finder.find_some
-      rescue ActiveRecord::RecordNotFound => error
-        finder ? finder.raise_error(error) : raise(error)
       end
     end
   end
