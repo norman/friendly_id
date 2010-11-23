@@ -425,12 +425,16 @@ Note that this method is **not** used by slugged models.
 
 ## Scoped Slugs
 
+_Note that in FriendlyId prior to 3.2.0, you could specify a non-standard
+`:scope` argument on finds. This feature has been removed in 3.2.0 in favor of
+the query stategies described below._
+
 FriendlyId can generate unique slugs within a given scope. For example, assume
-you have an application that displays restaurants. Without scoped slugs, if
-two restaurants are named "Joe's Diner," the second one will end up with
-"joes-diner--2" as its friendly_id. Using scoped allows you to keep the
-slug names unique for each city, so that the second "Joe's Diner" could have
-the slug "joes-diner" if it's located in a different city:
+you have an application that displays restaurants. Without scoped slugs, if two
+restaurants are named "Joe's Diner," the second one will end up with
+"joes-diner--2" as its friendly_id. Using scoped allows you to keep the slug
+names unique for each city, so that the second "Joe's Diner" can also have the
+slug "joes-diner", as long as it's located in a different city:
 
     class Restaurant < ActiveRecord::Base
       belongs_to :city
@@ -442,11 +446,9 @@ the slug "joes-diner" if it's located in a different city:
       has_friendly_id :name, :use_slug => true
     end
 
-    http://example.org/cities/seattle/restaurants/joes-diner
-    http://example.org/cities/chicago/restaurants/joes-diner
+    City.find("seattle").restaurants.find("joes-diner")
+    City.find("chicago").restaurants.find("joes-diner")
 
-    City.find("seattle").restaurants.find("joes-diner")  # returns 1 record
-    City.find("chicago").restaurants.find("joes-diner")  # returns 1 record
 
 The value for the `:scope` key in your model can be a custom method you
 define, or the name of a relation. If it's the name of a relation, then the
@@ -455,6 +457,12 @@ model record. In the example above, the city model also uses FriendlyId and so
 its `to_param` method returns its friendly_id: "chicago" or "seattle".
 
 ### Complications with Scoped Slugs
+
+### Scoped Models and Cached Slugs
+
+If you want to use cached slugs with scoped models, be sure not to create a unique index on the
+`cached_slug` column.
+
 
 #### Finding Records by friendly\_id
 
@@ -479,8 +487,6 @@ If you want to find all records with a particular friendly\_id regardless of sco
 the easiest way is to use cached slugs and query this column directly:
 
     Restaurant.find_all_by_cached_slug("joes-diner")
-    # Another option, with Active Record 3.x
-    Restaurant.where(:cached_slug => "joes-diner")
 
 
 If you're not using cached slugs, then this is slightly more complicated, but
@@ -494,38 +500,31 @@ still doable:
 
 #### Updating a Relation's Scoped Slugs
 
-When using a relation as the scope, updating the relation will update the
-slugs, but only if both models have specified the relationship. In the above
-example, updates to City will update the slugs for Restaurant because City
-specifies that it `has_many :restaurants`.
+When using a relation as the scope, updating the relation will update the slugs,
+but only if both models have specified the relationship. In the above example,
+updates to City will update the slugs for Restaurant because City specifies that
+it `has_many :restaurants`.
 
 ### Routes for Scoped Models
 
-Note that FriendlyId does not set up any routes for scoped models; you must
-do this yourself in your application. Here's an example of one way to set
-this up:
+Note that FriendlyId does not set up any routes for scoped models; you must do
+this yourself in your application. Here's an example of one way to set this up:
 
     # in routes.rb
-    map.resources :restaurants
-    map.restaurant "/restaurants/:city_id/:id", :controller => "restaurants"
+    resources :cities do
+      resources :restaurants
+    end
 
     # in views
-    link_to 'Show', restaurant_path(restaurant.city, restaurant)
+    <%= link_to 'Show', [@city, @restaurant] %>
 
     # in controllers
     @city = City.find(params[:city_id])
-    @restaurant = @city.resaturants.find(params[:id])
+    @restaurant = @city.restaurants.find(params[:id])
 
-### Scoped Models and Cached Slugs
-
-If you want to use cached slugs with scoped models, be sure not to create a unique index on the
-`cached_slug` column.
-
-### Scoped Models in FriendyId Before 3.2.0
-
-In older versions of FriendlyId, you could specify a non-standard `:scope`
-argument to finds. This feature has been removed in 3.2.0 in favor of the query
-stategies described above.
+    # URL's:
+    http://example.org/cities/seattle/restaurants/joes-diner
+    http://example.org/cities/chicago/restaurants/joes-diner
 
 
 ## FriendlyId Rake Tasks
