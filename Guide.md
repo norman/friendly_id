@@ -458,7 +458,7 @@ its `to_param` method returns its friendly_id: "chicago" or "seattle".
 
 ### Complications with Scoped Slugs
 
-### Scoped Models and Cached Slugs
+#### Scoped Models and Cached Slugs
 
 If you want to use cached slugs with scoped models, be sure not to create a unique index on the
 `cached_slug` column.
