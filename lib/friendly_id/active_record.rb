@@ -10,12 +10,12 @@ module FriendlyId
     include FriendlyId::Base
 
     def has_friendly_id(method, options = {})
-      unless FriendlyId.on_ar3?
-        class_inheritable_accessor :friendly_id_config
-        write_inheritable_attribute :friendly_id_config, Configuration.new(self, method, options)
-      else
+      if FriendlyId.on_ar3?
         class_attribute :friendly_id_config
         self.friendly_id_config = Configuration.new(self, method, options)
+      else
+        class_inheritable_accessor :friendly_id_config
+        write_inheritable_attribute :friendly_id_config, Configuration.new(self, method, options)
       end
 
       if friendly_id_config.use_slug?
