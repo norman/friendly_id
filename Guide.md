@@ -454,7 +454,7 @@ scope's text value will be the result of calling `to_param` on the related
 model record. In the example above, the city model also uses FriendlyId and so
 its `to_param` method returns its friendly_id: "chicago" or "seattle".
 
-If you want to find all records with a partular friendly\_id regardless of scope,
+If you want to find all records with a particular friendly\_id regardless of scope,
 this is a slightly more complicated, but doable:
 
     name, sequence = params[:id].parse_friendly_id
