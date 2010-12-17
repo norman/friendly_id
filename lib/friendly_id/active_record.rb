@@ -46,7 +46,7 @@ module FriendlyId
   end
 end
 
-require "friendly_id/active_record_adapter/slug"
+autoload :Slug, "friendly_id/active_record_adapter/slug"
 
 module ActiveRecord
   class Base
