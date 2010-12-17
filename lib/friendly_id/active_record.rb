@@ -7,6 +7,13 @@ module FriendlyId
 
   module ActiveRecordAdapter
 
+    autoload :Relation,       "friendly_id/active_record_adapter/relation"
+    autoload :Configuration,  "friendly_id/active_record_adapter/configuration"
+    autoload :Finders,        "friendly_id/active_record_adapter/finders"
+    autoload :SimpleModel,    "friendly_id/active_record_adapter/simple_model"
+    autoload :SluggedModel,   "friendly_id/active_record_adapter/slugged_model"
+    autoload :Tasks,          "friendly_id/active_record_adapter/tasks"
+
     include FriendlyId::Base
 
     def has_friendly_id(method, options = {})
@@ -39,13 +46,7 @@ module FriendlyId
   end
 end
 
-require "friendly_id/active_record_adapter/relation"
-require "friendly_id/active_record_adapter/configuration"
-require "friendly_id/active_record_adapter/finders"
-require "friendly_id/active_record_adapter/simple_model"
-require "friendly_id/active_record_adapter/slugged_model"
 require "friendly_id/active_record_adapter/slug"
-require "friendly_id/active_record_adapter/tasks"
 
 module ActiveRecord
   class Base
