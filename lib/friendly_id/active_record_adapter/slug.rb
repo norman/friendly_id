@@ -19,7 +19,7 @@ class Slug < ::ActiveRecord::Base
     sluggable_id && !@sluggable and begin
       klass = sluggable_type.constantize
       klass.send(:with_exclusive_scope) do
-        @sluggable = klass.find(sluggable_id.to_i)
+        @sluggable = klass.find(sluggable_id.to_i) rescue nil
       end
     end
     @sluggable
@@ -27,7 +27,7 @@ class Slug < ::ActiveRecord::Base
 
   # Whether this slug is the most recent of its owner's slugs.
   def current?
-    sluggable.slug == self
+    sluggable.present? && sluggable.slug == self
   end
 
   def outdated?
