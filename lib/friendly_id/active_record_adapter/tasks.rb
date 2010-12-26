@@ -35,8 +35,12 @@ module FriendlyId
           record.save(:validate => false)
           yield(record) if block_given?
         end
-        offset+=options[:limit]
-        options[:offset]=|| offset
+
+        if options[:offset].nil?
+          options[:offset] = offset
+        else
+          options[:offset] += limit
+        end
       end
     end
 
