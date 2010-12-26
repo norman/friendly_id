@@ -39,7 +39,7 @@ module FriendlyId
         if options[:offset].nil?
           options[:offset] = offset
         else
-          options[:offset] += limit
+          options[:offset] += options[:limit]
         end
       end
     end
