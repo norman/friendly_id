@@ -20,6 +20,10 @@ module FriendlyId
           @klass     = klass
           @id        = id
           @options   = options
+          if options[:scope]
+            raise "The :scope finder option has been removed from FriendlyId 3.2.0 " +
+              "https://github.com/norman/friendly_id/issues#issue/88"
+          end
         end
 
         def find_one
