@@ -11,6 +11,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Fixed deprecation on Rails edge. Thanks [slbug](http://github.com/slbug)
 * Removes `:scope` as a find parameter, allowing more flexible finds with
   scoped records.
+* Improve friendly_id:redo_slugs logic to support models with non-numeric ids. (thanks Oleksandr Petrov)
 
 ## 3.1.8 (2010-11-22)
 
