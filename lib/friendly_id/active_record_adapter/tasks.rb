@@ -27,20 +27,21 @@ module FriendlyId
     def make_slugs
       validate_uses_slugs
       cond = "slugs.id IS NULL"
-      options = {:limit => 100, :include => :slugs, :conditions => cond, :order => "#{klass.table_name}.id ASC"}.merge(task_options || {})
-      offset = 0
+      options = {
+        :limit      => (ENV["LIMIT"] || 100).to_i,
+        :include    => :slugs,
+        :conditions => cond,
+        :order      => "#{klass.table_name}.id ASC",
+      }.merge(task_options || {})
+      options[:offset] = options[:limit] * -1
+
       while records = find(:all, options) do
         break if records.size == 0
         records.each do |record|
           record.save(:validate => false)
           yield(record) if block_given?
         end
-
-        if options[:offset].nil?
-          options[:offset] = offset
-        else
-          options[:offset] += options[:limit]
-        end
+        options[:offset] += options[:limit]
       end
     end
 
