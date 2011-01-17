@@ -80,13 +80,13 @@ with Rails 2.3.x. and 3.0.
 
 After installing the gem, add an entry in environment.rb:
 
-    config.gem "friendly_id", :version => "~> 3.1"
+    config.gem "friendly_id", :version => "~> 3.2"
 
 ### Rails 3.0
 
 After installing the gem, add an entry in the Gemfile:
 
-    gem "friendly_id", "~> 3.1"
+    gem "friendly_id", "~> 3.2"
 
 ### As a Plugin
 
