@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.2.0 (NOT RELEASED YET)
+## 3.2.0 (2011-01-17)
 
 * Fixed deprecation on Rails edge. Thanks [slbug](http://github.com/slbug)
 * Removes `:scope` as a find parameter, allowing more flexible finds with
