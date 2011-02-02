@@ -101,7 +101,7 @@ module FriendlyId
           fragment = "(slugs.sluggable_type = %s AND slugs.name = %s AND slugs.sequence = %d)"
           conditions = ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            string = fragment % [connection.quote(klass.base_class), connection.quote(name), seq]
+            string = fragment % [connection.quote(klass.base_class.name), connection.quote(name), seq]
             clause ? clause + " OR #{string}" : string
           end
           sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
