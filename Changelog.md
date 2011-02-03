@@ -6,6 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.2.1 (2011-02-03)
+
+* Fixed minor issue with ActiveRecord 3.0.4.rc1 (Bruno Michel)
+* Added support for Rubygems-test
+
 ## 3.2.0 (2011-01-17)
 
 * Fixed deprecation on Rails edge. Thanks [slbug](http://github.com/slbug)
