@@ -8,7 +8,11 @@ require "rake/clean"
 task :default => :test
 
 CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
-Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
+
+gemspec = File.expand_path("../friendly_id.gemspec", __FILE__)
+if File.exists? gemspec
+  Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
+end
 
 begin
   require "yard"
