@@ -43,7 +43,7 @@ namespace :test do
 
   desc "Test against lots of versions"
   task :pre_release do
-    ["ree-1.8.7-2010.02", "ruby-1.9.2-p0"].each do |ruby|
+    ["ree-1.8.7-2010.02", "ruby-1.9.2-p136"].each do |ruby|
       ["sqlite3", "mysql", "postgres"].each do |driver|
         [2, 3].each do |ar_version|
           command = "rake-#{ruby} test AR=#{ar_version} DB=#{driver}"
