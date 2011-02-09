@@ -26,10 +26,16 @@ module FriendlyId
         Tourist.delete_all
       end
 
+      test "As of 3.2.0, should raise error if :scope option is passed" do
+        assert_raise(RuntimeError) do
+          Tourist.find("hello", :scope => "usa")
+        end
+      end
+
       test "should not use cached slug column with scopes" do
         @tourist  = Tourist.create!(:name => "John Smith", :country => @usa)
         @tourist2 = Tourist.create!(:name => "John Smith", :country => @canada)
-        assert_equal @canada, Tourist.find(@tourist2.friendly_id, :scope => @canada).country
+        assert_equal @canada, @canada.residents.find(@tourist2.friendly_id).country
       end
 
       test "a slugged model should auto-detect that it is being used as a parent scope" do
@@ -83,49 +89,18 @@ module FriendlyId
             :slugs => {:name => name, :sequence => sequence}}).size
       end
 
-      test "should find a single scoped record with a scope as a string" do
-        assert Resident.find(@resident.friendly_id, :scope => @resident.country.to_param)
+      test "should find a scoped record by friendly_id" do
+        assert Resident.find(@resident.friendly_id)
       end
 
-      test "should find a single scoped record with a scope" do
-        assert Resident.find(@resident.friendly_id, :scope => @resident.country)
+      test "should find a scope record as a relation member" do
+        assert_equal @resident, @usa.residents.find("john-smith")
+        assert_equal @resident2, @canada.residents.find("john-smith")
       end
 
-      test "should find a single scoped record with a nil scope" do
-        nomad  = Resident.create!(:name => "Homer", :country => nil)
-        assert Resident.find(nomad.friendly_id, :scope => nil)
-      end
-
-      test "should find a multiple scoped records with a scope" do
-        r1 = Resident.create!(:name => "John Smith", :country => @usa)
-        r2 = Resident.create!(:name => "Jane Smith", :country => @usa)
-        result = Resident.find([r1, r2].map(&:friendly_id), :scope => @resident.country)
-        assert_equal 2, result.size
-      end
-
-
-      test "should raise an error when finding a single scoped record with no scope" do
-        assert_raises ActiveRecord::RecordNotFound do
-          Resident.find(@resident.friendly_id)
-        end
-      end
-
-      test "should append scope error info when missing scope causes a find to fail" do
-        begin
-          Resident.find(@resident.friendly_id)
-          fail "The find should not have succeeded"
-        rescue ActiveRecord::RecordNotFound => e
-          assert_match(/scope: expected/, e.message)
-        end
-      end
-
-      test "should append scope error info when the scope value causes a find to fail" do
-        begin
-          Resident.find(@resident.friendly_id, :scope => "badscope")
-          fail "The find should not have succeeded"
-        rescue ActiveRecord::RecordNotFound => e
-          assert_match(/scope: badscope/, e.message)
-        end
+      test "should find a single scoped record using slug conditions" do
+        assert_equal @resident, Resident.find(@resident.friendly_id, :include => :slugs,
+          :conditions => {:slugs => {:scope => @resident.country.to_param}})
       end
 
       test "should update the sluggable field when a polymorphic relationship exists" do

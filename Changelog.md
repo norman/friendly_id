@@ -6,6 +6,22 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.2.1 (2011-02-03)
+
+* Fixed minor issue with ActiveRecord 3.0.4.rc1 (Bruno Michel)
+* Added support for Rubygems-test
+
+## 3.2.0 (2011-01-17)
+
+* Fixed deprecation on Rails edge. Thanks [slbug](http://github.com/slbug)
+* Removes `:scope` as a find parameter, allowing more flexible finds with
+  scoped records.
+* Improve logic of `friendly_id:redo_slugs` to support models with non-numeric ids. (thanks Oleksandr Petrov)
+
+## 3.1.8 (2010-11-22)
+
+* Fix compatibility with Active Record 3.0.3.
+
 ## 3.1.7 (2010-09-22)
 
 * Reserved words can now be regular expressions.

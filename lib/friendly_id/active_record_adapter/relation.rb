@@ -9,8 +9,7 @@ module FriendlyId
         attr :ids
         alias id ids
 
-        def_delegators :relation, :arel, :arel_table, :friendly_id_scope,
-                       :klass, :limit_value, :offset_value, :where
+        def_delegators :relation, :arel, :arel_table, :klass, :limit_value, :offset_value, :where
         def_delegators :klass, :connection, :friendly_id_config
         alias fc friendly_id_config
 
@@ -20,7 +19,7 @@ module FriendlyId
         end
 
         def find_one
-          if fc.cache_column? && !fc.scope?
+          if fc.cache_column?
             find_one_with_cached_slug
           elsif fc.use_slugs?
             find_one_with_slug
@@ -37,13 +36,6 @@ module FriendlyId
             record.friendly_id_status.name = ids
           end
           validate_expected_size!(ids, records)
-        end
-
-        def raise_error(error)
-          raise(error) unless fc.scope
-          scope_message = friendly_id_scope || "expected, but none given"
-          message = "%s, scope: %s" % [error.message, scope_message]
-          raise ActiveRecord::RecordNotFound, message
         end
 
         private
@@ -67,7 +59,14 @@ module FriendlyId
         end
 
         def find_one_with_slug
-          sluggable_id = sluggable_ids_for([id]).first
+          sluggable_ids = sluggable_ids_for([id])
+
+          if sluggable_ids.size > 1 && fc.scope?
+            return relation.where(relation.primary_key.in(sluggable_ids)).first
+          end
+
+          sluggable_id = sluggable_ids.first
+
           if sluggable_id
             name, seq = id.to_s.parse_friendly_id
             record = relation.send(:find_one_without_friendly, sluggable_id)
@@ -80,11 +79,11 @@ module FriendlyId
         end
 
         def friendly_records(friendly_ids, unfriendly_ids)
-          use_slugs_table =  fc.use_slugs? && (fc.scope? || !fc.cache_column?)
+          use_slugs_table =  fc.use_slugs? && (!fc.cache_column?)
           return find_some_using_slug(friendly_ids, unfriendly_ids) if use_slugs_table
           column     = fc.cache_column || fc.column
           friendly   = arel_table[column].in(friendly_ids)
-          unfriendly = arel_table[relation.primary_key].in unfriendly_ids
+          unfriendly = arel_table[relation.primary_key.name].in unfriendly_ids
           if friendly_ids.present? && unfriendly_ids.present?
             where(friendly.or(unfriendly))
           else
@@ -94,7 +93,7 @@ module FriendlyId
 
         def find_some_using_slug(friendly_ids, unfriendly_ids)
           ids = [unfriendly_ids + sluggable_ids_for(friendly_ids)].flatten.uniq
-          where(arel_table[relation.primary_key].in(ids))
+          where(arel_table[relation.primary_key.name].in(ids))
         end
 
         def sluggable_ids_for(ids)
@@ -102,16 +101,8 @@ module FriendlyId
           fragment = "(slugs.sluggable_type = %s AND slugs.name = %s AND slugs.sequence = %d)"
           conditions = ids.inject(nil) do |clause, id|
             name, seq = id.parse_friendly_id
-            string = fragment % [connection.quote(klass.base_class), connection.quote(name), seq]
+            string = fragment % [connection.quote(klass.base_class.name), connection.quote(name), seq]
             clause ? clause + " OR #{string}" : string
-          end
-          if fc.scope?
-            conditions = if friendly_id_scope
-              scope = connection.quote(friendly_id_scope)
-              "slugs.scope = %s AND (%s)" % [scope, conditions]
-            else
-              "slugs.scope IS NULL AND (%s)" % [conditions]
-            end
           end
           sql = "SELECT sluggable_id FROM slugs WHERE (%s)" % conditions
           connection.select_values sql
@@ -142,13 +133,11 @@ module FriendlyId
         end
       end
 
-      attr :friendly_id_scope
-
-      # This method overrides Active Record's default in order to allow the :scope option to
-      # be passed to finds.
       def apply_finder_options(options)
-        @friendly_id_scope = options.delete(:scope)
-        @friendly_id_scope = @friendly_id_scope.to_param if @friendly_id_scope.respond_to?(:to_param)
+        if options[:scope]
+          raise "The :scope finder option has been removed from FriendlyId 3.2.0 " +
+            "https://github.com/norman/friendly_id/issues#issue/88"
+        end
         super
       end
 
@@ -159,18 +148,18 @@ module FriendlyId
           return super if !klass.uses_friendly_id? or id.unfriendly_id?
           find = Find.new(self, id)
           find.find_one or super
-        rescue ActiveRecord::RecordNotFound => error
-          find ? find.raise_error(error) : raise(error)
         end
       end
 
       def find_some(ids)
         return super unless klass.uses_friendly_id?
-        Find.new(self, ids).find_some or super
-      rescue ActiveRecord::RecordNotFound => error
-        find ? find.raise_error(error) : raise(error)
+        Find.new(self, ids).find_some or begin
+          # A change in Arel 2.0.x causes find_some to fail with arrays of instances; not sure why.
+          # This is an emergency, temporary fix.
+          ids = ids.map {|id| (id.respond_to?(:friendly_id_config) ? id.id : id).to_i}
+          super
+        end
       end
-
     end
   end
 end

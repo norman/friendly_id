@@ -2,7 +2,7 @@ namespace :friendly_id do
   desc "Make slugs for a model."
   task :make_slugs => :environment do
     FriendlyId::TaskRunner.new.make_slugs do |record|
-      puts "%s(%d): friendly_id set to '%s'" % [record.class.to_s, record.id, record.slug.name] if record.slug
+      puts "#{record.class}(#{record.id}): friendly_id set to '#{record.slug.name}'" if record.slug
     end
   end
 

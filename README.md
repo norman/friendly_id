@@ -41,7 +41,7 @@ continue to support 2.3.x until Rails 3.1 is released.
     cd my_app
 
     # add to Gemfile
-    gem "friendly_id", "~> 3.1"
+    gem "friendly_id", "~> 3.2.1"
 
     rails generate friendly_id
     rails generate scaffold user name:string cached_slug:string
