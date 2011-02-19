@@ -114,6 +114,28 @@ module FriendlyId
           Resident.friendly_id_config.send(:associated_friendly_classes)
         end
       end
+
+
+      test "should raise RecordNotFound since the record doesnt exist" do
+        assert Resident.exists?(1)
+        assert Country.exists?(1)
+        resident = Resident.find(1)
+        resident.name = "1-name-with-numeral-in-front"
+        resident.save
+        
+        assert_raise ActiveRecord::RecordNotFound do
+          search_country_table_for_friendly_id_used_on_resident = Country.find("1-name-with-numeral-in-front")
+        end
+        
+        # this should raise (since no country with that friendly_id exists)
+        # but it returns the Country object with ID:1, so it appears to be
+        # truncating the text after the numeral
+        puts search_country_table_for_friendly_id_used_on_resident.to_param
+        puts search_country_table_for_friendly_id_used_on_resident.id
+      end
+
+
+
     end
   end
 end
