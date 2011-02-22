@@ -1,3 +1,8 @@
+== 2.1.5 2011-02-22
+
+* 1 major bugfix
+  * Fixed compatibility with Rails 2.1 multibyte
+
 == 2.1.4 2009-09-01
 
 * 1 minor enhancement:
