@@ -351,6 +351,22 @@ store a reserved value, FriendlyId raises a
 reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
 model using FriendlyId.
 
+If you'd like to show a validation error when a word is reserved, you can add
+an callback to your model that catches the error:
+
+    class Person < ActiveRecord::Base
+      has_friendly_id :name, :use_slug => true
+
+      after_validation :validate_reserved
+
+      def validate_reserved
+        slug_text
+      rescue FriendlyId::ReservedError
+        @errors[friendly_id_config.method] = "is reserved. Please choose something else"
+        return false
+      end
+    end
+
 ## Caching the FriendlyId Slug for Better Performance
 
 Checking the slugs table all the time has an impact on performance, so as of
