@@ -11,7 +11,6 @@ Gem::Specification.new do |s|
   s.files             = Dir["lib/**/*.rb", "lib/**/*.rake", "*.md", "MIT-LICENSE",
     "Rakefile", "rails/init.rb", "generators/**/*.*", "test/**/*.*",
     "extras/**/*.*", ".gemtest"]
-  s.has_rdoc          = true
   s.homepage          = "http://norman.github.com/friendly_id"
   s.name              = "friendly_id"
   s.platform          = Gem::Platform::RUBY
