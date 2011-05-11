@@ -62,7 +62,7 @@ module FriendlyId
           sluggable_ids = sluggable_ids_for([id])
 
           if sluggable_ids.size > 1 && fc.scope?
-            return relation.where(relation.primary_key.in(sluggable_ids)).first
+            return relation.where(primary_key_column.in(sluggable_ids)).first
           end
 
           sluggable_id = sluggable_ids.first
@@ -83,7 +83,7 @@ module FriendlyId
           return find_some_using_slug(friendly_ids, unfriendly_ids) if use_slugs_table
           column     = fc.cache_column || fc.column
           friendly   = arel_table[column].in(friendly_ids)
-          unfriendly = arel_table[relation.primary_key.name].in unfriendly_ids
+          unfriendly = primary_key_column.in unfriendly_ids
           if friendly_ids.present? && unfriendly_ids.present?
             where(friendly.or(unfriendly))
           else
@@ -93,7 +93,7 @@ module FriendlyId
 
         def find_some_using_slug(friendly_ids, unfriendly_ids)
           ids = [unfriendly_ids + sluggable_ids_for(friendly_ids)].flatten.uniq
-          where(arel_table[relation.primary_key.name].in(ids))
+          where(primary_key_column.in(ids))
         end
 
         def sluggable_ids_for(ids)
@@ -129,6 +129,14 @@ module FriendlyId
             error = "Couldn't find all #{klass.name.pluralize} with IDs "
             error << "(#{ids.join(", ")})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
             raise ActiveRecord::RecordNotFound, error
+          end
+        end
+
+        def primary_key_column
+          if relation.primary_key.is_a?(String)
+            arel_table[relation.primary_key]
+          else
+            arel_table[relation.primary_key.name]
           end
         end
       end
