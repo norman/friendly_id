@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.3.0 (NOT_RELEASED_YET)
+
+* Compatibility with Active Record 3.1 ([Andrew White](https://github.com/pixeltrix))
+
 ## 3.2.1 (2011-02-03)
 
 * Fixed minor issue with ActiveRecord 3.0.4.rc1 (Bruno Michel)
