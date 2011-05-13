@@ -9,6 +9,7 @@ suggestions, ideas and improvements to FriendlyId.
 ## 3.3.0 (NOT_RELEASED_YET)
 
 * Compatibility with Active Record 3.1 ([Andrew White](https://github.com/pixeltrix))
+* Gemspec compatibility with RubyGems 1.7 ([Philip Arndt](https://github.com/parndt))
 
 ## 3.2.1 (2011-02-03)
 
