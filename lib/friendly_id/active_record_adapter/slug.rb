@@ -45,6 +45,14 @@ class Slug < ::ActiveRecord::Base
     end
   end
 
+  def save(*args)
+    persisted? && !scope_changed? ? true : super
+  end
+
+  def save!(*args)
+    persisted? && !scope_changed? ? true : super
+  end
+
   private
 
   # If we're renaming back to a previously used friendly_id, delete the
