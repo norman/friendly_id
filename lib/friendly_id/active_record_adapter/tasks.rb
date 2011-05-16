@@ -30,7 +30,7 @@ module FriendlyId
         :include => :slug,
         :limit   => (ENV["LIMIT"] || 100).to_i,
         :offset  => 0,
-        :order   => ENV["ORDER"] || "#{klass.table_name}.id ASC",
+        :order   => ENV["ORDER"] || "#{klass.table_name}.#{klass.primary_key} ASC",
       }.merge(task_options || {})
 
       while records = find(:all, options) do
