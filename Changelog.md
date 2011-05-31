@@ -10,6 +10,9 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Compatibility with Active Record 3.1 ([Andrew White](https://github.com/pixeltrix))
 * Gemspec compatibility with RubyGems 1.7 ([Philip Arndt](https://github.com/parndt))
+* Fixed generators for Rails 3.1 ([Matt Burke](https://github.com/spraints))
+* Rake task fix for models with primary keys not named "id" ([Danny Hawkins](https://github.com/danhawkins))
+
 
 ## 3.2.1 (2011-02-03)
 
