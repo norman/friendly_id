@@ -46,6 +46,8 @@ module FriendlyId
         @usa.update_attributes(:name => "United States")
         assert_equal "united-states", @usa.to_param
         assert_equal "united-states", @resident.slugs(true).first.scope
+        assert_equal 2, @resident.slugs(true).count
+        assert_equal "usa", @resident.slugs(true).second.scope
       end
 
       test "a non-slugged model should auto-detect that it is being used as a parent scope" do

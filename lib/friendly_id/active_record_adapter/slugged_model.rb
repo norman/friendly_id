@@ -86,12 +86,15 @@ module FriendlyId
       def update_dependent_scopes
         return unless friendly_id_config.class.scopes_used?
         if slugs(true).size > 1 && @new_friendly_id
+          @old_friendly_id = slugs.second.to_friendly_id
           friendly_id_config.child_scopes.each do |klass|
-            Slug.update_all "scope = '#{@new_friendly_id}'", ["sluggable_type = ? AND scope = ?",
-              klass.to_s, slugs.second.to_friendly_id]
+            Slug.all(:conditions => ["sluggable_type = ? AND scope = ?", klass.to_s, @old_friendly_id]).each do |old_scoped_slug|
+              old_scoped_slug.sluggable.slugs.create!(:scope => @new_friendly_id, :name => old_scoped_slug.name)
+            end
           end
         end
       end
+
 
       # Does the model use slug caching?
       def uses_slug_cache?
