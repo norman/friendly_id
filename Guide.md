@@ -351,6 +351,22 @@ store a reserved value, FriendlyId raises a
 reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
 model using FriendlyId.
 
+### Nullifying reserved words
+
+If you don't want to handle the {FriendlyId::ReservedError} you can choose to nullify
+reserved words during slug creation like so:
+
+    class Restaurant < ActiveRecord::Base
+      has_friendly_id :name, :use_slug => true, :nullify_reserved_words => true
+    end
+
+In this case you will get a {FriendlyId::BlankError} error instead.  However, if you
+also add the `allow_nil` option, then no slug will be generated and you will get a
+normal numeric URL.  Together these two options allow naive slugging of a field with
+a guarantee that no slugging exception will occur.
+
+This option is only applicable if you are using slugs.
+
 ## Caching the FriendlyId Slug for Better Performance
 
 Checking the slugs table all the time has an impact on performance, so as of
@@ -413,7 +429,11 @@ This works whether the model uses slugs or not.
 
 For slugged models, if the friendly_id text is `nil`, no slug will be created.
 This can be useful, for example, to only create slugs for published articles
-and avoid creating many slugs with sequences.
+and avoid creating many slugs with sequences.  Additionally if the slug resolves
+a blank string it will also be considered null and no slug will be created.  In
+conjunction with `nullify_reserved_words` you can guarantee that slug creation
+will never raise an exception (you will just end up without a slug on those edge
+cases).
 
 For models that don't use slugs, this will make FriendlyId skip all its
 validations when the friendly_id text is `nil`. This can be useful, for
