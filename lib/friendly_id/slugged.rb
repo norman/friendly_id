@@ -81,7 +81,7 @@ module FriendlyId
       def slug_text
         text = send(friendly_id_config.method)
         text = normalize_friendly_id(SlugString.new(text)) unless text.nil?
-        text = nil if text.blank?
+        text = nil if text.blank? || (friendly_id_config.nullify_reserved_words? && friendly_id_config.reserved?(text))
         unless text.nil? && friendly_id_config.allow_nil?
           SlugString.new(text).validate_for!(friendly_id_config).to_s
         end
