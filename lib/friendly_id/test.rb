@@ -132,6 +132,11 @@ module FriendlyId
         end
       end
 
+      test "creation should succeed if the friendly_id text converts to empty and allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        assert klass.send(create_method, :name => "*")
+      end
+
       test "should allow the same friendly_id across models" do
         other_instance = other_class.send(create_method, :name => instance.name)
         assert_equal other_instance.friendly_id, instance.friendly_id

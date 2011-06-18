@@ -79,11 +79,11 @@ module FriendlyId
 
       # Get the processed string used as the basis of the friendly id.
       def slug_text
-        base = send(friendly_id_config.method)
-        base = nil if base.blank?
-        unless base.nil? && friendly_id_config.allow_nil?
-          text = normalize_friendly_id(SlugString.new(base))
-          SlugString.new(text.to_s).validate_for!(friendly_id_config).to_s
+        text = send(friendly_id_config.method)
+        text = normalize_friendly_id(SlugString.new(text)) unless text.nil?
+        text = nil if text.blank?
+        unless text.nil? && friendly_id_config.allow_nil?
+          SlugString.new(text).validate_for!(friendly_id_config).to_s
         end
       end
 
