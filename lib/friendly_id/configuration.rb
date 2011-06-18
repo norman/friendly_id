@@ -30,9 +30,9 @@ module FriendlyId
       :sequence_separator          => "--"
     }
 
-    # Whether to allow friendly_id and/or slugs to be nil. This is not
-    # generally useful on its own, but may allow you greater flexibility to
-    # customize your application.
+    # Whether to allow friendly_id and/or slugs to be nil. If this is true then blank
+    # slugs will automatically be converted to nil, allowing for item names that lack
+    # sluggable characters.
     attr_accessor :allow_nil
     alias :allow_nil? :allow_nil
 
