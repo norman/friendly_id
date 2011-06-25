@@ -10,6 +10,9 @@ comfortable with the source code and willing to fix bugs that will likely occur.
 That said, I will soon be deploying this on a high-traffic, production site, so
 I have a personal stake in making this work well. Your feedback is most welcome.
 
+If you want to try it out, grab the source, or [install the
+gem](https://rubygems.org/gems/friendly_id4).
+
 ## Back to basics
 
 This isn't the "big rewrite," it's the "small rewrite."
