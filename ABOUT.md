@@ -74,19 +74,26 @@ This was transparently handled by FriendlyId 3, but there were three problems:
 
 Here's how to do this in FriendlyId 4:
 
-    begin
-      # First try a performant, transparent find by either numeric id, or
-      # current friendly_id.
-      @post = Post.find(params[:id])
-    # That didn't work? Might be an out-of-date id.
-    rescue ActiveRecord::NotFoundError
-      # Explicit friendly_id-only find that considers slug history
-      @post = Post.find_by_friendly_id(params[:id])
-      # Now let's redirect to the current record
-      if @post.friendly_id != params[:id]
-        return redirect_to @post, :status => :moved_permanently
+    class PostsController < ApplicationController
+
+      before_filter :find_post
+
+      ...
+
+      def find_post
+        return unless params[:id]
+        @post = begin
+          Post.find params[:id]
+        rescue ActiveRecord::RecordNotFound
+          Post.find_by_friendly_id params[:id]
+        end
+        # If an old id or a numeric id was used to find the record, then
+        # the request path will not match the post_path, and we should do
+        # a 301 redirect that uses the current friendly_id
+        if request.path != post_path(@post)
+          return redirect_to @post, :status => :moved_permanently
+        end
       end
-    end
 
 Under FriendlyId 4 this is a little more verbose, but offers much finer-grained
 controler over the finding process, performs better, and has a much simpler
@@ -130,4 +137,3 @@ strings to ASCII. It's very easy to include - just override
         text.to_slug.normalize! :transliterate => :russian
       end
     end
-
