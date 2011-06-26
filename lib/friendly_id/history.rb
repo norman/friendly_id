@@ -1,3 +1,5 @@
+require "friendly_id/slug"
+
 module FriendlyId
   module History
 
@@ -22,8 +24,4 @@ module FriendlyId
       where("friendly_id_slugs.slug = ?", args.shift).includes(:friendly_id_slugs).first(*args)
     end
   end
-end
-
-class FriendlyIdSlug < ActiveRecord::Base
-  belongs_to :sluggable, :polymorphic => true
 end
