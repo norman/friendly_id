@@ -112,7 +112,7 @@ module FriendlyId
         end
       end
 
-      test "creation should raise an error if the friendly_id text is nil and allow_nil is false" do
+      test "creation should raise an error if the friendly_id text is nil and allow_nil and/or allow_blank is false" do
         assert_validation_error do
           klass.send(create_method, :name => nil)
         end
@@ -121,6 +121,11 @@ module FriendlyId
       test "creation should succeed if the friendly_id text is nil and allow_nil is true" do
         klass.friendly_id_config.stubs(:allow_nil?).returns(true)
         assert klass.send(create_method, :name => nil)
+      end
+      
+      test "creation should succeed if the friendly_id text is blank and allow_blank is true" do
+        klass.friendly_id_config.stubs(:allow_blank?).returns(true)
+        assert klass.send(create_method, :name => '')
       end
 
       test "should allow the same friendly_id across models" do
@@ -151,6 +156,14 @@ module FriendlyId
         instance = klass.send(create_method, :name => "hello")
         assert instance.friendly_id
         instance.name = nil
+        assert instance.send(save_method)
+      end
+      
+      test "should allow friendly_id to be blankable if allow_blank is true" do
+        klass.friendly_id_config.stubs(:allow_blank?).returns(true)
+        instance = klass.send(create_method, :name => "hello")
+        assert instance.friendly_id
+        instance.name = ''
         assert instance.send(save_method)
       end
 
@@ -221,9 +234,15 @@ module FriendlyId
         assert_equal instance, klass.send(find_method, old_friendly_id)
       end
 
-      test "should not create a slug when allow_nil is true and friendy_id text is blank" do
+      test "should not create a slug when allow_nil is true and friendy_id text is nil" do
         klass.friendly_id_config.stubs(:allow_nil?).returns(true)
         instance = klass.send(create_method, :name => nil)
+        assert_nil instance.slug
+      end
+      
+      test "should not create a slug when allow_blank is true and friendy_id text is blank" do
+        klass.friendly_id_config.stubs(:allow_blank?).returns(true)
+        instance = klass.send(create_method, :name => '')
         assert_nil instance.slug
       end
 
@@ -232,6 +251,16 @@ module FriendlyId
         instance = klass.send(create_method, :name => "hello")
         assert instance.friendly_id
         instance.name = nil
+        assert_validation_error do
+          instance.send(save_method)
+        end
+      end
+
+      test "should not allow friendly_id to be blank even if allow_blank is true" do
+        klass.friendly_id_config.stubs(:allow_blank?).returns(true)
+        instance = klass.send(create_method, :name => "hello")
+        assert instance.friendly_id
+        instance.name = ''
         assert_validation_error do
           instance.send(save_method)
         end

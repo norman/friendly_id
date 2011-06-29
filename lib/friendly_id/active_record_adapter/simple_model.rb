@@ -48,7 +48,7 @@ module FriendlyId
       end
 
       def skip_friendly_id_validations
-        friendly_id.nil? && friendly_id_config.allow_nil?
+        (friendly_id.nil? && friendly_id_config.allow_nil?) || (friendly_id.blank? && friendly_id_config.allow_blank?)
       end
 
       def validate_friendly_id
