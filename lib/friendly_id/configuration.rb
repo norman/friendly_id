@@ -23,6 +23,7 @@ module FriendlyId
 
     DEFAULTS = {
       :allow_nil                   => false,
+      :nullify_reserved_words      => false,
       :ascii_approximation_options => [],
       :max_length                  => 255,
       :reserved_words              => ["index", "new"],
@@ -30,9 +31,9 @@ module FriendlyId
       :sequence_separator          => "--"
     }
 
-    # Whether to allow friendly_id and/or slugs to be nil. This is not
-    # generally useful on its own, but may allow you greater flexibility to
-    # customize your application.
+    # Whether to allow friendly_id and/or slugs to be nil. If this is true then blank
+    # slugs will automatically be converted to nil, allowing for item names that lack
+    # sluggable characters.  Also see nullify_reserved_words.
     attr_accessor :allow_nil
     alias :allow_nil? :allow_nil
 
@@ -52,6 +53,12 @@ module FriendlyId
     # The method or column that will be used as the basis of the friendly_id string.
     attr_reader :method
     alias :column :method
+
+    # If set to true then slugs that come out as reserved words will be nullfied.  By itself
+    # this will change a ReservedError to a BlankError.  In conjunction with allow_nil this
+    # will allow any name to pass through without raising an error (you just won't get a slug).
+    attr_accessor :nullify_reserved_words
+    alias :nullify_reserved_words? :nullify_reserved_words
 
     # The message shown when a reserved word is used.
     # @see #reserved_words

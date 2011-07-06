@@ -123,6 +123,30 @@ module FriendlyId
         assert klass.send(create_method, :name => nil)
       end
 
+      test "creation should succeed if the friendly_id text is empty and allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        begin
+          assert klass.send(create_method, :name => "")
+        rescue ActiveRecord::RecordInvalid => e
+          raise unless e.message =~ /Name can't be blank/ # Test not applicable in this case
+        end
+      end
+
+      test "creation should succeed if the friendly_id text converts to empty and allow_nil is true" do
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        assert klass.send(create_method, :name => "*")
+      end
+
+      test "creation should succeed if the friendly_id text converts to empty and allow_nil and nullify_reserved_words are true" do
+        klass.friendly_id_config.stubs(:nullify_reserved_words?).returns(true)
+        klass.friendly_id_config.stubs(:allow_nil?).returns(true)
+        begin
+          assert klass.send(create_method, :name => "new")
+        rescue ActiveRecord::RecordInvalid => e
+          raise unless e.message =~ /Name can not be "new"/ # Test not applicable in this case
+        end
+      end
+
       test "should allow the same friendly_id across models" do
         other_instance = other_class.send(create_method, :name => instance.name)
         assert_equal other_instance.friendly_id, instance.friendly_id
