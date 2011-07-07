@@ -7,3 +7,4 @@ pkg
 coverage
 .yardoc
 *.gem
+*.sqlite3
