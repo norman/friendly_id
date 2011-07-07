@@ -49,7 +49,7 @@ module FriendlyId
 
     # @NOTE AR-specific code here
     def conflicts
-      pkey  = sluggable.class.arel_table.primary_key.name
+      pkey  = sluggable.class.primary_key
       value = sluggable.send pkey
       scope = sluggable.class.where("#{column} = ? OR #{column} LIKE ?", normalized, wildcard)
       scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
