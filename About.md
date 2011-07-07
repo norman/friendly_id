@@ -99,7 +99,7 @@ Here's how to do this in FriendlyId 4:
       end
 
 Under FriendlyId 4 this is a little more verbose, but offers much finer-grained
-controler over the finding process, performs better, and has a much simpler
+control over the finding process, performs better, and has a much simpler
 implementation.
 
 ## "Reserved words" are now just a normal validation
