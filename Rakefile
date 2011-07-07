@@ -1,8 +1,12 @@
-require "cutest"
+require "rubygems"
+require "rake/testtask"
 
 task :default => :test
-task :test do
-  Cutest.run(Dir["test/*_test.rb"])
+
+Rake::TestTask.new do |t|
+  # t.libs << "test"
+  t.test_files = FileList['test/*_test.rb']
+  t.verbose = true
 end
 
 task :clean do
@@ -15,6 +19,22 @@ end
 
 task :yard do
   %x{yard doc}
+end
+
+namespace :db do
+
+  desc "Set up the database schema"
+  task :up do
+    require File.expand_path("../test/helper", __FILE__)
+    FriendlyId::Test::Schema.up
+  end
+
+  desc "Destroy the database schema"
+  task :down do
+    require File.expand_path("../test/helper", __FILE__)
+    FriendlyId::Test::Schema.down
+  end
+
 end
 
 task :doc => :yard

@@ -1,35 +1,38 @@
 require File.expand_path("../helper.rb", __FILE__)
 
-setup { Class.new ActiveRecord::Base }
+class CoreTest < MiniTest::Unit::TestCase
 
-test "models don't use friendly_id by default" do |klass|
-  assert !klass.uses_friendly_id?
-end
+  include FriendlyId::Test
+  include FriendlyId::Test::Shared
 
-test "model classes should have a friendly id config" do |klass|
-  assert klass.has_friendly_id(:name).friendly_id_config
-end
-
-test "should raise error when bad config options are set" do |klass|
-  assert_raise ArgumentError do
-    klass.has_friendly_id :name, :garbage => :in
+  def klass
+    Author
   end
-end
 
-[User, Book].map {|klass| klass.has_friendly_id :name}
+  test "models don't use friendly_id by default" do
+    assert !Class.new(ActiveRecord::Base).uses_friendly_id?
+  end
 
-setup {User}
+  test "model classes should have a friendly id config" do
+    assert klass.has_friendly_id(:name).friendly_id_config
+  end
 
-test "should reserve 'new' and 'edit' by default" do |klass|
-  ["new", "edit"].each do |word|
-    transaction do
-      assert_raise(ActiveRecord::RecordInvalid) {klass.create! :name => word}
+  test "should raise error when bad config options are set" do
+    assert_raises ArgumentError do
+      klass.has_friendly_id :name, :garbage => :in
     end
   end
-end
 
-test "instances should have a friendly id" do |klass|
-  with_instance_of(klass) {|record| assert record.friendly_id}
-end
+  test "should reserve 'new' and 'edit' by default" do
+    ["new", "edit"].each do |word|
+      transaction do
+        assert_raises(ActiveRecord::RecordInvalid) {klass.create! :name => word}
+      end
+    end
+  end
 
-require File.expand_path("../shared.rb", __FILE__)
+  test "instances should have a friendly id" do
+    with_instance_of(klass) {|record| assert record.friendly_id}
+  end
+
+end

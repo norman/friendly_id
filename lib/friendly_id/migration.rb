@@ -12,6 +12,6 @@ class CreateFriendlyIdSlugs < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :slugs
+    drop_table :friendly_id_slugs
   end
 end

@@ -1,0 +1,6 @@
+adapter: postgresql
+host: localhost
+port: 5432
+username: postgres
+database: friendly_id_test
+encoding: utf-8
