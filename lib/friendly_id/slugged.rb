@@ -28,6 +28,7 @@ module FriendlyId
   end
 
   class Configuration
+    attr :use_slugs
     attr_writer :slug_column, :sequence_separator, :use_slugs
 
     DEFAULTS[:slug_column]        = 'slug'
@@ -36,7 +37,7 @@ module FriendlyId
     undef query_field
 
     def query_field
-      use_slugs? ? slug_column : base
+      use_slugs ? slug_column : base
     end
 
     def sequence_separator
@@ -45,10 +46,6 @@ module FriendlyId
 
     def slug_column
       @slug_column ||= DEFAULTS[:slug_column]
-    end
-
-    def use_slugs?
-      @use_slugs
     end
   end
 end

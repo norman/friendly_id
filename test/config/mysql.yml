@@ -1,4 +1,4 @@
-adapter: mysql2
+adapter: mysql
 database: friendly_id_test
 username: root
 hostname: localhost

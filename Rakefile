@@ -4,7 +4,6 @@ require "rake/testtask"
 task :default => :test
 
 Rake::TestTask.new do |t|
-  # t.libs << "test"
   t.test_files = FileList['test/*_test.rb']
   t.verbose = true
 end
@@ -19,6 +18,16 @@ end
 
 task :yard do
   %x{yard doc}
+end
+
+namespace :test do
+  # Test lots of versions and databases
+  task :all do
+    ["postgres", "mysql", "sqlite3"].map do |db|
+      ENV["DB"] = db
+      puts %x{rake test}
+    end
+  end
 end
 
 namespace :db do

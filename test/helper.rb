@@ -2,13 +2,11 @@ $LOAD_PATH << File.expand_path("../../lib", __FILE__)
 $LOAD_PATH.uniq!
 
 require "rubygems"
+require "bundler/setup"
 require "minitest/unit"
 require "active_record"
 require "active_support"
 require "active_support/core_ext/module/delegation"
-
-$VERBOSE = true
-
 require "friendly_id"
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
@@ -39,6 +37,10 @@ module FriendlyId
 
       def connect
         ActiveRecord::Base.establish_connection config
+        version = ActiveRecord::VERSION::STRING
+        driver  = FriendlyId::Test::Database.driver
+        puts "-" * 72
+        puts "Using AR #{version} with #{driver}"
       end
 
       def config
@@ -66,10 +68,28 @@ end
 
 FriendlyId::Test::Database.connect
 
-class Author < ActiveRecord::Base
-  has_friendly_id :name
+Author, Book = 2.times.map do
+  Class.new(ActiveRecord::Base) do
+    has_friendly_id :name
+  end
 end
 
-class Book < ActiveRecord::Base
+Journalist, Article, Novelist = 3.times.map do
+  Class.new(ActiveRecord::Base) do
+    include FriendlyId::Slugged
+    has_friendly_id :name
+  end
+end
+
+class Novel < ActiveRecord::Base
+  include FriendlyId::Slugged
+  include FriendlyId::Scoped
+  belongs_to :novelist
+  has_friendly_id :name, :scope => :novelist
+end
+
+class Manual < ActiveRecord::Base
+  include FriendlyId::Slugged
+  include FriendlyId::History
   has_friendly_id :name
 end

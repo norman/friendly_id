@@ -28,12 +28,13 @@ module FriendlyId
           end
 
           add_column :novels, :novelist_id, :integer
+          remove_index :novels, :slug
         end
 
         private
 
         def slugged_tables
-          ["journalists", "articles", "novelists", "novels"]
+          ["journalists", "articles", "novelists", "novels", "manuals"]
         end
 
         def simple_tables
