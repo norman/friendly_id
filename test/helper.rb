@@ -1,12 +1,11 @@
-$LOAD_PATH << File.expand_path("../../lib", __FILE__)
-$LOAD_PATH.uniq!
+$: << File.expand_path("../../lib", __FILE__)
+$: << File.expand_path("../", __FILE__)
+$:.uniq!
 
 require "rubygems"
 require "bundler/setup"
 require "minitest/unit"
 require "active_record"
-require "active_support"
-require "active_support/core_ext/module/delegation"
 require "friendly_id"
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
@@ -40,11 +39,17 @@ module FriendlyId
         version = ActiveRecord::VERSION::STRING
         driver  = FriendlyId::Test::Database.driver
         puts "-" * 72
-        puts "Using AR #{version} with #{driver}"
+        if in_memory?
+          ActiveRecord::Migration.verbose = false
+          Schema.up
+          puts "Using AR #{version} with #{driver} (in-memory)"
+        else
+          puts "Using AR #{version} with #{driver}"
+        end
       end
 
       def config
-        YAML::load(File.open(config_file))
+        @config ||= YAML::load(File.open(config_file))
       end
 
       def config_file
@@ -54,6 +59,11 @@ module FriendlyId
       def driver
         (ENV["DB"] or "sqlite3").downcase
       end
+
+      def in_memory?
+        config["database"] == ":memory:"
+      end
+
     end
   end
 end
@@ -64,32 +74,6 @@ class Module
   end
 end
 
-["shared", "schema"].each {|f| require File.expand_path("../#{f}", __FILE__)}
-
+require "schema"
+require "shared"
 FriendlyId::Test::Database.connect
-
-Author, Book = 2.times.map do
-  Class.new(ActiveRecord::Base) do
-    has_friendly_id :name
-  end
-end
-
-Journalist, Article, Novelist = 3.times.map do
-  Class.new(ActiveRecord::Base) do
-    include FriendlyId::Slugged
-    has_friendly_id :name
-  end
-end
-
-class Novel < ActiveRecord::Base
-  include FriendlyId::Slugged
-  include FriendlyId::Scoped
-  belongs_to :novelist
-  has_friendly_id :name, :scope => :novelist
-end
-
-class Manual < ActiveRecord::Base
-  include FriendlyId::Slugged
-  include FriendlyId::History
-  has_friendly_id :name
-end
