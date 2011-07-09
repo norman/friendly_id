@@ -1,3 +1,0 @@
-adapter: jdbcsqlite3
-database: test.sqlite3
-encoding: utf8
