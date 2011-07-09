@@ -34,6 +34,7 @@ end
 
 task :clean do
   %x{rm -rf *.gem doc}
+  %x{rm `find . -name '*.rbc'`}
 end
 
 task :gem do
