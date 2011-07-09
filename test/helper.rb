@@ -44,13 +44,14 @@ module FriendlyId
         ActiveRecord::Base.establish_connection config
         version = ActiveRecord::VERSION::STRING
         driver  = FriendlyId::Test::Database.driver
+        message = "Using #{RUBY_ENGINE} #{RUBY_VERSION} AR #{version} with #{driver}"
         puts "-" * 72
         if in_memory?
           ActiveRecord::Migration.verbose = false
           Schema.up
-          puts "Using AR #{version} with #{driver} (in-memory)"
+          puts "#{message} (in-memory)"
         else
-          puts "Using AR #{version} with #{driver}"
+          puts message
         end
       end
 

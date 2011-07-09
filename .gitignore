@@ -8,3 +8,4 @@ coverage
 .yardoc
 *.gem
 *.sqlite3
+*.rbc
