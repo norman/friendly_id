@@ -1,5 +1,11 @@
 require File.expand_path("../helper.rb", __FILE__)
 
+Author, Book = 2.times.map do
+  Class.new(ActiveRecord::Base) do
+    has_friendly_id :name
+  end
+end
+
 class CoreTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test

@@ -1,9 +1,17 @@
-# encoding: utf-8
 require File.expand_path("../helper", __FILE__)
 
-require File.expand_path("../helper.rb", __FILE__)
+class Novelist < ActiveRecord::Base
+  include FriendlyId::Slugged
+  has_friendly_id :name
+end
 
-class ObjectUtilsTest < MiniTest::Unit::TestCase
+class Novel < ActiveRecord::Base
+  include FriendlyId::Scoped
+  belongs_to :novelist
+  has_friendly_id :name, :scope => :novelist
+end
+
+class ScopedTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared

@@ -1,6 +1,11 @@
 require File.expand_path("../helper.rb", __FILE__)
 
-class CoreTest < MiniTest::Unit::TestCase
+class Manual < ActiveRecord::Base
+  include FriendlyId::History
+  has_friendly_id :name
+end
+
+class HistoryTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared

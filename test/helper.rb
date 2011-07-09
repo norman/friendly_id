@@ -6,6 +6,12 @@ require "rubygems"
 require "bundler/setup"
 require "minitest/unit"
 require "active_record"
+
+if ENV["COVERAGE"]
+  require 'simplecov'
+  SimpleCov.start
+end
+
 require "friendly_id"
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
@@ -63,7 +69,6 @@ module FriendlyId
       def in_memory?
         config["database"] == ":memory:"
       end
-
     end
   end
 end

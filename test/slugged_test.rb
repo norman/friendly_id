@@ -1,5 +1,12 @@
 require File.expand_path("../helper.rb", __FILE__)
 
+Journalist, Article = 2.times.map do
+  Class.new(ActiveRecord::Base) do
+    include FriendlyId::Slugged
+    has_friendly_id :name
+  end
+end
+
 class SluggedTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test

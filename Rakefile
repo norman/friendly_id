@@ -28,6 +28,14 @@ namespace :test do
       puts %x{rake test}
     end
   end
+
+  task :isolated do
+    dir = File.expand_path("../test", __FILE__)
+    Dir["#{dir}/*_test.rb"].each do |test|
+      puts "Running #{test}:"
+      puts %x{ruby #{test}}
+    end
+  end
 end
 
 namespace :db do
