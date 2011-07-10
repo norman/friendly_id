@@ -2,7 +2,7 @@ require File.expand_path("../helper.rb", __FILE__)
 
 
 class ObjectUtilsTest < MiniTest::Unit::TestCase
-  
+
   include FriendlyId::Test
 
   test "strings with letters are friendly_ids" do

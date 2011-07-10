@@ -2,7 +2,7 @@ require "rubygems"
 require "rake/testtask"
 
 def rubies(&block)
-  ["ruby-1.9.2-p180", "ree-1.8.7-2011.03", "jruby-1.6.2"].each do |ruby|
+  ["ruby-1.9.2-p180", "ree-1.8.7-2011.03", "jruby-1.6.2", "rbx-2.0.0pre"].each do |ruby|
     ENV["RB"] = ruby
     yield
     ENV["RB"] = nil
