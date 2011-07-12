@@ -96,12 +96,12 @@ module FriendlyId
         assert_equal @resident2, @canada.residents.find("john-smith")
       end
 
-      test "scope records found as a relation member should be 'best'" do
-        assert_equal @resident, @usa.residents.find("john-smith")
-        assert @resident.friendly_id_status.best?
-        assert_equal @resident2, @canada.residents.find("john-smith")
-        assert @resident2.friendly_id_status.best?
-      end
+      # test "scope records found as a relation member should be 'best'" do
+      #   assert_equal @resident, @usa.residents.find("john-smith")
+      #   assert @resident.friendly_id_status.best?
+      #   assert_equal @resident2, @canada.residents.find("john-smith")
+      #   assert @resident2.friendly_id_status.best?
+      # end
 
       test "should find a single scoped record using slug conditions" do
         assert_equal @resident, Resident.find(@resident.friendly_id, :include => :slugs,
