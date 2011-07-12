@@ -1,7 +1,7 @@
 require "rubygems"
 require "rake"
 require "rake/testtask"
-require "rake/gempackagetask"
+require "rubygems/package_task"
 require "rake/clean"
 require "bundler/setup"
 
@@ -11,7 +11,7 @@ CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
 
 gemspec = File.expand_path("../friendly_id.gemspec", __FILE__)
 if File.exists? gemspec
-  Rake::GemPackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
+  Gem::PackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
 end
 
 begin
