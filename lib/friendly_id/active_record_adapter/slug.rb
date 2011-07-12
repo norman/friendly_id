@@ -19,7 +19,7 @@ class Slug < ::ActiveRecord::Base
     sluggable_id && !@sluggable and begin
       klass = sluggable_type.constantize
       klass.send(:with_exclusive_scope) do
-        @sluggable = klass.find(sluggable_id.to_i)
+        @sluggable = klass.find(sluggable_id)
       end
     end
     @sluggable

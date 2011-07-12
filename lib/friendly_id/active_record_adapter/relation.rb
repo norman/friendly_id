@@ -29,7 +29,7 @@ module FriendlyId
         end
 
         def find_some
-          ids = @ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id.to_i : id}
+          ids = @ids.compact.uniq.map {|id| id.respond_to?(:friendly_id_config) ? id.id : id}
           friendly_ids, unfriendly_ids = ids.partition {|id| id.friendly_id?}
           return if friendly_ids.empty?
           records = friendly_records(friendly_ids, unfriendly_ids).each do |record|
@@ -164,7 +164,7 @@ module FriendlyId
         Find.new(self, ids).find_some or begin
           # A change in Arel 2.0.x causes find_some to fail with arrays of instances; not sure why.
           # This is an emergency, temporary fix.
-          ids = ids.map {|id| (id.respond_to?(:friendly_id_config) ? id.id : id).to_i}
+          ids = ids.map {|id| (id.respond_to?(:friendly_id_config) ? id.id : id)}
           super
         end
       end
