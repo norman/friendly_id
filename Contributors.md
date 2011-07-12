@@ -28,10 +28,12 @@ community, in particular from the following people:
 * Juan Schwindt
 * Kamal Fariz Mahyuddin
 * Laurence A. Lee
+* Loïc Guitaut
 * Louis T.
 * Mikhail Shirkov
 * Nash Kabbara
 * Nathan Phelps
+* Philip Arndt
 * Ramon Soares
 * Rdavila
 * Rob Ingram
