@@ -27,7 +27,11 @@ class Slug < ::ActiveRecord::Base
 
   # Whether this slug is the most recent of its owner's slugs.
   def current?
-    sluggable.slug == self
+    if cache_column = sluggable.friendly_id_config.cache_column
+      to_friendly_id == sluggable.send(cache_column)
+    else
+      sluggable.slug == self
+    end
   end
 
   def outdated?
