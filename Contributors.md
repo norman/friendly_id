@@ -18,6 +18,7 @@ community, in particular from the following people:
 * Diego R. V.
 * Eric Lindvall
 * Florian Aßmanqn
+* Gabe da Silveira
 * Harry Love
 * Ian Stewart
 * James Cropcho
