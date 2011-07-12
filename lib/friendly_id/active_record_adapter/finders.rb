@@ -63,7 +63,7 @@ module FriendlyId
         def parse_ids!
           @id = id.uniq.map do |member|
             if member.respond_to?(:friendly_id_config)
-              member.id.to_i
+              member.id
             else
               member
             end
