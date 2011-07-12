@@ -23,7 +23,8 @@ module FriendlyId
     end
 
     def slug_changed?
-      base != sluggable.current_friendly_id.try(:sub, /--[\d]*\z/, '')
+      separator = Regexp.escape friendly_id_config.sequence_separator
+      base != sluggable.current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
     end
 
     private
