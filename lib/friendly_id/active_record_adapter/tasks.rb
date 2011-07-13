@@ -36,7 +36,7 @@ module FriendlyId
       while records = find(:all, options) do
         break if records.size == 0
         records.each do |record|
-          record.save(:validate => false) unless record.slug?
+          record.save(Rails.version > "2.3.11" ? {:validate => false} : false) unless record.slug?
           yield(record) if block_given?
         end
         options[:offset] += options[:limit]
