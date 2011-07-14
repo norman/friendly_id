@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "ffaker"
   s.add_development_dependency "maruku"
   s.add_development_dependency "yard"
+  s.add_development_dependency "mocha"
 
   s.description       = <<-EOM
     FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins
