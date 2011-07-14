@@ -95,7 +95,6 @@ namespace :test do
 end
 
 namespace :db do
-
   desc "Set up the database schema"
   task :up do
     require File.expand_path("../test/helper", __FILE__)
@@ -107,7 +106,6 @@ namespace :db do
     require File.expand_path("../test/helper", __FILE__)
     FriendlyId::Test::Schema.down
   end
-
 end
 
 task :doc => :yard

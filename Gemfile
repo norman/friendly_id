@@ -18,3 +18,4 @@ gem "ffaker"
 gem "minitest"
 gem "simplecov", :platform => :ruby_19
 gem "yard"
+gem "mocha"

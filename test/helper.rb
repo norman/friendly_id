@@ -4,6 +4,7 @@ $:.uniq!
 
 require "rubygems"
 require "bundler/setup"
+require "mocha"
 require "minitest/unit"
 require "active_record"
 
