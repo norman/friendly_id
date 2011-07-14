@@ -33,8 +33,8 @@ Rake::TestTask.new do |t|
 end
 
 task :clean do
-  %x{rm -rf *.gem doc}
-  %x{rm `find . -name '*.rbc'`}
+  %x{rm -rf *.gem doc pkg}
+  %x{rm -f `find . -name '*.rbc'`}
 end
 
 task :gem do
