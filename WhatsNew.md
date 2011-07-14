@@ -1,4 +1,4 @@
-# FriendlyId 4
+# What's new in FriendlyId 4.0?
 
 This is a rewrite/rethink of FriendlyId. It will probably be released some time
 in August or September 2011, once I've had the chance to actually use it in a

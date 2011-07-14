@@ -123,7 +123,8 @@ your model:
     class City < ActiveRecord::Base
 
       belongs_to :country
-      has_friendly_id :name_and_country, :use_slug => true
+      include FriendlyId::Slugged
+      has_friendly_id :name_and_country
 
       def name_and_country
         #{name} #{country.name}
@@ -148,13 +149,16 @@ order to fine-tune the output:
 
     class City < ActiveRecord::Base
 
+      include FriendlyId::Slugged
+      has_friendly_id :whatever
+
       def normalize_friendly_id(text)
         my_text_modifier_method(text)
       end
 
     end
 
-The normalize_friendly_id method takes a single argument and receives an
+The `normalize_friendly_id` method takes a single argument and receives an
 instance of {FriendlyId::SlugString}, a class which wraps a regular Ruby string
 with additional formatting options.
 
@@ -228,7 +232,8 @@ the rest of the slug. This is important to enable having slugs like:
 You can configure the separator string used by your model by setting the
 `:sequence_separator` option in `has_friendly_id`:
 
-    has_friendly_id :title, :use_slug => true, :sequence_separator => ":"
+    include FriendlyId::Slugged
+    has_friendly_id :title, :sequence_separator => ":"
 
 You can also override the default used in
 {FriendlyId::Configuration::DEFAULTS} to set the value for any model using
@@ -240,43 +245,9 @@ FriendlyId will raise an error.
 
 ## Reserved Words
 
-You can configure a list of strings as reserved so that, for example, you
-don't end up with this problem:
-
-    /users/joe-schmoe # A user chose "joe schmoe" as his user name - no worries.
-    /users/new        # A user chose "new" as his user name, and now no one can sign up.
-
-Reserved words are configured using the `:reserved_words` option:
-
-    class Restaurant < ActiveRecord::Base
-      belongs_to :city
-      has_friendly_id :name, :use_slug => true, :reserved_words => ["my", "values"]
-    end
-
-The reserved words can be specified as an array or (since 3.1.7) as a regular
-expression.
-
-The strings "new" and "index" are reserved by default. When you attempt to
-store a reserved value, FriendlyId raises a
-{FriendlyId::ReservedError}. You can also override the default
-reserved words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
-model using FriendlyId.
-
-If you'd like to show a validation error when a word is reserved, you can add
-an callback to your model that catches the error:
-
-    class Person < ActiveRecord::Base
-      has_friendly_id :name, :use_slug => true
-
-      after_validation :validate_reserved
-
-      def validate_reserved
-        slug_text
-      rescue FriendlyId::ReservedError
-        @errors[friendly_id_config.method] = "is reserved. Please choose something else"
-        return false
-      end
-    end
+When you use slugs, FriendlyId adds a validation to avoid using "new" and
+"index" as slugs. You can control the default reserved words by changing the
+value in `FriendlyId::Configuration::DEFAULTS[:reserved_words]`.
 
 ## Scoped Slugs
 
@@ -356,14 +327,6 @@ this yourself in your application. Here's an example of one way to set this up:
 
 
 # Misc tips
-
-## Allowing Users to Override/Control Slugs
-
-Would you like to mostly use default slugs, but allow the option of a
-custom user-chosen slug in your application? If so, then you're not the first to
-want this. Here's a [demo
-application](http://github.com/norman/friendly_id_manual_slug_demo) showing how
-it can be done.
 
 ## Default Scopes
 
