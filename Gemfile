@@ -17,5 +17,6 @@ gem "activerecord", ENV["AR"] || "3.0.9"
 gem "ffaker"
 gem "minitest"
 gem "simplecov", :platform => :ruby_19
+gem "maruku"
 gem "yard"
 gem "mocha"

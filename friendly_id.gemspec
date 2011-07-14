@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3", "~> 1.3"
   s.add_development_dependency "cutest", "~> 1.1.2"
   s.add_development_dependency "ffaker"
+  s.add_development_dependency "maruku"
   s.add_development_dependency "yard"
 
   s.description       = <<-EOM
