@@ -19,7 +19,18 @@ versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
 please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html).
 
-FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
+## Compatibility
+
+FriendlyId 3.3.0 is compatible with Active Record 2.3, 3.0 and 3.1.
+
+## Roadmap
+
+FriendlyId 3.3 is now in **long term maintenance mode.** It will continue to be
+supported and maintained indefinitely, but no new features will be added to it.
+
+[FriendlyId 4.0](https://github.com/norman/friendly_id/tree/4.0.0) is a
+ground-up rewrite of FriendlyId, and is the project's future, and will be
+released by September, 2011.
 
 ## Docs, Info and Support
 
@@ -31,9 +42,6 @@ FriendlyId is compatible with Active Record **2.3.x** and **3.0**.
 
 ## Rails Quickstart
 
-Note that the example below uses Rails 3. But don't worry: FriendlyId will
-continue to support 2.3.x until Rails 3.1 is released.
-
     gem install friendly_id
 
     rails new my_app
@@ -41,7 +49,7 @@ continue to support 2.3.x until Rails 3.1 is released.
     cd my_app
 
     # add to Gemfile
-    gem "friendly_id", "~> 3.2.1"
+    gem "friendly_id", "~> 3.3.0"
 
     rails generate friendly_id
     rails generate scaffold user name:string cached_slug:string

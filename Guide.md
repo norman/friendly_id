@@ -69,10 +69,7 @@ feature. These features are explained in detail {file:Guide.md#features below}.
 
 ## Installation
 
-FriendlyId can be installed as a gem, or as a Rails plugin. It is compatible
-with Rails 2.3.x. and 3.0.
-
-### As a Gem
+### Gem installation
 
     gem install friendly_id
 
@@ -80,34 +77,24 @@ with Rails 2.3.x. and 3.0.
 
 After installing the gem, add an entry in environment.rb:
 
-    config.gem "friendly_id", :version => "~> 3.2.1"
+    config.gem "friendly_id", :version => "~> 3.3.0"
 
-### Rails 3.0
+### Rails 3.x
 
 After installing the gem, add an entry in the Gemfile:
 
-    gem "friendly_id", "~> 3.2.1"
+    gem "friendly_id", "~> 3.3.0"
 
-### As a Plugin
+### Roadmap
 
-Plugin installation is simple for all supported versions of Rails:
+FriendlyId 3.3 is now in **long term maintenance mode.** It will continue to be
+supported and maintained indefinitely, but no new features will be added to it.
 
-    ./script/plugin install git://github.com/norman/friendly_id.git
-
-However, installing as a gem offers simpler version control than plugin
-installation. Whenever possible, install as a gem instead. Plugin support may
-eventually be removed in a future version.
-
-### Future Compatibility
-
-FriendlyId will always remain compatible with the current release of Rails, and
-at least one stable release behind. That means that support for 2.3.x will not be
-dropped until a stable release of 3.1 is out, or possibly longer.
+[FriendlyId 4.0](https://github.com/norman/friendly_id/tree/4.0.0) is a
+ground-up rewrite of FriendlyId, and is the project's future, and will be
+released by September, 2011.
 
 ### Setup
-
-After installing either as a gem or plugin, run:
-
 
     rails generate friendly_id
     # or "./script generate friendly_id" on Rails 2.3
