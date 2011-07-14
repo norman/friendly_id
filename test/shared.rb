@@ -50,6 +50,26 @@ module FriendlyId
         assert_raises(ActiveRecord::RecordNotFound) {klass.find 0}
       end
 
+      test "should return numeric id if the friendly_id is nil" do
+        with_instance_of(klass) do |record|
+          record.expects(:friendly_id).returns(nil)
+          assert_equal record.id.to_s, record.to_param
+        end
+      end
+
+      test "should return numeric id if the friendly_id is an empty string" do
+        with_instance_of(klass) do |record|
+          record.expects(:friendly_id).returns("")
+          assert_equal record.id.to_s, record.to_param
+        end
+      end
+
+      test "should return numeric id if the friendly_id is blank" do
+        with_instance_of(klass) do |record|
+          record.expects(:friendly_id).returns("  ")
+          assert_equal record.id.to_s, record.to_param
+        end
+      end
     end
   end
 end

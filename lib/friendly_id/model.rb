@@ -16,7 +16,7 @@ module FriendlyId
 
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
-      (friendly_id or id).to_s
+      (friendly_id.present? ? friendly_id : id).to_s
     end
   end
 end
