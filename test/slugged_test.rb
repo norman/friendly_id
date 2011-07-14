@@ -46,6 +46,23 @@ class SluggedTest < MiniTest::Unit::TestCase
   end
 end
 
+class SlugSequencerTest < MiniTest::Unit::TestCase
+
+  include FriendlyId::Test
+
+  test "should quote column names" do
+    klass            = Class.new(ActiveRecord::Base)
+    klass.table_name = "journalists"
+    klass.send :include, FriendlyId::Slugged
+    klass.has_friendly_id :name, :slug_column => "strange name"
+    begin
+      with_instance_of(klass) {|record| assert klass.find(record.friendly_id)}
+    rescue ActiveRecord::StatementInvalid
+      flunk "column name was not quoted"
+    end
+  end
+end
+
 class SlugSeparatorTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
@@ -72,6 +89,23 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       assert !record2.slug_sequencer.slug_changed?
       record2.name = "hello world"
       assert record2.slug_sequencer.slug_changed?
+    end
+  end
+end
+
+class SluggedRegressionsTest < MiniTest::Unit::TestCase
+  include FriendlyId::Test
+
+  def klass
+    Journalist
+  end
+
+  test "should increment the slug sequence for duplicate friendly ids beyond 10" do
+    with_instance_of klass do |record|
+      (2..12).each do |i|
+        r = klass.create! :name => record.name
+        assert r.friendly_id.match(/#{i}\z/)
+      end
     end
   end
 end

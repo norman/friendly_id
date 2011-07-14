@@ -40,5 +40,4 @@ class CoreTest < MiniTest::Unit::TestCase
   test "instances should have a friendly id" do
     with_instance_of(klass) {|record| assert record.friendly_id}
   end
-
 end

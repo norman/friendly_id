@@ -26,8 +26,12 @@ module FriendlyId
             add_index  table_name, :slug, :unique => true
           end
 
+          # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
           remove_index :novels, :slug
+
+          # This will be used to test column name quoting
+          add_column :journalists, "strange name", :string
         end
 
         private
