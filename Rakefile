@@ -42,7 +42,7 @@ task :gem do
 end
 
 task :yard do
-  %x{yard doc}
+  %x{bundle exec yard doc --files=*.md}
 end
 
 desc "Bundle for all supported Ruby/AR versions"
