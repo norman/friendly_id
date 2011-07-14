@@ -1,23 +1,11 @@
 require File.expand_path("../test/helper", __FILE__)
 require "ffaker"
-require "friendly_id/migration"
 
 N = 1000
 
-migration do |m|
-  m.add_column :users, :slug, :string
-  m.add_index  :users, :slug, :unique => true
+def transaction
+  ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
 end
-
-migration do |m|
-  m.create_table :posts do |t|
-    t.string :name
-    t.string :slug
-  end
-  m.add_index  :posts, :slug, :unique => true
-end
-CreateFriendlyIdSlugs.up
-
 
 class Array
   def rand
@@ -25,25 +13,27 @@ class Array
   end
 end
 
-class User
+Book = Class.new ActiveRecord::Base
+
+class Journalist < ActiveRecord::Base
   include FriendlyId::Slugged
   has_friendly_id :name
 end
 
-class Post < ActiveRecord::Base
+class Manual < ActiveRecord::Base
   include FriendlyId::History
   has_friendly_id :name
 end
 
-USERS = []
-BOOKS = []
-POSTS = []
+BOOKS       = []
+JOURNALISTS = []
+MANUALS     = []
 
 100.times do
   name = Faker::Name.name
-  USERS << (User.create! :name => name).friendly_id
-  POSTS << (Post.create! :name => name).friendly_id
-  BOOKS << (Book.create! :name => name).id
+  BOOKS       << (Book.create! :name => name).id
+  JOURNALISTS << (Journalist.create! :name => name).friendly_id
+  MANUALS     << (Manual.create! :name => name).friendly_id
 end
 
 Benchmark.bmbm do |x|
@@ -51,10 +41,10 @@ Benchmark.bmbm do |x|
     N.times {Book.find BOOKS.rand}
   end
   x.report 'find (in-table slug)' do
-    N.times {User.find USERS.rand}
+    N.times {Journalist.find JOURNALISTS.rand}
   end
   x.report 'find (external slug)' do
-    N.times {Post.find_by_friendly_id POSTS.rand}
+    N.times {Manual.find_by_friendly_id MANUALS.rand}
   end
 
   x.report 'insert (without FriendlyId)' do
@@ -62,10 +52,10 @@ Benchmark.bmbm do |x|
   end
 
   x.report 'insert (in-table-slug)' do
-    N.times {transaction {User.create :name => Faker::Name.name}}
+    N.times {transaction {Journalist.create :name => Faker::Name.name}}
   end
 
   x.report 'insert (external slug)' do
-    N.times {transaction {Post.create :name => Faker::Name.name}}
+    N.times {transaction {Manual.create :name => Faker::Name.name}}
   end
 end

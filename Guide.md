@@ -355,14 +355,15 @@ performance of your application. Of course your results may vary.
 
     activerecord (3.0.9)
     ruby 1.9.2p180 (2011-02-18 revision 30909) [x86_64-darwin10.6.0]
-    friendly_id (4.0.0.pre3)
+    friendly_id (4.0.0.beta1)
     sqlite3 (1.3.3) gem
     sqlite3 3.6.12 in-memory database
 
-                                  user     system      total        real
-    find (without FriendlyId)     0.280000   0.000000   0.280000 (  0.278086)
-    find (in-table slug)          0.320000   0.000000   0.320000 (  0.320151)
-    find (external slug)          3.040000   0.010000   3.050000 (  3.048054)
-    insert (without FriendlyId)   0.780000   0.000000   0.780000 (  0.785427)
-    insert (in-table-slug)        1.520000   0.010000   1.530000 (  1.532350)
-    insert (external slug)        3.310000   0.020000   3.330000 (  3.335548)
+
+                                      user     system      total        real
+    find (without FriendlyId)     0.300000   0.000000   0.300000 (  0.306729)
+    find (in-table slug)          0.350000   0.000000   0.350000 (  0.351760)
+    find (external slug)          3.320000   0.000000   3.320000 (  3.326749)
+    insert (without FriendlyId)   0.810000   0.010000   0.820000 (  0.810513)
+    insert (in-table-slug)        1.740000   0.000000   1.740000 (  1.743511)
+    insert (external slug)        3.540000   0.010000   3.550000 (  3.544898)
