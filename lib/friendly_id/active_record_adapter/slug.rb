@@ -2,11 +2,10 @@
 class Slug < ::ActiveRecord::Base
   attr_writer :sluggable
   attr_accessible :name, :scope, :sluggable, :sequence
-  def self.named_scope(*args, &block) scope(*args, &block) end if FriendlyId.on_ar3?
   table_name = "slugs"
   before_save :enable_name_reversion, :set_sequence
   validate :validate_name
-  named_scope :similar_to, lambda {|slug| {:conditions => {
+  scope :similar_to, lambda {|slug| {:conditions => {
         :name           => slug.name,
         :scope          => slug.scope,
         :sluggable_type => slug.sluggable_type

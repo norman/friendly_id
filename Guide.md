@@ -73,14 +73,6 @@ feature. These features are explained in detail {file:Guide.md#features below}.
 
     gem install friendly_id
 
-#### Rails 2.3.x
-
-After installing the gem, add an entry in environment.rb:
-
-    config.gem "friendly_id", :version => "~> 3.3.0"
-
-### Rails 3.x
-
 After installing the gem, add an entry in the Gemfile:
 
     gem "friendly_id", "~> 3.3.0"
@@ -97,7 +89,6 @@ released by September, 2011.
 ### Setup
 
     rails generate friendly_id
-    # or "./script generate friendly_id" on Rails 2.3
     rake db:migrate
 
 This will install the Rake tasks and slug migration for FriendlyId. If you are
@@ -617,21 +608,6 @@ always the fastest operation, and thus the best choice when possible. If you
 decide not to use FriendlyId for performance reasons, keep in mind that your
 own solution is unlikely to be any faster than FriendlyId with cached slugs
 enabled. But if it is, then your patches would be very welcome!
-
-
-    activerecord (2.3.8)
-    ruby 1.9.2p0 (2010-08-18 revision 29036) [x86_64-darwin10.4.0]
-    friendly_id (3.1.4)
-    sqlite3-ruby (1.3.1)
-    sqlite3 3.6.12 in-memory database
-
-                                                       | DEFAULT | NO_SLUG |    SLUG | CACHED_SLUG |
-    ------------------------------------------------------------------------------------------------
-    find model by id                             x1000 |   0.370 |   0.503 |   0.940 |       0.562 |
-    find model using array of ids                x1000 |   0.612 |   0.615 |   1.054 |       0.957 |
-    find model using id, then to_param           x1000 |   0.374 |   0.535 |   1.396 |       0.567 |
-    ================================================================================================
-    Total                                              |   1.356 |   1.653 |   3.390 |       2.086 |
 
 
     activerecord (3.0.0)

@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 3.3.0 (NOT_RELEASED_YET)
 
+* Support for Active Record 2.3 dropped
 * Convert blank slugs to nil automatically ([Gabe da Silveira ](https://github.com/dasil003))
 * Compatibility with Active Record 3.1 ([Andrew White](https://github.com/pixeltrix))
 * Gemspec compatibility with RubyGems 1.7 ([Philip Arndt](https://github.com/parndt))

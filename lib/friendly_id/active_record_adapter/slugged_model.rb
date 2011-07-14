@@ -11,7 +11,6 @@ module FriendlyId
           after_update :update_scope
           after_update :update_dependent_scopes
           protect_friendly_id_attributes
-          extend FriendlyId::ActiveRecordAdapter::Finders unless FriendlyId.on_ar3?
         end
       end
 

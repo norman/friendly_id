@@ -21,7 +21,9 @@ please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guid
 
 ## Compatibility
 
-FriendlyId 3.3.0 is compatible with Active Record 2.3, 3.0 and 3.1.
+FriendlyId 3.3.0 is compatible with Active Record 3.0 and 3.1.
+
+If you are still on Rails 2.3, please use FriendlyId 3.2.x.
 
 ## Roadmap
 
