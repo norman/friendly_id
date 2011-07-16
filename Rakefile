@@ -48,6 +48,10 @@ task :yard do
   %x{bundle exec yard doc --files=*.md}
 end
 
+task :bench do
+  require File.expand_path("../bench", __FILE__)
+end
+
 desc "Bundle for all supported Ruby/AR versions"
 task :bundle do
   rubies do
