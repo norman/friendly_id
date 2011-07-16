@@ -3,25 +3,28 @@ require "rake/testtask"
 
 def rubies(&block)
   ["ruby-1.9.2-p180", "ree-1.8.7-2011.03", "jruby-1.6.2", "rbx-2.0.0pre"].each do |ruby|
+    old = ENV["RB"]
     ENV["RB"] = ruby
     yield
-    ENV["RB"] = nil
+    ENV["RB"] = old
   end
 end
 
 def versions(&block)
   ["3.1.0.rc4", "3.0.9"].each do |version|
+    old = ENV["AR"]
     ENV["AR"] = version
     yield
-    ENV["AR"] = nil
+    ENV["AR"] = old
   end
 end
 
 def adapters(&block)
   ["mysql", "postgres", "sqlite3"].each do |adapter|
+    old = ENV["DB"]
     ENV["DB"] = adapter
     yield
-    ENV["DB"] = nil
+    ENV["DB"] = old
   end
 end
 
