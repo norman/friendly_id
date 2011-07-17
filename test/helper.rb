@@ -6,6 +6,8 @@ require "rubygems"
 require "bundler/setup"
 require "mocha"
 require "minitest/unit"
+require "active_support"
+require "active_support/core_ext/module/delegation"
 require "active_record"
 
 if ENV["COVERAGE"]
