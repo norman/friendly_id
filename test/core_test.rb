@@ -3,7 +3,7 @@ require File.expand_path("../helper.rb", __FILE__)
 Author, Book = 2.times.map do
   Class.new(ActiveRecord::Base) do
     extend FriendlyId
-    has_friendly_id :name
+    friendly_id :name
   end
 end
 
@@ -17,11 +17,11 @@ class CoreTest < MiniTest::Unit::TestCase
   end
 
   test "models don't use friendly_id by default" do
-    assert !Class.new(ActiveRecord::Base).respond_to?(:has_friendly_id)
+    assert !Class.new(ActiveRecord::Base).respond_to?(:friendly_id)
   end
 
   test "model classes should have a friendly id config" do
-    assert klass.has_friendly_id(:name).friendly_id_config
+    assert klass.friendly_id(:name).friendly_id_config
   end
 
   test "should reserve 'new' and 'edit' by default" do

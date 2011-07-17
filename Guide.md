@@ -25,8 +25,9 @@ column with no spaces or special characters, and that is seldom or never
 updated. The most common example of this is a user name or login column:
 
     class User < ActiveRecord::Base
+      extend FriendlyId
       validates_format_of :login, :with => /\A[a-z0-9]+\z/i
-      has_friendly_id :login
+      friendly_id :login
     end
 
     @user = User.find "joe"   # the old User.find(1) still works, too
@@ -38,7 +39,8 @@ modify the value of the column, and your application should ensure that the valu
 is admissible in a URL:
 
     class City < ActiveRecord::Base
-      has_friendly_id :name
+      extend FriendlyId
+      friendly_id :name
     end
 
     @city.find "Viña del Mar"
@@ -55,8 +57,8 @@ title, which may have spaces, uppercase characters, or other attributes you
 wish to modify to make them more suitable for use in URL's.
 
     class Post < ActiveRecord::Base
-      include FriendlyId::Slugged
-      has_friendly_id :title
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
     end
 
     @post = Post.create(:title => "This is the first post!")
@@ -83,16 +85,13 @@ dropped until a stable release of 3.2 is out, or possibly longer.
 
 ## Configuration
 
-FriendlyId is configured in your model using the `has_friendly_id` method. Additional
-features can be activated by including various modules:
+FriendlyId is configured in your model using the `friendly_id` method. Additional
+features can be passing the names of modules into the `:use` option:
 
     class Post < ActiveRecord::Base
-      # use slugs
-      include FriendlyId::Slugged
-      # record slug history
-      include FriendlyId::History
+      extend FriendlyId
       # use the "title" accessor as the basis of the friendly_id
-      has_friendly_id :title
+      friendly_id :title, :use => [:slugged, :history]
     end
 
 Read on to learn about the various features that can be configured. For the
@@ -121,10 +120,9 @@ FriendlyId can use either a column or a method to generate the slug text for
 your model:
 
     class City < ActiveRecord::Base
-
+      extend FriendlyId
       belongs_to :country
-      include FriendlyId::Slugged
-      has_friendly_id :name_and_country
+      friendly_id :name_and_country, :use => :slugged
 
       def name_and_country
         #{name} #{country.name}
@@ -148,9 +146,8 @@ you can override the `normalize_friendly_id` method in your model class in
 order to fine-tune the output:
 
     class City < ActiveRecord::Base
-
-      include FriendlyId::Slugged
-      has_friendly_id :whatever
+      extend FriendlyId
+      friendly_id :whatever, :use => :slugged
 
       def normalize_friendly_id(text)
         my_text_modifier_method(text)
@@ -186,9 +183,8 @@ FriendlyId can maintain a history of your record's older slugs, so if your
 record's friendly_id changes, your URL's won't break.
 
     class Post < ActiveRecord::Base
-      include FriendlyId::Slugged
-      include FriendlyId::History
-      has_friendly_id :title
+      extend FriendlyId
+      friendly_id :title, :use => :history
     end
 
     class PostsController < ApplicationController
@@ -230,10 +226,9 @@ the rest of the slug. This is important to enable having slugs like:
     /cars/peugeot-206--2
 
 You can configure the separator string used by your model by setting the
-`:sequence_separator` option in `has_friendly_id`:
+`:sequence_separator` option in `friendly_id`:
 
-    include FriendlyId::Slugged
-    has_friendly_id :title, :sequence_separator => ":"
+    friendly_id :title, :use => :slugged, :sequence_separator => ":"
 
 You can also override the default used in
 {FriendlyId::Configuration::DEFAULTS} to set the value for any model using
@@ -259,16 +254,15 @@ names unique for each city, so that the second "Joe's Diner" can also have the
 slug "joes-diner", as long as it's located in a different city:
 
     class Restaurant < ActiveRecord::Base
+      extend FriendlyId
       belongs_to :city
-      include FriendlyId::Slugged
-      include FriendlyId::Scoped
-      has_friendly_id :name, :scope => :city
+      friendly_id :name, :use => :scoped, :scope => :city
     end
 
     class City < ActiveRecord::Base
+      extend FriendlyId
       has_many :restaurants
-      include FriendlyId::Slugged
-      has_friendly_id :name
+      friendly_id :name, :use => :slugged
     end
 
     City.find("seattle").restaurants.find("joes-diner")

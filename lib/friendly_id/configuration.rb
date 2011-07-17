@@ -1,5 +1,5 @@
 module FriendlyId
-  # The configuration paramters passed to +has_friendly_id+ will be stored in
+  # The configuration paramters passed to +friendly_id+ will be stored in
   # this object.
   class Configuration
     attr_reader :base
@@ -29,6 +29,12 @@ module FriendlyId
 
     def query_field
       base
+    end
+
+    def use(*modules)
+      modules.compact.each do |name|
+        klass.send :include, FriendlyId.const_get(name.to_s.classify)
+      end
     end
 
     def set(values)

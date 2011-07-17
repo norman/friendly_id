@@ -2,15 +2,13 @@ require File.expand_path("../helper", __FILE__)
 
 class Novelist < ActiveRecord::Base
   extend FriendlyId
-  include FriendlyId::Slugged
-  has_friendly_id :name
+  friendly_id :name, :use => :slugged
 end
 
 class Novel < ActiveRecord::Base
   extend FriendlyId
-  include FriendlyId::Scoped
   belongs_to :novelist
-  has_friendly_id :name, :scope => :novelist
+  friendly_id :name, :use => :scoped, :scope => :novelist
 end
 
 class ScopedTest < MiniTest::Unit::TestCase
@@ -30,7 +28,7 @@ class ScopedTest < MiniTest::Unit::TestCase
     klass = Class.new(ActiveRecord::Base)
     klass.extend FriendlyId
     klass.send :include, FriendlyId::Scoped
-    klass.has_friendly_id :empty, :scope => :dummy
+    klass.friendly_id :empty, :scope => :dummy
     assert_equal "dummy", klass.friendly_id_config.scope_column
   end
 

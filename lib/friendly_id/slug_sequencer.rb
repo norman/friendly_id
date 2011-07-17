@@ -48,7 +48,6 @@ module FriendlyId
       @conflict
     end
 
-    # @NOTE AR-specific code here
     def conflicts
       pkey  = sluggable.class.primary_key
       value = sluggable.send pkey

@@ -3,12 +3,13 @@ require "friendly_id/slug"
 module FriendlyId
   module History
 
-    def self.included(base)
-      base.class_eval do
-        include Slugged unless include? Slugged
-        extend  Finder
+    def self.included(klass)
+      klass.instance_eval do
+        include Slugged unless self < Slugged
         has_many :friendly_id_slugs, :as => :sluggable, :dependent => :destroy
         before_save :build_friendly_id_slug, :if => lambda {|r| r.slug_sequencer.slug_changed?}
+        scope :with_friendly_id, lambda {|id| includes(:friendly_id_slugs).where("friendly_id_slugs.slug = ?", id)}
+        extend  Finder
       end
     end
 
@@ -21,7 +22,7 @@ module FriendlyId
 
   module Finder
     def find_by_friendly_id(*args)
-      where("friendly_id_slugs.slug = ?", args.shift).includes(:friendly_id_slugs).first(*args)
+      with_friendly_id(args.shift).first(*args)
     end
   end
 end

@@ -20,5 +20,4 @@ module FriendlyId
     end
     ActiveRecord::Relation.send :include, FriendlyId::FinderMethods
   end
-
 end

@@ -3,8 +3,7 @@ require File.expand_path("../helper.rb", __FILE__)
 Journalist, Article = 2.times.map do
   Class.new(ActiveRecord::Base) do
     extend FriendlyId
-    include FriendlyId::Slugged
-    has_friendly_id :name
+    friendly_id :name, :use => :slugged
   end
 end
 
@@ -55,8 +54,7 @@ class SlugSequencerTest < MiniTest::Unit::TestCase
     klass            = Class.new(ActiveRecord::Base)
     klass.table_name = "journalists"
     klass.extend FriendlyId
-    klass.send :include, FriendlyId::Slugged
-    klass.has_friendly_id :name, :slug_column => "strange name"
+    klass.friendly_id :name, :use => :slugged, :slug_column => "strange name"
     begin
       with_instance_of(klass) {|record| assert klass.find(record.friendly_id)}
     rescue ActiveRecord::StatementInvalid
@@ -71,8 +69,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
 
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    include FriendlyId::Slugged
-    has_friendly_id :name, :sequence_separator => ":"
+    friendly_id :name, :use => :slugged, :sequence_separator => ":"
   end
 
   def klass

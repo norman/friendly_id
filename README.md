@@ -58,8 +58,8 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
     # edit app/models/user.rb
     class User < ActiveRecord::Base
-      include FriendlyId::Slugged
-      has_friendly_id :name
+      extend FriendlyId
+      friendly_id :name, :use => :slugged
     end
 
     User.create! :name => "Joe Schmoe"

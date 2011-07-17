@@ -12,7 +12,7 @@ module FriendlyId
   #   class Restaurant < ActiveRecord::Base
   #     belongs_to :city
   #     include FriendlyId::Scoped
-  #     has_friendly_id :name, :scope => :city
+  #     friendly_id :name, :scope => :city
   #   end
   module Scoped
     def self.included(klass)
@@ -28,7 +28,7 @@ module FriendlyId
 
       # Gets the scope column.
       #
-      # Checks to see if the +:scope+ option passed to {#has_friendly_id}
+      # Checks to see if the +:scope+ option passed to {#friendly_id}
       # refers to a relation, and if so, returns the realtion's foreign key.
       # Otherwise it assumes the option value was the name of column and returns
       # it cast to a String.
