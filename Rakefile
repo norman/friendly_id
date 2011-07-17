@@ -36,7 +36,7 @@ Rake::TestTask.new do |t|
 end
 
 task :clean do
-  %x{rm -rf *.gem doc pkg}
+  %x{rm -rf *.gem doc pkg coverage}
   %x{rm -f `find . -name '*.rbc'`}
 end
 
