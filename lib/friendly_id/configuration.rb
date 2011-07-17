@@ -16,7 +16,7 @@ module FriendlyId
 
     def initialize(klass, values = nil)
       @klass = klass
-      @defaults = @@defaults.dup
+      @defaults = self.class.defaults.dup
       set values
     end
 
