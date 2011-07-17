@@ -10,6 +10,7 @@ module FriendlyId
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.defaults[:slug_column]        = 'slug'
         friendly_id_config.defaults[:sequence_separator] = '--'
+        friendly_id_config.slug_sequencer_class          = Class.new(SlugSequencer)
         before_validation :set_slug
       end
     end
@@ -19,7 +20,7 @@ module FriendlyId
     end
 
     def slug_sequencer
-      SlugSequencer.new(self)
+      friendly_id_config.slug_sequencer_class.new(self)
     end
 
     private
@@ -30,6 +31,7 @@ module FriendlyId
 
     module Configuration
       attr_writer :slug_column, :sequence_separator
+      attr_accessor :slug_sequencer_class
 
       def query_field
         slug_column

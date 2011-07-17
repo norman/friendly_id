@@ -16,39 +16,33 @@ module FriendlyId
   #   end
   module Scoped
     def self.included(klass)
-      klass.send :include, Slugged unless klass.include? Slugged
-    end
-  end
-
-  class SlugSequencer
-    private
-
-    alias conflict_without_scope conflict
-
-    # Checks for naming conflicts, taking scopes into account.
-    # @return ActiveRecord::Base
-    def conflict_with_scope
-      column = friendly_id_config.scope_column
-      conflicts.where("#{column} = ?", sluggable.send(column)).first
+      klass.instance_eval do
+        include Slugged unless self < Slugged
+        friendly_id_config.class.send :include, Configuration
+        friendly_id_config.slug_sequencer_class.send :include, SlugSequencer
+      end
     end
 
-    def conflict
-      friendly_id_config.scope ? conflict_with_scope : conflict_without_scope
+    module Configuration
+      attr_accessor :scope
+
+      # Gets the scope column.
+      #
+      # Checks to see if the +:scope+ option passed to {#has_friendly_id}
+      # refers to a relation, and if so, returns the realtion's foreign key.
+      # Otherwise it assumes the option value was the name of column and returns
+      # it cast to a String.
+      # @return String The scope column
+      def scope_column
+        (klass.reflections[@scope].try(:association_foreign_key) || @scope).to_s
+      end
     end
-  end
 
-  class Configuration
-    attr_accessor :scope
-
-    # Gets the scope column.
-    #
-    # Checks to see if the +:scope+ option passed to {#has_friendly_id}
-    # refers to a relation, and if so, returns the realtion's foreign key.
-    # Otherwise it assumes the option value was the name of column and returns
-    # it cast to a String.
-    # @return String The scope column
-    def scope_column
-      (klass.reflections[@scope].try(:association_foreign_key) || @scope).to_s
+    module SlugSequencer
+      def conflict
+        column = friendly_id_config.scope_column
+        conflicts.where("#{column} = ?", sluggable.send(column)).first
+      end
     end
   end
 end
