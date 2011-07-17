@@ -8,7 +8,6 @@ module FriendlyId
         record.instance_eval {@current_friendly_id = friendly_id}
       end
       include Model
-      self
     end
 
     def friendly_id_config
