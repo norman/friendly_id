@@ -29,6 +29,7 @@ class ScopedTest < MiniTest::Unit::TestCase
   test "should detect scope column from explicit column name" do
     klass = Class.new(ActiveRecord::Base)
     klass.extend FriendlyId
+    klass.send :include, FriendlyId::Scoped
     klass.has_friendly_id :empty, :scope => :dummy
     assert_equal "dummy", klass.friendly_id_config.scope_column
   end
