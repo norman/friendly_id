@@ -15,7 +15,7 @@ module FriendlyId
     end
 
     def generate
-      if slug_changed? or new_record?
+      if new_record? or slug_changed?
         conflict? ? self.next : normalized
       else
         sluggable.friendly_id

@@ -16,11 +16,13 @@ end
 Book = Class.new ActiveRecord::Base
 
 class Journalist < ActiveRecord::Base
+  extend FriendlyId
   include FriendlyId::Slugged
   has_friendly_id :name
 end
 
 class Manual < ActiveRecord::Base
+  extend FriendlyId
   include FriendlyId::History
   has_friendly_id :name
 end

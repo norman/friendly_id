@@ -2,7 +2,7 @@ require File.expand_path("../helper.rb", __FILE__)
 
 Journalist, Article = 2.times.map do
   Class.new(ActiveRecord::Base) do
-    extend FriendlyId::Base
+    extend FriendlyId
     include FriendlyId::Slugged
     has_friendly_id :name
   end
@@ -54,7 +54,7 @@ class SlugSequencerTest < MiniTest::Unit::TestCase
   test "should quote column names" do
     klass            = Class.new(ActiveRecord::Base)
     klass.table_name = "journalists"
-    klass.extend FriendlyId::Base
+    klass.extend FriendlyId
     klass.send :include, FriendlyId::Slugged
     klass.has_friendly_id :name, :slug_column => "strange name"
     begin
@@ -70,7 +70,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
-    extend FriendlyId::Base
+    extend FriendlyId
     include FriendlyId::Slugged
     has_friendly_id :name, :sequence_separator => ":"
   end

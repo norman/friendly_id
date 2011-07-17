@@ -5,13 +5,15 @@ module FriendlyId
   # This module adds in-table slugs to an ActiveRecord model.
   module Slugged
 
-    # @NOTE AR-specific code here
     def self.included(klass)
-      klass.before_save :set_slug
-      klass.friendly_id_config.use_slugs = true
+      klass.instance_eval do
+        friendly_id_config.class.send :include, Configuration
+        friendly_id_config.defaults[:slug_column]        = 'slug'
+        friendly_id_config.defaults[:sequence_separator] = '--'
+        before_validation :set_slug
+      end
     end
 
-    # @NOTE AS-specific code here
     def normalize_friendly_id(value)
       value.to_s.parameterize
     end
@@ -25,27 +27,21 @@ module FriendlyId
     def set_slug
       send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
     end
-  end
 
-  class Configuration
-    attr :use_slugs
-    attr_writer :slug_column, :sequence_separator, :use_slugs
+    module Configuration
+      attr_writer :slug_column, :sequence_separator
 
-    DEFAULTS[:slug_column]        = 'slug'
-    DEFAULTS[:sequence_separator] = '--'
+      def query_field
+        slug_column
+      end
 
-    undef query_field
+      def sequence_separator
+        @sequence_separator or defaults[:sequence_separator]
+      end
 
-    def query_field
-      use_slugs ? slug_column : base
-    end
-
-    def sequence_separator
-      @sequence_separator ||= DEFAULTS[:sequence_separator]
-    end
-
-    def slug_column
-      @slug_column ||= DEFAULTS[:slug_column]
+      def slug_column
+        @slug_column or defaults[:slug_column]
+      end
     end
   end
 end

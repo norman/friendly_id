@@ -2,17 +2,29 @@ module FriendlyId
   # The configuration paramters passed to +has_friendly_id+ will be stored in
   # this object.
   class Configuration
-    attr_accessor :base
-    attr_reader   :klass
+    attr_reader :base
+    attr_reader :klass
+    attr_reader :defaults
 
-    DEFAULTS = {
-      :config_error_message => 'FriendlyId has no such config option "%s"',
-      :reserved_words       => ["new", "edit"]
+    @@defaults = {
+      :reserved_words => ["new", "edit"]
     }
+
+    def self.defaults
+      @@defaults
+    end
 
     def initialize(klass, values = nil)
       @klass = klass
+      @defaults = @@defaults.dup
       set values
+    end
+
+    def base=(base)
+      @base = base
+      if @base.respond_to?(:to_s)
+        @klass.validates_exclusion_of @base, :in => defaults[:reserved_words]
+      end
     end
 
     def query_field
@@ -21,13 +33,6 @@ module FriendlyId
 
     def set(values)
       values and values.each {|name, value| self.send "#{name}=", value}
-    end
-
-    private
-
-    def method_missing(symbol, *args, &block)
-      option = symbol.to_s.gsub(/=\z/, '')
-      raise ArgumentError, DEFAULTS[:config_error_message] % option
     end
   end
 end

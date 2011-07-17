@@ -12,4 +12,13 @@ module FriendlyId
   autoload :Slugged,  "friendly_id/slugged"
   autoload :Scoped,   "friendly_id/scoped"
   autoload :History,  "friendly_id/history"
+
+  def self.extended(base)
+    base.instance_eval do
+      extend FriendlyId::Base
+      @friendly_id_config = Class.new(FriendlyId::Configuration).new(base)
+    end
+    ActiveRecord::Relation.send :include, FriendlyId::FinderMethods
+  end
+
 end
