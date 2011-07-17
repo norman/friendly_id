@@ -6,6 +6,7 @@ require "friendly_id/finder_methods"
 
 # FriendlyId is a comprehensive Ruby library for ActiveRecord permalinks and
 # slugs.
+#
 # @author Norman Clarke
 module FriendlyId
   autoload :Slugged,  "friendly_id/slugged"

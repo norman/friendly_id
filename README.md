@@ -70,14 +70,14 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
 ## Bugs
 
-Please report them on the [Github issue tracker](http://github.com/norman/friendly_id/issues)
-for this project.
+Please report them on the [Github issue
+tracker](http://github.com/norman/friendly_id/issues) for this project.
 
 If you have a bug to report, please include the following information:
 
 * **Version information for FriendlyId, Rails and Ruby.**
 * Stack trace and error message.
-* Any snippets of relevant model, view or controller code that shows how your
+ * Any snippets of relevant model, view or controller code that shows how you
   are using FriendlyId.
 
 If you are able to, it helps even more if you can fork FriendlyId on Github,
@@ -85,8 +85,9 @@ and add a test that reproduces the error you are experiencing.
 
 ## Credits
 
-FriendlyId was created by Norman Clarke, Adrian Mugnolo, and Emilio Tagua, and
-has had significant contributions over the years from [many
+FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
+significant help early in its life by Emilio Tagua. I'm deeply gratful for the
+generous contributions over the years from [many
 volunteers](https://github.com/norman/friendly_id/contributors).
 
 Copyright (c) 2008-2011 Norman Clarke, released under the MIT license.

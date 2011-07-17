@@ -1,6 +1,6 @@
 module FriendlyId
-  # The configuration paramters passed to +has_friendly_id+ will be stored
-  # in this object.
+  # The configuration paramters passed to +has_friendly_id+ will be stored in
+  # this object.
   class Configuration
     attr_accessor :base
     attr_reader   :klass
