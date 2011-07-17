@@ -15,17 +15,19 @@ module FriendlyId
       set values
     end
 
-    def method_missing(symbol, *args, &block)
-      option = symbol.to_s.gsub(/=\z/, '')
-      raise ArgumentError, DEFAULTS[:config_error_message] % option
+    def query_field
+      base
     end
 
     def set(values)
       values and values.each {|name, value| self.send "#{name}=", value}
     end
 
-    def query_field
-      base
+    private
+
+    def method_missing(symbol, *args, &block)
+      option = symbol.to_s.gsub(/=\z/, '')
+      raise ArgumentError, DEFAULTS[:config_error_message] % option
     end
   end
 end
