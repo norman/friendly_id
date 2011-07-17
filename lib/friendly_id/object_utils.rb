@@ -6,10 +6,13 @@ module FriendlyId
 
     # True is the id is definitely friendly, false if definitely unfriendly,
     # else nil.
+    #
+    # An object is considired "definitely unfriendly" if its class is or
+    # inherits from Numeric, Symbol or ActiveRecord::Base.
     def friendly_id?
-      if kind_of?(Integer) or kind_of?(Symbol) or self.class.respond_to? :friendly_id_config
+      if [Numeric, Symbol, ActiveRecord::Base].detect {|klass| self.class < klass}
         false
-      elsif to_i.to_s != to_s
+      elsif respond_to?(:to_i) && to_i.to_s != to_s
         true
       end
     end

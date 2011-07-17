@@ -1,6 +1,7 @@
 require File.expand_path("../helper.rb", __FILE__)
 
 class Manual < ActiveRecord::Base
+  extend FriendlyId::Base
   include FriendlyId::History
   has_friendly_id :name
 end

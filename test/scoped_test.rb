@@ -1,11 +1,13 @@
 require File.expand_path("../helper", __FILE__)
 
 class Novelist < ActiveRecord::Base
+  extend FriendlyId::Base
   include FriendlyId::Slugged
   has_friendly_id :name
 end
 
 class Novel < ActiveRecord::Base
+  extend FriendlyId::Base
   include FriendlyId::Scoped
   belongs_to :novelist
   has_friendly_id :name, :scope => :novelist
@@ -26,6 +28,7 @@ class ScopedTest < MiniTest::Unit::TestCase
 
   test "should detect scope column from explicit column name" do
     klass = Class.new(ActiveRecord::Base)
+    klass.extend FriendlyId::Base
     klass.has_friendly_id :empty, :scope => :dummy
     assert_equal "dummy", klass.friendly_id_config.scope_column
   end

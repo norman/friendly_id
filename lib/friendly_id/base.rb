@@ -19,11 +19,5 @@ module FriendlyId
     def friendly_id_config
       @friendly_id_config ||= Configuration.new(self)
     end
-
-    def uses_friendly_id?
-      defined? @friendly_id_config
-    end
   end
 end
-
-ActiveRecord::Base.extend FriendlyId::Base

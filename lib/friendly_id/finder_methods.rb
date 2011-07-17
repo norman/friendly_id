@@ -5,7 +5,7 @@ module FriendlyId
     protected
 
     def find_one(id)
-      return super if !@klass.uses_friendly_id? or id.unfriendly_id?
+      return super if !@klass.respond_to?(:has_friendly_id) or id.unfriendly_id?
       where(@klass.friendly_id_config.query_field => id).first or super
     end
   end
