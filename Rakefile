@@ -45,7 +45,7 @@ task :gem do
 end
 
 task :yard do
-  %x{bundle exec yard doc --files=*.md}
+  puts %x{bundle exec yard doc --files=*.md}
 end
 
 task :bench do
