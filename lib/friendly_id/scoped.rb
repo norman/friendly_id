@@ -17,6 +17,7 @@ module FriendlyId
   module Scoped
     def self.included(klass)
       klass.instance_eval do
+        raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
         include Slugged unless self < Slugged
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.slug_sequencer_class.send :include, SlugSequencer

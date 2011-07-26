@@ -7,7 +7,7 @@ require "bundler/setup"
 require "mocha"
 require "minitest/unit"
 require "active_record"
-require "active_support/core_ext/class"
+# require "active_support/core_ext/class"
 
 if ENV["COVERAGE"]
   require 'simplecov'

@@ -43,4 +43,13 @@ class HistoryTest < MiniTest::Unit::TestCase
       assert !found.readonly?
     end
   end
+
+  test "should raise error if used with scoped" do
+    klass = Class.new(ActiveRecord::Base)
+    klass.extend FriendlyId
+    assert_raises RuntimeError do
+      klass.friendly_id :name, :use => [:history, :scoped]
+    end
+  end
+
 end
