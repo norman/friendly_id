@@ -17,7 +17,7 @@ class CoreTest < MiniTest::Unit::TestCase
   test "friendly_id should accept a block" do
     klass = Class.new(ActiveRecord::Base) do
       extend FriendlyId
-      friendly_id do |config|
+      friendly_id :foo do |config|
         config.use :slugged
         config.base = :foo
         config.slug_column = :bar

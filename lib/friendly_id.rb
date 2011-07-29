@@ -14,21 +14,27 @@ module FriendlyId
   autoload :History,  "friendly_id/history"
 
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
-  # extending FriendlyId::Base to add #friendly_id as a class method for
-  # configuring how a model is going to use FriendlyId. In previous versions of
-  # this library, ActiveRecord::Base was patched by default to include methods
-  # needed to configure friendly_id, but this version tries to be a little less
-  # invasive.
+  # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
+  # friendly_id} as a class method.
   #
-  # In addition to adding the #friendly_id method, the class instance variable
-  # +@friendly_id_config+ is added. This variable is an instance of an anonymous
-  # subclass of FriendlyId::Configuration. This is done to allow for
-  # subsequently loaded modules like FriendlyId::Slugged to add functionality to
-  # the configuration only for the current class, and thereby isolating other
-  # classes from large feature changes a module could potentially introduce. The
-  # upshot of this is, you can have two Active Record models that both have a
+  # Previous versions of FriendlyId simply patched ActiveRecord::Base, but this
+  # version tries to be less invasive.
+  #
+  # In addition to adding {FriendlyId::Base.friendly_id friendly_id}, the class
+  # instance variable +@friendly_id_config+ is added. This variable is an
+  # instance of an anonymous subclass of {FriendlyId::Configuration}. This
+  # allows subsequently loaded modules like {FriendlyId::Slugged} and
+  # {FriendlyId::Scoped} to add functionality to the configuration class only
+  # for the current class, rather than monkey patching
+  # {FriendlyId::Configuration} directly. This isolates other models from large
+  # feature changes an addon to FriendlyId could potentially introduce.
+  #
+  # The upshot of this is, you can htwo Active Record models that both have a
   # @friendly_id_config, but each config object can have different methods and
   # behaviors depending on what modules have been loaded, without conflicts.
+  # Keep this in mind if you're hacking on FriendlyId.
+  #
+  # For examples of this, see the source for {Scoped.included}.
   def self.extended(base)
     base.instance_eval do
       extend FriendlyId::Base

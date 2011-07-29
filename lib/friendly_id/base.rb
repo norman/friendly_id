@@ -2,15 +2,24 @@ module FriendlyId
   # Class methods that will be added to ActiveRecord::Base.
   module Base
 
-    def friendly_id(*args, &block)
-      if block_given?
-        yield(friendly_id_config)
-      else
-        base    = args.shift
-        options = args.extract_options!
-        @friendly_id_config.use options.delete :use
-        @friendly_id_config.send :set, options.merge(:base => base)
-      end
+    # Configure FriendlyId for a model. Use this method to configure FriendlyId
+    # for your model.
+    #
+    #   class Post < ActiveRecord::Base
+    #     extend FriendlyId
+    #     friendly_id :title, :use => :slugged
+    #   end
+    #
+    # @option options [Symbol] :use The name of an addon to use. By default, FriendlyId
+    #   provides {FriendlyId::Slugged :slugged}, {FriendlyId::History :history}
+    #   and {FriendlyId::Scoped :scoped}.
+    # @option options [Symbol] :slug_column Available when using +:slugged+.
+    #   Configures the name of the column where FriendlyId will store the slug.
+    #   Defaults to +:slug+.
+    def friendly_id(base = nil, options = {}, &block)
+      @friendly_id_config.use options.delete :use
+      @friendly_id_config.send :set, options.merge(:base => base)
+      yield @friendly_id_config if block_given?
       before_save do |record|
         record.instance_eval {@current_friendly_id = friendly_id}
       end
