@@ -11,7 +11,7 @@ def rubies(&block)
 end
 
 def versions(&block)
-  ["3.1.0.rc4", "3.0.9"].each do |version|
+  ["3.1.0.rc5", "3.0.9"].each do |version|
     old = ENV["AR"]
     ENV["AR"] = version
     yield
@@ -20,9 +20,10 @@ def versions(&block)
 end
 
 def adapters(&block)
-  ["mysql", "postgres", "sqlite3"].each do |adapter|
+  ["mysql", "mysql2", "postgres", "sqlite3"].each do |adapter|
     old = ENV["DB"]
     ENV["DB"] = adapter
+    ENV["DB_VERSION"] = "~> 0.3.6" if adapter == "mysql2" && ENV["AR"] && ENV["AR"][0..2] >= "3.1"
     yield
     ENV["DB"] = old
   end
