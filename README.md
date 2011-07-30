@@ -46,8 +46,10 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
     cd my_app
 
-    # add to Gemfile
-    gem "friendly_id", "~> 4.0.0"
+    # Add to Gemfile - this will change once version 4 is no longer
+    # in beta, but for now do this:
+    gem "friendly_id4", "4.0.0.beta4", :require => "friendly_id"
+
 
     rails generate scaffold user name:string slug:string
 
