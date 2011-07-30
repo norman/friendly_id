@@ -8,6 +8,7 @@ end
 
 platform :ruby do
   gem "mysql"
+  gem "mysql2", ENV["DB_VERSION"] || "~> 0.2.11"
   gem "pg"
   gem "sqlite3"
 end

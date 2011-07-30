@@ -10,7 +10,7 @@ module FriendlyId
         has_many :friendly_id_slugs, :as => :sluggable, :dependent => :destroy
         before_save :build_friendly_id_slug, :if => lambda {|r| r.slug_sequencer.slug_changed?}
         scope :with_friendly_id, lambda {|id| includes(:friendly_id_slugs).where("friendly_id_slugs.slug = ?", id)}
-        extend  Finder
+        extend Finder
       end
     end
 
