@@ -38,4 +38,15 @@ class CoreTest < MiniTest::Unit::TestCase
     assert_equal :foo, klass.friendly_id_config.base
   end
 
+  test "should allow defaults to be set via a block" do
+    begin
+      FriendlyId.defaults {|c| c.base = :foo}
+      klass = Class.new(ActiveRecord::Base) do
+        extend FriendlyId
+      end
+      assert_equal :foo, klass.friendly_id_config.base
+    ensure
+      FriendlyId.instance_variable_set :@defaults, nil
+    end
+  end
 end

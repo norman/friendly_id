@@ -1,3 +1,4 @@
+require "thread"
 require "friendly_id/base"
 require "friendly_id/model"
 require "friendly_id/object_utils"
@@ -9,6 +10,9 @@ require "friendly_id/finder_methods"
 #
 # @author Norman Clarke
 module FriendlyId
+
+  @mutex = Mutex.new
+
   autoload :Slugged,  "friendly_id/slugged"
   autoload :Scoped,   "friendly_id/scoped"
   autoload :History,  "friendly_id/history"
@@ -39,7 +43,19 @@ module FriendlyId
     base.instance_eval do
       extend FriendlyId::Base
       @friendly_id_config = Class.new(FriendlyId::Configuration).new(base)
+      if defaults = FriendlyId.defaults
+        defaults.yield @friendly_id_config
+      end
     end
     ActiveRecord::Relation.send :include, FriendlyId::FinderMethods
   end
+
+  # Set global defaults for all models using FriendlyId.
+  def self.defaults(&block)
+    @mutex.synchronize do
+      @defaults = block if block_given?
+    end
+    @defaults
+  end
+
 end
