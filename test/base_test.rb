@@ -28,4 +28,14 @@ class CoreTest < MiniTest::Unit::TestCase
     assert_equal :bar, klass.friendly_id_config.slug_column
   end
 
+  test "the block passed to friendly_id should be evaluated before arguments" do
+    klass = Class.new(ActiveRecord::Base) do
+      extend FriendlyId
+      friendly_id :foo do |config|
+        config.base = :bar
+      end
+    end
+    assert_equal :foo, klass.friendly_id_config.base
+  end
+
 end

@@ -17,9 +17,9 @@ module FriendlyId
     #   Configures the name of the column where FriendlyId will store the slug.
     #   Defaults to +:slug+.
     def friendly_id(base = nil, options = {}, &block)
+      yield @friendly_id_config if block_given?
       @friendly_id_config.use options.delete :use
       @friendly_id_config.send :set, options.merge(:base => base)
-      yield @friendly_id_config if block_given?
       before_save do |record|
         record.instance_eval {@current_friendly_id = friendly_id}
       end
