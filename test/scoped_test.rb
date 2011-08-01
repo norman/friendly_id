@@ -16,7 +16,7 @@ class ScopedTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
   include FriendlyId::Test::Shared
 
-  def klass
+  def model_class
     Novel
   end
 
@@ -25,10 +25,10 @@ class ScopedTest < MiniTest::Unit::TestCase
   end
 
   test "should detect scope column from explicit column name" do
-    klass = Class.new(ActiveRecord::Base)
-    klass.extend FriendlyId
-    klass.friendly_id :empty, :use => :scoped, :scope => :dummy
-    assert_equal "dummy", klass.friendly_id_config.scope_column
+    model_class = Class.new(ActiveRecord::Base)
+    model_class.extend FriendlyId
+    model_class.friendly_id :empty, :use => :scoped, :scope => :dummy
+    assert_equal "dummy", model_class.friendly_id_config.scope_column
   end
 
   test "should allow duplicate slugs outside scope" do
@@ -48,10 +48,10 @@ class ScopedTest < MiniTest::Unit::TestCase
   end
 
   test "should raise error if used with history" do
-    klass = Class.new(ActiveRecord::Base)
-    klass.extend FriendlyId
+    model_class = Class.new(ActiveRecord::Base)
+    model_class.extend FriendlyId
     assert_raises RuntimeError do
-      klass.friendly_id :name, :use => [:scoped, :history]
+      model_class.friendly_id :name, :use => [:scoped, :history]
     end
   end
 end

@@ -5,8 +5,8 @@ module FriendlyId
   # This module adds in-table slugs to an ActiveRecord model.
   module Slugged
 
-    def self.included(klass)
-      klass.instance_eval do
+    def self.included(model_class)
+      model_class.instance_eval do
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.defaults[:slug_column]        = 'slug'
         friendly_id_config.defaults[:sequence_separator] = '--'

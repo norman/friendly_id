@@ -12,7 +12,7 @@ class CoreTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
   include FriendlyId::Test::Shared
 
-  def klass
+  def model_class
     Author
   end
 
@@ -21,18 +21,18 @@ class CoreTest < MiniTest::Unit::TestCase
   end
 
   test "model classes should have a friendly id config" do
-    assert klass.friendly_id(:name).friendly_id_config
+    assert model_class.friendly_id(:name).friendly_id_config
   end
 
   test "should reserve 'new' and 'edit' by default" do
     ["new", "edit"].each do |word|
       transaction do
-        assert_raises(ActiveRecord::RecordInvalid) {klass.create! :name => word}
+        assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
       end
     end
   end
 
   test "instances should have a friendly id" do
-    with_instance_of(klass) {|record| assert record.friendly_id}
+    with_instance_of(model_class) {|record| assert record.friendly_id}
   end
 end

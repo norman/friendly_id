@@ -29,9 +29,9 @@ module FriendlyId
 
     # The model class that this configuration belongs to.
     # @return ActiveRecord::Base
-    attr_reader :klass
+    attr_reader :model_class
 
-    # The configuration parameters for the {#klass model class} using FriendlyId.
+    # The configuration parameters for the {#model_class model class} using FriendlyId.
     # @return Hash
     attr_reader :defaults
 
@@ -45,8 +45,8 @@ module FriendlyId
       @@defaults
     end
 
-    def initialize(klass, values = nil)
-      @klass = klass
+    def initialize(model_class, values = nil)
+      @model_class = model_class
       @defaults = self.class.defaults.dup
       set values
     end
@@ -54,7 +54,7 @@ module FriendlyId
     def base=(base)
       @base = base
       if @base.respond_to?(:to_s)
-        @klass.validates_exclusion_of @base, :in => defaults[:reserved_words]
+        @model_class.validates_exclusion_of @base, :in => defaults[:reserved_words]
       end
     end
 
@@ -74,7 +74,7 @@ module FriendlyId
     #   default FriendlyId provides +:slugged+, +:history+ and +:scoped+.
     def use(*modules)
       modules.to_a.flatten.compact.map do |name|
-        klass.send :include, FriendlyId.const_get(name.to_s.classify)
+        model_class.send :include, FriendlyId.const_get(name.to_s.classify)
       end
     end
 

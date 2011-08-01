@@ -15,8 +15,8 @@ module FriendlyId
   #     friendly_id :name, :scope => :city
   #   end
   module Scoped
-    def self.included(klass)
-      klass.instance_eval do
+    def self.included(model_class)
+      model_class.instance_eval do
         raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
         include Slugged unless self < Slugged
         friendly_id_config.class.send :include, Configuration
@@ -35,7 +35,7 @@ module FriendlyId
       # it cast to a String.
       # @return String The scope column
       def scope_column
-        (klass.reflections[@scope].try(:association_foreign_key) || @scope).to_s
+        (model_class.reflections[@scope].try(:association_foreign_key) || @scope).to_s
       end
     end
 
