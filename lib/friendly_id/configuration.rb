@@ -25,37 +25,18 @@ module FriendlyId
     #     extend FriendlyId
     #     friendly_id :name
     #   end
-    attr_reader :base
+    attr_accessor :base
+
+    attr_reader :defaults
 
     # The model class that this configuration belongs to.
     # @return ActiveRecord::Base
     attr_reader :model_class
 
-    # The configuration parameters for the {#model_class model class} using FriendlyId.
-    # @return Hash
-    attr_reader :defaults
-
-    @@defaults = {
-      :reserved_words => ["new", "edit"]
-    }
-
-    # The default configuration parameters for models using FriendlyId.
-    # @return Hash
-    def self.defaults
-      @@defaults
-    end
-
     def initialize(model_class, values = nil)
       @model_class = model_class
-      @defaults = self.class.defaults.dup
+      @defaults    = {}
       set values
-    end
-
-    def base=(base)
-      @base = base
-      if @base.respond_to?(:to_s)
-        @model_class.validates_exclusion_of @base, :in => defaults[:reserved_words]
-      end
     end
 
     # Lets you specify the modules to use with FriendlyId.
