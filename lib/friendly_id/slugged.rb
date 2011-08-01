@@ -8,9 +8,9 @@ module FriendlyId
     def self.included(model_class)
       model_class.instance_eval do
         friendly_id_config.class.send :include, Configuration
-        friendly_id_config.defaults[:slug_column]        = 'slug'
-        friendly_id_config.defaults[:sequence_separator] = '--'
-        friendly_id_config.slug_sequencer_class          = Class.new(SlugSequencer)
+        friendly_id_config.defaults[:slug_column]        ||= 'slug'
+        friendly_id_config.defaults[:sequence_separator] ||= '--'
+        friendly_id_config.slug_sequencer_class          ||= Class.new(SlugSequencer)
         before_validation :set_slug
       end
     end
