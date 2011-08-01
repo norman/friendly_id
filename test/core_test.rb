@@ -24,14 +24,6 @@ class CoreTest < MiniTest::Unit::TestCase
     assert model_class.friendly_id(:name).friendly_id_config
   end
 
-  test "should reserve 'new' and 'edit' by default" do
-    ["new", "edit"].each do |word|
-      transaction do
-        assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
-      end
-    end
-  end
-
   test "instances should have a friendly id" do
     with_instance_of(model_class) {|record| assert record.friendly_id}
   end

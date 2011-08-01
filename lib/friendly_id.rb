@@ -13,9 +13,10 @@ module FriendlyId
 
   @mutex = Mutex.new
 
-  autoload :Slugged,  "friendly_id/slugged"
-  autoload :Scoped,   "friendly_id/scoped"
   autoload :History,  "friendly_id/history"
+  autoload :Reserved, "friendly_id/reserved"
+  autoload :Scoped,   "friendly_id/scoped"
+  autoload :Slugged,  "friendly_id/slugged"
 
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
   # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
@@ -244,10 +245,8 @@ module FriendlyId
     base.instance_eval do
       extend FriendlyId::Base
       @friendly_id_config = Class.new(FriendlyId::Configuration).new(base)
-      if defaults = FriendlyId.defaults
-        defaults.yield @friendly_id_config
-      end
     end
+    defaults.yield base.friendly_id_config
     ActiveRecord::Relation.send :include, FriendlyId::FinderMethods
   end
 
@@ -261,9 +260,13 @@ module FriendlyId
   #   end
   def self.defaults(&block)
     @mutex.synchronize do
-      @defaults = block if block_given?
+      if block
+        @defaults = block
+      else
+        @defaults ||= Proc.new do |config|
+          config.use :reserved
+        end
+      end
     end
-    @defaults
   end
-
 end
