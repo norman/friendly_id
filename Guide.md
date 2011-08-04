@@ -17,37 +17,6 @@ FriendlyId will always remain compatible with the current release of Rails, and
 at least one stable release behind. That means that support for 3.0.x will not be
 dropped until a stable release of 3.2 is out, or possibly longer.
 
-## Configuration
-
-FriendlyId is configured in your model using the `friendly_id` method. Additional
-features can be passing the names of modules into the `:use` option:
-
-    class Post < ActiveRecord::Base
-      extend FriendlyId
-      # use the "title" accessor as the basis of the friendly_id
-      friendly_id :title, :use => [:slugged, :history]
-    end
-
-Read on to learn about the various features that can be configured. For the
-full list of valid configuration options, see the instance attribute summary
-for {FriendlyId::Configuration}.
-
-# Features
-
-## FriendlyId Strings
-
-By default, FriendlyId uses Active Support's Transliterator class to convert strings into
-ASCII slugs by default. Please see the API docs for
-[transliterate](http://api.rubyonrails.org/) and
-[parameterize](http://api.rubyonrails.org/) to see what options are avaialable
-to you.
-
-Previous versions of FriendlyId used [Babosa](github.com/norman/babosa) for slug
-string handling, but the core functionality it provides was extracted from it
-and added to Rails 3. However, Babosa offers some advanced functionality not
-offered by Rails and can still be a convenient option. This section shows how
-you can use it with FriendlyId.
-
 ### Using a Custom Method to Generate the Slug Text
 
 FriendlyId can use either a column or a method to generate the slug text for

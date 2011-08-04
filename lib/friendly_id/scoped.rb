@@ -43,7 +43,7 @@ relation:
 
     @city.restaurants.find("joes-diner")
 
-Alternatively, you could pass the scope value as a parameter:
+Alternatively, you could pass the scope value as a query parameter:
 
     Restaurant.find("joes-diner").where(:city_id => @city.id)
 
@@ -56,8 +56,9 @@ Query the slug column directly:
 
 === Routes for Scoped Models
 
-FriendlyId does not set up any routes for scoped models; you must do this
-yourself in your application. Here's an example of one way to set this up:
+Recall that FriendlyId is a database-centric library, and does not set up any
+routes for scoped models. You must do this yourself in your application. Here's
+an example of one way to set this up:
 
     # in routes.rb
     resources :cities do
@@ -71,7 +72,7 @@ yourself in your application. Here's an example of one way to set this up:
     @city = City.find(params[:city_id])
     @restaurant = @city.restaurants.find(params[:id])
 
-    # URL's:
+    # URLs:
     http://example.org/cities/seattle/restaurants/joes-diner
     http://example.org/cities/chicago/restaurants/joes-diner
 
@@ -86,7 +87,16 @@ yourself in your application. Here's an example of one way to set this up:
       end
     end
 
+    # This module adds the +:scope+ configuration option to
+    # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
+
+      # Gets the scope value.
+      #
+      # When setting this value, the argument should be a symbol referencing a
+      # +belongs_to+ relation, or a column.
+      #
+      # @return Symbol The scope value
       attr_accessor :scope
 
       # Gets the scope column.
@@ -101,6 +111,8 @@ yourself in your application. Here's an example of one way to set this up:
       end
     end
 
+    # This module overrides {FriendlyId::SlugSequencer#conflict} to consider
+    # scope, to avoid adding sequences to slugs under different scopes.
     module SlugSequencer
       def conflict
         column = friendly_id_config.scope_column
