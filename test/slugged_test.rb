@@ -44,6 +44,16 @@ class SluggedTest < MiniTest::Unit::TestCase
       assert_equal old, record.to_param
     end
   end
+
+  test "should not increment sequence on save" do
+    with_instance_of model_class do |record|
+      record2 = model_class.create! :name => record.name
+      record2.active = !record2.active
+      record2.save!
+      assert record2.friendly_id.match(/2\z/)
+    end
+  end
+
 end
 
 class SlugSequencerTest < MiniTest::Unit::TestCase

@@ -2,18 +2,80 @@ require "friendly_id/slugged"
 
 module FriendlyId
 
-  # This module adds scopes to in-table slugs. It's not loaded by default,
-  # so in order to active this feature you must include the module in your
-  # class.
-  #
-  # You can scope by an explicit column, or by a `belongs_to` relation.
-  #
-  # @example
-  #   class Restaurant < ActiveRecord::Base
-  #     belongs_to :city
-  #     include FriendlyId::Scoped
-  #     friendly_id :name, :scope => :city
-  #   end
+=begin
+This module allows FriendlyId to generate unique slugs within a scope.
+
+This allows, for example, two restaurants in different cities to have the slug
++joes-diner+:
+
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      belongs_to :city
+      friendly_id :name, :use => :scoped, :scope => :city
+    end
+
+    class City < ActiveRecord::Base
+      extend FriendlyId
+      has_many :restaurants
+      friendly_id :name, :use => :slugged
+    end
+
+    City.find("seattle").restaurants.find("joes-diner")
+    City.find("chicago").restaurants.find("joes-diner")
+
+Without :scoped in this case, one of the restaurants would have the slug
++joes-diner+ and the other would have +joes-diner--2+.
+
+The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
+a column.
+
+== Tips For Working With Scoped Slugs
+
+=== Finding Records by Friendly ID
+
+If you are using scopes your friendly ids may not be unique, so a simple find
+like
+
+    Restaurant.find("joes-diner")
+
+may return the wrong record. In these cases it's best to query through the
+relation:
+
+    @city.restaurants.find("joes-diner")
+
+Alternatively, you could pass the scope value as a parameter:
+
+    Restaurant.find("joes-diner").where(:city_id => @city.id)
+
+
+=== Finding All Records That Match a Scoped ID
+
+Query the slug column directly:
+
+    Restaurant.find_all_by_slug("joes-diner")
+
+=== Routes for Scoped Models
+
+FriendlyId does not set up any routes for scoped models; you must do this
+yourself in your application. Here's an example of one way to set this up:
+
+    # in routes.rb
+    resources :cities do
+      resources :restaurants
+    end
+
+    # in views
+    <%= link_to 'Show', [@city, @restaurant] %>
+
+    # in controllers
+    @city = City.find(params[:city_id])
+    @restaurant = @city.restaurants.find(params[:id])
+
+    # URL's:
+    http://example.org/cities/seattle/restaurants/joes-diner
+    http://example.org/cities/chicago/restaurants/joes-diner
+
+=end
   module Scoped
     def self.included(model_class)
       model_class.instance_eval do
