@@ -94,7 +94,7 @@ module FriendlyId
   # Previous versions of FriendlyId simply patched ActiveRecord::Base, but this
   # version tries to be less invasive.
   #
-  # In addition to adding {FriendlyId::Base.friendly_id friendly_id}, the class
+  # In addition to adding {FriendlyId::Base#friendly_id friendly_id}, the class
   # instance variable +@friendly_id_config+ is added. This variable is an
   # instance of an anonymous subclass of {FriendlyId::Configuration}. This
   # allows subsequently loaded modules like {FriendlyId::Slugged} and

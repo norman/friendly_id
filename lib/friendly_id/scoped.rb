@@ -101,10 +101,11 @@ an example of one way to set this up:
 
       # Gets the scope column.
       #
-      # Checks to see if the +:scope+ option passed to {#friendly_id}
-      # refers to a relation, and if so, returns the realtion's foreign key.
-      # Otherwise it assumes the option value was the name of column and returns
-      # it cast to a String.
+      # Checks to see if the +:scope+ option passed to
+      # {FriendlyId::Base#friendly_id} refers to a relation, and if so, returns
+      # the realtion's foreign key. Otherwise it assumes the option value was
+      # the name of column and returns it cast to a String.
+      #
       # @return String The scope column
       def scope_column
         (model_class.reflections[@scope].try(:association_foreign_key) || @scope).to_s

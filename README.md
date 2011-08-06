@@ -70,6 +70,12 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
     GET http://localhost:3000/users/joe-schmoe
 
+## Benchmarks
+
+The latest benchmarks for FriendlyId are maintained
+[here](https://gist.github.com/1129745).
+
+
 ## Bugs
 
 Please report them on the [Github issue

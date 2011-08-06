@@ -27,6 +27,7 @@ module FriendlyId
     #   end
     attr_accessor :base
 
+    # The default configuration options.
     attr_reader :defaults
 
     # The model class that this configuration belongs to.
