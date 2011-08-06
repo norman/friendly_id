@@ -1,17 +1,8 @@
-<hr>
-**NOTE** This is FriendlyId4 - a rewrite of FriendlyId. For more info about this
-rewrite, and the changes it brings, read [this
-document](https://github.com/norman/friendly_id_4/blob/master/ABOUT.md).
-
-For the current stable FriendlyId, please see:
-
-[https://github.com/norman/friendly_id](https://github.com/norman/friendly_id_4)
-<hr>
 # FriendlyId
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
-Ruby on Rails. It allows you to create pretty URL's and work with
-human-friendly strings as if they were numeric ids for Active Record models.
+Ruby on Rails. It allows you to create pretty URL's and work with human-friendly
+strings as if they were numeric ids for Active Record models.
 
 Using FriendlyId, it's easy to make your application use URL's like:
 
@@ -24,19 +15,9 @@ instead of:
 ## FriendlyId Features
 
 FriendlyId offers many advanced features, including: slug history and
-versioning, scoped slugs, reserved words, custom slug generators, and
-excellent Unicode support. For complete information on using FriendlyId,
-please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html).
+versioning, scoped slugs, reserved words, and custom slug generators.
 
 FriendlyId is compatible with Active Record **3.0** and **3.1**.
-
-## Docs, Info and Support
-
-* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
-* [API Docs](http://norman.github.com/friendly_id)
-* [Google Group](http://groups.google.com/group/friendly_id)
-* [Source Code](http://github.com/norman/friendly_id/)
-* [Issue Tracker](http://github.com/norman/friendly_id/issues)
 
 ## Rails Quickstart
 
@@ -69,6 +50,14 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
     rails server
 
     GET http://localhost:3000/users/joe-schmoe
+
+
+### Future Compatibility
+
+FriendlyId will always remain compatible with the current release of Rails, and
+at least one stable release behind. That means that support for 3.0.x will not be
+dropped until a stable release of 3.2 is out, or possibly longer.
+
 
 ## Benchmarks
 

@@ -78,6 +78,10 @@ an example of one way to set this up:
 
 =end
   module Scoped
+
+
+    # Sets up behavior and configuration options for FriendlyId's scoped slugs
+    # feature.
     def self.included(model_class)
       model_class.instance_eval do
         raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
@@ -115,6 +119,9 @@ an example of one way to set this up:
     # This module overrides {FriendlyId::SlugSequencer#conflict} to consider
     # scope, to avoid adding sequences to slugs under different scopes.
     module SlugSequencer
+
+      private
+
       def conflict
         column = friendly_id_config.scope_column
         conflicts.where("#{column} = ?", sluggable.send(column)).first

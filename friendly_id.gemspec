@@ -1,11 +1,11 @@
 # encoding: utf-8
 $:.push File.expand_path("../lib", __FILE__)
 
-require "friendly_id/version"
+require "friendly_id"
 
 Gem::Specification.new do |s|
   s.name              = "friendly_id4"
-  s.version           = FriendlyId::Version::STRING
+  s.version           = FriendlyId::VERSION
   s.authors           = ["Norman Clarke"]
   s.email             = ["norman@njclarke.com"]
   s.homepage          = "http://norman.github.com/friendly_id"

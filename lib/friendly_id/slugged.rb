@@ -169,10 +169,14 @@ This functionality was in fact taken from earlier versions of FriendlyId.
       value.to_s.parameterize
     end
 
+    # Gets a new instance of the configured slug sequencing class.
+    #
+    # @see FriendlyId::SlugSequencer
     def slug_sequencer
       friendly_id_config.slug_sequencer_class.new(self)
     end
 
+    # Sets the slug.
     def set_slug
       send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
     end
@@ -208,6 +212,7 @@ This functionality was in fact taken from earlier versions of FriendlyId.
         @sequence_separator or defaults[:sequence_separator]
       end
 
+      # The column that will be used to store the generated slug.
       def slug_column
         @slug_column or defaults[:slug_column]
       end

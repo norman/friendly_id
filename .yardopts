@@ -1,2 +1,4 @@
 --files=*.md
 --protected
+--list-undoc
+--exclude lib/friendly_id/migration

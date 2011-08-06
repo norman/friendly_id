@@ -80,6 +80,9 @@ In general, use slugs by default unless you know for sure you don't need them.
 =end
 module FriendlyId
 
+  # The current version.
+  VERSION = "4.0.0.beta5"
+
   @mutex = Mutex.new
 
   autoload :History,  "friendly_id/history"

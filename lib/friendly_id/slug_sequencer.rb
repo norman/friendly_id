@@ -8,12 +8,14 @@ module FriendlyId
       @sluggable = sluggable
     end
 
+    # Given a slug, get the next available slug in the sequence.
     def next
       sequence = conflict.slug.split(separator)[1].to_i
       next_sequence = sequence == 0 ? 2 : sequence.next
       "#{normalized}#{separator}#{next_sequence}"
     end
 
+    # Generate a new sequenced slug.
     def generate
       if new_record? or slug_changed?
         conflict? ? self.next : normalized
@@ -22,6 +24,7 @@ module FriendlyId
       end
     end
 
+    # Whether or not the model instance's slug has changed.
     def slug_changed?
       separator = Regexp.escape friendly_id_config.sequence_separator
       base != sluggable.current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
