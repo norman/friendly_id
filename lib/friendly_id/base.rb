@@ -126,7 +126,9 @@ module FriendlyId
     #   access. If you're concerned about thread safety, then be sure to invoke
     #   {#friendly_id} in your class for each model.
     def friendly_id_config
-      @friendly_id_config
+      @friendly_id_config or begin
+       @friendly_id_config = base_class.friendly_id_config.dup
+      end
     end
   end
 end
