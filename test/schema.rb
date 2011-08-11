@@ -32,6 +32,9 @@ module FriendlyId
 
           # This will be used to test column name quoting
           add_column :journalists, "strange name", :string
+
+          # This will be used to test STI
+          add_column :journalists, "type", :string
         end
 
         private

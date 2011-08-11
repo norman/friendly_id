@@ -10,50 +10,12 @@ end
 class SluggedTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
-  include FriendlyId::Test::Shared
+  include FriendlyId::Test::Shared::Core
+  include FriendlyId::Test::Shared::Slugged
 
   def model_class
     Journalist
   end
-
-  test "configuration should have a sequence_separator" do
-    assert !model_class.friendly_id_config.sequence_separator.empty?
-  end
-
-  test "should make a new slug if the friendly_id method value has changed" do
-    with_instance_of model_class do |record|
-      record.name = "Changed Value"
-      record.save!
-      assert_equal "changed-value", record.slug
-    end
-  end
-
-  test "should increment the slug sequence for duplicate friendly ids" do
-    with_instance_of model_class do |record|
-      record2 = model_class.create! :name => record.name
-      assert record2.friendly_id.match(/2\z/)
-    end
-  end
-
-  test "should not add slug sequence on update after other conflicting slugs were added" do
-    with_instance_of model_class do |record|
-      old = record.friendly_id
-      record2 = model_class.create! :name => record.name
-      record.save!
-      record.reload
-      assert_equal old, record.to_param
-    end
-  end
-
-  test "should not increment sequence on save" do
-    with_instance_of model_class do |record|
-      record2 = model_class.create! :name => record.name
-      record2.active = !record2.active
-      record2.save!
-      assert record2.friendly_id.match(/2\z/)
-    end
-  end
-
 end
 
 class SlugSequencerTest < MiniTest::Unit::TestCase

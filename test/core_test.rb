@@ -10,7 +10,7 @@ end
 class CoreTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
-  include FriendlyId::Test::Shared
+  include FriendlyId::Test::Shared::Core
 
   def model_class
     Author
