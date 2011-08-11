@@ -125,6 +125,8 @@ module FriendlyId
 
   # Set global defaults for all models using FriendlyId.
   #
+  # The default defaults are to use the +:reserved+ module and nothing else.
+  #
   # @example
   #   FriendlyId.defaults do |config|
   #     config.base = :name
@@ -133,7 +135,7 @@ module FriendlyId
   def self.defaults(&block)
     @mutex.synchronize do
       @defaults = block if block_given?
+      @defaults ||= lambda {|config| config.use :reserved}
     end
-    @defaults
   end
 end
