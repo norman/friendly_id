@@ -49,7 +49,8 @@ module FriendlyId
         ActiveRecord::Base.establish_connection config
         version = ActiveRecord::VERSION::STRING
         driver  = FriendlyId::Test::Database.driver
-        message = "Using #{RUBY_ENGINE} #{RUBY_VERSION} AR #{version} with #{driver}"
+        engine = RUBY_ENGINE rescue "ruby"
+        message = "Using #{engine} #{RUBY_VERSION} AR #{version} with #{driver}"
         puts "-" * 72
         if in_memory?
           ActiveRecord::Migration.verbose = false
