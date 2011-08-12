@@ -15,14 +15,14 @@ class HistoryTest < MiniTest::Unit::TestCase
   end
 
   test "should insert record in slugs table on create" do
-    with_instance_of(model_class) {|record| assert !record.friendly_id_slugs.empty?}
+    with_instance_of(model_class) {|record| assert !record.slugs.empty?}
   end
 
   test "should not create new slug record if friendly_id is not changed" do
     with_instance_of(model_class) do |record|
       record.active = true
       record.save!
-      assert_equal 1, FriendlyIdSlug.count
+      assert_equal 1, FriendlyId::Slug.count
     end
   end
 
@@ -30,7 +30,7 @@ class HistoryTest < MiniTest::Unit::TestCase
     with_instance_of(model_class) do |record|
       record.name = record.name + "b"
       record.save!
-      assert_equal 2, FriendlyIdSlug.count
+      assert_equal 2, FriendlyId::Slug.count
     end
   end
 
