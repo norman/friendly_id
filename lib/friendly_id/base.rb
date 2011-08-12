@@ -114,9 +114,7 @@ module FriendlyId
       yield @friendly_id_config if block_given?
       @friendly_id_config.use options.delete :use
       @friendly_id_config.send :set, base ? options.merge(:base => base) : options
-      before_save do |record|
-        record.instance_eval {@current_friendly_id = friendly_id}
-      end
+      before_save {|rec| rec.instance_eval {@current_friendly_id = friendly_id}}
       include Model
     end
 

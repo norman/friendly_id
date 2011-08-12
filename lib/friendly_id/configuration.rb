@@ -56,7 +56,8 @@ module FriendlyId
     #   default FriendlyId provides +:slugged+, +:history+ and +:scoped+.
     def use(*modules)
       modules.to_a.flatten.compact.map do |name|
-        model_class.send :include, FriendlyId.const_get(name.to_s.classify)
+        mod = FriendlyId.const_get(name.to_s.classify)
+        model_class.send(:include, mod) unless model_class < mod
       end
     end
 

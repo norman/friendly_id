@@ -112,15 +112,13 @@ module FriendlyId
   # Keep this in mind if you're hacking on FriendlyId.
   #
   # For examples of this, see the source for {Scoped.included}.
-  def self.extended(base)
-    base.instance_eval do
-      extend FriendlyId::Base
-      @friendly_id_config = Class.new(FriendlyId::Configuration).new(base)
-      if defaults = FriendlyId.defaults
-        defaults.yield @friendly_id_config
-      end
+  def self.extended(model_class)
+    model_class.instance_eval do
+      extend Base
+      @friendly_id_config = Class.new(Configuration).new(self)
+      FriendlyId.defaults.yield @friendly_id_config
     end
-    ActiveRecord::Relation.send :include, FriendlyId::FinderMethods
+    ActiveRecord::Relation.send :include, FinderMethods
   end
 
   # Set global defaults for all models using FriendlyId.

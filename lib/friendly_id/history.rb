@@ -62,7 +62,7 @@ method.
     def self.included(klass)
       klass.instance_eval do
         raise "FriendlyId::History is incompatibe with FriendlyId::Scoped" if self < Scoped
-        include Slugged unless self < Slugged
+        @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => "FriendlyId::Slug"
         before_save :build_slug, :if => lambda {|r| r.slug_sequencer.slug_changed?}
         scope :with_friendly_id, lambda {|id| includes(:slugs).where("friendly_id_slugs.slug = ?", id)}
