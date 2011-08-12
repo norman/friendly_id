@@ -21,3 +21,4 @@ gem "simplecov", :platform => :ruby_19
 gem "maruku"
 gem "yard"
 gem "mocha"
+gem "rake"
