@@ -57,13 +57,6 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 The current docs can be found
 [here](http://rdoc.info/github/norman/friendly_id/a4128af31d85ee29ad8f/frames).
 
-## Future Compatibility
-
-FriendlyId will always remain compatible with the current release of Rails, and
-at least one stable release behind. That means that support for 3.0.x will not be
-dropped until a stable release of 3.2 is out, or possibly longer.
-
-
 ## Benchmarks
 
 The latest benchmarks for FriendlyId are maintained

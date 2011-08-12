@@ -1,41 +1,52 @@
-# What's new in FriendlyId 4.0?
-
-This is a rewrite/rethink of FriendlyId. It will probably be released some time
-in August or September 2011, once I've had the chance to actually use it in a
-real website for a while.
-
-It's probably not wise to use this on a real site right now unless you're
-comfortable with the source code and willing to fix bugs that will likely occur.
-
-That said, I will soon be deploying this on a high-traffic, production site, so
-I have a personal stake in making this work well. Your feedback is most welcome.
-
-If you want to try it out, grab the source, or [install the
-gem](https://rubygems.org/gems/friendly_id4).
+# What's New in FriendlyId 4?
 
 ## Back to basics
 
-This isn't the "big rewrite," it's the "small rewrite."
+FriendlyId is mostly a different codebase from FriendlyId 3. However, this isn't
+the "big rewrite," it's the "small rewrite:"
 
 Adding new features with each release is not sustainable. This release *removes*
 features, but makes it possible to add them back as addons. We can also remove
 some complexity by relying on the better default functionality provided by newer
-versions of Active Support and Active Record. Let's see how small we can make
-this!
+versions of Active Support and Active Record.
 
 Here's what's changed:
 
+## New configuration and setup
+
+FriendlyId is no longer added to Active Record by default, you must explicitly
+add it to each model you want to use it in. The method and options have also
+changed:
+
+    # FriendlyId 3
+    class Post < ActiveRecord::Base
+      has_friendly_id :title, :use_slugs => true
+    end
+
+    # FriendlyId 4
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
+    end
+
+It also adds a new "defaults" method for configuring all models:
+
+    FriendlyId.defaults do |config|
+      config.use :slugged, :reserved
+      config.base = :name
+    end
+
 ## Active Record 3+ only
 
-For 2.3 support, you can use FriendlyId 3, which will continue to be maintained
+For 2.3 support, you can use FriendlyId 3.x, which will continue to be maintained
 until people don't want it any more.
 
 ## In-table slugs
 
 FriendlyId no longer creates a separate slugs table - it just stores the
 generated slug value in the model table, which is simpler, faster and what most
-people seem to want. Keeping slug history in a separate table is an optional
-add-on for FriendlyId 4.
+want by default. Keeping slug history in a separate table is an
+{FriendlyId::Slugged optional add-on} for FriendlyId 4.
 
 ## No more multiple finds
 
@@ -61,64 +72,6 @@ do that, so this feature has been removed:
     if request.path != person_path(@person)
       return redirect_to @person, :status => :moved_permanently
     end
-
-## No more slug history - unless you want it
-
-Since slugs are now stored in-table, when you update them, finds for the
-previous slug will no longer work. This can be a problem for permalinks, since
-renaming a friendly_id will lead to 404's.
-
-This was transparently handled by FriendlyId 3, but there were three problems:
-
-* Not everybody wants or needs this
-* Performance was negatively affected
-* Determining whether a current or old id was used was expensive, clunky, and
-  inconsistent when finding inside relations.
-
-Here's how to do this in FriendlyId 4:
-
-    class PostsController < ApplicationController
-
-      before_filter :find_post
-
-      ...
-
-      def find_post
-        return unless params[:id]
-        @post = begin
-          Post.find params[:id]
-        rescue ActiveRecord::RecordNotFound
-          Post.find_by_friendly_id params[:id]
-        end
-        # If an old id or a numeric id was used to find the record, then
-        # the request path will not match the post_path, and we should do
-        # a 301 redirect that uses the current friendly_id
-        if request.path != post_path(@post)
-          return redirect_to @post, :status => :moved_permanently
-        end
-      end
-
-Under FriendlyId 4 this is a little more verbose, but offers much finer-grained
-control over the finding process, performs better, and has a much simpler
-implementation.
-
-## "Reserved words" are now just a normal validation
-
-Rather than use a custom reserved words validator, use the validations provided
-by Active Record. FriendlyId still reserves "new" and "edit" by default to avoid
-routing problems.
-
-    validates_exclusion_of :name, :in => ["bad", "word"]
-
-You can configure the default words reserved by FriendlyId in
-`FriendlyId::Configuration::DEFAULTS[:reserved_words]`.
-
-## "Allow nil" is now just another validation
-
-Previous versions of FriendlyId offered a special option to allow nil slug
-values, but this is now the default. If you don't want this, then simply add a
-validation to the slug column, and/or declare the column `NOT NULL` in your
-database.
 
 ## Bye-bye Babosa
 
