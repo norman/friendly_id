@@ -116,7 +116,7 @@ module FriendlyId
     model_class.instance_eval do
       extend Base
       @friendly_id_config = Class.new(Configuration).new(self)
-      FriendlyId.defaults.yield @friendly_id_config
+      FriendlyId.defaults.call @friendly_id_config
     end
     ActiveRecord::Relation.send :include, FinderMethods
   end
