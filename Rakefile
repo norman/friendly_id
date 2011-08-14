@@ -103,17 +103,40 @@ namespace :test do
 end
 
 namespace :db do
+
+  desc "Create the database"
+  task :create do
+    require File.expand_path("../test/helper", __FILE__)
+    driver = FriendlyId::Test::Database.driver
+    config = FriendlyId::Test::Database.config[driver]
+    commands = {
+      "mysql"    => "mysql -e 'create database #{config["database"]};' >/dev/null",
+      "postgres" => "psql -c 'create database #{config['database']};' -U #{config['username']} >/dev/null"
+    }
+    %x{#{commands[driver] || true}}
+  end
+
+  desc "Create the database"
+  task :drop do
+    require File.expand_path("../test/helper", __FILE__)
+    driver = FriendlyId::Test::Database.driver
+    config = FriendlyId::Test::Database.config[driver]
+    commands = {
+      "mysql"    => "mysql -e 'drop database #{config["database"]};' >/dev/null",
+      "postgres" => "psql -c 'drop database #{config['database']};' -U #{config['username']} >/dev/null"
+    }
+    %x{#{commands[driver] || true}}
+  end
+
   desc "Set up the database schema"
   task :up do
     require File.expand_path("../test/helper", __FILE__)
     FriendlyId::Test::Schema.up
   end
 
-  desc "Destroy the database schema"
-  task :down do
-    require File.expand_path("../test/helper", __FILE__)
-    FriendlyId::Test::Schema.down
-  end
+  desc "Set up the"
+  task :reset => [:drop, :create]
+
 end
 
 task :doc => :yard

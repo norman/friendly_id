@@ -7,7 +7,7 @@ platform :jruby do
 end
 
 platform :ruby do
-  gem "mysql", "~> 2.8.1"
+  gem "mysql2", "~> 0.2.0"
   gem "pg", "~> 0.11.0"
   gem "sqlite3", "~> 1.3.4"
 end
