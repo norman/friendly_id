@@ -17,11 +17,11 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "activerecord", "~> 3.0"
   s.add_development_dependency "sqlite3", "~> 1.3"
-  s.add_development_dependency "cutest", "~> 1.1.2"
-  s.add_development_dependency "ffaker"
-  s.add_development_dependency "maruku"
-  s.add_development_dependency "yard"
-  s.add_development_dependency "mocha"
+  s.add_development_dependency "minitest", "~> 2.4.0"
+  s.add_development_dependency "mocha", "~> 0.9.12"
+  s.add_development_dependency "ffaker", "~> 1.8.0"
+  s.add_development_dependency "maruku", "~> 0.6.0"
+  s.add_development_dependency "yard", "~> 0.7.2"
 
   s.description       = <<-EOM
     FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins
