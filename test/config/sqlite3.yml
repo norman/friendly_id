@@ -1,3 +1,0 @@
-adapter: sqlite3
-database: ":memory:"
-encoding: utf8

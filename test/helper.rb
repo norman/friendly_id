@@ -46,7 +46,7 @@ module FriendlyId
       extend self
 
       def connect
-        ActiveRecord::Base.establish_connection config
+        ActiveRecord::Base.establish_connection config[driver]
         version = ActiveRecord::VERSION::STRING
         driver  = FriendlyId::Test::Database.driver
         engine = RUBY_ENGINE rescue "ruby"
@@ -62,11 +62,7 @@ module FriendlyId
       end
 
       def config
-        @config ||= YAML::load(File.open(config_file))
-      end
-
-      def config_file
-        File.expand_path("../config/#{driver}.yml", __FILE__)
+        @config ||= YAML::load(File.open(File.expand_path("../databases.yml", __FILE__)))
       end
 
       def driver
@@ -74,7 +70,7 @@ module FriendlyId
       end
 
       def in_memory?
-        config["database"] == ":memory:"
+        config[driver]["database"] == ":memory:"
       end
     end
   end
