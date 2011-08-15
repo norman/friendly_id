@@ -35,9 +35,7 @@ please read the docs to see what's new.
 
     cd my_app
 
-    # Add to Gemfile - this will change once version 4 is no longer
-    # in beta, but for now do this:
-    gem "friendly_id4", "4.0.0.beta4", :require => "friendly_id"
+    gem "friendly_id", "~> 4.0.0.beta7"
 
 
     rails generate scaffold user name:string slug:string
