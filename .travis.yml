@@ -11,7 +11,7 @@ rvm:
 
 branches:
   only:
-    - 4.0.0
+    - master
 env:
   - DB=postgres
   - DB=mysql
