@@ -3,7 +3,11 @@ rvm:
   - 1.9.2
   - 1.8.7
   - rbx-2.0
-  - jruby
+  # Temporarily not testing JRuby in CI because ActiveRecord JDBC does not
+  # support 3.1 well yet. Rest assured I'm testing this and want to target
+  # JRuby, I just don't want to see broken build messages all the time when I
+  # already know what the probelem is.
+  # - jruby
 
 branches:
   only:
