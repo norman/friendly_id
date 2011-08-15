@@ -178,11 +178,11 @@ fork, then this upgrade may causes issues.
 * New option to pass arguments to `FriendlyId::SlugString#approximate_ascii!`,
   allowing custom approximations specific to German or Spanish.
 * FriendlyId now queries against the cached_slug column, which improves performance.
-* {FriendlyId::SlugString} class added, allowing finer-grained control over
+* FriendlyId::SlugString class added, allowing finer-grained control over
   Unicode friendly_id strings.
-* {FriendlyId::Configuration} class added, offering more flexible/hackable
+* FriendlyId::Configuration class added, offering more flexible/hackable
   options.
-* FriendlyId now raises subclasses of {FriendlyId::SlugGenerationError}
+* FriendlyId now raises subclasses of FriendlyId::SlugGenerationError
   depending on the error context.
 * Simple models now correctly validate friendly_id length.
 * Passing block into FriendlyId deprecated in favor of overriding
