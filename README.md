@@ -22,6 +22,11 @@ versioning, scoped slugs, reserved words, and custom slug generators.
 
 FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
+## Version 4.x
+
+FriendlyId 4.x introduces many changes incompatible with 3.x. If you're upgrading,
+please read the docs to see what's new.
+
 ## Rails Quickstart
 
     gem install friendly_id

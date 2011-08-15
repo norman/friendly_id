@@ -6,7 +6,18 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.0 (NOT_RELEASED_YET)
+
+This is a complete rewrite of FriendlyId, and introduces a smaller, faster and
+less ambitious codebase. The primary change is the relegation of external slugs
+to an optional addon, and the adoption of what were formerly "cached slugs"
+as the primary way of handling slugging.
+
 ## 3.3.0 (NOT_RELEASED_YET)
+
+This is a compatiblity branch and will be maintained for apps that can't
+upgrade to 4.0. No new features are planned, only bugfixes. If you're creating
+a new app, please use 4.x.
 
 * Support for Active Record 2.3 dropped
 * Convert blank slugs to nil automatically ([Gabe da Silveira ](https://github.com/dasil003))
