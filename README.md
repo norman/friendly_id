@@ -24,8 +24,10 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
 ## Version 4.x
 
-FriendlyId 4.x introduces many changes incompatible with 3.x. If you're upgrading,
-please read the docs to see what's new.
+FriendlyId 4.x introduces many changes incompatible with 3.x. If you're
+upgrading, please [read the
+docs](http://norman.github.com/friendly_id/file.WhatsNew.html) to see what's
+new.
 
 ## Rails Quickstart
 
@@ -35,7 +37,7 @@ please read the docs to see what's new.
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.0.beta7"
+    gem "friendly_id", "~> 4.0.0.beta8"
 
 
     rails generate scaffold user name:string slug:string
@@ -60,7 +62,7 @@ please read the docs to see what's new.
 ## Docs
 
 The current docs can be found
-[here](http://rdoc.info/github/norman/friendly_id/a4128af31d85ee29ad8f/frames).
+[here](http://norman.github.com/friendly_id/)
 
 ## Benchmarks
 
