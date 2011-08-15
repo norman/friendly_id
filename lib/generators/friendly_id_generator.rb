@@ -1,16 +1,16 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
+# This generator adds a migration for the {FriendlyId::History
+# FriendlyId::History} addon.
 class FriendlyIdGenerator < Rails::Generators::Base
-
   include Rails::Generators::Migration
 
-  source_root File.expand_path('../../../generators/friendly_id/templates', __FILE__)
+  source_root File.expand_path('../../friendly_id', __FILE__)
 
-  class_option :"skip-migration", :type => :boolean, :desc => "Don't generate a migration for the slugs table"
-
+  # Copies the migration template to db/migrate.
   def copy_files(*args)
-    migration_template 'create_slugs.rb', "db/migrate/create_slugs.rb" unless options["skip-migration"]
+    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb'
   end
 
   # Taken from ActiveRecord's migration generator
@@ -21,5 +21,4 @@ class FriendlyIdGenerator < Rails::Generators::Base
       "%.3d" % (current_migration_number(dirname) + 1)
     end
   end
-
 end
