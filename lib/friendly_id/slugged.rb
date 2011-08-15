@@ -1,105 +1,220 @@
+# encoding: utf-8
+require "friendly_id/slug_sequencer"
+
 module FriendlyId
-  module Slugged
+=begin
+This module adds in-table slugs to a model.
 
-    class Status < FriendlyId::Status
+Slugs are unique id strings that have been processed to remove or replace
+characters that a developer considers inconvenient for use in URLs. For example,
+blog applications typically use a post title to provide the basis of a search
+engine friendly URL:
 
-      attr_accessor :sequence, :slug
+    "Gone With The Wind" -> "gone-with-the-wind"
 
-      # Did the find operation use the best possible id? True if +id+ is
-      # numeric, but the model has no slug, or +id+ is friendly and current
-      def best?
-        current? || (numeric? && !record.slug)
-      end
+FriendlyId generates slugs from a method or column that you specify, and stores
+them in a field in your model. By default, this field must be named +:slug+,
+though you may change this using the
+{FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
+option. You should add an index to this field. You may also wish to constrain it
+to NOT NULL, but this depends on your app's behavior and requirements.
 
-      # Did the find operation use the current slug?
-      def current?
-        !! slug && slug.current?
-      end
+=== Example Setup
 
-      # Did the find operation use a friendly id?
-      def friendly?
-        !! (name or slug)
-      end
-
-      def friendly_id=(friendly_id)
-        @name, @sequence = friendly_id.parse_friendly_id(record.friendly_id_config.sequence_separator)
-      end
-
-      # Did the find operation use an outdated slug?
-      def outdated?
-        !current?
-      end
-
-      # The slug that was used to find the model.
-      def slug
-        @slug ||= record.find_slug(name, sequence)
-      end
-
+    # your model
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
+      validates_presence_of :title, :slug, :body
     end
 
-    module Model
-      attr_accessor :slug
-
-      def find_slug
-        raise NotImplementedError
-      end
-
-      def friendly_id_config
-        self.class.friendly_id_config
-      end
-
-      # Get the {FriendlyId::Status} after the find has been performed.
-      def friendly_id_status
-        @friendly_id_status ||= Status.new(:record => self)
-      end
-
-      # The friendly id.
-      # @param
-      def friendly_id(skip_cache = false)
-        if friendly_id_config.cache_column? && !skip_cache
-          friendly_id = send(friendly_id_config.cache_column)
+    # a migration
+    class CreatePosts < ActiveRecord::Migration
+      def self.up
+        create_table :posts do |t|
+          t.string :title, :null => false
+          t.string :slug, :null => false
+          t.text :body
         end
-        friendly_id || (slug.to_friendly_id if slug?)
+
+        add_index :posts, :slug, :unique => true
       end
 
-      # Clean up the string before setting it as the friendly_id. You can override
-      # this method to add your own custom normalization routines.
-      # @param string An instance of {FriendlyId::SlugString}.
-      # @return [String]
-      def normalize_friendly_id(string)
-        string.normalize_for!(friendly_id_config).to_s
+      def self.down
+        drop_table :posts
+      end
+    end
+
+=== Slug Format
+
+By default, FriendlyId uses Active Support's
+paramaterize[http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize]
+method to create slugs. This method will intelligently replace spaces with
+dashes, and Unicode Latin characters with ASCII approximations:
+
+  movie = Movie.create! :title => "Der Preis fürs Überleben"
+  movie.slug #=> "der-preis-furs-uberleben"
+
+==== Slug Uniqueness
+
+When you try to insert a record that would generate a duplicate friendly id,
+FriendlyId will append a sequence to the generated slug to ensure uniqueness:
+
+  car = Car.create :title => "Peugot 206"
+  car2 = Car.create :title => "Peugot 206"
+
+  car.friendly_id #=> "peugot-206"
+  car2.friendly_id #=> "peugot-206--2"
+
+==== Changing the Slug Sequence Separator
+
+You can do this with the {Slugged::Configuration#sequence_separator
+sequence_separator} configuration option.
+
+==== Column or Method?
+
+FriendlyId always uses a method as the basis of the slug text - not a column. It
+first glance, this may sound confusing, but remember that Active Record provides
+methods for each column in a model's associated table, and that's what
+FriendlyId uses.
+
+Here's an example of a class that uses a custom method to generate the slug:
+
+  class Person < ActiveRecord::Base
+    friendly_id :name_and_location
+    def name_and_location
+      "#{name} from #{location}"
+    end
+  end
+
+  bob = Person.create! :name => "Bob Smith", :location => "New York City"
+  bob.friendly_id #=> "bob-smith-from-new-york-city"
+
+==== Providing Your Own Slug Processing Method
+
+You can override {Slugged#normalize_friendly_id} in your model for total
+control over the slug format.
+
+==== Locale-specific Transliterations
+
+Active Support's +parameterize+ uses
+transliterate[http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate],
+which in turn can use I18n's transliteration rules to consider the current
+locale when replacing Latin characters:
+
+  # config/locales/de.yml
+  de:
+    i18n:
+      transliterate:
+        rule:
+          ü: "ue"
+          ö: "oe"
+          etc...
+
+  movie = Movie.create! :title => "Der Preis fürs Überleben"
+  movie.slug #=> "der-preis-fuers-ueberleben"
+
+This functionality was in fact taken from earlier versions of FriendlyId.
+=end
+  module Slugged
+
+    # Sets up behavior and configuration options for FriendlyId's slugging
+    # feature.
+    def self.included(model_class)
+      model_class.instance_eval do
+        friendly_id_config.class.send :include, Configuration
+        friendly_id_config.defaults[:slug_column]        ||= 'slug'
+        friendly_id_config.defaults[:sequence_separator] ||= '--'
+        friendly_id_config.slug_sequencer_class          ||= Class.new(SlugSequencer)
+        before_validation :set_slug
+      end
+    end
+
+    # Process the given value to make it suitable for use as a slug.
+    #
+    # This method is not intended to be invoked directly; FriendlyId uses it
+    # internaly to process strings into slugs.
+    #
+    # However, if FriendlyId's default slug generation doesn't suite your needs,
+    # you can override this method in your model class to control exactly how
+    # slugs are generated.
+    #
+    # === Example
+    #
+    #   class Person < ActiveRecord::Base
+    #     friendly_id :name_and_location
+    #
+    #     def name_and_location
+    #       "#{name} from #{location}"
+    #     end
+    #
+    #     # Use default slug, but uupper case and with underscores
+    #     def normalize_friendly_id(string)
+    #       super.upcase.gsub("-", "_")
+    #     end
+    #   end
+    #
+    #   bob = Person.create! :name => "Bob Smith", :location => "New York City"
+    #   bob.friendly_id #=> "BOB_SMITH_FROM_NEW_YORK_CITY"
+    #
+    # === More Resources
+    #
+    # You might want to look into Babosa[https://github.com/norman/babosa],
+    # which is the slugging library used by FriendlyId prior to version 4, which
+    # offers some specialized functionality missing from Active Support.
+    #
+    # @param [#to_s] value The value used as the basis of the slug.
+    # @return The candidate slug text, without a sequence.
+    def normalize_friendly_id(value)
+      value.to_s.parameterize
+    end
+
+    # Gets a new instance of the configured slug sequencing class.
+    #
+    # @see FriendlyId::SlugSequencer
+    def slug_sequencer
+      friendly_id_config.slug_sequencer_class.new(self)
+    end
+
+    # Sets the slug.
+    def set_slug
+      send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
+    end
+    private :set_slug
+
+    # This module adds the +:slug_column+, and +:sequence_separator+, and
+    # +:slug_sequencer_class+ configuration options to
+    # {FriendlyId::Configuration FriendlyId::Configuration}.
+    module Configuration
+      attr_writer :slug_column, :sequence_separator
+      attr_accessor :slug_sequencer_class
+
+      # Makes FriendlyId use the slug column for querying.
+      # @return String The slug column.
+      def query_field
+        slug_column
       end
 
-      # Does the instance have a slug?
-      def slug?
-        !! slug
+      # The string used to separate a slug base from a numeric sequence.
+      #
+      # By default, +--+ is used to separate the slug from the sequence.
+      # FriendlyId uses two dashes to distinguish sequences from slugs with
+      # numbers in their name.
+      #
+      # You can change the default separator by setting the
+      # {FriendlyId::Slugged::Configuration#sequence_separator
+      # sequence_separator} configuration option.
+      #
+      # For obvious reasons, you should avoid setting it to "+-+" unless you're
+      # sure you will never want to have a friendly id with a number in it.
+      # @return String The sequence separator string. Defaults to "+--+".
+      def sequence_separator
+        @sequence_separator or defaults[:sequence_separator]
       end
 
-      private
-
-      # Get the processed string used as the basis of the friendly id.
-      def slug_text
-        text = send(friendly_id_config.method)
-        text = normalize_friendly_id(SlugString.new(text)) unless text.nil?
-        text = nil if text.blank?
-        unless text.nil? && friendly_id_config.allow_nil?
-          SlugString.new(text).validate_for!(friendly_id_config).to_s
-        end
-      end
-
-      # Has the slug text changed?
-      def slug_text_changed?
-        slug_text != slug.name
-      end
-
-      # Has the basis of our friendly id changed, requiring the generation of a
-      # new slug?
-      def new_slug_needed?
-        if friendly_id_config.allow_nil?
-          (!slug? && !slug_text.blank?) || (slug? && slug_text_changed?)
-        else
-          !slug? || slug_text_changed?
-        end
+      # The column that will be used to store the generated slug.
+      def slug_column
+        @slug_column or defaults[:slug_column]
       end
     end
   end

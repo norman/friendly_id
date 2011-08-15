@@ -1,93 +1,139 @@
-require "babosa"
-require "forwardable"
-require "friendly_id/slug_string"
+# encoding: utf-8
+require "thread"
+require "friendly_id/base"
+require "friendly_id/model"
+require "friendly_id/object_utils"
 require "friendly_id/configuration"
-require "friendly_id/status"
-require "friendly_id/slugged"
+require "friendly_id/finder_methods"
 
-# FriendlyId is a comprehensive Ruby library for slugging and permalinks with
-# ActiveRecord.
-# @author Norman Clarke
-# @author Emilio Tagua
-# @author Adrian Mugnolo
+=begin
+
+== About FriendlyId
+
+FriendlyId is an add-on to Ruby's Active Record that allows you to replace ids
+in your URLs with strings:
+
+    # without FriendlyId
+    http://example.com/states/4323454
+
+    # with FriendlyId
+    http://example.com/states/washington
+
+It requires few changes to your application code and offers flexibility,
+performance and a well-documented codebase.
+
+=== Concepts
+
+Although FriendlyId helps with URLs, it does all of its work inside your models,
+not your routes.
+
+=== Simple Models
+
+The simplest way to use FriendlyId is with a model that has a uniquely indexed
+column with no spaces or special characters, and that is seldom or never
+updated. The most common example of this is a user name:
+
+    class User < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :login
+      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
+    end
+
+    @user = User.find "joe"   # the old User.find(1) still works, too
+    @user.to_param            # returns "joe"
+    redirect_to @user         # the URL will be /users/joe
+
+In this case, FriendlyId assumes you want to use the column as-is; it will never
+modify the value of the column, and your application should ensure that the
+value is admissible in a URL:
+
+    class City < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :name
+    end
+
+    @city.find "Viña del Mar"
+    redirect_to @city # the URL will be /cities/Viña%20del%20Mar
+
+For this reason, it is often more convenient to use "slugs" rather than a single
+column.
+
+=== Slugged Models
+
+FriendlyId can uses a separate column to store slugs for models which require
+some processing of the friendly_id text. The most common example is a blog
+post's title, which may have spaces, uppercase characters, or other attributes
+you wish to modify to make them more suitable for use in URL's.
+
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
+    end
+
+    @post = Post.create(:title => "This is the first post!")
+    @post.friendly_id   # returns "this-is-the-first-post"
+    redirect_to @post   # the URL will be /posts/this-is-the-first-post
+
+In general, use slugs by default unless you know for sure you don't need them.
+
+@author Norman Clarke
+=end
 module FriendlyId
 
-  # An error based on this class is raised when slug generation fails
-  class SlugGenerationError < StandardError ; end
+  # The current version.
+  VERSION = "4.0.0.beta7"
 
-  # Raised when the slug text is blank.
-  class BlankError < SlugGenerationError ; end
+  @mutex = Mutex.new
 
-  # Raised when the slug text is reserved.
-  class ReservedError < SlugGenerationError ; end
+  autoload :History,  "friendly_id/history"
+  autoload :Reserved, "friendly_id/reserved"
+  autoload :Scoped,   "friendly_id/scoped"
+  autoload :Slugged,  "friendly_id/slugged"
 
-  module Base
-    # Set up a model to use a friendly_id. This method accepts a hash with
-    # {FriendlyId::Configuration several possible options}.
-    #
-    # @param [#to_sym] method The column or method that should be used as the
-    #   basis of the friendly_id string.
-    #
-    # @param [Hash] options For valid configuration options, see
-    #   {FriendlyId::Configuration}.
-    #
-    # @example
-    #
-    #   class User < ActiveRecord::Base
-    #     has_friendly_id :user_name
-    #   end
-    #
-    #   class Post < ActiveRecord::Base
-    #     has_friendly_id :title, :use_slug => true, :approximate_ascii => true
-    #   end
-    #
-    # @see FriendlyId::Configuration
-    def has_friendly_id(method, options = {})
-      raise NotImplementedError
+  # FriendlyId takes advantage of `extended` to do basic model setup, primarily
+  # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
+  # friendly_id} as a class method.
+  #
+  # Previous versions of FriendlyId simply patched ActiveRecord::Base, but this
+  # version tries to be less invasive.
+  #
+  # In addition to adding {FriendlyId::Base#friendly_id friendly_id}, the class
+  # instance variable +@friendly_id_config+ is added. This variable is an
+  # instance of an anonymous subclass of {FriendlyId::Configuration}. This
+  # allows subsequently loaded modules like {FriendlyId::Slugged} and
+  # {FriendlyId::Scoped} to add functionality to the configuration class only
+  # for the current class, rather than monkey patching
+  # {FriendlyId::Configuration} directly. This isolates other models from large
+  # feature changes an addon to FriendlyId could potentially introduce.
+  #
+  # The upshot of this is, you can htwo Active Record models that both have a
+  # @friendly_id_config, but each config object can have different methods and
+  # behaviors depending on what modules have been loaded, without conflicts.
+  # Keep this in mind if you're hacking on FriendlyId.
+  #
+  # For examples of this, see the source for {Scoped.included}.
+  def self.extended(model_class)
+    model_class.instance_eval do
+      extend Base
+      @friendly_id_config = Class.new(Configuration).new(self)
+      FriendlyId.defaults.call @friendly_id_config
     end
-
-    # Does the model class use the FriendlyId plugin?
-    def uses_friendly_id?
-      respond_to? :friendly_id_config
-    end
+    ActiveRecord::Relation.send :include, FinderMethods
   end
 
-end
-
-class String
-  def parse_friendly_id(separator = nil)
-    separator ||= FriendlyId::Configuration::DEFAULTS[:sequence_separator]
-    name, sequence = split(/#{Regexp.escape(separator)}(\d+)?\z/)
-    return name, (sequence ||= 1).to_i
-  end
-end
-
-class Object
-
-  # Is the object a friendly id? Note that the return value here is
-  # +false+ if the +id+ is definitely not friendly, and +nil+ if it can
-  # not be determined.
-  # The return value will be:
-  # * +true+ - if the id is definitely friendly (i.e., a string with non-numeric characters)
-  # * +false+ - if the id is definitely unfriendly (i.e., an Integer, a model instance, etc.)
-  # * +nil+ - if it can not be determined (i.e., a numeric string like "206".)
-  # @return [true, false, nil]
-  # @see #unfriendly?
-  def friendly_id?
-    if kind_of?(Integer) or kind_of?(Symbol) or self.class.respond_to? :friendly_id_config
-      false
-    elsif to_i.to_s != to_s
-      true
+  # Set global defaults for all models using FriendlyId.
+  #
+  # The default defaults are to use the +:reserved+ module and nothing else.
+  #
+  # @example
+  #   FriendlyId.defaults do |config|
+  #     config.base = :name
+  #     config.use :slugged
+  #   end
+  def self.defaults(&block)
+    @mutex.synchronize do
+      @defaults = block if block_given?
+      @defaults ||= lambda {|config| config.use :reserved}
     end
   end
-
-  # Is the object a numeric id?
-  # @return [true, false, nil] +true+ if definitely unfriendly, +false+ if
-  #   definitely friendly, else +nil+.
-  # @see #friendly?
-  def unfriendly_id?
-    val = friendly_id? ; !val unless val.nil?
-  end
 end
-
-require "friendly_id/railtie" if defined?(Rails) && Rails.version >= "3"

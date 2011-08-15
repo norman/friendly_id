@@ -1,79 +1,77 @@
 require "rubygems"
-require "rake"
 require "rake/testtask"
-require "rubygems/package_task"
-require "rake/clean"
-require "bundler/setup"
 
 task :default => :test
 
-CLEAN << "pkg" << "doc" << "coverage" << ".yardoc"
-
-gemspec = File.expand_path("../friendly_id.gemspec", __FILE__)
-if File.exists? gemspec
-  Gem::PackageTask.new(eval(File.read("friendly_id.gemspec"))) { |pkg| }
+Rake::TestTask.new do |t|
+  t.test_files = FileList['test/*_test.rb']
+  t.verbose = true
 end
 
-begin
-  require "yard"
-  YARD::Rake::YardocTask.new do |t|
-    t.options = ["--output-dir=doc"]
-    t.options << "--files" << ["Guide.md", "Contributors.md", "Changelog.md"].join(",")
-  end
-rescue LoadError
+task :clean do
+  %x{rm -rf *.gem doc pkg coverage}
+  %x{rm -f `find . -name '*.rbc'`}
 end
 
-begin
-  require "rcov/rcovtask"
-  Rcov::RcovTask.new do |r|
-    r.test_files = FileList["test/**/*_test.rb"]
-    r.verbose = true
-    r.rcov_opts << "--exclude gems/*"
-  end
-rescue LoadError
+task :gem do
+  %x{gem build friendly_id.gemspec}
 end
 
+task :yard do
+  puts %x{bundle exec yard}
+end
 
-Rake::TestTask.new(:test) { |t| t.pattern = "test/**/*_test.rb" }
+task :bench do
+  require File.expand_path("../bench", __FILE__)
+end
 
 namespace :test do
-  task :rails do
-    rm_rf "fid"
-    sh "rails --template extras/template-gem.rb fid"
-    sh "cd fid; rake test"
-  end
-  Rake::TestTask.new(:friendly_id) { |t| t.pattern = "test/*_test.rb" }
-  Rake::TestTask.new(:ar) { |t| t.pattern = "test/active_record_adapter/*_test.rb" }
 
-  desc "Test against lots of versions"
-  task :pre_release do
-    ["ree-1.8.7-2010.02", "ruby-1.9.2-p136"].each do |ruby|
-      ["sqlite3", "mysql", "postgres"].each do |driver|
-        [2, 3].each do |ar_version|
-          command = "rake-#{ruby} test AR=#{ar_version} DB=#{driver}"
-          puts command
-          puts `#{command}`
-        end
-      end
-    end
-  end
-
-  namespace :rails do
-    task :plugin do
-      rm_rf "fid"
-      sh "rails --template extras/template-plugin.rb fid"
-      sh "cd fid; rake test"
+  desc "Run each test class in a separate process"
+  task :isolated do
+    dir = File.expand_path("../test", __FILE__)
+    Dir["#{dir}/*_test.rb"].each do |test|
+      puts "Running #{test}:"
+      puts %x{ruby #{test}}
     end
   end
 end
 
-task :pushdocs do
-  branch = `git branch | grep "*"`.chomp.gsub("* ", "")
-  sh "git stash"
-  sh "git checkout gh-pages"
-  sh "cp -rp doc/* ."
-  sh 'git commit -a -m "Regenerated docs"'
-  sh "git push origin gh-pages"
-  sh "git checkout #{branch}"
-  sh "git stash apply"
+namespace :db do
+
+  desc "Create the database"
+  task :create do
+    require File.expand_path("../test/helper", __FILE__)
+    driver = FriendlyId::Test::Database.driver
+    config = FriendlyId::Test::Database.config[driver]
+    commands = {
+      "mysql"    => "mysql -e 'create database #{config["database"]};' >/dev/null",
+      "postgres" => "psql -c 'create database #{config['database']};' -U #{config['username']} >/dev/null"
+    }
+    %x{#{commands[driver] || true}}
+  end
+
+  desc "Create the database"
+  task :drop do
+    require File.expand_path("../test/helper", __FILE__)
+    driver = FriendlyId::Test::Database.driver
+    config = FriendlyId::Test::Database.config[driver]
+    commands = {
+      "mysql"    => "mysql -e 'drop database #{config["database"]};' >/dev/null",
+      "postgres" => "psql -c 'drop database #{config['database']};' -U #{config['username']} >/dev/null"
+    }
+    %x{#{commands[driver] || true}}
+  end
+
+  desc "Set up the database schema"
+  task :up do
+    require File.expand_path("../test/helper", __FILE__)
+    FriendlyId::Test::Schema.up
+  end
+
+  desc "Drop and recreate the database schema"
+  task :reset => [:drop, :create]
+
 end
+
+task :doc => :yard

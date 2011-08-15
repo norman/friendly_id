@@ -1,4 +1,0 @@
-adapter: mysql2
-database: friendly_id_test
-username: root
-hostname: 127.0.0.1
