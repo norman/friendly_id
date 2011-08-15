@@ -92,6 +92,16 @@ significant help early in its life by Emilio Tagua. I'm deeply gratful for the
 generous contributions over the years from [many
 volunteers](https://github.com/norman/friendly_id/contributors).
 
+Part of the inspiration to rework FriendlyId came from Darcy Laycock's library
+[Slugged](https://github.com/Sutto/slugged), which he was inspired to create
+because of frustrations he experienced while using FriendlyId 3.x. Seeing a
+smart programmer become frustrated with my code was enough of a kick in the
+butt to make me want to improve this library significantly.
+
+Many thanks to him for providing valid, real criticism while still being a cool
+about it. I definitely recommend you check out his library if for some reason
+FriendlyId doesn't do it for you.
+
 Lastly, FriendlyId uses [Travis](http://travis-ci.org/) for continuous
 integration. It's an excellent, free service created by a whole bunch of [good
 people](https://github.com/travis-ci) - if you're not already using it, you
