@@ -12,6 +12,8 @@ module FriendlyId
         end
 
         def up
+          # TODO: use schema version to avoid ugly hacks like this
+          return if @done
           CreateFriendlyIdSlugs.up
 
           tables.each do |table_name|
@@ -35,6 +37,7 @@ module FriendlyId
 
           # This will be used to test STI
           add_column :journalists, "type", :string
+          @done = true
         end
 
         private
