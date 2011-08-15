@@ -1,5 +1,7 @@
 # FriendlyId
 
+[![Build Status](http://travis-ci.org/norman/friendly_id.png)](http://travis-ci.org/norman/friendly_id)
+
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URL's and work with human-friendly
 strings as if they were numeric ids for Active Record models.
@@ -84,5 +86,10 @@ FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
 significant help early in its life by Emilio Tagua. I'm deeply gratful for the
 generous contributions over the years from [many
 volunteers](https://github.com/norman/friendly_id/contributors).
+
+Lastly, FriendlyId uses [Travis](http://travis-ci.org/) for continuous
+integration. It's an excellent, free service created by a whole bunch of [good
+people](https://github.com/travis-ci) - if you're not already using it, you
+should be!
 
 Copyright (c) 2008-2011 Norman Clarke, released under the MIT license.
