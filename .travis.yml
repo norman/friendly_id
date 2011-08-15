@@ -11,7 +11,7 @@ env:
   - DB=sqlite3
 
 gemfile:
-  - ci/Gemfile.rails-3.0.rb
-  - ci/Gemfile.rails-3.1.rb
+  - gemfiles/Gemfile.rails-3.0.rb
+  - gemfiles/Gemfile.rails-3.1.rb
 
 script: "bundle exec rake db:reset db:up test"
