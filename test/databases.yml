@@ -1,7 +1,7 @@
 mysql:
   adapter: mysql2
   database: friendly_id_test
-  username:
+  username: root
   hostname: localhost
   encoding: utf8
 
