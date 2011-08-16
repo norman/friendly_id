@@ -57,8 +57,6 @@ current locale:
   I18n.with_locale(:es) do
     post.set_friendly_id("la-guerra-de-las-galaxas")
   end
-
-
 =end
   module I18n
     def self.included(model_class)

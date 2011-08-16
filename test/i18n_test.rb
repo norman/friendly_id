@@ -38,12 +38,14 @@ class I18nTest < MiniTest::Unit::TestCase
   end
 
   test "to_param should return the numeric id when there's no slug for the current locale" do
-    journalist = Journalist.new(:name => "Juan Fulano")
-    I18n.with_locale(:es) do
-      journalist.save!
-      assert_equal "juan-fulano", journalist.to_param
+    transaction do
+      journalist = Journalist.new(:name => "Juan Fulano")
+      I18n.with_locale(:es) do
+        journalist.save!
+        assert_equal "juan-fulano", journalist.to_param
+      end
+      assert_equal journalist.id.to_s, journalist.to_param
     end
-    assert_equal journalist.id.to_s, journalist.to_param
   end
 
   test "should set friendly id for locale" do
