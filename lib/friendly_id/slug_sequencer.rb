@@ -2,15 +2,16 @@ module FriendlyId
   # This class offers functionality to check slug strings for uniqueness and,
   # if necessary, append a sequence to ensure it.
   class SlugSequencer
-    attr_reader :sluggable
+    attr_reader :sluggable, :normalized
 
-    def initialize(sluggable)
-      @sluggable = sluggable
+    def initialize(sluggable, normalized)
+      @sluggable  = sluggable
+      @normalized = normalized
     end
 
     # Given a slug, get the next available slug in the sequence.
     def next
-      sequence = conflict.slug.split(separator)[1].to_i
+      sequence = conflict.to_param.split(separator)[1].to_i
       next_sequence = sequence == 0 ? 2 : sequence.next
       "#{normalized}#{separator}#{next_sequence}"
     end
@@ -37,7 +38,7 @@ module FriendlyId
     end
 
     def column
-      sluggable.connection.quote_column_name friendly_id_config.query_field
+      sluggable.connection.quote_column_name friendly_id_config.slug_column
     end
 
     def conflict?
@@ -65,10 +66,6 @@ module FriendlyId
 
     def new_record?
       sluggable.new_record?
-    end
-
-    def normalized
-      @normalized ||= sluggable.normalize_friendly_id(base)
     end
 
     def separator

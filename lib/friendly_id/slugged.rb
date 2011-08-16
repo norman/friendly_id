@@ -172,8 +172,9 @@ This functionality was in fact taken from earlier versions of FriendlyId.
     # Gets a new instance of the configured slug sequencing class.
     #
     # @see FriendlyId::SlugSequencer
-    def slug_sequencer
-      friendly_id_config.slug_sequencer_class.new(self)
+    def slug_sequencer(normalized = nil)
+      normalized ||= normalize_friendly_id(send(friendly_id_config.base))
+      friendly_id_config.slug_sequencer_class.new(self, normalized)
     end
 
     # Sets the slug.

@@ -53,7 +53,7 @@ module FriendlyId
     #   end
     # @param [#to_s] *modules Arguments should be a symbols or strings that
     #   correspond with the name of a module inside the FriendlyId namespace. By
-    #   default FriendlyId provides +:slugged+, +:history+ and +:scoped+.
+    #   default FriendlyId provides +:slugged+, +:history+, +:i18n+ and +:scoped+.
     def use(*modules)
       modules.to_a.flatten.compact.map do |name|
         mod = FriendlyId.const_get(name.to_s.classify)
