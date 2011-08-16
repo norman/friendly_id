@@ -148,7 +148,7 @@ This functionality was in fact taken from earlier versions of FriendlyId.
     #       "#{name} from #{location}"
     #     end
     #
-    #     # Use default slug, but uupper case and with underscores
+    #     # Use default slug, but upper case and with underscores
     #     def normalize_friendly_id(string)
     #       super.upcase.gsub("-", "_")
     #     end
