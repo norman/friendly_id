@@ -40,6 +40,17 @@ module FriendlyId
             assert record2.friendly_id.match(/2\z/)
           end
         end
+
+        test "should create slug on save if the slug is nil" do
+          with_instance_of model_class do |record|
+            record.slug = nil
+            record.save!
+            assert_nil record.slug
+            record.save
+            refute_nil record.slug
+          end
+        end
+
       end
 
       module Core
