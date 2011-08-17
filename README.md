@@ -29,6 +29,12 @@ upgrading, please [read the
 docs](http://norman.github.com/friendly_id/file.WhatsNew.html) to see what's
 new.
 
+## Docs
+
+The current docs can alwaus be found
+[here](http://rubydoc.info/github/norman/friendly_id/master/frames).
+
+
 ## Rails Quickstart
 
     gem install friendly_id
@@ -38,7 +44,6 @@ new.
     cd my_app
 
     gem "friendly_id", "~> 4.0.0.beta8"
-
 
     rails generate scaffold user name:string slug:string
 
@@ -59,10 +64,11 @@ new.
 
     GET http://localhost:3000/users/joe-schmoe
 
-## Docs
+    # If you're adding FriendlyId to an existing app and need
+    # to generate slugs for existing users, do this from the
+    # console, runner, or add a Rake task:
+    User.all.map(&:save)
 
-The current docs can be found
-[here](http://norman.github.com/friendly_id/)
 
 ## Benchmarks
 
@@ -79,13 +85,13 @@ If you have a bug to report, please include the following information:
 
 * **Version information for FriendlyId, Rails and Ruby.**
 * Stack trace and error message.
- * Any snippets of relevant model, view or controller code that shows how you
+* Any snippets of relevant model, view or controller code that shows how you
   are using FriendlyId.
 
 If you are able to, it helps even more if you can fork FriendlyId on Github,
 and add a test that reproduces the error you are experiencing.
 
-## Credits
+## Thanks and Credits
 
 FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
 significant help early in its life by Emilio Tagua. I'm deeply gratful for the
@@ -102,9 +108,33 @@ Many thanks to him for providing valid, real criticism while still being a cool
 about it. I definitely recommend you check out his library if for some reason
 FriendlyId doesn't do it for you.
 
+Thanks also to Loren Segal and Nick Plante for YARD and the
+[rubydoc.info](http://rubydoc.info/) website which FriendlyId uses for
+documentation.
+
 Lastly, FriendlyId uses [Travis](http://travis-ci.org/) for continuous
 integration. It's an excellent, free service created by a whole bunch of [good
 people](https://github.com/travis-ci) - if you're not already using it, you
 should be!
 
+## License
+
 Copyright (c) 2008-2011 Norman Clarke, released under the MIT license.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
