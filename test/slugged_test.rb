@@ -16,6 +16,15 @@ class SluggedTest < MiniTest::Unit::TestCase
   def model_class
     Journalist
   end
+
+  test "should not allow reserved words in resulting slug" do
+    ["new", "New", "NEW"].each do |word|
+      transaction do
+        assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
+      end
+    end
+  end
+
 end
 
 class SlugSequencerTest < MiniTest::Unit::TestCase
