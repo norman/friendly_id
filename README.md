@@ -31,7 +31,7 @@ new.
 
 ## Docs
 
-The current docs can alwaus be found
+The current docs can always be found
 [here](http://rubydoc.info/github/norman/friendly_id/master/frames).
 
 
