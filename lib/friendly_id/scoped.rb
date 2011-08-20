@@ -124,7 +124,7 @@ an example of one way to set this up:
 
       def conflict
         column = friendly_id_config.scope_column
-        conflicts.where("#{column} = ?", sluggable.send(column)).first
+        conflicts.where(column => sluggable.send(column)).first
       end
     end
   end
