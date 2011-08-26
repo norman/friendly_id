@@ -34,7 +34,10 @@ module FriendlyId
 
           # This will be used to test column name quoting
           add_column :journalists, "strange name", :string
-
+          
+          # This will be used to test default scoping interaction
+          add_column :ordered_journalists, :position, :integer
+          
           # This will be used to test STI
           add_column :journalists, "type", :string
 
@@ -48,7 +51,7 @@ module FriendlyId
         private
 
         def slugged_tables
-          ["journalists", "articles", "novelists", "novels", "manuals"]
+          ["journalists", "ordered_journalists", "articles", "novelists", "novels", "manuals"]
         end
 
         def simple_tables
