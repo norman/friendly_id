@@ -37,6 +37,7 @@ module FriendlyId
           
           # This will be used to test default scoping interaction
           add_column :ordered_journalists, :position, :integer
+          add_column :ordered_journalists, :department, :string
           
           # This will be used to test STI
           add_column :journalists, "type", :string
