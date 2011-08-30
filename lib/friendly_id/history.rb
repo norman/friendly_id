@@ -63,9 +63,9 @@ method.
       klass.instance_eval do
         raise "FriendlyId::History is incompatibe with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => "FriendlyId::Slug"
+        has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
         before_save :build_slug, :if => lambda {|r| r.slug_sequencer.slug_changed?}
-        scope :with_friendly_id, lambda {|id| includes(:slugs).where("friendly_id_slugs.slug = ?", id)}
+        scope :with_friendly_id, lambda {|id| includes(:slugs).where("#{Slug.table_name}.slug" => id)}
         extend Finder
       end
     end
