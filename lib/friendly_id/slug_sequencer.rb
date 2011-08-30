@@ -55,7 +55,7 @@ module FriendlyId
     def conflicts
       pkey  = sluggable.class.primary_key
       value = sluggable.send pkey
-      scope = sluggable.class.where("#{column} = ? OR #{column} LIKE ?", normalized, wildcard)
+      scope = sluggable.class.unscoped.where("#{column} = ? OR #{column} LIKE ?", normalized, wildcard)
       scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
       scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
     end

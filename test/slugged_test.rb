@@ -74,6 +74,30 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
   end
 end
 
+class DefaultScopeTest < MiniTest::Unit::TestCase
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged
+    default_scope :order => 'id ASC', :conditions => { :active => true }
+  end
+
+  test "friendly_id should correctly sequence a default_scoped ordered table" do
+    transaction do
+      3.times { assert Journalist.create :name => "a", :active => true }
+    end
+  end
+
+  test "friendly_id should correctly sequence a default_scoped scoped table" do
+    transaction do
+      assert Journalist.create :name => "a", :active => false
+      assert Journalist.create :name => "a", :active => true
+    end
+  end
+end
+
 class SluggedRegressionsTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
