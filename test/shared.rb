@@ -25,7 +25,7 @@ module FriendlyId
         test "should not add slug sequence on update after other conflicting slugs were added" do
           with_instance_of model_class do |record|
             old = record.friendly_id
-            record2 = model_class.create! :name => record.name
+            model_class.create! :name => record.name
             record.save!
             record.reload
             assert_equal old, record.to_param
