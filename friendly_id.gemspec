@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "activerecord", "~> 3.0"
   s.add_development_dependency "mocha", "~> 0.9"
   s.add_development_dependency "sqlite3", "~> 1.3"
+  s.add_development_dependency "rake", "~> 0.9.2"
 
   s.post_install_message = <<-EOM
     FriendlyId 3.3.x is now in long-term maintanence. For new projects with
