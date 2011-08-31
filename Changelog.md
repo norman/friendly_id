@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 3.3.0 (NOT_RELEASED_YET)
+## 3.3.0 (2011-08-31)
 
 * Support for Active Record 2.3 dropped
 * Convert blank slugs to nil automatically ([Gabe da Silveira ](https://github.com/dasil003))
