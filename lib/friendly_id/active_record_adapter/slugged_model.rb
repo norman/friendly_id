@@ -98,7 +98,7 @@ module FriendlyId
       end
 
       # This method was removed in ActiveRecord 3.0.
-      if !ActiveRecord::Base.private_method_defined? :update_without_callbacks
+      if !::ActiveRecord::Base.private_method_defined? :update_without_callbacks
         def update_without_callbacks
           attributes_with_values = arel_attributes_values(false, false, attribute_names)
           return false if attributes_with_values.empty?
