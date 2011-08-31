@@ -12,7 +12,7 @@ platform :ruby do
   gem "sqlite3", "~> 1.3.4"
 end
 
-gem "activerecord", "~> 3.1.0.rc6"
+gem "activerecord", "~> 3.1.0"
 gem "minitest", "~> 2.4.0"
 gem "mocha", "~> 0.9.12"
 gem "rake"
