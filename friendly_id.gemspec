@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     FriendlyId 3.3.x is now in long-term maintanence. For new projects with
     Rails 3.1.x please consider using 4.0, which is under active development:
 
-    https://github.com/norman/friendly_id/tree/4.0.0
+    https://github.com/norman/friendly_id
   EOM
 
   s.description = <<-EOM
