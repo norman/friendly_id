@@ -124,8 +124,8 @@ module FriendlyId
           if result.size == expected_size
             result
           else
-            conditions = arel.send(:where_clauses).join(', ')
-            conditions = " [WHERE #{conditions}]" if conditions.present?
+            conditions = arel.where_sql
+            conditions = " [#{conditions}]" if conditions
             error = "Couldn't find all #{klass.name.pluralize} with IDs "
             error << "(#{ids.join(", ")})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
             raise ActiveRecord::RecordNotFound, error
