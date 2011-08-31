@@ -66,6 +66,15 @@ module FriendlyId
           with_instance_of(model_class) {|record| assert model_class.find record.friendly_id}
         end
 
+        test "should exist? by friendly id" do
+          with_instance_of(model_class) do |record|
+            assert model_class.exists? record.id
+            assert model_class.exists? record.friendly_id
+            assert !model_class.exists?(record.friendly_id + "-hello")
+            assert !model_class.exists?(0)
+          end
+        end
+
         test "should be findable by id as integer" do
           with_instance_of(model_class) {|record| assert model_class.find record.id.to_i}
         end
