@@ -112,7 +112,7 @@ an example of one way to set this up:
       #
       # @return String The scope column
       def scope_column
-        (model_class.reflections[@scope].try(:association_foreign_key) || @scope).to_s
+        (model_class.reflections[@scope].try(:foreign_key) || @scope).to_s
       end
     end
 
