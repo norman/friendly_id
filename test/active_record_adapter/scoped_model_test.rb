@@ -26,12 +26,6 @@ module FriendlyId
         Tourist.delete_all
       end
 
-      test "As of 3.2.0, should raise error if :scope option is passed" do
-        assert_raise(RuntimeError) do
-          Tourist.find("hello", :scope => "usa")
-        end
-      end
-
       test "should not use cached slug column with scopes" do
         @tourist  = Tourist.create!(:name => "John Smith", :country => @usa)
         @tourist2 = Tourist.create!(:name => "John Smith", :country => @canada)

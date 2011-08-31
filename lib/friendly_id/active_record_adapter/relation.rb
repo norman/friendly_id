@@ -141,14 +141,6 @@ module FriendlyId
         end
       end
 
-      def apply_finder_options(options)
-        if options[:scope]
-          raise "The :scope finder option has been removed from FriendlyId 3.2.0 " +
-            "https://github.com/norman/friendly_id/issues#issue/88"
-        end
-        super
-      end
-
       protected
 
       def find_one(id)
