@@ -1,9 +1,10 @@
 module FriendlyId
-  # This class offers functionality to check slug strings for uniqueness and,
-  # if necessary, append a sequence to ensure it.
+  # The default slug generator offers functionality to check slug strings for
+  # uniqueness and, if necessary, appends a sequence to guarantee it.
   class SlugGenerator
     attr_reader :sluggable, :normalized
 
+    # Create a new slug generator.
     def initialize(sluggable, normalized)
       @sluggable  = sluggable
       @normalized = normalized

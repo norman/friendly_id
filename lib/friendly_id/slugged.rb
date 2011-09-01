@@ -202,19 +202,13 @@ This functionality was in fact taken from earlier versions of FriendlyId.
       slug_base != current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
     end
 
-    # Gets a new instance of the configured slug sequencing class.
-    #
-    # @see FriendlyId::SlugGenerator
-    def slug_generator(normalized = nil)
-      normalized ||= normalize_friendly_id(send(friendly_id_config.base))
-      friendly_id_config.slug_generator_class.new(self, normalized)
-    end
-    private :slug_generator
-
     # Sets the slug.
-    def set_slug
+    def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
-        send "#{friendly_id_config.slug_column}=", slug_generator.generate
+        config = self.class.friendly_id_config
+        normalized_slug ||= normalize_friendly_id send(config.base)
+        generator = config.slug_generator_class.new self, normalized_slug
+        send "#{config.slug_column}=", generator.generate
       end
     end
     private :set_slug
