@@ -112,7 +112,19 @@ an example of one way to set this up:
       #
       # @return String The scope column
       def scope_column
-        (model_class.reflections[@scope].try(:foreign_key) || @scope).to_s
+        (reflection_foreign_key or @scope).to_s
+      end
+
+      private
+
+      if ActiveRecord::VERSION::STRING < "3.1"
+        def reflection_foreign_key
+          model_class.reflections[@scope].try(:primary_key_name)
+        end
+      else
+        def reflection_foreign_key
+          model_class.reflections[@scope].try(:foreign_key)
+        end
       end
     end
 
