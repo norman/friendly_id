@@ -30,7 +30,7 @@ class SluggedTest < MiniTest::Unit::TestCase
 
 end
 
-class SlugSequencerTest < MiniTest::Unit::TestCase
+class SlugGeneratorTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
 

@@ -100,10 +100,10 @@ module FriendlyId
     #   Configures the name of the column where FriendlyId will store the slug.
     #   Defaults to +:slug+.
     #
-    # @option options [Symbol] :slug_sequencer_class Available when using +:slugged+.
+    # @option options [Symbol] :slug_generator_class Available when using +:slugged+.
     #   Sets the class used to generate unique slugs. You should not specify this
     #   unless you're doing some extensive hacking on FriendlyId. Defaults to
-    #   {FriendlyId::SlugSequencer}.
+    #   {FriendlyId::SlugGenerator}.
     #
     # @yield Provides access to the model class's friendly_id_config, which
     #   allows an alternate configuration syntax, and conditional configuration

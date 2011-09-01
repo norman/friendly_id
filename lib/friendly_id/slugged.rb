@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "friendly_id/slug_sequencer"
+require "friendly_id/slug_generator"
 
 module FriendlyId
 =begin
@@ -146,7 +146,7 @@ This functionality was in fact taken from earlier versions of FriendlyId.
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.defaults[:slug_column]        ||= 'slug'
         friendly_id_config.defaults[:sequence_separator] ||= '--'
-        friendly_id_config.slug_sequencer_class          ||= Class.new(SlugSequencer)
+        friendly_id_config.slug_generator_class          ||= Class.new(SlugGenerator)
         before_validation :set_slug
       end
     end
@@ -204,27 +204,27 @@ This functionality was in fact taken from earlier versions of FriendlyId.
 
     # Gets a new instance of the configured slug sequencing class.
     #
-    # @see FriendlyId::SlugSequencer
-    def slug_sequencer(normalized = nil)
+    # @see FriendlyId::SlugGenerator
+    def slug_generator(normalized = nil)
       normalized ||= normalize_friendly_id(send(friendly_id_config.base))
-      friendly_id_config.slug_sequencer_class.new(self, normalized)
+      friendly_id_config.slug_generator_class.new(self, normalized)
     end
-    private :slug_sequencer
+    private :slug_generator
 
     # Sets the slug.
     def set_slug
       if should_generate_new_friendly_id?
-        send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
+        send "#{friendly_id_config.slug_column}=", slug_generator.generate
       end
     end
     private :set_slug
 
     # This module adds the +:slug_column+, and +:sequence_separator+, and
-    # +:slug_sequencer_class+ configuration options to
+    # +:slug_generator_class+ configuration options to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_writer :slug_column, :sequence_separator
-      attr_accessor :slug_sequencer_class
+      attr_accessor :slug_generator_class
 
       # Makes FriendlyId use the slug column for querying.
       # @return String The slug column.

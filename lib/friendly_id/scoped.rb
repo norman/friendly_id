@@ -87,7 +87,7 @@ an example of one way to set this up:
         raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
         include Slugged unless self < Slugged
         friendly_id_config.class.send :include, Configuration
-        friendly_id_config.slug_sequencer_class.send :include, SlugSequencer
+        friendly_id_config.slug_generator_class.send :include, SlugGenerator
       end
     end
 
@@ -128,9 +128,9 @@ an example of one way to set this up:
       end
     end
 
-    # This module overrides {FriendlyId::SlugSequencer#conflict} to consider
+    # This module overrides {FriendlyId::SlugGenerator#conflict} to consider
     # scope, to avoid adding sequences to slugs under different scopes.
-    module SlugSequencer
+    module SlugGenerator
 
       private
 

@@ -70,7 +70,7 @@ current locale:
     module Model
       def set_friendly_id(text, locale = nil)
         ::I18n.with_locale(locale || ::I18n.current_locale) do
-          slug = slug_sequencer(normalize_friendly_id(text)).generate
+          slug = slug_generator(normalize_friendly_id(text)).generate
           send "#{friendly_id_config.slug_column}=", slug
         end
       end

@@ -1,7 +1,7 @@
 module FriendlyId
   # This class offers functionality to check slug strings for uniqueness and,
   # if necessary, append a sequence to ensure it.
-  class SlugSequencer
+  class SlugGenerator
     attr_reader :sluggable, :normalized
 
     def initialize(sluggable, normalized)
