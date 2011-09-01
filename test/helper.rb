@@ -8,7 +8,7 @@ require "mocha"
 require "minitest/unit"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
-# require "active_support/core_ext/class"
+
 
 if ENV["COVERAGE"]
   require 'simplecov'
