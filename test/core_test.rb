@@ -1,10 +1,13 @@
 require File.expand_path("../helper.rb", __FILE__)
 
-Author, Book = 2.times.map do
-  Class.new(ActiveRecord::Base) do
-    extend FriendlyId
-    friendly_id :name
-  end
+class Author < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name
+end
+
+class Book < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name
 end
 
 class CoreTest < MiniTest::Unit::TestCase
