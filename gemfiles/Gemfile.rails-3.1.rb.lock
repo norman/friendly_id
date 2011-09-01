@@ -1,3 +1,21 @@
+GIT
+  remote: https://github.com/nicksieger/activerecord-jdbc-adapter.git
+  revision: a2c03d97aa49a74176f9f579864c4d121be00c07
+  specs:
+    activerecord-jdbc-adapter (1.2.0)
+    activerecord-jdbcmysql-adapter (1.2.0)
+      activerecord-jdbc-adapter (~> 1.2.0)
+      jdbc-mysql (~> 5.1.0)
+    activerecord-jdbcpostgresql-adapter (1.2.0)
+      activerecord-jdbc-adapter (~> 1.2.0)
+      jdbc-postgres (~> 9.0.0)
+    activerecord-jdbcsqlite3-adapter (1.2.0)
+      activerecord-jdbc-adapter (~> 1.2.0)
+      jdbc-sqlite3 (~> 3.7.2)
+    jdbc-mysql (5.1.13)
+    jdbc-postgres (9.0.801)
+    jdbc-sqlite3 (3.7.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -11,16 +29,6 @@ GEM
       activesupport (= 3.1.0)
       arel (~> 2.2.1)
       tzinfo (~> 0.3.29)
-    activerecord-jdbc-adapter (1.1.3)
-    activerecord-jdbcmysql-adapter (1.1.3)
-      activerecord-jdbc-adapter (= 1.1.3)
-      jdbc-mysql (~> 5.1.0)
-    activerecord-jdbcpostgresql-adapter (1.1.3)
-      activerecord-jdbc-adapter (= 1.1.3)
-      jdbc-postgres (~> 9.0.0)
-    activerecord-jdbcsqlite3-adapter (1.1.3)
-      activerecord-jdbc-adapter (= 1.1.3)
-      jdbc-sqlite3 (~> 3.7.0)
     activesupport (3.1.0)
       multi_json (~> 1.0)
     arel (2.2.1)
@@ -28,13 +36,10 @@ GEM
     bcrypt-ruby (3.0.0-java)
     builder (3.0.0)
     i18n (0.6.0)
-    jdbc-mysql (5.1.13)
-    jdbc-postgres (9.0.801)
-    jdbc-sqlite3 (3.7.2)
     minitest (2.4.0)
     mocha (0.9.12)
     multi_json (1.0.3)
-    mysql2 (0.3.6)
+    mysql2 (0.3.7)
     pg (0.11.0)
     rake (0.9.2)
     sqlite3 (1.3.4)
@@ -46,6 +51,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.1.0)
+  activerecord-jdbc-adapter!
   activerecord-jdbcmysql-adapter
   activerecord-jdbcpostgresql-adapter
   activerecord-jdbcsqlite3-adapter
