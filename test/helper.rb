@@ -97,3 +97,4 @@ end
 require "schema"
 require "shared"
 FriendlyId::Test::Database.connect
+at_exit {ActiveRecord::Base.connection.disconnect!}
