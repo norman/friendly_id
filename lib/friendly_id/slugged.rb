@@ -95,6 +95,27 @@ Here's an example of a class that uses a custom method to generate the slug:
 You can override {Slugged#normalize_friendly_id} in your model for total
 control over the slug format.
 
+==== Deciding when to generate new slugs
+
+Overriding {Slugged#should_generate_new_friendly_id?} lets you control whether
+new friendly ids are created when a model is updated. For example, if you only
+want to generate slugs once and then treat them as read-only:
+
+  class Post < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :title, :use => :slugged
+
+    def should_generate_new_friendly_id?
+      new_record?
+    end
+  end
+
+  post = Post.create!(:title => "Hello world!")
+  post.slug #=> "hello-world"
+  post.title = "Hello there, world!"
+  post.save!
+  post.slug #=> "hello-world"
+
 ==== Locale-specific Transliterations
 
 Active Support's +parameterize+ uses
@@ -169,6 +190,18 @@ This functionality was in fact taken from earlier versions of FriendlyId.
       value.to_s.parameterize
     end
 
+    # Whether to generate a new slug.
+    #
+    # You can override this method in your model if, for example, you only want
+    # slugs to be generated once, and then never updated.
+    def should_generate_new_friendly_id?
+      return true if new_record?
+      config    = self.class.friendly_id_config
+      slug_base = send config.base
+      separator = Regexp.escape config.sequence_separator
+      slug_base != current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
+    end
+
     # Gets a new instance of the configured slug sequencing class.
     #
     # @see FriendlyId::SlugSequencer
@@ -176,10 +209,13 @@ This functionality was in fact taken from earlier versions of FriendlyId.
       normalized ||= normalize_friendly_id(send(friendly_id_config.base))
       friendly_id_config.slug_sequencer_class.new(self, normalized)
     end
+    private :slug_sequencer
 
     # Sets the slug.
     def set_slug
-      send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
+      if should_generate_new_friendly_id?
+        send "#{friendly_id_config.slug_column}=", slug_sequencer.generate
+      end
     end
     private :set_slug
 

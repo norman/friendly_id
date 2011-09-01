@@ -70,9 +70,9 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
   test "should detect when a sequenced slug has changed" do
     with_instance_of model_class do |record|
       record2 = model_class.create! :name => record.name
-      assert !record2.slug_sequencer.slug_changed?
+      assert !record2.should_generate_new_friendly_id?
       record2.name = "hello world"
-      assert record2.slug_sequencer.slug_changed?
+      assert record2.should_generate_new_friendly_id?
     end
   end
 end

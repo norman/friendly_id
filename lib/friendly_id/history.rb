@@ -64,7 +64,7 @@ method.
         raise "FriendlyId::History is incompatibe with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
-        before_save :build_slug, :if => lambda {|r| r.slug_sequencer.slug_changed?}
+        before_save :build_slug, :if => lambda {|r| r.should_generate_new_friendly_id?}
         scope :with_friendly_id, lambda {|id| includes(:slugs).where("#{Slug.table_name}.slug" => id)}
         extend Finder
       end

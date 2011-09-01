@@ -18,24 +18,10 @@ module FriendlyId
 
     # Generate a new sequenced slug.
     def generate
-      if new_record? or slug_changed?
-        conflict? ? self.next : normalized
-      else
-        sluggable.friendly_id
-      end
-    end
-
-    # Whether or not the model instance's slug has changed.
-    def slug_changed?
-      separator = Regexp.escape friendly_id_config.sequence_separator
-      base != sluggable.current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
+      conflict? ? self.next : normalized
     end
 
     private
-
-    def base
-      sluggable.send friendly_id_config.base
-    end
 
     def column
       sluggable.connection.quote_column_name friendly_id_config.slug_column
@@ -62,10 +48,6 @@ module FriendlyId
 
     def friendly_id_config
       sluggable.friendly_id_config
-    end
-
-    def new_record?
-      sluggable.new_record?
     end
 
     def separator
