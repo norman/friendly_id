@@ -128,5 +128,19 @@ module FriendlyId
        @friendly_id_config = base_class.friendly_id_config.dup
       end
     end
+
+    private
+
+    def relation
+      @relation = nil unless @relation.class <= relation_class
+      @relation ||= relation_class.new(self, arel_table)
+      super
+    end
+
+    def relation_class
+      @relation_class ||= Class.new(relation_without_friendly_id.class) do
+        include FriendlyId::FinderMethods
+      end
+    end
   end
 end

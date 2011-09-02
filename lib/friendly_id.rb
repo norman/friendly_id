@@ -114,6 +114,9 @@ module FriendlyId
   #
   # For examples of this, see the source for {Scoped.included}.
   def self.extended(model_class)
+    class << model_class
+      alias relation_without_friendly_id relation
+    end
     model_class.instance_eval do
       extend Base
       @friendly_id_config = Class.new(Configuration).new(self)
@@ -134,20 +137,6 @@ module FriendlyId
     @mutex.synchronize do
       @defaults = block if block_given?
       @defaults ||= lambda {|config| config.use :reserved}
-    end
-  end
-
-  private
-
-  def relation
-    @relation = nil unless @relation.class <= relation_class
-    @relation ||= relation_class.new(self, arel_table)
-    super
-  end
-
-  def relation_class
-    @relation_class ||= Class.new(ActiveRecord::Relation) do
-      include FriendlyId::FinderMethods
     end
   end
 end
