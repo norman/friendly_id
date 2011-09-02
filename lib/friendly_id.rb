@@ -119,7 +119,6 @@ module FriendlyId
       @friendly_id_config = Class.new(Configuration).new(self)
       FriendlyId.defaults.call @friendly_id_config
     end
-    ActiveRecord::Relation.send :include, FinderMethods
   end
 
   # Set global defaults for all models using FriendlyId.
@@ -135,6 +134,20 @@ module FriendlyId
     @mutex.synchronize do
       @defaults = block if block_given?
       @defaults ||= lambda {|config| config.use :reserved}
+    end
+  end
+
+  private
+
+  def relation
+    @relation = nil unless @relation.class <= relation_class
+    @relation ||= relation_class.new(self, arel_table)
+    super
+  end
+
+  def relation_class
+    @relation_class ||= Class.new(ActiveRecord::Relation) do
+      include FriendlyId::FinderMethods
     end
   end
 end
