@@ -26,7 +26,7 @@ FriendlyId is compatible with Active Record **3.0** and **3.1**.
 
 FriendlyId 4.x introduces many changes incompatible with 3.x. If you're
 upgrading, please [read the
-docs](http://norman.github.com/friendly_id/file.WhatsNew.html) to see what's
+docs](http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md) to see what's
 new.
 
 ## Docs
