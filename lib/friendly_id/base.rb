@@ -131,12 +131,36 @@ module FriendlyId
 
     private
 
+    # Gets an instance of an anonymous subclass of ActiveRecord::Relation.
+    # @see #relation_class
     def relation
       @relation = nil unless @relation.class <= relation_class
       @relation ||= relation_class.new(self, arel_table)
       super
     end
 
+    # Gets an anonymous subclass of the model's relation class.
+    #
+    # Rather than including FriendlyId's overridden finder methods in
+    # ActiveRecord::Relation directly, FriendlyId adds them to the anonymous
+    # subclass, and makes #relation return an instance of this class. By doing
+    # this, we ensure that only models that specifically extend FriendlyId have
+    # their finder methods overridden.
+    #
+    # Note that this method does not directly subclass ActiveRecord::Relation,
+    # but rather whatever class the @relation class instance variable is an
+    # instance of.  In practice, this will almost always end up being
+    # ActiveRecord::Relation, but in case another plugin is using this same
+    # pattern to extend a model's finder functionality, FriendlyId will not
+    # replace it, but rather override it.
+    #
+    # This pattern can be seen as a poor man's "refinement"
+    # (http://timelessrepo.com/refinements-in-ruby), and while I **think** it
+    # will work quite well, I realize that it could cause unexpected issues,
+    # since the authors of Rails are probably not intending this kind of usage
+    # against a private API. If this ends up being problematic I will probably
+    # revert back to the old behavior of simply extending
+    # ActiveRecord::Relation.
     def relation_class
       @relation_class ||= Class.new(relation_without_friendly_id.class) do
         include FriendlyId::FinderMethods

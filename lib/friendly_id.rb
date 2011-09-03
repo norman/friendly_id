@@ -107,10 +107,10 @@ module FriendlyId
   # {FriendlyId::Configuration} directly. This isolates other models from large
   # feature changes an addon to FriendlyId could potentially introduce.
   #
-  # The upshot of this is, you can htwo Active Record models that both have a
-  # @friendly_id_config, but each config object can have different methods and
-  # behaviors depending on what modules have been loaded, without conflicts.
-  # Keep this in mind if you're hacking on FriendlyId.
+  # The upshot of this is, you can have two Active Record models that both have
+  # a @friendly_id_config, but each config object can have different methods
+  # and behaviors depending on what modules have been loaded, without
+  # conflicts.  Keep this in mind if you're hacking on FriendlyId.
   #
   # For examples of this, see the source for {Scoped.included}.
   def self.extended(model_class)
