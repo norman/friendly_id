@@ -39,10 +39,24 @@ class HistoryTest < MiniTest::Unit::TestCase
       old_friendly_id = record.friendly_id
       record.name = record.name + "b"
       record.save!
-      assert found = model_class.find_by_friendly_id(old_friendly_id)
-      assert !found.readonly?
+      begin
+        assert model_class.find(old_friendly_id)
+        assert model_class.exists?(old_friendly_id), "should exist? by old id"
+      rescue ActiveRecord::RecordNotFound
+        flunk "Could not find record by old id"
+      end
     end
   end
+
+  test "should not be read only when found by old slug" do
+    with_instance_of(model_class) do |record|
+      old_friendly_id = record.friendly_id
+      record.name = record.name + "b"
+      record.save!
+      assert !model_class.find(old_friendly_id).readonly?
+    end
+  end
+
 
   test "should raise error if used with scoped" do
     model_class = Class.new(ActiveRecord::Base)

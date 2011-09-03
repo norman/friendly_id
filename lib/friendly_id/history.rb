@@ -41,12 +41,8 @@ method.
       ...
 
       def find_post
-        return unless params[:id]
-        @post = begin
-          Post.find params[:id]
-        rescue ActiveRecord::RecordNotFound
-          Post.find_by_friendly_id params[:id]
-        end
+        Post.find params[:id]
+
         # If an old id or a numeric id was used to find the record, then
         # the request path will not match the post_path, and we should do
         # a 301 redirect that uses the current friendly id.
@@ -59,14 +55,13 @@ method.
   module History
 
     # Configures the model instance to use the History add-on.
-    def self.included(klass)
-      klass.instance_eval do
+    def self.included(model_class)
+      model_class.instance_eval do
         raise "FriendlyId::History is incompatibe with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
         before_save :build_slug, :if => lambda {|r| r.should_generate_new_friendly_id?}
-        scope :with_friendly_id, lambda {|id| includes(:slugs).where("#{Slug.table_name}.slug" => id)}
-        extend Finder
+        relation_class.send :include, FinderMethods
       end
     end
 
@@ -75,14 +70,25 @@ method.
     def build_slug
       slugs.build :slug => friendly_id
     end
-  end
 
-  # Adds a finder that explictly uses slugs from the slug table.
-  module Finder
+    # Adds a finder that explictly uses slugs from the slug table.
+    module FinderMethods
 
-    # Search for a record in the slugs table using the specified slug.
-    def find_by_friendly_id(*args)
-      with_friendly_id(args.shift).first(*args)
+      # Search for a record in the slugs table using the specified slug.
+      def find_one(id)
+        return super if id.unfriendly_id?
+        where(@klass.friendly_id_config.query_field => id).first or
+        includes(:slugs).where("#{Slug.table_name}.slug" => id).first or
+        find_one_without_friendly_id(id)
+      end
+
+      # Search for a record in the slugs table using the specified slug.
+      def exists?(id = nil)
+        return super if id.unfriendly_id?
+        exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
+        includes(:slugs).where("#{Slug.table_name}.slug" => id).exists_without_friendly_id? or
+        exists_without_friendly_id?(id)
+      end
     end
   end
 end

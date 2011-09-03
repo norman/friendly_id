@@ -38,8 +38,8 @@ It also adds a new "defaults" method for configuring all models:
 
 ## Active Record 3+ only
 
-For 2.3 support, you can use FriendlyId 3.x, which will continue to be maintained
-until people don't want it any more.
+For 2.3 support, you can use FriendlyId 3.x, which will continue to be
+maintained until people don't want it any more.
 
 ## In-table slugs
 

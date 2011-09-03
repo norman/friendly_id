@@ -36,6 +36,8 @@ MANUALS     = []
   MANUALS     << (Manual.create! :name => name).friendly_id
 end
 
+ActiveRecord::Base.connection.execute "UPDATE manuals SET slug = NULL"
+
 Benchmark.bmbm do |x|
   x.report 'find (without FriendlyId)' do
     N.times {Book.find BOOKS.rand}
@@ -44,7 +46,7 @@ Benchmark.bmbm do |x|
     N.times {Journalist.find JOURNALISTS.rand}
   end
   x.report 'find (external slug)' do
-    N.times {Manual.find_by_friendly_id MANUALS.rand}
+    N.times {Manual.find MANUALS.rand}
   end
 
   x.report 'insert (without FriendlyId)' do
