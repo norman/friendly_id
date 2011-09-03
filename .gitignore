@@ -9,3 +9,4 @@ coverage
 *.gem
 *.sqlite3
 *.rbc
+*.lock
