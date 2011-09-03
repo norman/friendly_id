@@ -163,6 +163,8 @@ module FriendlyId
     # ActiveRecord::Relation.
     def relation_class
       @relation_class ||= Class.new(relation_without_friendly_id.class) do
+        alias_method :find_one_without_friendly_id, :find_one
+        alias_method :exists_without_friendly_id?, :exists?
         include FriendlyId::FinderMethods
       end
     end
