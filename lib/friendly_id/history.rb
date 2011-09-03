@@ -78,7 +78,7 @@ method.
       def find_one(id)
         return super if id.unfriendly_id?
         where(@klass.friendly_id_config.query_field => id).first or
-        includes(:slugs).where("#{Slug.table_name}.slug" => id).first or
+        with_old_friendly_id(id) {|x| find_one_without_friendly_id(x)} or
         find_one_without_friendly_id(id)
       end
 
@@ -86,8 +86,18 @@ method.
       def exists?(id = nil)
         return super if id.unfriendly_id?
         exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
-        includes(:slugs).where("#{Slug.table_name}.slug" => id).exists_without_friendly_id? or
+        with_old_friendly_id(id) {|x| exists_without_friendly_id?(x)} or
         exists_without_friendly_id?(id)
+      end
+
+      private
+
+      # Accepts a slug, and yields a corresponding sluggable_id into the block.
+      def with_old_friendly_id(slug, &block)
+        sql = "SELECT sluggable_id FROM #{Slug.quoted_table_name} WHERE sluggable_type = %s AND slug = %s"
+        sql = sql % [@klass.base_class.name, slug].map {|x| connection.quote(x)}
+        sluggable_id = connection.select_values(sql).first
+        yield sluggable_id if sluggable_id
       end
     end
   end

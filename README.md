@@ -73,7 +73,7 @@ The current docs can always be found
 ## Benchmarks
 
 The latest benchmarks for FriendlyId are maintained
-[here](https://gist.github.com/1129745).
+[here](http://bit.ly/friendly-id-benchmarks).
 
 
 ## Bugs
