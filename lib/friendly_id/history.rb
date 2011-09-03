@@ -57,7 +57,7 @@ method.
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
       model_class.instance_eval do
-        raise "FriendlyId::History is incompatibe with FriendlyId::Scoped" if self < Scoped
+        raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
         before_save :build_slug, :if => lambda {|r| r.should_generate_new_friendly_id?}
