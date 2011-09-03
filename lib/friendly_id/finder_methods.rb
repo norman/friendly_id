@@ -27,11 +27,7 @@ module FriendlyId
     # @see FriendlyId::ObjectUtils
     def exists?(id = nil)
       return super if id.unfriendly_id?
-      join_dependency = construct_join_dependency_for_association_find
-      relation = construct_relation_for_association_find(join_dependency)
-      relation = relation.except(:select).select("1").limit(1)
-      relation = relation.where(@klass.friendly_id_config.query_field => id)
-      connection.select_value(relation.to_sql) ? true : false
+      super @klass.friendly_id_config.query_field => id
     end
   end
 end
