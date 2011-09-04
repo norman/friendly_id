@@ -26,14 +26,14 @@ class I18nTest < MiniTest::Unit::TestCase
     I18n.with_locale(I18n.default_locale) do
       journalist = Journalist.new(:name => "John Doe")
       journalist.valid?
-      assert_equal "john-doe", journalist.slug
+      assert_equal "john-doe", journalist.slug_en
       assert_nil journalist.slug_es
     end
     I18n.with_locale(:es) do
       journalist = Journalist.new(:name => "John Doe")
       journalist.valid?
       assert_equal "john-doe", journalist.slug_es
-      assert_nil journalist.slug
+      assert_nil journalist.slug_en
     end
   end
 
@@ -92,9 +92,9 @@ class I18nTest < MiniTest::Unit::TestCase
       end
     end
 
-    test "should not add locale to slug column for default locale" do
+    test "should add locale to slug column for default locale" do
       I18n.with_locale(I18n.default_locale) do
-        assert_equal "slug", Journalist.friendly_id_config.slug_column
+        assert_equal "slug_en", Journalist.friendly_id_config.slug_column
       end
     end
   end

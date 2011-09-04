@@ -39,9 +39,10 @@ module FriendlyId
           add_column :journalists, "type", :string
 
           # These will be used to test i18n
+          add_column :journalists, "slug_en", :string
           add_column :journalists, "slug_es", :string
           add_column :journalists, "slug_de", :string
-          
+
           @done = true
         end
 

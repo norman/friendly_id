@@ -6,20 +6,21 @@ module FriendlyId
 This module adds very basic i18n support to FriendlyId.
 
 In order to use this module, your model must have a slug column for each locale.
-The slug column for your default locale should, however, still be named "slug".
-An i18n module that uses external slugs and doesn't require a column for each
-locale is planned, but has not been created yet.
+By default FriendlyId looks for columns named, for example, "slug_en",
+"slug_es", etc. The first part of the name can be configured by passing the
++:slug_column+ option if you choose. Note that as of 4.0.0.beta11, the column
+for the default locale must also include the locale in its name.
 
 == Example migration
 
   def self.up
     create_table :posts do |t|
       t.string :title
-      t.string :slug
+      t.string :slug_en
       t.string :slug_es
       t.text   :body
     end
-    add_index :posts, :slug
+    add_index :posts, :slug_en
     add_index :posts, :slug_es
   end
 
@@ -59,6 +60,7 @@ current locale:
   end
 =end
   module I18n
+
     def self.included(model_class)
       model_class.instance_eval do
         friendly_id_config.use :slugged
@@ -77,7 +79,7 @@ current locale:
 
     module Configuration
       def slug_column
-        ::I18n.locale == ::I18n.default_locale ? super : [super, "_", ::I18n.locale].join
+        "#{super}_#{::I18n.locale}"
       end
     end
   end
