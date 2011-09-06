@@ -117,3 +117,27 @@ class SluggedRegressionsTest < MiniTest::Unit::TestCase
     end
   end
 end
+
+# https://github.com/norman/friendly_id/issues/148
+class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged
+    validates_presence_of :slug_de
+  end
+
+  test "to_param should return the unchanged value if the slug changes before validation fails" do
+    transaction do
+      journalist = Journalist.create! :name => "Joseph Pulitzer", :slug_de => "value"
+      assert_equal "joseph-pulitzer", journalist.to_param
+      assert journalist.valid?
+      assert journalist.persisted?
+      journalist.name = "Joe Pulitzer"
+      journalist.slug_de = nil
+      assert !journalist.valid?
+      assert_equal "joseph-pulitzer", journalist.to_param
+    end
+  end
+end
