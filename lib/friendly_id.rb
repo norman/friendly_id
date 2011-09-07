@@ -81,7 +81,7 @@ In general, use slugs by default unless you know for sure you don't need them.
 module FriendlyId
 
   # The current version.
-  VERSION = "4.0.0.beta10"
+  VERSION = "4.0.0.beta11"
 
   @mutex = Mutex.new
 

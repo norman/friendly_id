@@ -13,6 +13,8 @@ class FriendlyIdGenerator < Rails::Generators::Base
     migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb'
   end
 
+  # TODO: use the module provided with Rails, no need to do this
+  # any more
   # Taken from ActiveRecord's migration generator
   def self.next_migration_number(dirname) #:nodoc:
     if ActiveRecord::Base.timestamped_migrations
