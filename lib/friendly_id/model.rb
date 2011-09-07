@@ -16,7 +16,11 @@ module FriendlyId
 
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
-      (friendly_id.present? ? friendly_id : id).to_s
+      if diff = changes[friendly_id_config.query_field]
+        diff.first
+      else
+        friendly_id.present? ? friendly_id : id.to_s
+      end
     end
   end
 end
