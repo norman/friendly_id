@@ -1,5 +1,5 @@
 module FriendlyId
-  # These methods will override the finder methods in ActiveRecord::Relation.
+  # These methods will be added to the model's {FriendlyId::Base#relation_class relation_class}.
   module FinderMethods
 
     protected
