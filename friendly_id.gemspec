@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- {test}/*`.split("\n")
   s.require_paths     = ["lib"]
 
+  s.add_development_dependency "railties", "~> 3.1"
   s.add_development_dependency "activerecord", "~> 3.1"
   s.add_development_dependency "sqlite3", "~> 1.3"
   s.add_development_dependency "minitest", "~> 2.4.0"
