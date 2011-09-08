@@ -16,4 +16,5 @@ end
 gem "activerecord", "~> 3.1.0"
 gem "minitest", "~> 2.4.0"
 gem "mocha", "~> 0.9.12"
+gem "railties", "~> 3.1.0"
 gem "rake"

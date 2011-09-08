@@ -12,7 +12,8 @@ platform :ruby do
   gem "sqlite3", "~> 1.3.4"
 end
 
-gem "activerecord", "3.0.10"
+gem "activerecord", "~> 3.0.10"
 gem "minitest", "~> 2.4.0"
 gem "mocha", "~> 0.9.12"
+gem "railties", "~> 3.0.10"
 gem "rake"
