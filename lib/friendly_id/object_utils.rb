@@ -12,17 +12,25 @@ module FriendlyId
     # else nil.
     #
     # An object is considired "definitely unfriendly" if its class is or
-    # inherits from Numeric, Symbol or ActiveRecord::Base.
+    # inherits from ActiveRecord::Base, Array, Hash, NilClass, Numeric, or
+    # Symbol.
     #
     # An object is considered "definitely friendly" if it responds to +to_i+,
     # and its value when cast to an integer and then back to a string is
     # different from its value when merely cast to a string:
     #
-    #   123.friendly_id?       #=> false
-    #   "123".friendly_id?     #=> nil
-    #   "abc123".friendly_id?  #=> true
+    #   123.friendly_id?                  #=> false
+    #   :id.friendly_id?                  #=> false
+    #   {:name => 'joe'}.friendly_id?     #=> false
+    #   ['name = ?', 'joe'].friendly_id?  #=> false
+    #   nil.friendly_id?                  #=> false
+    #   "123".friendly_id?                #=> nil
+    #   "abc123".friendly_id?             #=> true
     def friendly_id?
-      if [Numeric, Symbol, ActiveRecord::Base].detect {|klass| self.class < klass}
+      unfriendly_classes = [ActiveRecord::Base, Array, Hash, NilClass, Numeric, Symbol]
+      # Considered unfriendly if this is an instance of an unfriendly class or
+      # one of its descendants.
+      if unfriendly_classes.detect {|klass| self.class <= klass}
         false
       elsif respond_to?(:to_i) && to_i.to_s != to_s
         true

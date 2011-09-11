@@ -23,6 +23,8 @@ module FriendlyId
     # @example
     #  person = Person.exists?(123)
     #  person = Person.exists?("joe")
+    #  person = Person.exists?({:name => 'joe'})
+    #  person = Person.exists?(['name = ?', 'joe'])
     #
     # @see FriendlyId::ObjectUtils
     def exists?(id = nil)
