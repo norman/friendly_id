@@ -59,7 +59,8 @@ method.
       model_class.instance_eval do
         raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
+        has_many :slugs, :as => :sluggable, :dependent => :destroy,
+          :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
         before_save :build_slug
         relation_class.send :include, FinderMethods
       end
