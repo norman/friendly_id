@@ -17,7 +17,7 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, scoped slugs, reserved words, custom slug generators, and
 excellent Unicode support. For complete information on using FriendlyId,
-please see the [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html).
+please see the [FriendlyId Guide](https://github.com/norman/friendly_id/blob/3.x/Guide.md)
 
 ## Compatibility
 
@@ -36,8 +36,7 @@ released by September, 2011.
 
 ## Docs, Info and Support
 
-* [FriendlyId Guide](http://norman.github.com/friendly_id/file.Guide.html)
-* [API Docs](http://norman.github.com/friendly_id)
+* [FriendlyId Guide](https://github.com/norman/friendly_id/blob/3.x/Guide.md)
 * [Source Code](http://github.com/norman/friendly_id/)
 * [Issue Tracker](http://github.com/norman/friendly_id/issues)
 
