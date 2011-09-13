@@ -70,6 +70,8 @@ module FriendlyId
           with_instance_of(model_class) do |record|
             assert model_class.exists? record.id
             assert model_class.exists? record.friendly_id
+            assert model_class.exists?({:id => record.id})
+            assert model_class.exists?(['id = ?', record.id])
             assert !model_class.exists?(record.friendly_id + "-hello")
             assert !model_class.exists?(0)
           end
