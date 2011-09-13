@@ -60,7 +60,7 @@ method.
         raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy, :class_name => Slug.to_s
-        before_save :build_slug, :if => lambda {|r| r.should_generate_new_friendly_id?}
+        before_save :build_slug
         relation_class.send :include, FinderMethods
       end
     end
@@ -68,6 +68,9 @@ method.
     private
 
     def build_slug
+      return unless should_generate_new_friendly_id?
+      # Allow reversion back to a previously used slug
+      slugs.where(:slug => friendly_id).delete_all
       slugs.build :slug => friendly_id
     end
 

@@ -66,4 +66,15 @@ class HistoryTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should handle renames" do
+    with_instance_of(model_class) do |record|
+      record.name = 'x'
+      assert record.save
+      record.name = 'y'
+      assert record.save
+      record.name = 'x'
+      assert record.save
+    end
+  end
+
 end
