@@ -90,6 +90,6 @@ strings to ASCII. It's very easy to include - just override
       ...
 
       def normalize_friendly_id(text)
-        text.to_slug.normalize! :transliterate => :russian
+        text.to_slug.normalize! :transliterations => :russian
       end
     end
