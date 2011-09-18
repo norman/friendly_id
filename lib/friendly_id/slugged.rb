@@ -198,7 +198,7 @@ This functionality was in fact taken from earlier versions of FriendlyId.
       return true if new_record?
       slug_base = send friendly_id_config.base
       separator = Regexp.escape friendly_id_config.sequence_separator
-      slug_base != current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
+      normalize_friendly_id(slug_base) != current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
     end
 
     # Sets the slug.
