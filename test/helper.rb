@@ -39,7 +39,7 @@ module FriendlyId
 
     def with_instance_of(*args)
       model_class = args.shift
-      args[0] ||= {:name => "a"}
+      args[0] ||= {:name => "a b c"}
       transaction { yield model_class.create!(*args) }
     end
 

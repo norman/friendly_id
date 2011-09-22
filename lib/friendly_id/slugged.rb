@@ -196,7 +196,7 @@ This functionality was in fact taken from earlier versions of FriendlyId.
     # slugs to be generated once, and then never updated.
     def should_generate_new_friendly_id?
       return true if new_record?
-      slug_base = send friendly_id_config.base
+      slug_base = normalize_friendly_id send(friendly_id_config.base)
       separator = Regexp.escape friendly_id_config.sequence_separator
       slug_base != current_friendly_id.try(:sub, /#{separator}[\d]*\z/, '')
     end
