@@ -28,6 +28,21 @@ class SluggedTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should allow validations on the slug" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "articles"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged
+      validates_length_of :slug, :maximum => 1
+      def self.name
+        "Article"
+      end
+    end
+    instance = model_class.new :name => "hello"
+    refute instance.valid?
+  end
+
+
 end
 
 class SlugGeneratorTest < MiniTest::Unit::TestCase
