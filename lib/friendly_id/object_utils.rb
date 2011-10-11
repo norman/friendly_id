@@ -27,9 +27,11 @@ module FriendlyId
     #   "123".friendly_id?                #=> nil
     #   "abc123".friendly_id?             #=> true
     def friendly_id?
-      unfriendly_classes = [ActiveRecord::Base, Array, Hash, NilClass, Numeric, Symbol]
       # Considered unfriendly if this is an instance of an unfriendly class or
       # one of its descendants.
+      unfriendly_classes = [ActiveRecord::Base, Array, Hash, NilClass, Numeric,
+                            Symbol, TrueClass, FalseClass]
+
       if unfriendly_classes.detect {|klass| self.class <= klass}
         false
       elsif respond_to?(:to_i) && to_i.to_s != to_s
