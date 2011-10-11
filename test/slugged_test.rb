@@ -44,18 +44,20 @@ class SluggedTest < MiniTest::Unit::TestCase
 
   test "should not break validates_uniqueness_of" do
     model_class = Class.new(ActiveRecord::Base) do
-      self.table_name = "articles"
+      self.table_name = "journalists"
       extend FriendlyId
       friendly_id :name, :use => :slugged
-      validates_uniqueness_of :name
+      validates_uniqueness_of :slug_en
       def self.name
-        "Article"
+        "Journalist"
       end
     end
-    instance = model_class.create :name => "hello"
-    instance2 = model_class.create :name => "hello"
-    assert instance.valid?
-    refute instance2.valid?
+    transaction do
+      instance = model_class.create! :name => "hello", :slug_en => "hello"
+      instance2 = model_class.create :name => "hello", :slug_en => "hello"
+      assert instance.valid?
+      refute instance2.valid?
+    end
   end
 
 
