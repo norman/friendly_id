@@ -114,6 +114,7 @@ module FriendlyId
   #
   # For examples of this, see the source for {Scoped.included}.
   def self.extended(model_class)
+    return if model_class.respond_to? :friendly_id
     class << model_class
       alias relation_without_friendly_id relation
     end
