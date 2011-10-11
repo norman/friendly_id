@@ -43,7 +43,7 @@ The current docs can always be found
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.0.beta8"
+    gem "friendly_id", "~> 4.0.0.beta12"
 
     rails generate scaffold user name:string slug:string
 
