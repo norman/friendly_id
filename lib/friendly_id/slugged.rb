@@ -202,8 +202,9 @@ This functionality was in fact taken from earlier versions of FriendlyId.
     end
 
     # Sets the slug.
+    # FIXME: This method sucks and the logic is pretty dubious.
     def set_slug(normalized_slug = nil)
-      if should_generate_new_friendly_id?
+      if normalized_slug || should_generate_new_friendly_id?
         normalized_slug ||= normalize_friendly_id send(friendly_id_config.base)
         generator = friendly_id_config.slug_generator_class.new self, normalized_slug
         send "#{friendly_id_config.slug_column}=", generator.generate
