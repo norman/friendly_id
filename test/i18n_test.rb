@@ -53,7 +53,7 @@ class I18nTest < MiniTest::Unit::TestCase
       journalist = Journalist.create!(:name => "John Smith")
       journalist.set_friendly_id("Juan Fulano", :es)
       journalist.save!
-      assert_equal "john-smith", journalist.to_param
+      assert_equal "juan-fulano", journalist.slug_es
       I18n.with_locale(:es) do
         assert_equal "juan-fulano", journalist.to_param
       end
