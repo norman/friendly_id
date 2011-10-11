@@ -42,6 +42,22 @@ class SluggedTest < MiniTest::Unit::TestCase
     refute instance.valid?
   end
 
+  test "should not break validates_uniqueness_of" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "articles"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged
+      validates_uniqueness_of :name
+      def self.name
+        "Article"
+      end
+    end
+    instance = model_class.create :name => "hello"
+    instance2 = model_class.create :name => "hello"
+    assert instance.valid?
+    refute instance2.valid?
+  end
+
 
 end
 
