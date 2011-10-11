@@ -67,7 +67,7 @@ The current docs can always be found
     # If you're adding FriendlyId to an existing app and need
     # to generate slugs for existing users, do this from the
     # console, runner, or add a Rake task:
-    User.all.map(&:save)
+    User.find_each(&:save)
 
 
 ## Benchmarks
