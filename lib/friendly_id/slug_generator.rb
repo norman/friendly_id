@@ -69,6 +69,8 @@ module FriendlyId
           @sluggable_class = sluggable.superclass
         end while @sluggable_class.superclass != ActiveRecord::Base
       end
+
+      @sluggable_class
     end
   end
 end
