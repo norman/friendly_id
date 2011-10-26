@@ -40,9 +40,9 @@ module FriendlyId
     end
 
     def conflicts
-      pkey  = sluggable.class.primary_key
+      pkey  = @sluggable_class.primary_key
       value = sluggable.send pkey
-      scope = sluggable.class.unscoped.where("#{column} = ? OR #{column} LIKE ?", normalized, wildcard)
+      scope = @sluggable_class.unscoped.where("#{column} = ? OR #{column} LIKE ?", normalized, wildcard)
       scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
       scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
     end
@@ -57,6 +57,18 @@ module FriendlyId
 
     def wildcard
       "#{normalized}#{separator}%"
+    end
+
+    def sluggable_class
+      return @sluggable_class if defined? @sluggable_class
+
+      if sluggable.superclass == ActiveRecord::Base
+        @sluggable_class = sluggable.class
+      else
+        begin
+          @sluggable_class = sluggable.superclass
+        end while @sluggable_class.superclass != ActiveRecord::Base
+      end
     end
   end
 end
