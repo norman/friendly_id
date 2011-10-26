@@ -60,17 +60,7 @@ module FriendlyId
     end
 
     def sluggable_class
-      return @sluggable_class if defined? @sluggable_class
-
-      if sluggable.class.superclass == ActiveRecord::Base
-        @sluggable_class = sluggable.class
-      else
-        begin
-          @sluggable_class = sluggable.class.superclass
-        end while @sluggable_class.superclass != ActiveRecord::Base
-      end
-
-      @sluggable_class
+      @sluggable_class ||= sluggable.class.table_name.capitalize.singularize.constantize
     end
   end
 end
