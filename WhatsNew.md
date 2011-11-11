@@ -46,7 +46,7 @@ maintained until people don't want it any more.
 FriendlyId no longer creates a separate slugs table - it just stores the
 generated slug value in the model table, which is simpler, faster and what most
 want by default. Keeping slug history in a separate table is an
-{FriendlyId::Slugged optional add-on} for FriendlyId 4.
+{FriendlyId::History optional add-on} for FriendlyId 4.
 
 ## No more multiple finds
 
