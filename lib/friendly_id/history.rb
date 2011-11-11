@@ -75,8 +75,14 @@ method.
     def build_slug
       return unless should_generate_new_friendly_id?
       # Allow reversion back to a previously used slug
-      slugs.where(:slug => friendly_id).delete_all
-      slugs.build :slug => friendly_id
+      Slug.transaction do
+        select = slugs.where(:slug => friendly_id)
+        unless Slug.connection.adapter_name =~ /sqlite/i
+          Slug.connection.execute "#{select.to_sql} FOR UPDATE"
+        end
+        select.delete_all
+        slugs.build :slug => friendly_id
+      end
     end
 
     # Adds a finder that explictly uses slugs from the slug table.
