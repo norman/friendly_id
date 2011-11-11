@@ -76,8 +76,8 @@ method.
       return unless should_generate_new_friendly_id?
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
-      relation.select("id").lock(true).all
-      relation.delete_all
+      result = relation.select("id").lock(true).all
+      relation.delete_all unless result.empty?
       slugs.build :slug => friendly_id
     end
 
