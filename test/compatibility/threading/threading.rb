@@ -28,8 +28,11 @@ def save_thing
     $things.pop
   end
   if thing.nil? then return end
-  value = thing.save!
-  print "#{thing.friendly_id}\n"
+  Thing.transaction do
+    Thing.connection.execute "LOCK TABLE things"
+    thing.save!
+    print "#{thing.friendly_id}\n"
+  end
   true
 end
 
