@@ -42,6 +42,14 @@ class SluggedTest < MiniTest::Unit::TestCase
     refute instance.valid?
   end
 
+  test "should allow nil slugs" do
+    transaction do
+      m1 = model_class.create!
+      m2 = model_class.create!
+      assert_nil m1.slug
+    end
+  end
+
   test "should not break validates_uniqueness_of" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "journalists"
