@@ -45,7 +45,7 @@ class SluggedTest < MiniTest::Unit::TestCase
   test "should allow nil slugs" do
     transaction do
       m1 = model_class.create!
-      m2 = model_class.create!
+      model_class.create!
       assert_nil m1.slug
     end
   end
@@ -67,13 +67,15 @@ class SluggedTest < MiniTest::Unit::TestCase
       refute instance2.valid?
     end
   end
-
-
 end
 
 class SlugGeneratorTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
+
+  def model_class
+    Journalist
+  end
 
   test "should quote column names" do
     model_class            = Class.new(ActiveRecord::Base)
@@ -86,6 +88,18 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       flunk "column name was not quoted"
     end
   end
+
+  test "should not resequence lower sequences on update" do
+    transaction do
+      m1 = model_class.create! :name => "a b c d"
+      assert_equal "a-b-c-d", m1.slug
+      model_class.create! :name => "a b c d"
+      m1 = model_class.find(m1.id)
+      m1.save!
+      assert_equal "a-b-c-d", m1.slug
+    end
+  end
+
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
