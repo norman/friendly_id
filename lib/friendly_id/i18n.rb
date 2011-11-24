@@ -46,7 +46,7 @@ When new records are created, the slug is generated for the current locale only.
 
 == Translating Slugs
 
-To translate an existing record's friendly_id, use {#set_friendly_id}. This will
+To translate an existing record's friendly_id, use {I18n::Model#set_friendly_id}. This will
 ensure that the slug you add is properly escaped, transliterated and sequenced:
 
   post = Post.create :name => "Star Wars"
