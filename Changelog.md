@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.1 (2011-12-12)
+
+* Fix for "can't modify frozen hash" on 3.1 ([Theo Cushion](https://github.com/theozaurus))
+
 ## 3.3.0 (2011-08-31)
 
 * Support for Active Record 2.3 dropped
