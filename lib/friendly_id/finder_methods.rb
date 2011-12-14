@@ -14,7 +14,18 @@ module FriendlyId
     # @see FriendlyId::ObjectUtils
     def find_one(id)
       return super if id.unfriendly_id?
-      where(@klass.friendly_id_config.query_field => id).first or super
+      config = @klass.friendly_id_config
+      record = where(config.query_field => id).first
+      unless record
+        if config.fallback_find.nil? or config.fallback_find
+          record = super
+        else
+          conditions = arel.where_sql
+          conditions = " [#{conditions}]" if conditions
+          raise ActiveRecord::RecordNotFound, "Couldn't find #{@klass.name} with #{primary_key}=#{id}#{conditions}"
+        end
+      end
+      record
     end
 
     # FriendlyId overrides this method to make it possible to use friendly id's
