@@ -12,7 +12,8 @@ module FriendlyId
 
     # Given a slug, get the next available slug in the sequence.
     def next
-      sequence = conflict.to_param.split(separator)[1].to_i
+      # Don't assume that the separator is unique within the slug
+      sequence = conflict.to_param.gsub(/^#{Regexp.quote(normalized)}(#{Regexp.quote(separator)})?/, '').to_i
       next_sequence = sequence == 0 ? 2 : sequence.next
       "#{normalized}#{separator}#{next_sequence}"
     end
