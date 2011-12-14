@@ -100,6 +100,15 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should correctly sequence slugs that end with numbers" do
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206", record1.slug
+      record2 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206--2", record2.slug
+    end
+  end
+
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
