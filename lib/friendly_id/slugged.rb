@@ -136,6 +136,25 @@ locale when replacing Latin characters:
   movie.slug #=> "der-preis-fuers-ueberleben"
 
 This functionality was in fact taken from earlier versions of FriendlyId.
+
+==== Common Problems
+
+FriendlyId uses a before_validation callback to generate and set the slug. This
+means that if you create two model instances before saving them, it's possible
+they will generate the same slug, and the second save will fail.
+
+This can happen in two fairly normal cases: the first, when a model using nested
+attributes creates more than one record for a model that uses friendly_id. The
+second, in concurrent code, either in threads or multiple processes.
+
+To solve the nested attributes issue, I recommend simply avoiding them when
+creating more than one nested record for a model that uses FriendlyId. See {this
+Github issue}[https://github.com/norman/friendly_id/issues/185] for discussion.
+
+To solve the concurrency issue, I recommend locking the model's table against
+inserts while when saving the record. See {this Github
+issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
+
 =end
   module Slugged
 
