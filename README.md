@@ -35,7 +35,7 @@ The current docs can always be found
 [here](http://rubydoc.info/github/norman/friendly_id/master/frames).
 
 The best place to start is with the
-[Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.html),
+[Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
 ## Rails Quickstart
