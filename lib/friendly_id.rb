@@ -1,7 +1,6 @@
 # encoding: utf-8
 require "thread"
 require "friendly_id/base"
-require "friendly_id/model"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
 require "friendly_id/finder_methods"
