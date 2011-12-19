@@ -3,21 +3,37 @@ require "friendly_id/slug_generator"
 
 module FriendlyId
 =begin
-This module adds in-table slugs to a model.
 
-Slugs are unique id strings that have been processed to remove or replace
-characters that a developer considers inconvenient for use in URLs. For example,
-blog applications typically use a post title to provide the basis of a search
-engine friendly URL:
+== Slugged Models
 
-    "Gone With The Wind" -> "gone-with-the-wind"
+FriendlyId can use a separate column to store slugs for models which require
+some text processing.
 
-FriendlyId generates slugs from a method or column that you specify, and stores
-them in a field in your model. By default, this field must be named +:slug+,
-though you may change this using the
+For example, blog applications typically use a post title to provide the basis
+of a search engine friendly URL. Such identifiers typically lack uppercase
+characters, use ASCII to approximate UTF-8 character, and strip out other
+characters which may make them aesthetically unappealing or error-prone when
+used in a URL.
+
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
+    end
+
+    @post = Post.create(:title => "This is the first post!")
+    @post.friendly_id   # returns "this-is-the-first-post"
+    redirect_to @post   # the URL will be /posts/this-is-the-first-post
+
+In general, use slugs by default unless you know for sure you don't need them.
+To activate the slugging functionality, use the {FriendlyId::Slugged} module.
+
+FriendlyId will generate slugs from a method or column that you specify, and
+store them in a field in your model. By default, this field must be named
++:slug+, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
-option. You should add an index to this field. You may also wish to constrain it
-to NOT NULL, but this depends on your app's behavior and requirements.
+option. You should add an index to this column, and in most cases, make it
+unique. You may also wish to constrain it to NOT NULL, but this depends on your
+app's behavior and requirements.
 
 === Example Setup
 
@@ -45,7 +61,9 @@ to NOT NULL, but this depends on your app's behavior and requirements.
       end
     end
 
-=== Slug Format
+=== Working With Slugs
+
+==== Formatting
 
 By default, FriendlyId uses Active Support's
 paramaterize[http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize]
@@ -55,7 +73,7 @@ dashes, and Unicode Latin characters with ASCII approximations:
   movie = Movie.create! :title => "Der Preis fürs Überleben"
   movie.slug #=> "der-preis-furs-uberleben"
 
-==== Slug Uniqueness
+==== Uniqueness
 
 When you try to insert a record that would generate a duplicate friendly id,
 FriendlyId will append a sequence to the generated slug to ensure uniqueness:
@@ -66,9 +84,11 @@ FriendlyId will append a sequence to the generated slug to ensure uniqueness:
   car.friendly_id #=> "peugot-206"
   car2.friendly_id #=> "peugot-206--2"
 
-==== Changing the Slug Sequence Separator
+==== Sequence Separator - The Two Dashes
 
-You can do this with the {Slugged::Configuration#sequence_separator
+By default, FriendlyId uses two dashes to separate the slug from a sequence.
+
+You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
 sequence_separator} configuration option.
 
 ==== Column or Method?
@@ -92,14 +112,15 @@ Here's an example of a class that uses a custom method to generate the slug:
 
 ==== Providing Your Own Slug Processing Method
 
-You can override {Slugged#normalize_friendly_id} in your model for total
-control over the slug format.
+You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
+total control over the slug format.
 
-==== Deciding when to generate new slugs
+==== Deciding When to Generate New Slugs
 
-Overriding {Slugged#should_generate_new_friendly_id?} lets you control whether
-new friendly ids are created when a model is updated. For example, if you only
-want to generate slugs once and then treat them as read-only:
+Overriding {FriendlyId::Slugged#should_generate_new_friendly_id?} lets you
+control whether new friendly ids are created when a model is updated. For
+example, if you only want to generate slugs once and then treat them as
+read-only:
 
   class Post < ActiveRecord::Base
     extend FriendlyId
@@ -137,7 +158,7 @@ locale when replacing Latin characters:
 
 This functionality was in fact taken from earlier versions of FriendlyId.
 
-==== Common Problems
+==== Gotchas: Common Problems
 
 FriendlyId uses a before_validation callback to generate and set the slug. This
 means that if you create two model instances before saving them, it's possible
@@ -147,9 +168,13 @@ This can happen in two fairly normal cases: the first, when a model using nested
 attributes creates more than one record for a model that uses friendly_id. The
 second, in concurrent code, either in threads or multiple processes.
 
+===== Nested Attributes
+
 To solve the nested attributes issue, I recommend simply avoiding them when
 creating more than one nested record for a model that uses FriendlyId. See {this
 Github issue}[https://github.com/norman/friendly_id/issues/185] for discussion.
+
+===== Concurrency
 
 To solve the concurrency issue, I recommend locking the model's table against
 inserts while when saving the record. See {this Github

@@ -3,7 +3,10 @@ require "i18n"
 module FriendlyId
 
 =begin
-This module adds very basic i18n support to FriendlyId.
+
+== Basic I18n
+
+This {FriendlyId::I18n i18n} adds very basic i18n support to FriendlyId.
 
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
@@ -11,7 +14,7 @@ By default FriendlyId looks for columns named, for example, "slug_en",
 +:slug_column+ option if you choose. Note that as of 4.0.0.beta11, the column
 for the default locale must also include the locale in its name.
 
-== Example migration
+=== Example migration
 
   def self.up
     create_table :posts do |t|
@@ -24,7 +27,7 @@ for the default locale must also include the locale in its name.
     add_index :posts, :slug_es
   end
 
-== Finds
+=== Finds
 
 Finds will take into consideration the current locale:
 
@@ -40,14 +43,15 @@ passed to I18n's +with_locale+ method:
     Post.find("la-guerra-de-las-galaxas")
   end
 
-== Creating Records
+=== Creating Records
 
 When new records are created, the slug is generated for the current locale only.
 
-== Translating Slugs
+=== Translating Slugs
 
-To translate an existing record's friendly_id, use {I18n::Model#set_friendly_id}. This will
-ensure that the slug you add is properly escaped, transliterated and sequenced:
+To translate an existing record's friendly_id, use
+{FriendlyId::I18n::Model#set_friendly_id}. This will ensure that the slug you
+add is properly escaped, transliterated and sequenced:
 
   post = Post.create :name => "Star Wars"
   post.set_friendly_id("La guerra de las galaxas", :es)

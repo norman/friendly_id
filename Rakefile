@@ -17,12 +17,35 @@ task :gem do
   %x{gem build friendly_id.gemspec}
 end
 
-task :yard do
+task :yard => :guide do
   puts %x{bundle exec yard}
 end
 
 task :bench do
   require File.expand_path("../bench", __FILE__)
+end
+
+task :guide do
+  def read_comments(path)
+    path  = File.expand_path("../#{path}", __FILE__)
+    match = File.read(path).match(/\n=begin(.*)\n=end/m)[1].to_s
+    match.split("\n").reject {|x| x =~ /^@/}.join("\n")
+  end
+
+  buffer = []
+
+  buffer << read_comments("lib/friendly_id.rb")
+  buffer << read_comments("lib/friendly_id/base.rb")
+  buffer << read_comments("lib/friendly_id/slugged.rb")
+  buffer << read_comments("lib/friendly_id/history.rb")
+  buffer << read_comments("lib/friendly_id/scoped.rb")
+  buffer << read_comments("lib/friendly_id/i18n.rb")
+  buffer << read_comments("lib/friendly_id/reserved.rb")
+
+  File.open("Guide.rdoc", "w") do |file|
+    file.write("#encoding: utf-8\n")
+    file.write(buffer.join("\n"))
+  end
 end
 
 namespace :test do

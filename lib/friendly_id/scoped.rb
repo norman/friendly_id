@@ -3,7 +3,11 @@ require "friendly_id/slugged"
 module FriendlyId
 
 =begin
-This module allows FriendlyId to generate unique slugs within a scope.
+
+== Unique Slugs by Scope
+
+The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
+within a scope.
 
 This allows, for example, two restaurants in different cities to have the slug
 +joes-diner+:
@@ -28,8 +32,6 @@ Without :scoped in this case, one of the restaurants would have the slug
 
 The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
 a column.
-
-== Tips For Working With Scoped Slugs
 
 === Finding Records by Friendly ID
 

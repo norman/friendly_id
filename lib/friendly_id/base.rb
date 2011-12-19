@@ -1,5 +1,55 @@
 module FriendlyId
-  # Class methods that will be added to model classes that extend {FriendlyId}.
+=begin
+
+== Setting Up FriendlyId in Your Model
+
+To use FriendlyId in your ActiveRecord models, you must first extend the
+FriendlyId module, then invoke the {FriendlyId::Base#friendly_id friendly_id}
+method to configure your desired options:
+
+    class Foo < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id bar, :use => [:slugged, :i18n]
+    end
+
+The most important option is `:use`, which you use to tell FriendlyId which
+addons it should use. See the documentation for this method for a list of all
+available addons, or skim through the rest of the docs to get a high-level
+overview.
+
+=== The Default Setup: Simple Models
+
+The simplest way to use FriendlyId is with a model that has a uniquely indexed
+column with no spaces or special characters, and that is seldom or never
+updated. The most common example of this is a user name:
+
+    class User < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :login
+      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
+    end
+
+    @user = User.find "joe"   # the old User.find(1) still works, too
+    @user.to_param            # returns "joe"
+    redirect_to @user         # the URL will be /users/joe
+
+In this case, FriendlyId assumes you want to use the column as-is; it will never
+modify the value of the column, and your application should ensure that the
+value is unique and admissible in a URL:
+
+    class City < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :name
+    end
+
+    @city.find "Viña del Mar"
+    redirect_to @city # the URL will be /cities/Viña%20del%20Mar
+
+Writing the code to process an arbitrary string into a good identifier for use
+in a URL can be repetitive and surprisingly tricky, so for this reason it's
+often better and easier to use {FriendlyId::Slugged slugs}.
+
+=end
   module Base
 
     # Configure FriendlyId's behavior in a model.
@@ -166,6 +216,31 @@ module FriendlyId
         alias_method :find_one_without_friendly_id, :find_one
         alias_method :exists_without_friendly_id?, :exists?
         include FriendlyId::FinderMethods
+      end
+    end
+  end
+
+  # Instance methods that will be added to all classes using FriendlyId.
+  module Model
+
+    attr_reader :current_friendly_id
+
+    # Convenience method for accessing the class method of the same name.
+    def friendly_id_config
+      self.class.friendly_id_config
+    end
+
+    # Get the instance's friendly_id.
+    def friendly_id
+      send friendly_id_config.query_field
+    end
+
+    # Either the friendly_id, or the numeric id cast to a string.
+    def to_param
+      if diff = changes[friendly_id_config.query_field]
+        diff.first
+      else
+        friendly_id.present? ? friendly_id : id.to_s
       end
     end
   end

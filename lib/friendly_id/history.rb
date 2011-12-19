@@ -3,12 +3,16 @@ require "friendly_id/slug"
 module FriendlyId
 
 =begin
-This module adds the ability to store a log of a model's slugs, so that when its
-friendly id changes, it's still possible to perform finds by the old id.
+
+== History: Avoiding 404's When Slugs Change
+
+FriendlyId's {FriendlyId::History History} module adds the ability to store a
+log of a model's slugs, so that when its friendly id changes, it's still
+possible to perform finds by the old id.
 
 The primary use case for this is avoiding broken URLs.
 
-== Setup
+=== Setup
 
 In order to use this module, you must add a table to your database schema to
 store the slug records. FriendlyId provides a generator for this purpose:
@@ -19,7 +23,7 @@ store the slug records. FriendlyId provides a generator for this purpose:
 This will add a table named +friendly_id_slugs+, used by the {FriendlyId::Slug}
 model.
 
-== Considerations
+=== Considerations
 
 This module is incompatible with the +:scoped+ module.
 
@@ -27,7 +31,7 @@ Because recording slug history requires creating additional database records,
 this module has an impact on the performance of the associated model's +create+
 method.
 
-== Example
+=== Example
 
     class Post < ActiveRecord::Base
       extend FriendlyId

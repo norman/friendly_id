@@ -22,61 +22,26 @@ in your URLs with strings:
 It requires few changes to your application code and offers flexibility,
 performance and a well-documented codebase.
 
-=== Concepts
+=== Core Concepts
 
-Although FriendlyId helps with URLs, it does all of its work inside your models,
-not your routes.
+==== Slugs
 
-=== Simple Models
+The concept of "slugs[http://en.wikipedia.org/wiki/Slug_(web_publishing)]" is at
+the heart of FriendlyId.
 
-The simplest way to use FriendlyId is with a model that has a uniquely indexed
-column with no spaces or special characters, and that is seldom or never
-updated. The most common example of this is a user name:
+A slug is the part of a URL which identifies a page using human-readable
+keywords, rather than an opaque identifier such as a numeric id. This can make
+your application more friendly both for users and search engine.
 
-    class User < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :login
-      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
-    end
+==== Finders: Slugs Act Like Numeric IDs
 
-    @user = User.find "joe"   # the old User.find(1) still works, too
-    @user.to_param            # returns "joe"
-    redirect_to @user         # the URL will be /users/joe
+To the extent possible, FriendlyId lets you treat text-based identifiers like
+normal IDs. This means that you can perform finds with slugs just like you do
+with numeric ids:
 
-In this case, FriendlyId assumes you want to use the column as-is; it will never
-modify the value of the column, and your application should ensure that the
-value is admissible in a URL:
+    Person.find(82542335)
+    Person.find("joe")
 
-    class City < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :name
-    end
-
-    @city.find "Viña del Mar"
-    redirect_to @city # the URL will be /cities/Viña%20del%20Mar
-
-For this reason, it is often more convenient to use "slugs" rather than a single
-column.
-
-=== Slugged Models
-
-FriendlyId can uses a separate column to store slugs for models which require
-some processing of the friendly_id text. The most common example is a blog
-post's title, which may have spaces, uppercase characters, or other attributes
-you wish to modify to make them more suitable for use in URL's.
-
-    class Post < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :title, :use => :slugged
-    end
-
-    @post = Post.create(:title => "This is the first post!")
-    @post.friendly_id   # returns "this-is-the-first-post"
-    redirect_to @post   # the URL will be /posts/this-is-the-first-post
-
-In general, use slugs by default unless you know for sure you don't need them.
-
-@author Norman Clarke
 =end
 module FriendlyId
 

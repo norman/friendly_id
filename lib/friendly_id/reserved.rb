@@ -1,11 +1,15 @@
 module FriendlyId
 
 =begin
-This module adds the ability to exlude a list of words from use as
-FriendlyId slugs.
 
-By default, FriendlyId reserves the words "new" and "edit" when this module
-is included. You can configure this globally by using {FriendlyId.defaults FriendlyId.defaults}:
+== Reserved Words
+
+The {FriendlyId::Reserved Reserved} module adds the ability to exlude a list of
+words from use as FriendlyId slugs.
+
+By default, FriendlyId reserves the words "new" and "edit" when this module is
+included. You can configure this globally by using {FriendlyId.defaults
+FriendlyId.defaults}:
 
   FriendlyId.defaults do |config|
     config.use :reserved
