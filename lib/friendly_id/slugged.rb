@@ -197,13 +197,13 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
     # Sets up behavior and configuration options for FriendlyId's slugging
     # feature.
     def self.included(model_class)
-      model_class.instance_eval do
-        friendly_id_config.class.send :include, Configuration
-        friendly_id_config.defaults[:slug_column]        ||= 'slug'
-        friendly_id_config.defaults[:sequence_separator] ||= '--'
-        friendly_id_config.slug_generator_class          ||= Class.new(SlugGenerator)
-        before_validation :set_slug
+      model_class.friendly_id_config.instance_eval do
+        self.class.send :include, Configuration
+        self.slug_generator_class     ||= Class.new(SlugGenerator)
+        defaults[:slug_column]        ||= 'slug'
+        defaults[:sequence_separator] ||= '--'
       end
+      model_class.before_validation :set_slug
     end
 
     # Process the given value to make it suitable for use as a slug.
