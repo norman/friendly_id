@@ -39,7 +39,7 @@ task :guide do
   buffer << read_comments("lib/friendly_id/slugged.rb")
   buffer << read_comments("lib/friendly_id/history.rb")
   buffer << read_comments("lib/friendly_id/scoped.rb")
-  buffer << read_comments("lib/friendly_id/i18n.rb")
+  buffer << read_comments("lib/friendly_id/simple_i18n.rb")
   buffer << read_comments("lib/friendly_id/reserved.rb")
 
   File.open("Guide.rdoc", "w") do |file|

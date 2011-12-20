@@ -3,11 +3,9 @@ require File.expand_path("../helper.rb", __FILE__)
 class I18nTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
-  I18n = ::I18n
-
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :name, :use => :i18n
+    friendly_id :name, :use => :simple_i18n
   end
 
   test "friendly_id should return a the current locale's slug" do
@@ -103,7 +101,7 @@ class I18nTest < MiniTest::Unit::TestCase
     test "should add locale to non-default slug column and non-default locale" do
       model_class = Class.new(ActiveRecord::Base) do
         extend FriendlyId
-        friendly_id :name, :use => :i18n, :slug_column => :foo
+        friendly_id :name, :use => :simple_i18n, :slug_column => :foo
       end
       I18n.with_locale :es do
         assert_equal "foo_es", model_class.friendly_id_config.slug_column
