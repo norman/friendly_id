@@ -2,6 +2,7 @@ ENV["DB"] = "postgres"
 
 require "thread"
 require File.expand_path("../../../helper", __FILE__)
+require "active_record/locking/fatalistic"
 
 ActiveRecord::Migration.tap do |m|
   m.drop_table "things"
@@ -28,8 +29,7 @@ def save_thing
     $things.pop
   end
   if thing.nil? then return end
-  Thing.transaction do
-    Thing.connection.execute "LOCK TABLE things"
+  Thing.lock do
     thing.save!
     print "#{thing.friendly_id}\n"
   end
