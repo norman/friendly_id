@@ -20,7 +20,7 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
-FriendlyId is compatible with Active Record **3.0** and **3.1**.
+FriendlyId is compatible with Active Record **3.0**, **3.1** and **3.2**
 
 ## Version 4.x
 
@@ -46,7 +46,7 @@ which compiles the top-level RDocs into one outlined document.
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.0.beta14"
+    gem "friendly_id", "~> 4.0.0"
 
     rails generate scaffold user name:string slug:string
 
