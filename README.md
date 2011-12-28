@@ -3,10 +3,10 @@
 [![Build Status](http://travis-ci.org/norman/friendly_id.png)](http://travis-ci.org/norman/friendly_id) [![Dependency Status](https://gemnasium.com/norman/friendly_id.png)](https://gemnasium.com/norman/friendly_id)
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
-Ruby on Rails. It allows you to create pretty URL's and work with human-friendly
+Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
 strings as if they were numeric ids for Active Record models.
 
-Using FriendlyId, it's easy to make your application use URL's like:
+Using FriendlyId, it's easy to make your application use URLs like:
 
     http://example.com/states/washington
 
@@ -20,7 +20,7 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
-FriendlyId is compatible with Active Record **3.0**, **3.1** and **3.2**
+FriendlyId is compatible with Active Record **3.0** and higher.
 
 ## Version 4.x
 
@@ -51,17 +51,17 @@ which compiles the top-level RDocs into one outlined document.
     rails generate scaffold user name:string slug:string
 
     # edit db/migrate/*_create_users.rb
-    add_index :users, :slug, :unique => true
+    add_index :users, :slug, unique: true
 
     rake db:migrate
 
     # edit app/models/user.rb
     class User < ActiveRecord::Base
       extend FriendlyId
-      friendly_id :name, :use => :slugged
+      friendly_id :name, use: :slugged
     end
 
-    User.create! :name => "Joe Schmoe"
+    User.create! name: "Joe Schmoe"
 
     rails server
 
@@ -87,12 +87,15 @@ tracker](http://github.com/norman/friendly_id/issues) for this project.
 If you have a bug to report, please include the following information:
 
 * **Version information for FriendlyId, Rails and Ruby.**
-* Stack trace and error message.
+* Full stack trace and error message (if you have them).
 * Any snippets of relevant model, view or controller code that shows how you
   are using FriendlyId.
 
 If you are able to, it helps even more if you can fork FriendlyId on Github,
 and add a test that reproduces the error you are experiencing.
+
+For more info on how to report bugs, please see [this
+article](http://yourbugreportneedsmore.info/).
 
 ## Thanks and Credits
 
@@ -105,7 +108,7 @@ Part of the inspiration to rework FriendlyId came from Darcy Laycock's library
 [Slugged](https://github.com/Sutto/slugged), which he was inspired to create
 because of frustrations he experienced while using FriendlyId 3.x. Seeing a
 smart programmer become frustrated with my code was enough of a kick in the
-butt to make me want to improve this library significantly.
+butt to make me want to significantly improve this library.
 
 Many thanks to him for providing valid, real criticism while still being a cool
 about it. I definitely recommend you check out his library if for some reason
