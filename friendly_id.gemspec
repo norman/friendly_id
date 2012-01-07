@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3", "~> 1.3.4"
   s.add_development_dependency "minitest", "~> 2.10.0"
   s.add_development_dependency "mocha", "~> 0.10.0"
-  s.add_development_dependency "ffaker", "~> 1.10.1"
   s.add_development_dependency "maruku", "~> 0.6.0"
   s.add_development_dependency "yard", "~> 0.7.2"
   s.add_development_dependency "i18n", "~> 0.6.0"
+  s.add_development_dependency "ffaker"
   s.add_development_dependency "simplecov"
 
   s.description = <<-EOM
