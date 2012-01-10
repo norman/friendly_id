@@ -48,6 +48,17 @@ class HistoryTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should create slug records on each change" do
+    transaction do
+      record = model_class.create! :name => "hello"
+      assert_equal 1, FriendlyId::Slug.count
+      record = model_class.find("hello")
+      record.name = "hello again"
+      record.save!
+      assert_equal 2, FriendlyId::Slug.count
+    end
+  end
+
   test "should not be read only when found by old slug" do
     with_instance_of(model_class) do |record|
       old_friendly_id = record.friendly_id
