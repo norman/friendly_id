@@ -80,9 +80,9 @@ To translate an existing record's friendly_id, simply change locale and assign
           where(@klass.friendly_id_config.query_field => id).first or super
         else
           where(@klass.friendly_id_config.query_field => id).first or
-          joins(:translations).where("#{@klass.downcase}_translations.locale = ? AND #{@klass.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.locale, id).first or
+          joins(:translations).where("#{@klass.to_s.downcase}_translations.locale = ? AND #{@klass.to_s.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.locale, id).first or
           # if locale is not translated fallback to default locale
-          joins(:translations).where("#{@klass.downcase}_translations.locale = ? AND #{@klass.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.default_locale, id).first or
+          joins(:translations).where("#{@klass.to_s.downcase}_translations.locale = ? AND #{@klass.to_s.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.default_locale, id).first or
           super
         end
       end
