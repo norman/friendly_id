@@ -65,20 +65,20 @@ method.
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy,
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
-        before_save :build_slug
+        after_save :create_slug
         relation_class.send :include, FinderMethods
       end
     end
 
     private
 
-    def build_slug
-      return unless should_generate_new_friendly_id?
+    def create_slug
+      return if slugs.first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
       result = relation.select("id").lock(true).all
       relation.delete_all unless result.empty?
-      slugs.build :slug => friendly_id
+      slugs.create! :slug => friendly_id
     end
 
     # Adds a finder that explictly uses slugs from the slug table.
