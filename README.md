@@ -38,6 +38,8 @@ The best place to start is with the
 [Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
+You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid).
+
 ## Rails Quickstart
 
     gem install friendly_id
