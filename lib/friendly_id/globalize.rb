@@ -50,11 +50,21 @@ To translate an existing record's friendly_id, simply change locale and assign
 =end
   module Globalize
 
+    class MissingTranslationFieldError < StandardError
+    end
+
     def self.included(model_class)
       model_class.instance_eval do
         friendly_id_config.use :slugged
         relation_class.send :include, FinderMethods
         include Model
+        # Check if slug field is enabled to be translated with Globalize
+        unless columns.map(&:name).include?(friendly_id_config.query_field)
+          raise MissingTranslationFieldError.new("Missing field '#{friendly_id_config.query_field}' in db table")
+        end
+        unless respond_to?('translated_attribute_names') && translated_attribute_names.include?(friendly_id_config.query_field.to_sym)
+          raise MissingTranslationFieldError.new("You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model)")
+        end
       end
     end
 
@@ -76,15 +86,11 @@ To translate an existing record's friendly_id, simply change locale and assign
       # @see FriendlyId::ObjectUtils
       def find_one(id)
         return super if id.unfriendly_id?
-        unless respond_to?('translated?')
-          where(@klass.friendly_id_config.query_field => id).first or super
-        else
-          where(@klass.friendly_id_config.query_field => id).first or
-          joins(:translations).where("#{@klass.to_s.downcase}_translations.locale = ? AND #{@klass.to_s.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.locale, id).first or
-          # if locale is not translated fallback to default locale
-          joins(:translations).where("#{@klass.to_s.downcase}_translations.locale = ? AND #{@klass.to_s.downcase}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.default_locale, id).first or
-          super
-        end
+        where(@klass.friendly_id_config.query_field => id).first or
+        joins(:translations).where("#{table_name.singularize}_translations.locale = ? AND #{table_name.singularize}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.locale, id).first or
+        # if locale is not translated fallback to default locale
+        joins(:translations).where("#{table_name.singularize}_translations.locale = ? AND #{table_name.singularize}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.default_locale, id).first or
+        super
       end
 
     end
