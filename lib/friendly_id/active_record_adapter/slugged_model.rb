@@ -11,6 +11,12 @@ module FriendlyId
           after_update :update_scope
           after_update :update_dependent_scopes
           protect_friendly_id_attributes
+
+          def slug_with_rails_3_2_patch
+            slug_without_rails_3_2_patch || slugs.first
+          end
+
+          alias_method_chain :slug, :rails_3_2_patch
         end
       end
 
