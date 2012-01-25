@@ -1,6 +1,6 @@
 # FriendlyId
 
-[![Build Status](http://travis-ci.org/norman/friendly_id.png)](http://travis-ci.org/norman/friendly_id) [![Dependency Status](https://gemnasium.com/norman/friendly_id.png)](https://gemnasium.com/norman/friendly_id)
+[![Build Status](http://travis-ci.org/norman/friendly_id.png)](http://travis-ci.org/norman/friendly_id)
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
