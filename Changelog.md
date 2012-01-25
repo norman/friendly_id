@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.2 (2012-01-24)
+
+* Fix for 3.2 support ([Philip Arndt](https://github.com/parndt))
+
 ## 3.1.1 (2011-12-12)
 
 * Fix for "can't modify frozen hash" on 3.1 ([Theo Cushion](https://github.com/theozaurus))
