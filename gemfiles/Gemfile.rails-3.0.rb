@@ -7,13 +7,13 @@ source :rubygems
 # end
 
 platform :ruby do
-  gem "mysql2", "~> 0.2.0"
-  gem "pg", "~> 0.11.0"
-  gem "sqlite3", "~> 1.3.4"
+  gem "mysql2"
+  gem "pg"
+  gem "sqlite3"
 end
 
-gem "activerecord", "~> 3.0.10"
-gem "minitest", "~> 2.4.0"
-gem "mocha", "~> 0.9.12"
-gem "railties", "~> 3.0.10"
+gem "activerecord", "~> 3.0.0"
+gem "railties", "~> 3.0.0"
+gem "minitest"
+gem "mocha"
 gem "rake"
