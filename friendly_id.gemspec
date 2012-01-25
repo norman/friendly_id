@@ -15,14 +15,14 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- {test}/*`.split("\n")
   s.require_paths     = ["lib"]
 
-  s.add_development_dependency "railties", "~> 3.1.0"
-  s.add_development_dependency "activerecord", "~> 3.1.0"
-  s.add_development_dependency "sqlite3", "~> 1.3.4"
-  s.add_development_dependency "minitest", "~> 2.10.0"
-  s.add_development_dependency "mocha", "~> 0.10.0"
-  s.add_development_dependency "maruku", "~> 0.6.0"
-  s.add_development_dependency "yard", "~> 0.7.2"
-  s.add_development_dependency "i18n", "~> 0.6.0"
+  s.add_development_dependency "railties", "~> 3.2.0"
+  s.add_development_dependency "activerecord", "~> 3.2.0"
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "minitest"
+  s.add_development_dependency "mocha"
+  s.add_development_dependency "maruku"
+  s.add_development_dependency "yard"
+  s.add_development_dependency "i18n"
   s.add_development_dependency "ffaker"
   s.add_development_dependency "simplecov"
 
