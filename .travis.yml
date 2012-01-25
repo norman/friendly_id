@@ -1,0 +1,20 @@
+rvm:
+  - 1.9.3
+  - 1.9.2
+  - 1.8.7
+  - rbx-2.0
+  # - jruby
+
+branches:
+  only:
+    - master
+env:
+  - DB=postgres
+  - DB=mysql
+  - DB=sqlite3
+
+gemfile:
+  - gemfiles/Gemfile.rails-3.0.rb
+  - gemfiles/Gemfile.rails-3.1.rb
+
+script: "bundle exec rake db:reset db:up test"
