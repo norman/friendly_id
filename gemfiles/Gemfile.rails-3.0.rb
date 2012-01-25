@@ -7,7 +7,7 @@ source :rubygems
 # end
 
 platform :ruby do
-  gem "mysql2"
+  gem "mysql2", "~> 0.2.0"
   gem "pg"
   gem "sqlite3"
 end
