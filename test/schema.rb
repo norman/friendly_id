@@ -30,6 +30,7 @@ module FriendlyId
 
           # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
+          add_column :novels, :publisher_id, :integer
           remove_index :novels, :slug
 
           # This will be used to test column name quoting
@@ -53,7 +54,7 @@ module FriendlyId
         end
 
         def simple_tables
-          ["authors", "books"]
+          ["authors", "books", "publishers"]
         end
 
         def tables

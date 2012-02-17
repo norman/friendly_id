@@ -105,7 +105,7 @@ an example of one way to set this up:
       # @return Symbol The scope value
       attr_accessor :scope
 
-      # Gets the scope column.
+      # Gets the scope columns.
       #
       # Checks to see if the +:scope+ option passed to
       # {FriendlyId::Base#friendly_id} refers to a relation, and if so, returns
@@ -113,19 +113,19 @@ an example of one way to set this up:
       # the name of column and returns it cast to a String.
       #
       # @return String The scope column
-      def scope_column
-        (reflection_foreign_key or @scope).to_s
+      def scope_columns
+        [@scope].flatten.map { |s| (reflection_foreign_key(s) or s).to_s }
       end
 
       private
 
       if ActiveRecord::VERSION::STRING < "3.1"
-        def reflection_foreign_key
-          model_class.reflections[@scope].try(:primary_key_name)
+        def reflection_foreign_key(scope)
+          model_class.reflections[scope].try(:primary_key_name)
         end
       else
-        def reflection_foreign_key
-          model_class.reflections[@scope].try(:foreign_key)
+        def reflection_foreign_key(scope)
+          model_class.reflections[scope].try(:foreign_key)
         end
       end
     end
@@ -137,8 +137,12 @@ an example of one way to set this up:
       private
 
       def conflict
-        column = friendly_id_config.scope_column
-        conflicts.where(column => sluggable.send(column)).first
+        columns = friendly_id_config.scope_columns
+        matched = columns.inject(conflicts) do |memo, column|
+           memo.where(column => sluggable.send(column))
+        end
+
+        matched.first
       end
     end
   end

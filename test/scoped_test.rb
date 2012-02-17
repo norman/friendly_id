@@ -8,7 +8,12 @@ end
 class Novel < ActiveRecord::Base
   extend FriendlyId
   belongs_to :novelist
-  friendly_id :name, :use => :scoped, :scope => :novelist
+  belongs_to :publisher
+  friendly_id :name, :use => :scoped, :scope => [:publisher, :novelist]
+end
+
+class Publisher < ActiveRecord::Base
+  has_many :novels
 end
 
 class ScopedTest < MiniTest::Unit::TestCase
@@ -21,7 +26,7 @@ class ScopedTest < MiniTest::Unit::TestCase
   end
 
   test "should detect scope column from belongs_to relation" do
-    assert_equal "novelist_id", Novel.friendly_id_config.scope_column
+    assert_equal ["publisher_id", "novelist_id"], Novel.friendly_id_config.scope_columns
   end
 
   test "should detect scope column from explicit column name" do
@@ -30,7 +35,7 @@ class ScopedTest < MiniTest::Unit::TestCase
       extend FriendlyId
       friendly_id :empty, :use => :scoped, :scope => :dummy
     end
-    assert_equal "dummy", model_class.friendly_id_config.scope_column
+    assert_equal ["dummy"], model_class.friendly_id_config.scope_columns
   end
 
   test "should allow duplicate slugs outside scope" do
@@ -57,6 +62,22 @@ class ScopedTest < MiniTest::Unit::TestCase
 
     assert_raises RuntimeError do
       model_class.friendly_id :name, :use => [:scoped, :history]
+    end
+  end
+
+  test "should apply scope with multiple columns" do
+    transaction do
+      novelist = Novelist.create! :name => "a"
+      publisher = Publisher.create! :name => "b"
+
+      novel1 = Novel.create! :name => "c", :novelist => novelist, :publisher => publisher
+      novel2 = Novel.create! :name => "c", :novelist => novelist, :publisher => Publisher.create(:name => "d")
+      novel3 = Novel.create! :name => "c", :novelist => Novelist.create(:name => "e"), :publisher => publisher
+      novel4 = Novel.create! :name => "c", :novelist => novelist, :publisher => publisher
+
+      assert_equal novel1.friendly_id, novel2.friendly_id
+      assert_equal novel2.friendly_id, novel3.friendly_id
+      assert novel3.friendly_id != novel4.friendly_id
     end
   end
 end
