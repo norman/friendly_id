@@ -59,11 +59,13 @@ To translate an existing record's friendly_id, simply change locale and assign
         relation_class.send :include, FinderMethods
         include Model
         # Check if slug field is enabled to be translated with Globalize
-        unless columns.map(&:name).include?(friendly_id_config.query_field)
-          raise MissingTranslationFieldError.new("Missing field '#{friendly_id_config.query_field}' in db table")
-        end
-        unless respond_to?('translated_attribute_names') && translated_attribute_names.include?(friendly_id_config.query_field.to_sym)
-          raise MissingTranslationFieldError.new("You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model)")
+        if table_exists?
+          if columns.map(&:name).exclude?(friendly_id_config.query_field)
+            raise MissingTranslationFieldError.new("Missing field '#{friendly_id_config.query_field}' in db table")
+          end
+          unless respond_to?('translated_attribute_names') || translated_attribute_names.exclude?(friendly_id_config.query_field.to_sym)
+            raise MissingTranslationFieldError.new("You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model)")
+          end
         end
       end
     end
