@@ -1,4 +1,4 @@
-require "i18n"
+require 'i18n'
 
 module FriendlyId
 
@@ -75,7 +75,6 @@ To translate an existing record's friendly_id, simply change locale and assign
     end
 
     module FinderMethods
-      protected
       # FriendlyId overrides this method to make it possible to use friendly id's
       # identically to numeric ids in finders.
       #
@@ -87,11 +86,17 @@ To translate an existing record's friendly_id, simply change locale and assign
       def find_one(id)
         return super if id.unfriendly_id?
         where(@klass.friendly_id_config.query_field => id).first or
-        joins(:translations).where("#{table_name.singularize}_translations.locale = ? AND #{table_name.singularize}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.locale, id).first or
+        joins(:translations).
+          where(translation_class.arel_table[:locale].eq(I18n.locale)).
+          where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         # if locale is not translated fallback to default locale
-        joins(:translations).where("#{table_name.singularize}_translations.locale = ? AND #{table_name.singularize}_translations.#{@klass.friendly_id_config.query_field} = ?", I18n.default_locale, id).first or
+        joins(:translations).
+          where(translation_class.arel_table[:locale].eq(I18n.default_localelocale)).
+          where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         super
       end
+
+      protected :find_one
 
     end
   end
