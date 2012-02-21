@@ -93,7 +93,7 @@ To translate an existing record's friendly_id, simply change locale and assign
           where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         # if locale is not translated fallback to default locale
         joins(:translations).
-          where(translation_class.arel_table[:locale].eq(I18n.default_localelocale)).
+          where(translation_class.arel_table[:locale].eq(I18n.default_locale)).
           where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         super
       end
