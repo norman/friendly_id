@@ -89,12 +89,13 @@ class HistoryTest < MiniTest::Unit::TestCase
   end
 
   test "should not create new slugs that match old slugs" do
-    transaction do 
+    transaction do
       first_record = model_class.create! :name => "foo"
       first_record.name = "bar"
       first_record.save!
       second_record = model_class.create! :name => "foo"
       assert second_record.slug != "foo"
+      assert second_record.slug == "foo--2"
     end
   end
 
