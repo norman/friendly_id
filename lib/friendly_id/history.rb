@@ -67,6 +67,7 @@ method.
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
         after_save :create_slug
         relation_class.send :include, FinderMethods
+        friendly_id_config.slug_generator_class.send :include, SlugGenerator
       end
     end
 
@@ -108,6 +109,23 @@ method.
         sql = sql % [@klass.base_class.name, slug].map {|x| connection.quote(x)}
         sluggable_id = connection.select_values(sql).first
         yield sluggable_id if sluggable_id
+      end
+    end
+
+    # This module overrides {FriendlyId::SlugGenerator#conflicts} to consider
+    # all historic slugs for that model.
+    module SlugGenerator
+
+      private
+
+      def conflicts
+        pkey  = sluggable.class.primary_key
+        value = sluggable.send pkey
+
+        scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
+        scope = scope.where(:sluggable_type => sluggable.class.name)
+        scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
+        scope = scope.order("LENGTH(slug) DESC, slug DESC")
       end
     end
   end
