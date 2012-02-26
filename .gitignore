@@ -10,3 +10,4 @@ coverage
 *.sqlite3
 *.rbc
 *.lock
+.rbx
