@@ -44,7 +44,7 @@ method to configure your desired options:
 
     class Foo < ActiveRecord::Base
       extend FriendlyId
-      friendly_id bar, :use => [:slugged, :simple_i18n]
+      friendly_id :bar, :use => [:slugged, :simple_i18n]
     end
 
 The most important option is `:use`, which you use to tell FriendlyId which
@@ -404,7 +404,7 @@ Enable i18n use in your model with :
 
   class Post < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :title, use: [:slugged, :simple_i18n]
+    friendly_id :title, :use => [:slugged, :simple_i18n]
   end
 
 === Example migration
