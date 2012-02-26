@@ -100,6 +100,7 @@ class I18nTest < MiniTest::Unit::TestCase
 
     test "should add locale to non-default slug column and non-default locale" do
       model_class = Class.new(ActiveRecord::Base) do
+        self.abstract_class = true
         extend FriendlyId
         friendly_id :name, :use => :simple_i18n, :slug_column => :foo
       end

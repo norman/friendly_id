@@ -20,6 +20,7 @@ class StiTest < MiniTest::Unit::TestCase
 
   test "friendly_id should accept a base and a hash with single table inheritance" do
     abstract_klass = Class.new(ActiveRecord::Base) do
+      def self.table_exists?; false end
       extend FriendlyId
       friendly_id :foo, :use => :slugged, :slug_column => :bar
     end
@@ -31,6 +32,7 @@ class StiTest < MiniTest::Unit::TestCase
 
   test "friendly_id should accept a block with single table inheritance" do
     abstract_klass = Class.new(ActiveRecord::Base) do
+      def self.table_exists?; false end
       extend FriendlyId
       friendly_id :foo do |config|
         config.use :slugged
