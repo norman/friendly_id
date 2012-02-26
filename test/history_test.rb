@@ -15,7 +15,7 @@ class HistoryTest < MiniTest::Unit::TestCase
   end
 
   test "should insert record in slugs table on create" do
-    with_instance_of(model_class) {|record| assert !record.slugs.empty?}
+    with_instance_of(model_class) {|record| assert record.slugs.any?}
   end
 
   test "should not create new slug record if friendly_id is not changed" do
