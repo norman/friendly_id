@@ -45,8 +45,8 @@ class StiTest < MiniTest::Unit::TestCase
   end
 
   test "friendly_id slugs should not clash with eachother" do
-    journalist  = Journalist.create! name: 'foo bar'
-    editoralist = Editorialist.create! name: 'foo bar'
+    journalist  = Journalist.create! :name => 'foo bar'
+    editoralist = Editorialist.create! :name => 'foo bar'
 
     assert_equal 'foo-bar', journalist.slug
     assert_equal 'foo-bar--2', editoralist.slug
