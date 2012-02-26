@@ -44,7 +44,7 @@ method to configure your desired options:
 
     class Foo < ActiveRecord::Base
       extend FriendlyId
-      friendly_id bar, :use => [:slugged, :i18n]
+      friendly_id bar, :use => [:slugged, :simple_i18n]
     end
 
 The most important option is `:use`, which you use to tell FriendlyId which
@@ -392,13 +392,20 @@ an example of one way to set this up:
 
 == Basic I18n
 
-This {FriendlyId::I18n i18n} adds very basic i18n support to FriendlyId.
+This {FriendlyId::SimpleI18n i18n} adds very basic i18n support to FriendlyId.
 
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
 "slug_es", etc. The first part of the name can be configured by passing the
 +:slug_column+ option if you choose. Note that as of 4.0.0.beta11, the column
 for the default locale must also include the locale in its name.
+
+Enable i18n use in your model with :
+
+  class Post < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :title, use: [:slugged, :simple_i18n]
+  end
 
 === Example migration
 
