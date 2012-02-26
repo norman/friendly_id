@@ -29,7 +29,6 @@ class StiTest < MiniTest::Unit::TestCase
     assert_equal :bar, klass.friendly_id_config.slug_column
   end
 
-
   test "friendly_id should accept a block with single table inheritance" do
     abstract_klass = Class.new(ActiveRecord::Base) do
       extend FriendlyId
@@ -43,6 +42,14 @@ class StiTest < MiniTest::Unit::TestCase
     assert klass < FriendlyId::Slugged
     assert_equal :foo, klass.friendly_id_config.base
     assert_equal :bar, klass.friendly_id_config.slug_column
+  end
+
+  test "friendly_id slugs should not class with eachother" do
+    journalist  = Journalist.create! name: 'foo bar'
+    editoralist = Editorialist.create! name: 'foo bar'
+
+    assert_equal 'foo-bar', journalist.slug
+    assert_equal 'foo-bar--2', editoralist.slug
   end
 
 end
