@@ -16,5 +16,5 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.rb
   - gemfiles/Gemfile.rails-3.1.rb
   - gemfiles/Gemfile.rails-3.2.rb
-before_script: 'bundle exec rake db:reset db:up'
+before_script: 'bundle exec rake db:create db:up'
 script: 'bundle exec rake test'
