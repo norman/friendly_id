@@ -20,7 +20,9 @@ class CoreTest < MiniTest::Unit::TestCase
   end
 
   test "models don't use friendly_id by default" do
-    assert !Class.new(ActiveRecord::Base).respond_to?(:friendly_id)
+    assert !Class.new(ActiveRecord::Base) {
+      self.abstract_class = true
+    }.respond_to?(:friendly_id)
   end
 
   test "model classes should have a friendly id config" do

@@ -1,21 +1,21 @@
 source :rubygems
 
-# platform :jruby do
-#   gem "activerecord-jdbc-adapter", :git => "https://github.com/nicksieger/activerecord-jdbc-adapter.git"
-#   gem "activerecord-jdbcmysql-adapter"
-#   gem "activerecord-jdbcpostgresql-adapter"
-#   gem "activerecord-jdbcsqlite3-adapter"
-# end
-
-platform :ruby do
-  gem "mysql2"
-  gem "pg"
-  gem "sqlite3"
+platforms :jruby do
+  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'activerecord-jdbcmysql-adapter'
+  gem 'activerecord-jdbcpostgresql-adapter'
+  gem 'jruby-openssl'
 end
 
-gem "ffaker"
-gem "activerecord", "~> 3.2.0"
-gem "railties", "~> 3.2.0"
-gem "minitest"
-gem "mocha"
-gem "rake"
+platforms :ruby do
+  gem 'sqlite3'
+  gem 'mysql2'
+  gem 'pg'
+end
+
+gem 'ffaker'
+gem 'activerecord', '~> 3.2.0'
+gem 'railties', '~> 3.2.0'
+gem 'minitest'
+gem 'mocha'
+gem 'rake'

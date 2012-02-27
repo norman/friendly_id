@@ -5,7 +5,9 @@ class ConfigurationTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
   def setup
-    @model_class = Class.new(ActiveRecord::Base)
+    @model_class = Class.new(ActiveRecord::Base) do
+      self.abstract_class = true
+    end
   end
 
   test "should set model class on initialization" do

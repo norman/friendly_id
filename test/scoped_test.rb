@@ -25,9 +25,11 @@ class ScopedTest < MiniTest::Unit::TestCase
   end
 
   test "should detect scope column from explicit column name" do
-    model_class = Class.new(ActiveRecord::Base)
-    model_class.extend FriendlyId
-    model_class.friendly_id :empty, :use => :scoped, :scope => :dummy
+    model_class = Class.new(ActiveRecord::Base) do
+      self.abstract_class = true
+      extend FriendlyId
+      friendly_id :empty, :use => :scoped, :scope => :dummy
+    end
     assert_equal "dummy", model_class.friendly_id_config.scope_column
   end
 
@@ -48,8 +50,11 @@ class ScopedTest < MiniTest::Unit::TestCase
   end
 
   test "should raise error if used with history" do
-    model_class = Class.new(ActiveRecord::Base)
-    model_class.extend FriendlyId
+    model_class = Class.new(ActiveRecord::Base) do
+      self.abstract_class = true
+      extend FriendlyId
+    end
+
     assert_raises RuntimeError do
       model_class.friendly_id :name, :use => [:scoped, :history]
     end

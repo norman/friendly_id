@@ -1,6 +1,5 @@
 require File.expand_path("../helper", __FILE__)
 
-require "test/unit"
 require "rails/generators"
 require "generators/friendly_id_generator"
 

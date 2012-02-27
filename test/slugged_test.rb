@@ -78,10 +78,13 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
   end
 
   test "should quote column names" do
-    model_class            = Class.new(ActiveRecord::Base)
-    model_class.table_name = "journalists"
-    model_class.extend FriendlyId
-    model_class.friendly_id :name, :use => :slugged, :slug_column => "strange name"
+    model_class = Class.new(ActiveRecord::Base) do
+      self.abstract_class = true
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged, :slug_column => "strange name"
+    end
+
     begin
       with_instance_of(model_class) {|record| assert model_class.find(record.friendly_id)}
     rescue ActiveRecord::StatementInvalid

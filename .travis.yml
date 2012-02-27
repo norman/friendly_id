@@ -1,6 +1,8 @@
 rvm:
   - 1.9.3
   - 1.8.7
+  - jruby
+  - rbx
 
 branches:
   only:
@@ -14,5 +16,5 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.rb
   - gemfiles/Gemfile.rails-3.1.rb
   - gemfiles/Gemfile.rails-3.2.rb
-
-script: "bundle exec rake db:reset db:up test"
+before_script: 'bundle exec rake db:create db:up > /dev/null'
+script: 'bundle exec rake test'
