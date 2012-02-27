@@ -27,8 +27,12 @@ module FriendlyId
     end
 
     def last_in_sequence
+      @_last_in_sequence ||= extract_sequence_from_slug(conflict.to_param)
+    end
+
+    def extract_sequence_from_slug(slug)
       # Don't assume that the separator is unique in the slug.
-      @_last_in_sequence ||= conflict.to_param.gsub(/^#{Regexp.quote(normalized)}(#{Regexp.quote(separator)})?/, '').to_i
+      slug.gsub(/^#{Regexp.quote(normalized)}(#{Regexp.quote(separator)})?/, '').to_i
     end
 
     def column

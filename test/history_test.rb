@@ -68,6 +68,16 @@ class HistoryTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should create correct sequence numbers even when some conflicted slugs have changed" do
+    transaction do
+      record1 = model_class.create! :name => 'hello'
+      record2 = model_class.create! :name => 'hello!'
+      record2.update_attributes :name => 'goodbye'
+      record3 = model_class.create! :name => 'hello!'
+      assert_equal 'hello--3', record3.slug
+    end
+  end
+
 
   test "should raise error if used with scoped" do
     model_class = Class.new(ActiveRecord::Base) do
