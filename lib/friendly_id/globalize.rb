@@ -50,9 +50,6 @@ To translate an existing record's friendly_id, simply change locale and assign
 =end
   module Globalize
 
-    class MissingTranslationFieldError < StandardError
-    end
-
     def self.included(model_class)
       model_class.instance_eval do
         friendly_id_config.use :slugged
@@ -61,10 +58,10 @@ To translate an existing record's friendly_id, simply change locale and assign
         # Check if slug field is enabled to be translated with Globalize
         if table_exists?
           if columns.map(&:name).exclude?(friendly_id_config.query_field)
-            raise MissingTranslationFieldError.new("Missing field '#{friendly_id_config.query_field}' in db table")
+            puts "\n[FriendlyId] Missing field '#{friendly_id_config.query_field}' in DB table '#{table_name}'. This is required for FriendlyId to properly function with the :globalize option.\n\n"
           end
           unless respond_to?('translated_attribute_names') || translated_attribute_names.exclude?(friendly_id_config.query_field.to_sym)
-            raise MissingTranslationFieldError.new("You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model)")
+            puts "\n[FriendlyId] You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model '#{self.class.name}')\n\n"
           end
         end
       end
