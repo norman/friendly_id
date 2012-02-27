@@ -4,7 +4,7 @@ module FriendlyId
 
 =begin
 
-== Basic I18n
+== Simple I18n
 
 The {FriendlyId::SimpleI18n SimpleI18n} module adds very basic i18n support to
 FriendlyId.

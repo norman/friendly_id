@@ -9,7 +9,7 @@ method to configure your desired options:
 
     class Foo < ActiveRecord::Base
       extend FriendlyId
-      friendly_id bar, :use => [:slugged, :simple_i18n]
+      friendly_id :bar, :use => [:slugged, :simple_i18n]
     end
 
 The most important option is `:use`, which you use to tell FriendlyId which
