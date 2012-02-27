@@ -65,7 +65,10 @@ module FriendlyId
     end
 
     def wildcard
-      "#{normalized}#{separator}%"
+      # Underscores (matching a single character) and percent signs (matching
+      # any number of characters) need to be escaped
+      # (While this seems like an excessive number of backslashes, it is correct)
+      "#{normalized}#{separator}".gsub(/[_%]/, '\\\\\&') + '%'
     end
   end
 end
