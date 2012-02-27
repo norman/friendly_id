@@ -91,12 +91,34 @@ class HistoryTest < MiniTest::Unit::TestCase
   end
 
   test "should not create new slugs that match old slugs" do
-    transaction do 
+    transaction do
       first_record = model_class.create! :name => "foo"
       first_record.name = "bar"
       first_record.save!
       second_record = model_class.create! :name => "foo"
       assert second_record.slug != "foo"
+      assert second_record.slug == "foo--2"
+    end
+  end
+
+  test 'should increment the sequence by one for each historic slug' do
+    transaction do
+      previous_record = model_class.create! :name => "foo"
+      first_record = model_class.create! :name => 'another'
+      second_record = model_class.create! :name => 'another'
+      assert second_record.slug == "another--2"
+    end
+  end
+
+  test 'should not fail when updating historic slugs' do
+    transaction do
+      first_record = model_class.create! :name => "foo"
+      second_record = model_class.create! :name => 'another'
+
+      second_record.update_attributes :name => 'foo'
+      assert second_record.slug == "foo--2"
+      first_record.update_attributes :name => 'another'
+      assert first_record.slug == "another--2"
     end
   end
 
