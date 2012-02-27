@@ -10,6 +10,15 @@ class Article < ActiveRecord::Base
   friendly_id :name, :use => :slugged
 end
 
+class Novelist < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, :use => :slugged, :sequence_separator => '_'
+
+  def normalize_friendly_id(string)
+    super.gsub("-", "_")
+  end
+end
+
 class SluggedTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
@@ -109,6 +118,14 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       assert_equal "peugeuot-206", record1.slug
       record2 = model_class.create! :name => "Peugeuot 206"
       assert_equal "peugeuot-206--2", record2.slug
+    end
+  end
+
+  test "should correctly sequence slugs with underscores" do
+    transaction do
+      record1 = Novelist.create! :name => 'wordsfail, buildings tumble'
+      record2 = Novelist.create! :name => 'word fail'
+      assert_equal 'word_fail', record2.slug
     end
   end
 
