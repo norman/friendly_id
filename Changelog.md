@@ -12,6 +12,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Allow the scoped module to use multiple scopes (Ben Caldwell)
 * Fixes for conflicting slugs in history module (Erik Ogan, Thomas Shafer, Evan Arnold)
 * Maintainence improvements (Norman Clarke, Philip Arndt, Thomas Darde, Lee Hambley)
+* Fix for conflicting slugs when using STI (Danny van der Heiden, Diederick Lawson)
 
 ## 4.0.0 (2011-12-27)
 
