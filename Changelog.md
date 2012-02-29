@@ -6,13 +6,13 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.0.1 (NOT RELEASED YET)
+## 4.0.1 (2012-02-29)
 
 * Added support for Globalize 3 (Enrico Pilotto and Philip Arndt)
 * Allow the scoped module to use multiple scopes (Ben Caldwell)
 * Fixes for conflicting slugs in history module (Erik Ogan, Thomas Shafer, Evan Arnold)
-* Maintainence improvements (Norman Clarke, Philip Arndt, Thomas Darde, Lee Hambley)
 * Fix for conflicting slugs when using STI (Danny van der Heiden, Diederick Lawson)
+* Maintainence improvements (Norman Clarke, Philip Arndt, Thomas Darde, Lee Hambley)
 
 ## 4.0.0 (2011-12-27)
 
