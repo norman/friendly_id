@@ -18,7 +18,8 @@ instead of:
 ## FriendlyId Features
 
 FriendlyId offers many advanced features, including: slug history and
-versioning, i18n, globalize, scoped slugs, reserved words, and custom slug generators.
+versioning, i18n, Globalize support, scoped slugs, reserved words, and custom
+slug generators.
 
 FriendlyId is compatible with Active Record **3.0** and higher.
 
@@ -48,7 +49,7 @@ You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://rails
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.0"
+    gem "friendly_id", "~> 4.0.1"
 
     rails generate scaffold user name:string slug:string
 
@@ -127,7 +128,7 @@ should be!
 
 ## License
 
-Copyright (c) 2008-2011 Norman Clarke, released under the MIT license.
+Copyright (c) 2008-2012 Norman Clarke, released under the MIT license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
