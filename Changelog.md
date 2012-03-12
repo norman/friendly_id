@@ -10,6 +10,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Improved conflict handling and performance in History module (Erik Ogan and Thomas Shafer)
 * Fixed bug that impeded using underscores as a sequence separator (Erik Ogan and Thomas Shafer)
+* Minor documentation improvements (Norman Clarke)
 
 ## 4.0.1 (2012-02-29)
 
