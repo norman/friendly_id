@@ -117,18 +117,20 @@ method.
     module SlugGenerator
 
       private
+      def last_in_sequence
+        @_last_in_sequence ||= extract_sequence_from_slug(conflict.slug)
+      end
 
       def conflicts
         sluggable_class = friendly_id_config.model_class
         pkey            = sluggable_class.primary_key
         value           = sluggable.send pkey
-        # TODO this is a bit of a performance drain right now; optimize before next release.
-        scope = sluggable_class.unscoped.includes(:slugs).where("#{Slug.quoted_table_name}.slug = ? OR #{Slug.quoted_table_name}.slug LIKE ?", normalized, wildcard)
-        scope = scope.where(Slug.table_name => {:sluggable_type => sluggable_class.name})
-        scope = scope.where("#{sluggable_class.table_name}.#{pkey} <> ?", value) unless sluggable.new_record?
-        scope.order("LENGTH(#{Slug.quoted_table_name}.slug) DESC, #{Slug.quoted_table_name}.slug DESC")
-      end
 
+        scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
+        scope = scope.where(:sluggable_type => sluggable_class.name)
+        scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
+        scope.order("LENGTH(slug) DESC, slug DESC")
+      end
     end
   end
 end
