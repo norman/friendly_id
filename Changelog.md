@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.2 (2012-03-12)
+
+* Improve conflict handling and performance in History module (Erik Ogan and Thomas Shafer)
+
 ## 4.0.1 (2012-02-29)
 
 * Added support for Globalize 3 (Enrico Pilotto and Philip Arndt)
