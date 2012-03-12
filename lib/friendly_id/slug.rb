@@ -5,5 +5,10 @@ module FriendlyId
   class Slug < ActiveRecord::Base
     self.table_name = "friendly_id_slugs"
     belongs_to :sluggable, :polymorphic => true
+
+    def to_param
+      slug
+    end
+
   end
 end

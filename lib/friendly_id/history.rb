@@ -117,9 +117,6 @@ method.
     module SlugGenerator
 
       private
-      def last_in_sequence
-        @_last_in_sequence ||= extract_sequence_from_slug(conflict.slug)
-      end
 
       def conflicts
         sluggable_class = friendly_id_config.model_class
