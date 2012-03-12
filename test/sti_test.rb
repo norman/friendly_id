@@ -30,6 +30,10 @@ class StiTest < MiniTest::Unit::TestCase
     assert_equal :bar, klass.friendly_id_config.slug_column
   end
 
+  test "the configuration's model_class should be the class, not the base_class" do
+    assert_equal StiTest::Editorialist, model_class.friendly_id_config.model_class
+  end
+
   test "friendly_id should accept a block with single table inheritance" do
     abstract_klass = Class.new(ActiveRecord::Base) do
       def self.table_exists?; false end

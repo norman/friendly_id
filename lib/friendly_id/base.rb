@@ -175,7 +175,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #   {#friendly_id} in your class for each model.
     def friendly_id_config
       @friendly_id_config or begin
-       @friendly_id_config = base_class.friendly_id_config.dup
+        @friendly_id_config = base_class.friendly_id_config.dup.tap do |config|
+          config.model_class = self
+        end
       end
     end
 

@@ -51,7 +51,7 @@ module FriendlyId
     end
 
     def conflicts
-      sluggable_class = friendly_id_config.model_class
+      sluggable_class = friendly_id_config.model_class.base_class
 
       pkey  = sluggable_class.primary_key
       value = sluggable.send pkey

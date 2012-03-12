@@ -32,7 +32,7 @@ module FriendlyId
 
     # The model class that this configuration belongs to.
     # @return ActiveRecord::Base
-    attr_reader :model_class
+    attr_accessor :model_class
 
     def initialize(model_class, values = nil)
       @model_class = model_class
