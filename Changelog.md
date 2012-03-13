@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.3 (NOT RELEASED YET)
 
+* Allow FriendlyId to be extended or included (Norman Clarke)
 * Allow Configuration#use to accept a module (Norman Clarke)
 * Fix bugs with History module + STI (Norman Clarke and [spetrunin](https://github.com/spetrunin))
 

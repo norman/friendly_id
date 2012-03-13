@@ -90,6 +90,11 @@ module FriendlyId
     end
   end
 
+  # Allow developers to `include` FriendlyId or `extend` it.
+  def self.included(model_class)
+    model_class.extend self
+  end
+
   # Set global defaults for all models using FriendlyId.
   #
   # The default defaults are to use the +:reserved+ module and nothing else.

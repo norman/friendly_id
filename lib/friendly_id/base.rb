@@ -3,12 +3,13 @@ module FriendlyId
 
 == Setting Up FriendlyId in Your Model
 
-To use FriendlyId in your ActiveRecord models, you must first extend the
-FriendlyId module, then invoke the {FriendlyId::Base#friendly_id friendly_id}
-method to configure your desired options:
+To use FriendlyId in your ActiveRecord models, you must first either extend or
+include the FriendlyId module (it makes no difference), then invoke the
+{FriendlyId::Base#friendly_id friendly_id} method to configure your desired
+options:
 
     class Foo < ActiveRecord::Base
-      extend FriendlyId
+      include FriendlyId
       friendly_id :bar, :use => [:slugged, :simple_i18n]
     end
 

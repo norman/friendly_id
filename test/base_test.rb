@@ -3,6 +3,20 @@ require "helper"
 class CoreTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
+  test "friendly_id can be added using 'extend'" do
+    klass = Class.new(ActiveRecord::Base) do
+      extend FriendlyId
+    end
+    assert klass.respond_to? :friendly_id
+  end
+
+  test "friendly_id can be added using 'include'" do
+    klass = Class.new(ActiveRecord::Base) do
+      include FriendlyId
+    end
+    assert klass.respond_to? :friendly_id
+  end
+
   test "friendly_id should accept a base and a hash" do
     klass = Class.new(ActiveRecord::Base) do
       self.abstract_class = true
