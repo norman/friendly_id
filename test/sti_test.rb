@@ -1,4 +1,4 @@
-require File.expand_path("../helper.rb", __FILE__)
+require "helper"
 
 class StiTest < MiniTest::Unit::TestCase
 

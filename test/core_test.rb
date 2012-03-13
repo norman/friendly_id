@@ -1,4 +1,4 @@
-require File.expand_path("../helper.rb", __FILE__)
+require "helper"
 
 class Author < ActiveRecord::Base
   extend FriendlyId

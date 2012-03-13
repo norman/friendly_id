@@ -1,4 +1,4 @@
-require File.expand_path("../helper.rb", __FILE__)
+require "helper"
 
 class CoreTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
