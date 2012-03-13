@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.3 (NOT RELEASED YET)
+
+* Fix bugs with History module + STI (Norman Clarke and [spetrunin](https://github.com/spetrunin))
+
 ## 4.0.2 (2012-03-12)
 
 * Improved conflict handling and performance in History module (Erik Ogan and Thomas Shafer)
