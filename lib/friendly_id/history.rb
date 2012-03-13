@@ -107,7 +107,7 @@ method.
       # Accepts a slug, and yields a corresponding sluggable_id into the block.
       def with_old_friendly_id(slug, &block)
         sql = "SELECT sluggable_id FROM #{Slug.quoted_table_name} WHERE sluggable_type = %s AND slug = %s"
-        sql = sql % [@klass.base_class.name, slug].map {|x| connection.quote(x)}
+        sql = sql % [@klass.base_class.to_s, slug].map {|x| connection.quote(x)}
         sluggable_id = connection.select_values(sql).first
         yield sluggable_id if sluggable_id
       end
@@ -120,12 +120,12 @@ method.
       private
 
       def conflicts
-        sluggable_class = friendly_id_config.model_class
+        sluggable_class = friendly_id_config.model_class.base_class
         pkey            = sluggable_class.primary_key
         value           = sluggable.send pkey
 
         scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
-        scope = scope.where(:sluggable_type => sluggable_class.name)
+        scope = scope.where(:sluggable_type => sluggable_class.to_s)
         scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
         scope.order("LENGTH(slug) DESC, slug DESC")
       end
