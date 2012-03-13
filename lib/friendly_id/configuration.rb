@@ -57,7 +57,7 @@ module FriendlyId
     def use(*modules)
       modules.to_a.flatten.compact.map do |name|
         mod = FriendlyId.const_get(name.to_s.classify)
-        model_class.send(:include, mod) unless model_class < mod
+        model_class.send(:include, mod)
       end
     end
 
