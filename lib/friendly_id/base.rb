@@ -161,9 +161,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #
     # @yieldparam config The model class's {FriendlyId::Configuration friendly_id_config}.
     def friendly_id(base = nil, options = {}, &block)
-      yield @friendly_id_config if block_given?
-      @friendly_id_config.use options.delete :use
-      @friendly_id_config.send :set, base ? options.merge(:base => base) : options
+      yield friendly_id_config if block_given?
+      friendly_id_config.use options.delete :use
+      friendly_id_config.send :set, base ? options.merge(:base => base) : options
       before_save {|rec| rec.instance_eval {@current_friendly_id = friendly_id}}
       include Model
     end
