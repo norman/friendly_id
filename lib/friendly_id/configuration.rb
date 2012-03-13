@@ -51,12 +51,13 @@ module FriendlyId
     #     extend FriendlyId
     #     friendly_id :name, :use => :slugged
     #   end
-    # @param [#to_s] *modules Arguments should be a symbols or strings that
-    #   correspond with the name of a module inside the FriendlyId namespace. By
-    #   default FriendlyId provides +:slugged+, +:history+, +:simple_i18n+ and +:scoped+.
+    # @param [#to_s,Module] *modules Arguments should be Modules, or symbols or
+    #   strings that correspond with the name of a module inside the FriendlyId
+    #   namespace. By default FriendlyId provides +:slugged+, +:history+,
+    #   +:simple_i18n+ and +:scoped+.
     def use(*modules)
-      modules.to_a.flatten.compact.map do |name|
-        mod = FriendlyId.const_get(name.to_s.classify)
+      modules.to_a.flatten.compact.map do |object|
+        mod = object.kind_of?(Module) ? object : FriendlyId.const_get(object.to_s.classify)
         model_class.send(:include, mod)
       end
     end

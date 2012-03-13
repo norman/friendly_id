@@ -129,8 +129,31 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #     end
     #   end
     #
-    # @option options [Symbol] :use The name of an addon to use. By default,
-    #   FriendlyId provides {FriendlyId::Slugged :slugged},
+    # === Including Your Own Modules
+    #
+    # Because :use can accept a name or a Module, {FriendlyId.defaults defaults}
+    # can be a convenient place to set up behavior common to all classes using
+    # FriendlyId. You can include any module, or more conveniently, define one
+    # on-the-fly. For example, let's say you want to make
+    # Babosa[http://github.com/norman/babosa] the default slugging library in
+    # place of Active Support, and transliterate all slugs from Russian Cyrillic
+    # to ASCII:
+    #
+    #   require "babosa"
+    #
+    #   FriendlyId.defaults do |config|
+    #     config.base = :name
+    #     config.use :slugged
+    #     config.use Module.new {
+    #       def normalize_friendly_id(text)
+    #         text.to_slug.normalize(:transliterations => [:russian, :latin])
+    #       end
+    #     }
+    #   end
+    #
+    #
+    # @option options [Symbol,Module] :use The addon or name of an addon to use.
+    #   By default, FriendlyId provides {FriendlyId::Slugged :slugged},
     #   {FriendlyId::History :history}, {FriendlyId::Reserved :reserved}, and
     #   {FriendlyId::Scoped :scoped}.
     #

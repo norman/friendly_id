@@ -26,4 +26,23 @@ class ConfigurationTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "#use should accept a name that resolves to a module" do
+    refute @model_class < FriendlyId::Slugged
+    @model_class.class_eval do
+      extend FriendlyId
+      friendly_id :hello, :use => :slugged
+    end
+    assert @model_class < FriendlyId::Slugged
+  end
+
+  test "#use should accept a module" do
+    my_module = Module.new
+    refute @model_class < my_module
+    @model_class.class_eval do
+      extend FriendlyId
+      friendly_id :hello, :use => my_module
+    end
+    assert @model_class < my_module
+  end
+
 end
