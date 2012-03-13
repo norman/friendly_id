@@ -3,6 +3,12 @@ require "rake/testtask"
 
 task :default => :test
 
+task :load_path do
+  %w(lib test).each do |path|
+    $LOAD_PATH.unshift(File.expand_path("../#{path}", __FILE__))
+  end
+end
+
 Rake::TestTask.new do |t|
   t.libs << "test"
   t.test_files = FileList['test/*_test.rb']
@@ -22,7 +28,7 @@ task :yard => :guide do
   puts %x{bundle exec yard}
 end
 
-task :bench do
+task :bench => :load_path do
   require File.expand_path("../bench", __FILE__)
 end
 
@@ -56,7 +62,7 @@ namespace :test do
     dir = File.expand_path("../test", __FILE__)
     Dir["#{dir}/*_test.rb"].each do |test|
       puts "Running #{test}:"
-      puts %x{ruby #{test}}
+      puts %x{ruby -Ilib -Itest #{test}}
     end
   end
 end
@@ -64,8 +70,8 @@ end
 namespace :db do
 
   desc "Create the database"
-  task :create do
-    require File.expand_path("../test/helper", __FILE__)
+  task :create => :load_path do
+    require "helper"
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
     commands = {
@@ -76,8 +82,8 @@ namespace :db do
   end
 
   desc "Create the database"
-  task :drop do
-    require File.expand_path("../test/helper", __FILE__)
+  task :drop => :load_path do
+    require "helper"
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
     commands = {
@@ -88,8 +94,8 @@ namespace :db do
   end
 
   desc "Set up the database schema"
-  task :up do
-    require File.expand_path("../test/helper", __FILE__)
+  task :up => :load_path do
+    require "helper"
     FriendlyId::Test::Schema.up
   end
 
