@@ -80,7 +80,9 @@ method.
       relation = slugs.where(:slug => friendly_id)
       result = relation.select("id").lock(true).all
       relation.delete_all unless result.empty?
-      slugs.create! :slug => friendly_id
+      slugs.create! do |record|
+        record.slug = friendly_id
+      end
     end
 
     # Adds a finder that explictly uses slugs from the slug table.
