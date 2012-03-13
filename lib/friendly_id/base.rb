@@ -194,9 +194,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Returns the model class's {FriendlyId::Configuration friendly_id_config}.
     # @note In the case of Single Table Inheritance (STI), this method will
-    #   duplicate the parent class's FriendlyId::Configuration instance on first
-    #   access. If you're concerned about thread safety, then be sure to invoke
-    #   {#friendly_id} in your class for each model.
+    #   duplicate the parent class's FriendlyId::Configuration and relation class
+    #   on first access. If you're concerned about thread safety, then be sure
+    #   to invoke {#friendly_id} in your class for each model.
     def friendly_id_config
       @friendly_id_config or begin
         @friendly_id_config = base_class.friendly_id_config.dup.tap do |config|
