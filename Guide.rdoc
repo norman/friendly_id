@@ -241,6 +241,20 @@ This functionality was in fact taken from earlier versions of FriendlyId.
 
 ==== Gotchas: Common Problems
 
+===== STI (Single Table Inheritance)
+
+Note that when using FriendlyId with STI classes, you must invoke
+{FriendlyId::Base#friendly_id friendly_id} in child classes as well as the parent:
+
+  class Foo < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, use: :slugged
+  end
+
+  class Base < Foo
+    friendly_id :name, use: :slugged
+  end
+
 ===== Slugs That Begin With Numbers
 
 Ruby's `to_i` function casts strings to integers in such a way that +23abc.to_i+
