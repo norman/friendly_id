@@ -46,7 +46,7 @@ module FriendlyId
             record.slug = nil
             record.save!
             assert_nil record.slug
-            record.save
+            record.save!
             refute_nil record.slug
           end
         end

@@ -31,7 +31,7 @@ class StiTest < MiniTest::Unit::TestCase
   end
 
   test "the configuration's model_class should be the class, not the base_class" do
-    assert_equal StiTest::Editorialist, model_class.friendly_id_config.model_class
+    assert_equal model_class, model_class.friendly_id_config.model_class
   end
 
   test "friendly_id should accept a block with single table inheritance" do
@@ -51,11 +51,28 @@ class StiTest < MiniTest::Unit::TestCase
   end
 
   test "friendly_id slugs should not clash with eachother" do
-    journalist  = Journalist.create! :name => 'foo bar'
-    editoralist = Editorialist.create! :name => 'foo bar'
+    transaction do
+      journalist  = model_class.base_class.create! :name => 'foo bar'
+      editoralist = model_class.create! :name => 'foo bar'
 
-    assert_equal 'foo-bar', journalist.slug
-    assert_equal 'foo-bar--2', editoralist.slug
+      assert_equal 'foo-bar', journalist.slug
+      assert_equal 'foo-bar--2', editoralist.slug
+    end
   end
 
+end
+
+class StiTestWithHistory < StiTest
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :history]
+  end
+
+  class Editorialist < Journalist
+    friendly_id :name, :use => [:slugged, :history]
+  end
+
+  def model_class
+    Editorialist
+  end
 end

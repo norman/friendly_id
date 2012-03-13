@@ -133,3 +133,18 @@ class HistoryTest < MiniTest::Unit::TestCase
   end
 
 end
+
+class HistoryTestWithSti < HistoryTest
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :history]
+  end
+
+  class Editorialist < Journalist
+    friendly_id :name, :use => [:slugged, :history]
+  end
+
+  def model_class
+    Editorialist
+  end
+end
