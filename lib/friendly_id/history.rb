@@ -74,6 +74,7 @@ method.
     private
 
     def create_slug
+      return unless friendly_id
       return if slugs.first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
