@@ -69,7 +69,6 @@ class StiTestWithHistory < StiTest
   end
 
   class Editorialist < Journalist
-    friendly_id :name, :use => [:slugged, :history]
   end
 
   def model_class
