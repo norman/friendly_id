@@ -32,6 +32,7 @@ module FriendlyId
           add_column :novels, :novelist_id, :integer
           add_column :novels, :publisher_id, :integer
           remove_index :novels, :slug
+          add_index :novels, [:slug, :publisher_id, :novelist_id], :unique => true
 
           # This will be used to test column name quoting
           add_column :journalists, "strange name", :string
