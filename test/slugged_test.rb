@@ -202,6 +202,26 @@ class SluggedRegressionsTest < MiniTest::Unit::TestCase
   end
 end
 
+class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
+  include FriendlyId::Test
+
+  class Manual < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged, :sequence_separator => "_"
+  end
+
+  test "should not create duplicate slugs" do
+    3.times do
+      begin
+        assert Manual.create! :name => "foo"
+      rescue
+        flunk "Tried to insert duplicate slug"
+      end
+    end
+  end
+
+end
+
 # https://github.com/norman/friendly_id/issues/148
 class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
