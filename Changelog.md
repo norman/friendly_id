@@ -6,11 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.0.3 (NOT RELEASED YET)
+## 4.0.3 (2012-03-14)
 
 * Fix escape for '%' and '_' on SQLite (Norman Clarke and Sergey Petrunin)
 * Allow FriendlyId to be extended or included (Norman Clarke)
-* Allow Configuration#use to accept a module (Norman Clarke)
+* Allow Configuration#use to accept a Module (Norman Clarke)
 * Fix bugs with History module + STI (Norman Clarke and Sergey Petrunin)
 
 ## 4.0.2 (2012-03-12)
