@@ -402,7 +402,7 @@ an example of one way to set this up:
     http://example.org/cities/chicago/restaurants/joes-diner
 
 
-== Simple I18n
+== Translating Slugs Using Simple I18n
 
 The {FriendlyId::SimpleI18n SimpleI18n} module adds very basic i18n support to
 FriendlyId.
@@ -412,6 +412,10 @@ By default FriendlyId looks for columns named, for example, "slug_en",
 "slug_es", etc. The first part of the name can be configured by passing the
 +:slug_column+ option if you choose. Note that as of 4.0.0.beta11, the column
 for the default locale must also include the locale in its name.
+
+This module is most suitable to applications that need to support few locales.
+If you need to support 2 or more locales, you may wish to use the
+{FriendlyId::Globalize Globalize} module instead.
 
 === Example migration
 
@@ -460,6 +464,54 @@ current locale:
 
   I18n.with_locale(:es) do
     post.set_friendly_id("la-guerra-de-las-galaxas")
+  end
+
+
+== Translating Slugs Using Globalize
+
+The {FriendlyId::Globalize Globalize} module lets you use
+Globalize[https://github.com/svenfuchs/globalize3] to translate slugs. This
+module is most suitable for applications that need to be localized to many
+languages. If your application only needs to be localized to one or two
+languages, you may wish to consider the {FriendlyId::SimpleI18n SimpleI18n}
+module.
+
+In order to use this module, your model must have a slug column and set the
+field +slug+ as translable with Globalize:
+
+    class Post < ActiveRecord::Base
+      translates :title, :slug
+      extend FriendlyId
+      friendly_id :title, :use => :globalize
+    end
+
+=== Finds
+
+Finds will take the current locale into consideration:
+
+  I18n.locale = :it
+  Post.find("guerre-stellari")
+  I18n.locale = :en
+  Post.find("star-wars")
+
+To find a slug by an explicit locale, perform the find inside a block
+passed to I18n's +with_locale+ method:
+
+  I18n.with_locale(:it) do
+    Post.find("guerre-stellari")
+  end
+
+=== Creating Records
+
+When new records are created, the slug is generated for the current locale only.
+
+=== Translating Slugs
+
+To translate an existing record's friendly_id, simply change the locale and
+assign a value to the +slug+ field:
+
+  I18n.with_locale(:it) do
+    post.slug = "guerre-stellari"
   end
 
 

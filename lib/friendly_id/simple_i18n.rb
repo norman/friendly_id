@@ -4,7 +4,7 @@ module FriendlyId
 
 =begin
 
-== Simple I18n
+== Translating Slugs Using Simple I18n
 
 The {FriendlyId::SimpleI18n SimpleI18n} module adds very basic i18n support to
 FriendlyId.
@@ -12,8 +12,12 @@ FriendlyId.
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
 "slug_es", etc. The first part of the name can be configured by passing the
-+:slug_column+ option if you choose. Note that as of 4.0.0.beta11, the column
-for the default locale must also include the locale in its name.
++:slug_column+ option if you choose. Note that the column for the default locale
+must also include the locale in its name.
+
+This module is most suitable to applications that need to support few locales.
+If you need to support two or more locales, you may wish to use the
+{FriendlyId::Globalize Globalize} module instead.
 
 === Example migration
 
