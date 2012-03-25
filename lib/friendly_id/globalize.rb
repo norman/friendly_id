@@ -60,13 +60,8 @@ assign a value to the +slug+ field:
         relation_class.send :include, FinderMethods
         include Model
         # Check if slug field is enabled to be translated with Globalize
-        if table_exists?
-          if columns.map(&:name).exclude?(friendly_id_config.query_field)
-            puts "\n[FriendlyId] Missing field '#{friendly_id_config.query_field}' in DB table '#{table_name}'. This is required for FriendlyId to properly function with the :globalize option.\n\n"
-          end
-          unless respond_to?('translated_attribute_names') || translated_attribute_names.exclude?(friendly_id_config.query_field.to_sym)
-            puts "\n[FriendlyId] You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model '#{self.class.name}')\n\n"
-          end
+        unless respond_to?('translated_attribute_names') || translated_attribute_names.exclude?(friendly_id_config.query_field.to_sym)
+          puts "\n[FriendlyId] You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model '#{self.class.name}')\n\n"
         end
       end
     end
