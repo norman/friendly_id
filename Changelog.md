@@ -6,6 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.4 (2012-03-26)
+
+* Fix globalize plugin to avoid issues with asset precompilation (Philip Arndt)
+
+
 ## 4.0.3 (2012-03-14)
 
 * Fix escape for '%' and '_' on SQLite (Norman Clarke and Sergey Petrunin)
