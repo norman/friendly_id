@@ -84,11 +84,11 @@ assign a value to the +slug+ field:
       def find_one(id)
         return super if id.unfriendly_id?
         where(@klass.friendly_id_config.query_field => id).first or
-        joins(:translations).
+        includes(:translations).
           where(translation_class.arel_table[:locale].eq(I18n.locale)).
           where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         # if locale is not translated fallback to default locale
-        joins(:translations).
+        includes(:translations).
           where(translation_class.arel_table[:locale].eq(I18n.default_locale)).
           where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
         super
