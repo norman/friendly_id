@@ -12,4 +12,6 @@ group :development, :test do
   platforms :ruby do
     gem 'sqlite3'
   end
+
+  gem 'globalize3'
 end
