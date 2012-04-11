@@ -114,8 +114,9 @@ store them in a field in your model. By default, this field must be named
 +:slug+, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
 option. You should add an index to this column, and in most cases, make it
-unique. You may also wish to constrain it to NOT NULL, but this depends on your
-app's behavior and requirements.
+unique. Do not make the column unique in case you wish to scope the slug 
+(more on this later). You may also wish to constrain it to NOT NULL, but this 
+depends on your app's behavior and requirements.
 
 === Example Setup
 
@@ -355,6 +356,9 @@ Without :scoped in this case, one of the restaurants would have the slug
 
 The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
 a column.
+
+Please do note that you must drop the uniqueness constraint on the slug's
+column in the database when you're scoping the slug.
 
 === Finding Records by Friendly ID
 
