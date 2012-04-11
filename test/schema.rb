@@ -1,4 +1,9 @@
 require "friendly_id/migration"
+require "globalize3"
+
+class TranslatedArticle < ActiveRecord::Base
+  translates :slug, :title
+end
 
 module FriendlyId
   module Test
@@ -9,6 +14,7 @@ module FriendlyId
           tables.each do |name|
             drop_table name
           end
+          TranslatedArticle.drop_translation_table!
         end
 
         def up
@@ -45,13 +51,16 @@ module FriendlyId
           add_column :journalists, "slug_es", :string
           add_column :journalists, "slug_de", :string
 
+          # This will be used to test globalize translations
+          TranslatedArticle.create_translation_table! :slug => :string, :title => :string
+
           @done = true
         end
 
         private
 
         def slugged_tables
-          ["journalists", "articles", "novelists", "novels", "manuals"]
+          ["journalists", "articles", "novelists", "novels", "manuals", "translated_articles"]
         end
 
         def simple_tables

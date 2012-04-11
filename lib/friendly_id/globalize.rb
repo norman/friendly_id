@@ -83,15 +83,16 @@ assign a value to the +slug+ field:
       # @see FriendlyId::ObjectUtils
       def find_one(id)
         return super if id.unfriendly_id?
-        where(@klass.friendly_id_config.query_field => id).first or
-        includes(:translations).
-          where(translation_class.arel_table[:locale].eq(I18n.locale)).
-          where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
+        found = where(@klass.friendly_id_config.query_field => id).first
+        found = includes(:translations).
+                where(translation_class.arel_table[:locale].in([I18n.locale, I18n.default_locale])).
+                where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first if found.nil?
         # if locale is not translated fallback to default locale
-        includes(:translations).
-          where(translation_class.arel_table[:locale].eq(I18n.default_locale)).
-          where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first or
-        super
+        if found
+          found.tap { |f| f.translations.reload }
+        else
+          super
+        end
       end
 
       protected :find_one
