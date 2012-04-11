@@ -32,7 +32,9 @@ class GlobalizeTest < MiniTest::Unit::TestCase
         article = TranslatedArticle.create(:title => 'a title')
         Globalize.with_locale(:ja) { article.update_attributes(:title => 'タイトル') }
         article_by_friendly_id = TranslatedArticle.find("a-title")
-        assert_equal article.translations, article_by_friendly_id.translations
+        article.translations.each do |translation|
+          assert_includes article_by_friendly_id.translations, translation
+        end
       end
     end
   end
