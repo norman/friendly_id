@@ -6,6 +6,12 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.5 (NOT RELEASED YET)
+
+* Favor `includes` over `joins` in globalize to avoid read-only results (Jakub Wojtysiak)
+* Fix globalize compatibility with results from dynamic finders (Chris Salzberg)
+
+
 ## 4.0.4 (2012-03-26)
 
 * Fix globalize plugin to avoid issues with asset precompilation (Philip Arndt)
