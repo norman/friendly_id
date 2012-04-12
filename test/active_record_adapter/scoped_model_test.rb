@@ -64,6 +64,15 @@ module FriendlyId
         assert_equal "canada", @resident.slugs(true).first.scope
       end
 
+      test "updating the scope should increment sequence correctly when there's more than one
+            existing slug in scope" do
+        resident4 = Resident.create!(:name => "John Smith", :country => @canada)
+        old_friendly_id = @resident.friendly_id
+        @resident.update_attributes! :country => @canada
+        assert_equal "#{old_friendly_id}--3", @resident.friendly_id
+        assert_equal "canada", @resident.slugs(true).first.scope
+      end
+
       test "a non-slugged model should update its child model's scopes when its friendly_id changes" do
         @user.update_attributes(:name => "jack")
         assert_equal "jack", @user.to_param
