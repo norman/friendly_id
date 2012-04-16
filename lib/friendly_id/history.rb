@@ -57,13 +57,13 @@ method.
     end
 =end
   module History
-
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
       model_class.instance_eval do
         raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
+        @friendly_id_config.class.send :include, History::Configuration
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => :destroy,
+        has_many :slugs, :as => :sluggable, :dependent => @friendly_id_config.dependent_destroy,
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
         after_save :create_slug
         relation_class.send :include, FinderMethods
@@ -112,6 +112,13 @@ method.
         sql = sql % [@klass.base_class.to_s, slug].map {|x| connection.quote(x)}
         sluggable_id = connection.select_values(sql).first
         yield sluggable_id if sluggable_id
+      end
+    end
+
+    module Configuration
+      def dependent_destroy
+        return @dependent_destroy if defined?(@dependent_destroy)
+        @dependent_destroy = options.delete(:dependent_destroy) != false ? :destroy : nil
       end
     end
 
