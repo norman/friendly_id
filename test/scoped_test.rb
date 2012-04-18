@@ -54,17 +54,6 @@ class ScopedTest < MiniTest::Unit::TestCase
     end
   end
 
-  test "should raise error if used with history" do
-    model_class = Class.new(ActiveRecord::Base) do
-      self.abstract_class = true
-      extend FriendlyId
-    end
-
-    assert_raises RuntimeError do
-      model_class.friendly_id :name, :use => [:scoped, :history]
-    end
-  end
-
   test "should apply scope with multiple columns" do
     transaction do
       novelist = Novelist.create! :name => "a"

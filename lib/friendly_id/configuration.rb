@@ -30,6 +30,9 @@ module FriendlyId
     # The default configuration options.
     attr_reader :defaults
 
+    # The modules in use
+    attr_reader :modules
+
     # The model class that this configuration belongs to.
     # @return ActiveRecord::Base
     attr_accessor :model_class
@@ -37,6 +40,7 @@ module FriendlyId
     def initialize(model_class, values = nil)
       @model_class = model_class
       @defaults    = {}
+      @modules     = []
       set values
     end
 
@@ -59,7 +63,13 @@ module FriendlyId
       modules.to_a.flatten.compact.map do |object|
         mod = object.kind_of?(Module) ? object : FriendlyId.const_get(object.to_s.classify)
         model_class.send(:include, mod)
+        @modules << mod.name.split("::").last.downcase.to_sym if mod.name.present?
       end
+    end
+
+    # Returns whether the given module is in use
+    def uses?(modul)
+      @modules.include?(modul)
     end
 
     # The column that FriendlyId will use to find the record when querying by
