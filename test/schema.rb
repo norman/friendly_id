@@ -34,6 +34,10 @@ module FriendlyId
             add_index  table_name, :slug, :unique => true
           end
 
+          scoped_tables.each do |table_name|
+            add_column table_name, :slug, :string
+          end
+
           # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
           add_column :novels, :publisher_id, :integer
@@ -57,6 +61,9 @@ module FriendlyId
           # This will be used to test relationships
           add_column :books, :author_id, :integer
 
+          # Used to test :scoped and :history together
+          add_column :restaurants, :city_id, :integer
+
           @done = true
         end
 
@@ -66,12 +73,16 @@ module FriendlyId
           %w[journalists articles novelists novels manuals translated_articles]
         end
 
+        def scoped_tables
+          ["restaurants"]
+        end
+
         def simple_tables
-          %w[authors books publishers]
+          %w[authors books publishers cities]
         end
 
         def tables
-          simple_tables + slugged_tables
+          simple_tables + slugged_tables + scoped_tables
         end
       end
     end
