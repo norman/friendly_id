@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 3.1.3 (2012-04-28)
+
+* Fix for sequenced scoped slugs ([Louise Crow](https://github.com/crowbot))
+
 ## 3.1.2 (2012-01-24)
 
 * Fix for 3.2 support ([Philip Arndt](https://github.com/parndt))
