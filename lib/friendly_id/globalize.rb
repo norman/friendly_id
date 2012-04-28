@@ -87,10 +87,12 @@ assign a value to the +slug+ field:
         found = includes(:translations).
                 where(translation_class.arel_table[:locale].in([I18n.locale, I18n.default_locale])).
                 where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first if found.nil?
-        # if locale is not translated fallback to default locale
+
         if found
+          # Reload the translations for the found records.
           found.tap { |f| f.translations.reload }
         else
+          # if locale is not translated fallback to default locale
           super
         end
       end
