@@ -7,7 +7,7 @@ end
 
 class Leaflet < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :history, :dependent_destroy => false
+  friendly_id :name, :use => :history, :dependent => false
 end
 
 class HistoryTest < MiniTest::Unit::TestCase

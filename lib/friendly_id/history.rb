@@ -63,7 +63,7 @@ method.
         raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.class.send :include, History::Configuration
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => @friendly_id_config.dependent_destroy,
+        has_many :slugs, :as => :sluggable, :dependent => @friendly_id_config.dependent,
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
         after_save :create_slug
         relation_class.send :include, FinderMethods
@@ -116,9 +116,9 @@ method.
     end
 
     module Configuration
-      def dependent_destroy
-        return @dependent_destroy if defined?(@dependent_destroy)
-        @dependent_destroy = options.delete(:dependent_destroy) != false ? :destroy : nil
+      def dependent
+        return @dependent if defined?(@dependent)
+        @dependent = options.delete(:dependent).presence || :destroy
       end
     end
 
