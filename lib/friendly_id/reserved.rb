@@ -30,7 +30,7 @@ For example:
     after_validation :move_friendly_id_error_to_name
 
     def move_friendly_id_error_to_name
-      errors.messages[:name] = errors.messages.delete(:friendly_id) if errors[:friendly_id].present?
+      errors.add :name, *errors.delete(:friendly_id) if errors.has_key?(:friendly_id)
     end
   end
 
