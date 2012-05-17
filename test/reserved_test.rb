@@ -11,7 +11,7 @@ class ReservedTest < MiniTest::Unit::TestCase
     after_validation :move_friendly_id_error_to_name
 
     def move_friendly_id_error_to_name
-      errors.add :name, *errors.delete(:friendly_id) if errors.has_key?(:friendly_id)
+      errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
     end
   end
 
@@ -32,7 +32,7 @@ class ReservedTest < MiniTest::Unit::TestCase
       record.errors.add :name, "xxx"
       record.errors.add :friendly_id, "yyy"
       record.move_friendly_id_error_to_name
-      assert record.errors.get(:name) && !record.errors.get(:friendly_id)
+      assert record.errors[:name].present? && record.errors[:friendly_id].blank?
       assert_equal 2, record.errors.count
     end
   end
