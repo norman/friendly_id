@@ -1,6 +1,6 @@
 require "helper"
 
-class I18nTest < MiniTest::Unit::TestCase
+class SimpleI18nTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
