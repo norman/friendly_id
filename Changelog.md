@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.0.6 (NOT RELEASED)
+## 4.0.6 (2012-05-21)
 
 * Fix nil return value from to_param when save fails because of validation errors (Tomás Arribas)
 * Fix incorrect usage of i18n API (Vinicius Ferriani)
