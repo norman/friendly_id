@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.6 (NOT RELEASED)
+
+* Improve error handling in reserved module (Adrián Mugnolo and Github user "nolamesa")
+
 ## 4.0.5 (2012-04-28)
 
 * Favor `includes` over `joins` in globalize to avoid read-only results (Jakub Wojtysiak)
