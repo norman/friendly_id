@@ -58,6 +58,17 @@ class SimpleI18nTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "set friendly_id should fall back default locale when none is given" do
+    transaction do
+      journalist = I18n.with_locale(:es) do
+        Journalist.create!(:name => "Juan Fulano")
+      end
+      journalist.set_friendly_id("John Doe")
+      journalist.save!
+      assert_equal "john-doe", journalist.slug_en
+    end
+  end
+
   test "should sequence localized slugs" do
     transaction do
       journalist = Journalist.create!(:name => "John Smith")
