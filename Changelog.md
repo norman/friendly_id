@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.6 (NOT RELEASED)
 
+* Fix incorrect usage of i18n API (Vinicius Ferriani)
 * Improve error handling in reserved module (Adrián Mugnolo and Github user "nolamesa")
 
 ## 4.0.5 (2012-04-28)
