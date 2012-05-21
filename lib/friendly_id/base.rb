@@ -266,7 +266,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
       if diff = changes[friendly_id_config.query_field]
-        diff.first
+        diff.first || diff.second
       else
         friendly_id.present? ? friendly_id : id.to_s
       end
