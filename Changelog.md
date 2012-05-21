@@ -8,6 +8,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.6 (NOT RELEASED)
 
+* Fix nil return value from to_param when save fails because of validation errors (Tomás Arribas)
 * Fix incorrect usage of i18n API (Vinicius Ferriani)
 * Improve error handling in reserved module (Adrián Mugnolo and Github user "nolamesa")
 
