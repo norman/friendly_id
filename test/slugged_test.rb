@@ -129,6 +129,24 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should correctly sequence slugs that uses single dashes as sequence separator" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged, :sequence_separator => '-'
+      validates_uniqueness_of :slug_en
+      def self.name
+        "Journalist"
+      end
+    end
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206", record1.slug
+      record2 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206-2", record2.slug
+    end
+  end
+
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
