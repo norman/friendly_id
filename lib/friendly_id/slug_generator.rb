@@ -17,7 +17,22 @@ module FriendlyId
 
     # Generate a new sequenced slug.
     def generate
-      conflict? ? self.next : normalized
+      attempt_count = 0
+
+      while conflict?
+        attempt_count += 1
+        attempt = sluggable.normalize_friendly_id sluggable.resolve_slug_conflict(attempt_count)
+
+        if attempt.blank?
+          @conflict = conflicts.first
+          return self.next
+        end
+
+        @normalized = attempt
+        @conflict = conflicts.first
+      end
+
+      normalized
     end
 
     private
@@ -44,7 +59,7 @@ module FriendlyId
     end
 
     def conflict
-      unless defined? @conflict
+      unless defined?(@conflict)
         @conflict = conflicts.first
       end
       @conflict

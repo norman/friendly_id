@@ -266,6 +266,50 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
       slug_base != (current_friendly_id || slug_value).try(:sub, /#{separator}[\d]*\z/, '')
     end
 
+    # Returns a name that is supposed to generate a non-conflicting slug.
+    #
+    # Override this if you want to try different approaches to solve a conflict
+    # before adding a sequence number.
+    #
+    # You can try different approaches if a previous attempt still conflicts.
+    #
+    # For example, you might want to add a country to the slug only if there is
+    # a conflict. If this still fails, you might want to add a city.
+    #
+    # NOTE: Attempts begin at 1 as in "first attempt", not 0!
+    #
+    # === Example
+    #
+    #   class Person < ActiveRecord::Base
+    #     friendly_id :name
+    #
+    #     def resolve_slug_conflict(attempts)
+    #       case attempts
+    #         when 1
+    #           "#{name} from #{location}"
+    #         when 2
+    #           "#{name} from #{city} in #{location}"
+    #         else
+    #           super
+    #       end
+    #     end
+    #   end
+    #
+    #   bob1 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
+    #   bob2 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
+    #   bob3 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
+    #   bob4 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
+    #   bob1.friendly_id #=> "bob-smith"
+    #   bob2.friendly_id #=> "bob-smith-from-usa"
+    #   bob3.friendly_id #=> "bob-smith-from-new-york-city-in-usa"
+    #   bob4.friendly_id #=> "bob-smith-from-new-york-city-in-usa--2"
+    #
+    # @param attempts The attempts taken so far to solve the conflict.
+    # @return An attempt for a non-conflicting name, or false.
+    def resolve_slug_conflict(attempts)
+      nil
+    end
+
     # Sets the slug.
     # FIXME: This method sucks and the logic is pretty dubious.
     def set_slug(normalized_slug = nil)
