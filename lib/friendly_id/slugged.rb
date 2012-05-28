@@ -250,72 +250,32 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
     # You can override this method in your model if, for example, you only want
     # slugs to be generated once, and then never updated.
     def should_generate_new_friendly_id?
-      base       = send(friendly_id_config.base)
+      base       = friendly_id_config.base.kind_of?(Enumerable) ? friendly_id_config.base : [send(friendly_id_config.base)]
       slug_value = send(friendly_id_config.slug_column)
 
       # If the slug base is nil, and the slug field is nil, then we're going to
       # leave the slug column NULL.
-      return false if base.nil? && slug_value.nil?
+      return false if (base.nil? || base.empty? || base.first.nil?) && slug_value.nil?
       # Otherwise, if this is a new record, we're definitely going to try to
       # create a new slug.
       return true if new_record?
-      slug_base = normalize_friendly_id(base)
-      separator = Regexp.escape friendly_id_config.sequence_separator
-      # If the slug base (without sequence) is different from either the current
-      # friendly id or the slug value, then we'll generate a new friendly_id.
-      slug_base != (current_friendly_id || slug_value).try(:sub, /#{separator}[\d]*\z/, '')
-    end
 
-    # Returns a name that is supposed to generate a non-conflicting slug.
-    #
-    # Override this if you want to try different approaches to solve a conflict
-    # before adding a sequence number.
-    #
-    # You can try different approaches if a previous attempt still conflicts.
-    #
-    # For example, you might want to add a country to the slug only if there is
-    # a conflict. If this still fails, you might want to add a city.
-    #
-    # NOTE: Attempts begin at 1 as in "first attempt", not 0!
-    #
-    # === Example
-    #
-    #   class Person < ActiveRecord::Base
-    #     friendly_id :name
-    #
-    #     def resolve_slug_conflict(attempts)
-    #       case attempts
-    #         when 1
-    #           "#{name} from #{location}"
-    #         when 2
-    #           "#{name} from #{city} in #{location}"
-    #         else
-    #           super
-    #       end
-    #     end
-    #   end
-    #
-    #   bob1 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
-    #   bob2 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
-    #   bob3 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
-    #   bob4 = Person.create! :name => "Bob Smith", :country => "USA", :city => "New York City"
-    #   bob1.friendly_id #=> "bob-smith"
-    #   bob2.friendly_id #=> "bob-smith-from-usa"
-    #   bob3.friendly_id #=> "bob-smith-from-new-york-city-in-usa"
-    #   bob4.friendly_id #=> "bob-smith-from-new-york-city-in-usa--2"
-    #
-    # @param attempts The attempts taken so far to solve the conflict.
-    # @return An attempt for a non-conflicting name, or false.
-    def resolve_slug_conflict(attempts)
-      nil
+      separator = Regexp.escape friendly_id_config.sequence_separator
+      # If all the possible candidates (without sequence) are different from either the current
+      # friendly id or the slug value, then we'll generate a new friendly_id.
+      base.collect do |b|
+        normalize_friendly_id(b) != (current_friendly_id || slug_value).try(:sub, /#{separator}[\d]*\z/, '')
+      end.uniq == [true]
     end
 
     # Sets the slug.
     # FIXME: This method sucks and the logic is pretty dubious.
-    def set_slug(normalized_slug = nil)
-      if normalized_slug || should_generate_new_friendly_id?
-        normalized_slug ||= normalize_friendly_id send(friendly_id_config.base)
-        generator = friendly_id_config.slug_generator_class.new self, normalized_slug
+    def set_slug(slug = nil)
+      if slug || should_generate_new_friendly_id?
+        slug ||= friendly_id_config.base.kind_of?(Enumerable) ? friendly_id_config.base : send(friendly_id_config.base)
+        slug = [slug] if !slug.kind_of?(Enumerable)
+
+        generator = friendly_id_config.slug_generator_class.new self, slug
         send "#{friendly_id_config.slug_column}=", generator.generate
       end
     end

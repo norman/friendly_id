@@ -68,7 +68,7 @@ assign a value to the +slug+ field:
 
     module Model
       def slug=(text)
-        set_slug(normalize_friendly_id(text))
+        set_slug(text)
       end
     end
 

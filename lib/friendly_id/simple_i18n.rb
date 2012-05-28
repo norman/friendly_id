@@ -81,7 +81,7 @@ current locale:
     module Model
       def set_friendly_id(text, locale = nil)
         I18n.with_locale(locale || I18n.current_locale) do
-          set_slug(normalize_friendly_id(text))
+          set_slug(text)
         end
       end
     end

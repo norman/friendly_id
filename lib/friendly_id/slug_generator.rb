@@ -2,37 +2,32 @@ module FriendlyId
   # The default slug generator offers functionality to check slug strings for
   # uniqueness and, if necessary, appends a sequence to guarantee it.
   class SlugGenerator
-    attr_reader :sluggable, :normalized
+    attr_reader :sluggable, :candidates
 
     # Create a new slug generator.
-    def initialize(sluggable, normalized)
+    def initialize(sluggable, candidates)
       @sluggable  = sluggable
-      @normalized = normalized
+      @candidates = candidates.each
+      @normalized_cantidate = normalize_candidate candidates.first
     end
 
     # Given a slug, get the next available slug in the sequence.
     def next
-      "#{normalized}#{separator}#{next_in_sequence}"
+      "#{@normalized_cantidate}#{separator}#{next_in_sequence}"
     end
 
-    # Generate a new sequenced slug.
+    # Generate a new sequenced slug, trying candidates on conflict
     def generate
-      attempt_count = 0
 
       while conflict?
-        attempt_count += 1
-        attempt = sluggable.normalize_friendly_id sluggable.resolve_slug_conflict(attempt_count)
-
-        if attempt.blank?
-          @conflict = conflicts.first
-          return self.next
-        end
-
-        @normalized = attempt
+        @normalized_cantidate = normalize_candidate @candidates.next
         @conflict = conflicts.first
       end
 
-      normalized
+      @normalized_cantidate
+
+      rescue StopIteration
+      self.next
     end
 
     private
@@ -45,9 +40,16 @@ module FriendlyId
       @_last_in_sequence ||= extract_sequence_from_slug(conflict.to_param)
     end
 
+    def normalize_candidate(candidate)
+      return sluggable.normalize_friendly_id(sluggable.send(candidate)) if candidate.kind_of?(Symbol)
+      return sluggable.normalize_friendly_id(sluggable.instance_exec(&candidate)) if candidate.kind_of?(Proc)
+      return sluggable.normalize_friendly_id(candidate) if candidate.kind_of?(String)
+    end
+
     def extract_sequence_from_slug(slug)
       # Don't assume that the separator is unique in the slug.
-      slug.gsub(/^#{Regexp.quote(normalized)}(#{Regexp.quote(separator)})?/, '').to_i
+
+      slug.gsub(/^#{Regexp.quote(@normalized_cantidate)}(#{Regexp.quote(separator)})?/, '').to_i
     end
 
     def column
@@ -73,7 +75,7 @@ module FriendlyId
       base = "#{column} = ? OR #{column} LIKE ?"
       # Awful hack for SQLite3, which does not pick up '\' as the escape character without this.
       base << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
-      scope = sluggable_class.unscoped.where(base, normalized, wildcard)
+      scope = sluggable_class.unscoped.where(base, @normalized_cantidate, wildcard)
       scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
       scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
     end
@@ -90,7 +92,7 @@ module FriendlyId
       # Underscores (matching a single character) and percent signs (matching
       # any number of characters) need to be escaped
       # (While this seems like an excessive number of backslashes, it is correct)
-      "#{normalized}#{separator}".gsub(/[_%]/, '\\\\\&') + '%'
+      "#{@normalized_cantidate}#{separator}".gsub(/[_%]/, '\\\\\&') + '%'
     end
   end
 end

@@ -133,20 +133,14 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "articles"
       extend FriendlyId
-      friendly_id :name, :use => :slugged
+      friendly_id [:name, :attempt1, lambda{"#{name} attempt 2"}], :use => :slugged
+
       def self.name
         "Article"
       end
 
-      def resolve_slug_conflict(attempts)
-        case attempts
-          when 1
-            "#{name} attempt 1"
-          when 2
-            "#{name} attempt 2"
-          else
-            super
-        end
+      def attempt1
+        "#{self.name} attempt 1"
       end
     end
     transaction do
