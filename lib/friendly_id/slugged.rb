@@ -263,8 +263,8 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
       separator = Regexp.escape friendly_id_config.sequence_separator
       # If the slug base (with and without sequence) is different from either the current
       # friendly id or the slug value, then we'll generate a new friendly_id.
-      slug_base != (current_friendly_id || slug_value) &&
-          slug_base != (current_friendly_id || slug_value).try(:sub, /#{separator}[\d]*\z/, '')
+      compare = (current_friendly_id || slug_value)
+      slug_base != compare && slug_base != compare.try(:sub, /#{separator}[\d]*\z/, '')
     end
 
     # Sets the slug.
