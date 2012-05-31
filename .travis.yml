@@ -1,8 +1,8 @@
 rvm:
   - 1.9.3
   - 1.8.7
-  - jruby
-  - rbx
+#  - jruby
+#  - rbx
 
 branches:
   only:
@@ -16,23 +16,5 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.rb
   - gemfiles/Gemfile.rails-3.1.rb
   - gemfiles/Gemfile.rails-3.2.rb
-  - gemfiles/Gemfile.rails-3.2-stable.rb
-  - gemfiles/Gemfile.rails-master.rb
-
-matrix:
-  exclude:
-    - {rvm: 1.8.7, gemfile: gemfiles/Gemfile.rails-3.2-stable}
-    - {rvm: 1.8.7, gemfile: gemfiles/Gemfile.rails-3.2-master}
-
-    - {rvm: rbx, gemfile: gemfiles/Gemfile.rails-3.0}
-    - {rvm: rbx, gemfile: gemfiles/Gemfile.rails-3.1}
-    - {rvm: rbx, gemfile: gemfiles/Gemfile.rails-3.2-stable}
-    - {rvm: rbx, gemfile: gemfiles/Gemfile.rails-master}
-
-    - {rvm: jruby, gemfile: gemfiles/Gemfile.rails-3.0}
-    - {rvm: jruby, gemfile: gemfiles/Gemfile.rails-3.1}
-    - {rvm: jruby, gemfile: gemfiles/Gemfile.rails-3.2-stable}
-    - {rvm: jruby, gemfile: gemfiles/Gemfile.rails-master}
-
 before_script: 'bundle exec rake db:create db:up > /dev/null'
 script: 'bundle exec rake test'
