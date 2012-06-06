@@ -145,6 +145,10 @@ module FriendlyId
             assert_equal record.id.to_s, record.to_param
           end
         end
+
+        test "should return nil for to_param with a new record" do
+          assert_equal nil, model_class.new.to_param
+        end
       end
     end
   end
