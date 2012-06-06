@@ -6,6 +6,14 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.7 (2012-06-06)
+
+* to_param just calls super when no friendly_id is present, to keep the model's
+  default behavior. (Andrew White)
+
+* FriendlyId can now properly sequence slugs that end in numbers even when a
+  single dash is used as the separator (Tomás Arribas).
+
 ## 4.0.6 (2012-05-21)
 
 * Fix nil return value from to_param when save fails because of validation errors (Tomás Arribas)
