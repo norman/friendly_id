@@ -31,8 +31,7 @@ module FriendlyId
     end
 
     def extract_sequence_from_slug(slug)
-      # Don't assume that the separator is unique in the slug.
-      slug.gsub(/^#{Regexp.quote(normalized)}(#{Regexp.quote(separator)})?/, '').to_i
+      slug.split("#{normalized}#{separator}").last.to_i
     end
 
     def column

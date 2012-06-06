@@ -159,6 +159,39 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       assert record2.should_generate_new_friendly_id?
     end
   end
+
+  test "should correctly sequence slugs that uses single dashes as sequence separator" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged, :sequence_separator => '-'
+      def self.name
+        "Journalist"
+      end
+    end
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206", record1.slug
+      record2 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206-2", record2.slug
+    end
+  end
+
+  test "should detect when a sequenced slug has changed when name ends in number and using single dash" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :name, :use => :slugged, :sequence_separator => '-'
+    end
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot 206"
+      assert !record1.should_generate_new_friendly_id?
+      record1.save!
+      assert !record1.should_generate_new_friendly_id?
+      record1.name = "Peugeot 307"
+      assert record1.should_generate_new_friendly_id?
+    end
+  end
 end
 
 class DefaultScopeTest < MiniTest::Unit::TestCase
