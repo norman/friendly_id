@@ -1,5 +1,3 @@
-require "friendly_id/slug"
-
 module FriendlyId
 
 =begin
