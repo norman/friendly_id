@@ -6,6 +6,12 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.8 (NOT RELEASED YET)
+
+* autoload FriendlyId::Slug; previously this class was not accessible from
+  migrations unless required explicitly, which could cause some queries to
+  unexpectedly fail.
+
 ## 4.0.7 (2012-06-06)
 
 * to_param just calls super when no friendly_id is present, to keep the model's
