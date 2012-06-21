@@ -8,6 +8,10 @@ class SimpleI18nTest < MiniTest::Unit::TestCase
     friendly_id :name, :use => :simple_i18n
   end
 
+  def setup
+    I18n.locale = :en
+  end
+
   test "friendly_id should return the current locale's slug" do
     journalist = Journalist.new(:name => "John Doe")
     journalist.slug_es = "juan-fulano"

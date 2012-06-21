@@ -11,6 +11,10 @@ end
 class GlobalizeTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
+  def setup
+    I18n.locale = :en
+  end
+
   test "should find slug in current locale if locale is set, otherwise in default locale" do
     transaction do
       I18n.default_locale = :en
