@@ -8,6 +8,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.8 (NOT RELEASED YET)
 
+* Added set_friendly_id method to Globalize module.
+
 * autoload FriendlyId::Slug; previously this class was not accessible from
   migrations unless required explicitly, which could cause some queries to
   unexpectedly fail.

@@ -31,12 +31,15 @@ Finds will take the current locale into consideration:
   I18n.locale = :en
   Post.find("star-wars")
 
+Additionally, finds will fall back to the default locale:
+
+  I18n.locale = :it
+  Post.find("star-wars")
+
 To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's +with_locale+ method:
 
-  I18n.with_locale(:it) do
-    Post.find("guerre-stellari")
-  end
+  I18n.with_locale(:it) { Post.find("guerre-stellari") }
 
 === Creating Records
 
@@ -44,12 +47,17 @@ When new records are created, the slug is generated for the current locale only.
 
 === Translating Slugs
 
-To translate an existing record's friendly_id, simply change the locale and
-assign a value to the +slug+ field:
+To translate an existing record's friendly_id, use
+{FriendlyId::Globalize::Model#set_friendly_id}. This will ensure that the slug
+you add is properly escaped, transliterated and sequenced:
 
-  I18n.with_locale(:it) do
-    post.slug = "guerre-stellari"
-  end
+  post = Post.create :name => "Star Wars"
+  post.set_friendly_id("Guerre stellari", :it)
+
+If you don't pass in a locale argument, FriendlyId::Globalize will just use the
+current locale:
+
+  I18n.with_locale(:it) { post.set_friendly_id("Guerre stellari") }
 
 =end
   module Globalize
@@ -67,8 +75,10 @@ assign a value to the +slug+ field:
     end
 
     module Model
-      def slug=(text)
-        set_slug(normalize_friendly_id(text))
+      def set_friendly_id(text, locale)
+        I18n.with_locale(locale || I18n.locale) do
+          set_slug(normalize_friendly_id(text))
+        end
       end
     end
 

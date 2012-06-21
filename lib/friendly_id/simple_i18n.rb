@@ -65,7 +65,7 @@ If you don't pass in a locale argument, FriendlyId::SimpleI18n will just use the
 current locale:
 
   I18n.with_locale(:es) do
-    post.set_friendly_id("la-guerra-de-las-galaxas")
+    post.set_friendly_id("La guerra de las galaxas")
   end
 =end
   module SimpleI18n
