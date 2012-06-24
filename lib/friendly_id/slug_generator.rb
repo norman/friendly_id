@@ -43,10 +43,7 @@ module FriendlyId
     end
 
     def conflict
-      unless defined? @conflict
-        @conflict = conflicts.first
-      end
-      @conflict
+      @conflict ||= conflicts.first
     end
 
     def conflicts
