@@ -5,6 +5,11 @@ class Manual < ActiveRecord::Base
   friendly_id :name, :use => :history
 end
 
+class Leaflet < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, :use => :history, :dependent => false
+end
+
 class HistoryTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
@@ -130,6 +135,32 @@ class HistoryTest < MiniTest::Unit::TestCase
       first_record.update_attributes :name => 'another'
       assert first_record.slug == "another--2"
     end
+  end
+
+  class DependentDestroyTest < MiniTest::Unit::TestCase
+
+    include FriendlyId::Test
+
+    def model_class
+      Leaflet
+    end
+
+    test "run!" do
+      transaction do
+        assert FriendlyId::Slug.find_by_slug('test').nil?
+        assert FriendlyId::Slug.find_by_slug('test--2').nil?
+        l = model_class.create! :name => "test"
+        assert FriendlyId::Slug.find_by_slug('test').present?
+        assert FriendlyId::Slug.find_by_slug('test--2').nil?
+        l.destroy
+        assert FriendlyId::Slug.find_by_slug('test').present?
+        assert FriendlyId::Slug.find_by_slug('test--2').nil?
+        model_class.create! :name => "test"
+        assert FriendlyId::Slug.find_by_slug('test').present?
+        assert FriendlyId::Slug.find_by_slug('test--2').present?
+      end
+    end
+
   end
 
 end

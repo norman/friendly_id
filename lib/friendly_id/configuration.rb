@@ -25,7 +25,7 @@ module FriendlyId
     #     extend FriendlyId
     #     friendly_id :name
     #   end
-    attr_accessor :base
+    attr_accessor :base, :options
 
     # The default configuration options.
     attr_reader :defaults

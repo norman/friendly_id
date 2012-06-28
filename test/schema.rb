@@ -60,7 +60,7 @@ module FriendlyId
         private
 
         def slugged_tables
-          ["journalists", "articles", "novelists", "novels", "manuals", "translated_articles"]
+          ["journalists", "articles", "novelists", "novels", "manuals", "leaflets", "translated_articles"]
         end
 
         def simple_tables
