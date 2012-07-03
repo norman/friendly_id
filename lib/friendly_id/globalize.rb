@@ -13,8 +13,8 @@ languages. If your application only needs to be localized to one or two
 languages, you may wish to consider the {FriendlyId::SimpleI18n SimpleI18n}
 module.
 
-In order to use this module, your model's table must have a slug column, and you
-must set the field +slug+ as translatable with Globalize:
+In order to use this module, your model's translation table must have a slug
+column, and you must set the field +slug+ as translatable with Globalize:
 
     class Post < ActiveRecord::Base
       translates :title, :slug
