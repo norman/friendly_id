@@ -1,6 +1,6 @@
 require "rubygems"
 require "bundler/setup"
-require "mocha"
+require "mocha_standalone"
 require "minitest/unit"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
