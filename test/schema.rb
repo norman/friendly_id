@@ -54,17 +54,20 @@ module FriendlyId
           # This will be used to test globalize translations
           TranslatedArticle.create_translation_table! :slug => :string, :title => :string
 
+          # This will be used to test relationships
+          add_column :books, :author_id, :integer
+
           @done = true
         end
 
         private
 
         def slugged_tables
-          ["journalists", "articles", "novelists", "novels", "manuals", "translated_articles"]
+          %w[journalists articles novelists novels manuals translated_articles]
         end
 
         def simple_tables
-          ["authors", "books", "publishers"]
+          %w[authors books publishers]
         end
 
         def tables
