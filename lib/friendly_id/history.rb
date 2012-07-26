@@ -60,8 +60,9 @@ method.
     def self.included(model_class)
       model_class.instance_eval do
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => :destroy,
-          :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
+        has_many :slugs, -> { order("#{Slug.quoted_table_name}.id DESC") },
+                 :as => :sluggable, :dependent => :destroy,
+                 :class_name => Slug.to_s
         after_save :create_slug
         relation_class.send :include, FinderMethods
         friendly_id_config.slug_generator_class.send :include, SlugGenerator
