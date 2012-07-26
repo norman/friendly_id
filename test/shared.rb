@@ -55,7 +55,7 @@ module FriendlyId
           my_model_class = Class.new(model_class)
           self.class.const_set("Foo", my_model_class)
           with_instance_of my_model_class do |record|
-            record.update_attribute(my_model_class.friendly_id_config.slug_column, nil)
+            record.update_attributes my_model_class.friendly_id_config.slug_column => nil
             record = my_model_class.find(record.id)
             record.class.validate Proc.new {errors[:name] = "FAIL"}
             record.save
