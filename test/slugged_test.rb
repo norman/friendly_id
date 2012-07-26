@@ -201,7 +201,7 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
   class Journalist < ActiveRecord::Base
     extend FriendlyId
     friendly_id :name, :use => :slugged
-    default_scope :order => 'id ASC', :conditions => { :active => true }
+    default_scope -> { order('id ASC').where(:active => true) }
   end
 
   test "friendly_id should correctly sequence a default_scoped ordered table" do
