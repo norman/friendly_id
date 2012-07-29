@@ -199,11 +199,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #   on first access. If you're concerned about thread safety, then be sure
     #   to invoke {#friendly_id} in your class for each model.
     def friendly_id_config
-      @friendly_id_config or begin
-        @friendly_id_config = base_class.friendly_id_config.dup.tap do |config|
-          config.model_class = self
-          @relation_class = base_class.send(:relation_class)
-        end
+      @friendly_id_config ||= base_class.friendly_id_config.dup.tap do |config|
+        config.model_class = self
+        @relation_class = base_class.send(:relation_class)
       end
     end
 
