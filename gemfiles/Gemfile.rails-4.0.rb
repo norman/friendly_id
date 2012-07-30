@@ -29,7 +29,7 @@ if ENV['AR_DEPRECATED_FINDERS']
 else
   gem 'active_record_deprecated_finders', :git => 'git://github.com/rails/active_record_deprecated_finders.git'
 end
-gem 'minitest'
+gem 'minitest', '~> 3.2.0'
 gem 'mocha'
 gem 'rake'
 gem 'globalize3', :git => 'git://github.com/svenfuchs/globalize3.git'
