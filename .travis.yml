@@ -8,6 +8,7 @@ rvm:
 branches:
   only:
     - master
+    - rails4
 env:
   - DB=postgres
   - DB=mysql
