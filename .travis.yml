@@ -1,10 +1,11 @@
 language: ruby
 rvm:
   - 1.9.3
-  - 1.8.7
 #  - jruby
 #  - rbx
-
+notifications:
+  email:
+    - parndt@gmail.com
 branches:
   only:
     - master
