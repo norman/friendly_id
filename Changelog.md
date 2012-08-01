@@ -8,11 +8,19 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.8 (NOT RELEASED YET)
 
-* Added set_friendly_id method to Globalize module.
+* Avoid using deprecated `update_attribute` (Philip Arndt).
+
+* Added set_friendly_id method to Globalize module (Norman Clarke).
 
 * autoload FriendlyId::Slug; previously this class was not accessible from
   migrations unless required explicitly, which could cause some queries to
-  unexpectedly fail.
+  unexpectedly fail (Norman Clarke).
+
+* Fix Mocha load order (Mark Turner).
+
+* Minor doc updates (Rob Yurkowski).
+
+* Other miscellaneous refactorings and doc updates.
 
 ## 4.0.7 (2012-06-06)
 
