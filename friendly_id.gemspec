@@ -6,8 +6,8 @@ require "friendly_id"
 Gem::Specification.new do |s|
   s.name              = "friendly_id"
   s.version           = FriendlyId::VERSION
-  s.authors           = ["Norman Clarke"]
-  s.email             = ["norman@njclarke.com"]
+  s.authors           = ["Norman Clarke", "Philip Arndt"]
+  s.email             = ["norman@njclarke.com", "parndt@gmail.com"]
   s.homepage          = "http://github.com/norman/friendly_id"
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.rubyforge_project = "friendly_id"
