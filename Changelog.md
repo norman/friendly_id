@@ -8,6 +8,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.8 (NOT RELEASED YET)
 
+* Name internal anonymous class to fix marshall dump/load error (Jess Brown, Philip Arndt and Norman Clarke).
+
 * Avoid using deprecated `update_attribute` (Philip Arndt).
 
 * Added set_friendly_id method to Globalize module (Norman Clarke).

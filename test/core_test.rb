@@ -45,11 +45,4 @@ class CoreTest < MiniTest::Unit::TestCase
       end
     end
   end
-
-
-  # test "instances can be marshaled" do
-  #   with_instance_of(model_class) do |record|
-  #     assert Marshal.load(Marshal.dump(record))
-  #   end
-  # end
 end
