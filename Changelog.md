@@ -6,7 +6,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.0.8 (NOT RELEASED YET)
+## 4.0.8 (2012-08-01)
 
 * Name internal anonymous class to fix marshall dump/load error (Jess Brown, Philip Arndt and Norman Clarke).
 
