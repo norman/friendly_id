@@ -16,7 +16,7 @@ end
 gem 'activerecord', '~> 3.1.0'
 gem 'railties', '~> 3.1.3'
 gem 'ffaker'
-gem 'minitest'
+gem 'minitest', '3.2.0'
 gem 'mocha'
 gem 'rake'
 gem 'globalize3'
