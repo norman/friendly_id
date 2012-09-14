@@ -114,8 +114,8 @@ store them in a field in your model. By default, this field must be named
 +:slug+, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
 option. You should add an index to this column, and in most cases, make it
-unique. Do not make the column unique in case you wish to scope the slug 
-(more on this later). You may also wish to constrain it to NOT NULL, but this 
+unique. Do not make the column unique in case you wish to scope the slug
+(more on this later). You may also wish to constrain it to NOT NULL, but this
 depends on your app's behavior and requirements.
 
 === Example Setup
@@ -316,7 +316,7 @@ method.
       ...
 
       def find_post
-        Post.find params[:id]
+        @post = Post.find params[:id]
 
         # If an old id or a numeric id was used to find the record, then
         # the request path will not match the post_path, and we should do
