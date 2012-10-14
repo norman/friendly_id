@@ -19,6 +19,17 @@ class Novelist < ActiveRecord::Base
   end
 end
 
+class ChangesPenNameALot < ActiveRecord::Base
+  self.table_name = "journalists"
+
+  extend FriendlyId
+  friendly_id :name, :use => :slugged
+
+  def should_generate_new_friendly_id?
+    true
+  end
+end
+
 class SluggedTest < MiniTest::Unit::TestCase
 
   include FriendlyId::Test
@@ -126,6 +137,16 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       record1 = Novelist.create! :name => 'wordsfail, buildings tumble'
       record2 = Novelist.create! :name => 'word fail'
       assert_equal 'word_fail', record2.slug
+    end
+  end
+
+  test "should allow regeneration of existing slugs without adding sequences" do
+    transaction do
+      record1 = ChangesPenNameALot.create! :name => "Joseph Heller"
+      record2 = ChangesPenNameALot.create! :name => "Joseph Heller"
+      record1.slug = nil
+      record1.save
+      assert_equal 'joseph-heller', record1.slug
     end
   end
 

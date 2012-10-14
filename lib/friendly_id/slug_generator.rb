@@ -39,27 +39,54 @@ module FriendlyId
     end
 
     def conflict?
-      !! conflict
+      !! (direct_conflict && conflict)
+    end
+
+    def direct_conflict
+      @direct_conflict ||= direct_conflicts.first
     end
 
     def conflict
-      unless defined? @conflict
-        @conflict = conflicts.first
-      end
-      @conflict
+      @conflict ||= conflicts.first
+    end
+
+    def sluggable_class
+      friendly_id_config.model_class.base_class
+    end
+
+    def sluggable_primary_key_column
+      sluggable_class.primary_key
+    end
+
+    def sluggable_primary_key
+      sluggable.send(sluggable_primary_key_column)
+    end
+
+    def direct_conflicts
+      base = "#{column} = ?"
+      scope = sluggable_class.unscoped.where(base, normalized)
+      scope_excluding_sluggable(scope)
     end
 
     def conflicts
-      sluggable_class = friendly_id_config.model_class.base_class
-
-      pkey  = sluggable_class.primary_key
-      value = sluggable.send pkey
-      base = "#{column} = ? OR #{column} LIKE ?"
-      # Awful hack for SQLite3, which does not pick up '\' as the escape character without this.
-      base << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
+      base = query_with_sqlite_hack("#{column} = ? OR #{column} LIKE ?")
       scope = sluggable_class.unscoped.where(base, normalized, wildcard)
-      scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
       scope = scope.order("LENGTH(#{column}) DESC, #{column} DESC")
+      scope_excluding_sluggable(scope)
+    end
+
+    def scope_excluding_sluggable(scope)
+      if sluggable.new_record?
+        scope
+      else
+        scope.where("#{sluggable_primary_key_column} <> ?", sluggable_primary_key)
+      end
+    end
+
+    def query_with_sqlite_hack(query)
+      # Awful hack for SQLite3, which does not pick up '\' as the escape character without this.
+      query << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
+      query
     end
 
     def friendly_id_config
