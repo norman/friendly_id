@@ -45,7 +45,7 @@ with numeric ids:
 module FriendlyId
 
   # The current version.
-  VERSION = "4.0.8"
+  VERSION = "4.0.9"
 
   @mutex = Mutex.new
 
