@@ -160,6 +160,20 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should detect when a stored slug does not match the current friendly_id" do
+    with_instance_of model_class do |record|
+      record.slug = "something-else"
+      assert record.should_generate_new_friendly_id?
+    end
+  end
+
+  test "should detect when a stored slug has been cleared" do
+    with_instance_of model_class do |record|
+      record.slug = nil
+      assert record.should_generate_new_friendly_id?
+    end
+  end
+
   test "should correctly sequence slugs that uses single dashes as sequence separator" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "journalists"
