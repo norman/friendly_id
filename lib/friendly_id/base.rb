@@ -189,7 +189,6 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       yield friendly_id_config if block_given?
       friendly_id_config.use options.delete :use
       friendly_id_config.send :set, base ? options.merge(:base => base) : options
-      before_save {|rec| rec.instance_eval {@current_friendly_id = friendly_id}}
       include Model
     end
 
@@ -254,8 +253,6 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
   # Instance methods that will be added to all classes using FriendlyId.
   module Model
-
-    attr_reader :current_friendly_id
 
     # Convenience method for accessing the class method of the same name.
     def friendly_id_config

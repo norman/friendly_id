@@ -198,7 +198,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       friendly_id :name, :use => :slugged, :sequence_separator => '-'
     end
     transaction do
-      record1 = model_class.create! :name => "Peugeuot 206"
+      record1 = model_class.create! :name => "Peugeot 206"
       assert !record1.should_generate_new_friendly_id?
       record1.save!
       assert !record1.should_generate_new_friendly_id?
