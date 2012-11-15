@@ -45,7 +45,7 @@ module FriendlyId
 
       # Respond with the slugged value if available.
       def to_param_from_slug
-        slug? ? slug.to_friendly_id : id.to_s
+        slug? ? slug_friendly_id : id.to_s
       end
 
       # Build the new slug using the generated friendly id.
@@ -53,19 +53,24 @@ module FriendlyId
         return unless new_slug_needed?
         self.slug = slugs.build :name => slug_text.to_s, :scope => friendly_id_config.scope_for(self),
           :sluggable => self
-        @new_friendly_id = self.slug.to_friendly_id
+        @new_friendly_id = slug_friendly_id
+      end
+
+      def slug_friendly_id
+        slug.sluggable = self
+        slug.to_friendly_id
       end
 
       # Reset the cached friendly_id?
       def new_cache_needed?
-        uses_slug_cache? && slug? && send(friendly_id_config.cache_column) != slug.to_friendly_id
+        uses_slug_cache? && slug? && send(friendly_id_config.cache_column) != slug_friendly_id
       end
 
       # Reset the cached friendly_id.
       def set_slug_cache
         if new_cache_needed?
           begin
-            send "#{friendly_id_config.cache_column}=", slug.to_friendly_id
+            send "#{friendly_id_config.cache_column}=", slug_friendly_id
             update_without_callbacks
           rescue ActiveRecord::StaleObjectError
             reload
