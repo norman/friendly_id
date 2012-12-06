@@ -119,15 +119,27 @@ method.
 
       private
 
-      def conflicts
-        sluggable_class = friendly_id_config.model_class.base_class
-        pkey            = sluggable_class.primary_key
-        value           = sluggable.send pkey
-
-        scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
+      def direct_conflicts
+        scope = Slug.where("slug = ?", normalized)
         scope = scope.where(:sluggable_type => sluggable_class.to_s)
-        scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
-        scope.order("LENGTH(slug) DESC, slug DESC")
+        scope = scope.where("sluggable_id <> ?", sluggable_primary_key) unless sluggable.new_record?
+        scope_excluding_sluggable(scope)
+      end
+
+      def conflicts
+        base = query_with_sqlite_hack("slug = ? OR slug like ?")
+        scope = Slug.where(base, normalized, wildcard)
+        scope = scope.where(:sluggable_type => sluggable_class.to_s)
+        scope = scope.order("LENGTH(slug) DESC, slug DESC")
+        scope_excluding_sluggable(scope)
+      end
+
+      def scope_excluding_sluggable(scope)
+        if sluggable.new_record?
+          scope
+        else
+          scope.where("sluggable_id <> ?", sluggable_primary_key)
+        end
       end
     end
   end
