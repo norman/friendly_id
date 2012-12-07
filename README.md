@@ -103,7 +103,7 @@ article](http://yourbugreportneedsmore.info/).
 ## Thanks and Credits
 
 FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
-significant help early in its life by Emilio Tagua. I'm deeply gratful for the
+significant help early in its life by Emilio Tagua. I'm deeply grateful for the
 generous contributions over the years from [many
 volunteers](https://github.com/norman/friendly_id/contributors).
 
