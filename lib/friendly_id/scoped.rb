@@ -33,6 +33,28 @@ Without :scoped in this case, one of the restaurants would have the slug
 The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
 a column.
 
+Additionally, the +:scope+ option can receive an array of scope values:
+
+    class Cuisine < ActiveRecord::Base
+      extend FriendlyId
+      has_many :restaurants
+      friendly_id :name, :use => :slugged
+    end
+
+    class City < ActiveRecord::Base
+      extend FriendlyId
+      has_many :restaurants
+      friendly_id :name, :use => :slugged
+    end
+
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      belongs_to :city
+      friendly_id :name, :use => :scoped, :scope => [:city, :cuisine]
+    end
+
+All supplied values will be used to determine scope.
+
 === Finding Records by Friendly ID
 
 If you are using scopes your friendly ids may not be unique, so a simple find
