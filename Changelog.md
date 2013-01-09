@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.1.0.beta.1 (2013-01-09)
+
+Made the :scoped and :history modules compatible with each other (Andre Duffeck)
+
 ## 4.0.9 (2012-10-31)
 
 * Fixed support for Rails 3.2.9.rc1
