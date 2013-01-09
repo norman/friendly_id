@@ -108,11 +108,14 @@ an example of one way to set this up:
     # feature.
     def self.included(model_class)
       model_class.instance_eval do
-        raise "FriendlyId::Scoped is incompatibe with FriendlyId::History" if self < History
         include Slugged unless self < Slugged
         friendly_id_config.class.send :include, Configuration
         friendly_id_config.slug_generator_class.send :include, SlugGenerator
       end
+    end
+
+    def serialized_scope
+      friendly_id_config.scope_columns.sort.map { |column| "#{column}:#{send(column)}" }.join(",")
     end
 
     # This module adds the +:scope+ configuration option to
@@ -159,12 +162,18 @@ an example of one way to set this up:
       private
 
       def conflict
-        columns = friendly_id_config.scope_columns
-        matched = columns.inject(conflicts) do |memo, column|
-           memo.where(column => sluggable.send(column))
-        end
+        if friendly_id_config.uses?(:history)
+          # When using the :history module +conflicts+ already returns only real conflicts, so there's no need to check
+          # for the scope columns again
+          conflicts.first
+        else
+          columns = friendly_id_config.scope_columns
+          matched = columns.inject(conflicts) do |memo, column|
+            memo.where(column => sluggable.send(column))
+          end
 
-        matched.first
+          matched.first
+        end
       end
     end
   end

@@ -59,7 +59,6 @@ method.
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
       model_class.instance_eval do
-        raise "FriendlyId::History is incompatible with FriendlyId::Scoped" if self < Scoped
         @friendly_id_config.use :slugged
         has_many :slugs, :as => :sluggable, :dependent => :destroy,
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
@@ -80,6 +79,7 @@ method.
       relation.delete_all unless result.empty?
       slugs.create! do |record|
         record.slug = friendly_id
+        record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
       end
     end
 
@@ -90,7 +90,7 @@ method.
       def find_one(id)
         return super(id) if id.unfriendly_id?
         where(@klass.friendly_id_config.query_field => id).first or
-        with_old_friendly_id(id) {|x| find_one_without_friendly_id(x)} or
+        with_old_friendly_id(id) {|x| where(:id => x).first} or
         find_one_without_friendly_id(id)
       end
 
@@ -98,7 +98,7 @@ method.
       def exists?(id = false)
         return super if id.unfriendly_id?
         exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
-        with_old_friendly_id(id) {|x| exists_without_friendly_id?(x)} or
+        with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)} or
         exists_without_friendly_id?(id)
       end
 
@@ -108,8 +108,8 @@ method.
       def with_old_friendly_id(slug, &block)
         sql = "SELECT sluggable_id FROM #{Slug.quoted_table_name} WHERE sluggable_type = %s AND slug = %s"
         sql = sql % [@klass.base_class.to_s, slug].map {|x| connection.quote(x)}
-        sluggable_id = connection.select_values(sql).first
-        yield sluggable_id if sluggable_id
+        sluggable_ids = connection.select_values(sql)
+        yield sluggable_ids if sluggable_ids
       end
     end
 
@@ -127,7 +127,9 @@ method.
         scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
         scope = scope.where(:sluggable_type => sluggable_class.to_s)
         scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
-
+        if sluggable.friendly_id_config.uses?(:scoped)
+          scope = scope.where("scope = ?", sluggable.serialized_scope)
+        end
         length_command = "LENGTH"
         length_command = "LEN" if sluggable.connection.adapter_name =~ /sqlserver/i
         scope.order("#{length_command}(slug) DESC, slug DESC")
