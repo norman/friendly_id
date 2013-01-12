@@ -49,7 +49,7 @@ You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://rails
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.9"
+    gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
 
     rails generate scaffold user name:string slug:string
 
