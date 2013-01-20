@@ -3,8 +3,11 @@ module FriendlyId
   #
   # @see FriendlyId::History
   class Slug < ActiveRecord::Base
-    self.table_name = "friendly_id_slugs"
     belongs_to :sluggable, :polymorphic => true
+
+    def self.name
+      "FriendlyIdSlug"
+    end
 
     def to_param
       slug
