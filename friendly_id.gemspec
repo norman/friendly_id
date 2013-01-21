@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "railties", "~> 3.2.0"
   s.add_development_dependency "activerecord", "~> 3.2.0"
-  s.add_development_dependency "minitest", "3.2.0"
+  s.add_development_dependency "minitest", "~> 4.4.0"
   s.add_development_dependency "mocha"
   s.add_development_dependency "maruku"
   s.add_development_dependency "yard"
