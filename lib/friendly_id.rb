@@ -44,9 +44,6 @@ with numeric ids:
 =end
 module FriendlyId
 
-  # The current version.
-  VERSION = "4.0.9"
-
   @mutex = Mutex.new
 
   autoload :History,    "friendly_id/history"
