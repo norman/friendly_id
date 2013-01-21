@@ -108,4 +108,12 @@ module FriendlyId
       @defaults ||= lambda {|config| config.use :reserved}
     end
   end
+
+  # Set the ActiveRecord table name prefix to friendly_id_
+  #
+  # This makes 'slugs' into 'friendly_id_slugs' and also respects any
+  # 'global' table_name_prefix set on ActiveRecord::Base.
+  def self.table_name_prefix
+    "#{ActiveRecord::Base.table_name_prefix}friendly_id_"
+  end
 end
