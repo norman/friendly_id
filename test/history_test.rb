@@ -121,6 +121,20 @@ class HistoryTest < MiniTest::Unit::TestCase
     end
   end
 
+  test 'should name table according to prefix and suffix' do
+    transaction do
+      begin
+        prefix = "prefix_"
+        without_prefix = FriendlyId::Slug.table_name
+        ActiveRecord::Base.table_name_prefix = prefix
+        FriendlyId::Slug.reset_table_name
+        assert_equal prefix + without_prefix, FriendlyId::Slug.table_name
+      ensure
+        ActiveRecord::Base.table_name_prefix = ""
+        FriendlyId::Slug.table_name = without_prefix
+      end
+    end
+  end
 end
 
 class HistoryTestWithSti < HistoryTest
@@ -136,8 +150,6 @@ class HistoryTestWithSti < HistoryTest
     Editorialist
   end
 end
-
-
 
 class City < ActiveRecord::Base
   has_many :restaurants
