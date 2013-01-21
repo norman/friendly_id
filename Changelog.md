@@ -6,6 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.10 (NOT RELEASED YET)
+
+* Fixed table prefixes/suffixes being ignored (Jesse Farless)
+
 ## 4.0.9 (2012-10-31)
 
 * Fixed support for Rails 3.2.9.rc1
