@@ -15,9 +15,9 @@ module FriendlyId
     def find_one(id)
       return super if id.unfriendly_id?
       if id.friendly_id?
-        where(@klass.friendly_id_config.query_field => id).first or super
-      else
         where(@klass.friendly_id_config.query_field => id).first or raise ActiveRecord::RecordNotFound
+      else
+        where(@klass.friendly_id_config.query_field => id).first or super
       end
     end
 

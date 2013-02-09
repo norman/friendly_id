@@ -92,11 +92,11 @@ method.
         if id.friendly_id?
           where(@klass.friendly_id_config.query_field => id).first or
           with_old_friendly_id(id) {|x| where(:id => x).first} or
-          find_one_without_friendly_id(id)
+          raise ActiveRecord::RecordNotFound
         else
           where(@klass.friendly_id_config.query_field => id).first or
           with_old_friendly_id(id) {|x| where(:id => x).first} or
-          raise ActiveRecord::RecordNotFound
+          find_one_without_friendly_id(id)
         end
       end
 
@@ -105,11 +105,11 @@ method.
         return super if id.unfriendly_id?
         if id.friendly_id?
           exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
-          with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)} or
-          exists_without_friendly_id?(id)
+          with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)}
         else
           exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
-          with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)}
+          with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)} or
+          exists_without_friendly_id?(id)
         end
       end
 
