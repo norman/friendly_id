@@ -218,7 +218,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # ideal, but I know of no better way to accomplish this.
     # @see #relation_class
     def relation #:nodoc:
-      relation = relation_class.new(self, arel_table)
+      relation = relation_without_friendly_id
 
       if finder_needs_type_condition?
         relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
@@ -251,11 +251,14 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # ActiveRecord::Relation.
     def relation_class
       @relation_class or begin
-        @relation_class = Class.new(relation_without_friendly_id.class) do
+        @relation_class = relation_without_friendly_id.class
+
+        relation_without_friendly_id.class.class_eval do
           alias_method :find_one_without_friendly_id, :find_one
           alias_method :exists_without_friendly_id?, :exists?
           include FriendlyId::FinderMethods
         end
+
         # Set a name so that model instances can be marshalled. Use a
         # ridiculously long name that will not conflict with anything.
         # TODO: just use the constant, no need for the @relation_class variable.
