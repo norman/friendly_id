@@ -45,8 +45,6 @@ module FriendlyId
           with_instance_of model_class do |record|
             record.slug = nil
             record.save!
-            assert_nil record.slug
-            record.save!
             refute_nil record.slug
           end
         end
