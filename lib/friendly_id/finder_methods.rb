@@ -1,9 +1,6 @@
 module FriendlyId
   # These methods will be added to the model's {FriendlyId::Base#relation_class relation_class}.
   module FinderMethods
-
-    protected
-
     # FriendlyId overrides this method to make it possible to use friendly id's
     # identically to numeric ids in finders.
     #
