@@ -5,7 +5,7 @@ require "rails/generators/active_record"
 # FriendlyId::History} addon.
 class FriendlyIdGenerator < Rails::Generators::Base
   include Rails::Generators::Migration
-  extend ActiveRecord::Generators::Migration
+  extend ActiveRecord::Generators::Migration if defined? ActiveRecord::Generators::Migration
 
   source_root File.expand_path('../../friendly_id', __FILE__)
 
