@@ -35,7 +35,7 @@ module FriendlyId
     end
 
     def column
-      sluggable.connection.quote_column_name friendly_id_config.slug_column
+      sluggable.class.connection.quote_column_name friendly_id_config.slug_column
     end
 
     def conflict?
@@ -56,12 +56,12 @@ module FriendlyId
       value = sluggable.send pkey
       base = "#{column} = ? OR #{column} LIKE ?"
       # Awful hack for SQLite3, which does not pick up '\' as the escape character without this.
-      base << "ESCAPE '\\'" if sluggable.connection.adapter_name =~ /sqlite/i
+      base << "ESCAPE '\\'" if sluggable.class.connection.adapter_name =~ /sqlite/i
       scope = sluggable_class.unscoped.where(base, normalized, wildcard)
       scope = scope.where("#{pkey} <> ?", value) unless sluggable.new_record?
       
       length_command = "LENGTH"
-      length_command = "LEN" if sluggable.connection.adapter_name =~ /sqlserver/i
+      length_command = "LEN" if sluggable.class.connection.adapter_name =~ /sqlserver/i
       scope = scope.order("#{length_command}(#{column}) DESC, #{column} DESC")
     end
 

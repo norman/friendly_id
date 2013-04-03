@@ -112,8 +112,8 @@ method.
       # Accepts a slug, and yields a corresponding sluggable_id into the block.
       def with_old_friendly_id(slug, &block)
         sql = "SELECT sluggable_id FROM #{Slug.quoted_table_name} WHERE sluggable_type = %s AND slug = %s"
-        sql = sql % [@klass.base_class.to_s, slug].map {|x| connection.quote(x)}
-        sluggable_ids = connection.select_values(sql)
+        sql = sql % [@klass.base_class.to_s, slug].map {|x| self.connection.quote(x)}
+        sluggable_ids = self.connection.select_values(sql)
         yield sluggable_ids if sluggable_ids
       end
     end
@@ -136,7 +136,7 @@ method.
           scope = scope.where("scope = ?", sluggable.serialized_scope)
         end
         length_command = "LENGTH"
-        length_command = "LEN" if sluggable.connection.adapter_name =~ /sqlserver/i
+        length_command = "LEN" if sluggable.class.connection.adapter_name =~ /sqlserver/i
         scope.order("#{length_command}(slug) DESC, slug DESC")
       end
     end

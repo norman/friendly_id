@@ -223,11 +223,11 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       if finder_needs_type_condition?
         relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
       else
-        relation
+        inject_friendly_id(relation)
       end
     end
 
-    # Gets (and if necessary, creates) a subclass of the model's relation class.
+    # Includes friendly_id methods into relation class
     #
     # Rather than including FriendlyId's overridden finder methods in
     # ActiveRecord::Relation directly, FriendlyId adds them to a subclass
@@ -249,20 +249,20 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # against a private API. If this ends up being problematic I will probably
     # revert back to the old behavior of simply extending
     # ActiveRecord::Relation.
+    def inject_friendly_id(klass)
+      klass.class.class_eval do
+        alias_method :find_one_without_friendly_id, :find_one
+        alias_method :exists_without_friendly_id?, :exists?
+        include FriendlyId::FinderMethods
+      end
+
+      klass
+    end
+
+    # Gets (and if necessary, creates) a subclass of the model's relation class.
     def relation_class
       @relation_class or begin
-        @relation_class = relation_without_friendly_id.class
-
-        relation_without_friendly_id.class.class_eval do
-          alias_method :find_one_without_friendly_id, :find_one
-          alias_method :exists_without_friendly_id?, :exists?
-          include FriendlyId::FinderMethods
-        end
-
-        # Set a name so that model instances can be marshalled. Use a
-        # ridiculously long name that will not conflict with anything.
-        # TODO: just use the constant, no need for the @relation_class variable.
-        const_set('FriendlyIdActiveRecordRelation', @relation_class)
+        @relation_class = inject_friendly_id(relation_without_friendly_id).class
       end
     end
   end
