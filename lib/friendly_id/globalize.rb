@@ -97,7 +97,8 @@ current locale:
         found = where(@klass.friendly_id_config.query_field => id).first
         found = includes(:translations).
                 where(translation_class.arel_table[:locale].in([I18n.locale, I18n.default_locale])).
-                where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).first if found.nil?
+                where(translation_class.arel_table[@klass.friendly_id_config.query_field].eq(id)).
+                references(translation_class.arel_table).first if found.nil?
 
         if found
           # Reload the translations for the found records.
