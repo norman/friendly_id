@@ -20,14 +20,30 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
-FriendlyId is compatible with Active Record **3.0** and higher.
+FriendlyId is compatible with Active Record **3.2** and higher.
 
-## Version 4.x
+## Version 5.x
 
-FriendlyId 4.x introduces many changes incompatible with 3.x. If you're
-upgrading, please [read the
-docs](http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md) to see what's
-new.
+As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
+infer from the version number, FriendlyId 5.0 introduces changes incompatible
+with 4.x. If you're upgrading, please [read the
+docs](http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md) to
+see what's new.
+
+Here's a summary of the most important changes:
+
+* FriendlyId no longer overrides `find`. If you want to do friendly finds, you
+  must do `Model.friendly.find` rather than `Model.find`.
+
+* Version 5.0 offers a new "candidates" functionality which makes it easy to
+  set up a list of alternate slugs that can be used to uniquely distinguish
+  records, rather than appending a sequence.
+
+* Now that candidates have been added, FriendlyId no longer uses a numeric
+  sequence to differentiate conflicting slug, but rather a GUID. This makes the
+  codebase simpler and more reliable when running concurrently, at the expense
+  of uglier ids being generated when there are conflicts.
+
 
 ## Docs
 
@@ -38,7 +54,8 @@ The best place to start is with the
 [Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
-You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid).
+You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
+which is now somewhat outdated but still mostly relevant.
 
 ## Rails Quickstart
 
@@ -48,7 +65,7 @@ You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://rails
 
     cd my_app
 
-    gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
+    gem "friendly_id", "~> 5.0.0" # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 
     rails generate scaffold user name:string slug:string
 
@@ -64,6 +81,9 @@ You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://rails
     end
 
     User.create! name: "Joe Schmoe"
+
+    # Change User.find to User.friendly.find in your controller
+    User.friendly.find(params[:id])
 
     rails server
 
@@ -102,32 +122,15 @@ article](http://yourbugreportneedsmore.info/).
 ## Thanks and Credits
 
 FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
-significant help early in its life by Emilio Tagua. I'm deeply grateful for the
-generous contributions over the years from [many
+significant help early in its life by Emilio Tagua. It is now maintained by
+Norman Clarke and Philip Arndt.
+
+We're deeply grateful for the generous contributions over the years from [many
 volunteers](https://github.com/norman/friendly_id/contributors).
-
-Part of the inspiration to rework FriendlyId came from Darcy Laycock's library
-[Slugged](https://github.com/Sutto/slugged), which he was inspired to create
-because of frustrations he experienced while using FriendlyId 3.x. Seeing a
-smart programmer become frustrated with my code was enough of a kick in the
-butt to make me want to significantly improve this library.
-
-Many thanks to him for providing valid, real criticism while still being a cool
-about it. I definitely recommend you check out his library if for some reason
-FriendlyId doesn't do it for you.
-
-Thanks also to Loren Segal and Nick Plante for YARD and the
-[rubydoc.info](http://rubydoc.info/) website which FriendlyId uses for
-documentation.
-
-Lastly, FriendlyId uses [Travis](http://travis-ci.org/) for continuous
-integration. It's an excellent, free service created by a whole bunch of [good
-people](https://github.com/travis-ci) - if you're not already using it, you
-should be!
 
 ## License
 
-Copyright (c) 2008-2012 Norman Clarke and contributors, released under the MIT
+Copyright (c) 2008-2013 Norman Clarke and contributors, released under the MIT
 license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

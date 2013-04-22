@@ -95,7 +95,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
 
     begin
-      with_instance_of(model_class) {|record| assert model_class.find(record.friendly_id)}
+      with_instance_of(model_class) {|record| assert model_class.friendly.find(record.friendly_id)}
     rescue ActiveRecord::StatementInvalid
       flunk "column name was not quoted"
     end
@@ -106,7 +106,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       m1 = model_class.create! :name => "a b c d"
       assert_equal "a-b-c-d", m1.slug
       model_class.create! :name => "a b c d"
-      m1 = model_class.find(m1.id)
+      m1 = model_class.friendly.find(m1.id)
       m1.save!
       assert_equal "a-b-c-d", m1.slug
     end
@@ -117,7 +117,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       record1 = model_class.create! :name => "Peugeuot 206"
       assert_equal "peugeuot-206", record1.slug
       record2 = model_class.create! :name => "Peugeuot 206"
-      assert_equal "peugeuot-206--2", record2.slug
+      assert_match(/\Apeugeuot-206--([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
     end
   end
 
@@ -144,26 +144,10 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
     Journalist
   end
 
-  test "should increment sequence with configured sequence separator" do
+  test "should sequence with configured sequence separator" do
     with_instance_of model_class do |record|
       record2 = model_class.create! :name => record.name
-      assert record2.friendly_id.match(/:2\z/)
-    end
-  end
-
-  test "should detect when a sequenced slug has changed" do
-    with_instance_of model_class do |record|
-      record2 = model_class.create! :name => record.name
-      assert !record2.should_generate_new_friendly_id?
-      record2.name = "hello world"
-      assert record2.should_generate_new_friendly_id?
-    end
-  end
-
-  test "should detect when a stored slug does not match the current friendly_id" do
-    with_instance_of model_class do |record|
-      record.slug = "something-else"
-      assert record.should_generate_new_friendly_id?
+      assert record2.friendly_id.match(/:.*\z/)
     end
   end
 
@@ -187,23 +171,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       record1 = model_class.create! :name => "Peugeuot 206"
       assert_equal "peugeuot-206", record1.slug
       record2 = model_class.create! :name => "Peugeuot 206"
-      assert_equal "peugeuot-206-2", record2.slug
-    end
-  end
-
-  test "should detect when a sequenced slug has changed when name ends in number and using single dash" do
-    model_class = Class.new(ActiveRecord::Base) do
-      self.table_name = "journalists"
-      extend FriendlyId
-      friendly_id :name, :use => :slugged, :sequence_separator => '-'
-    end
-    transaction do
-      record1 = model_class.create! :name => "Peugeot 206"
-      assert !record1.should_generate_new_friendly_id?
-      record1.save!
-      assert !record1.should_generate_new_friendly_id?
-      record1.name = "Peugeot 307"
-      assert record1.should_generate_new_friendly_id?
+      assert_match(/\Apeugeuot-206-([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
     end
   end
 end
@@ -228,23 +196,6 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
     transaction do
       assert Journalist.create :name => "a", :active => false
       assert Journalist.create :name => "a", :active => true
-    end
-  end
-end
-
-class SluggedRegressionsTest < MiniTest::Unit::TestCase
-  include FriendlyId::Test
-
-  def model_class
-    Journalist
-  end
-
-  test "should increment the slug sequence for duplicate friendly ids beyond 10" do
-    with_instance_of model_class do |record|
-      (2..12).each do |i|
-        r = model_class.create! :name => record.name
-        assert r.friendly_id.match(/#{i}\z/)
-      end
     end
   end
 end

@@ -7,18 +7,19 @@ module FriendlyId
           assert !model_class.friendly_id_config.sequence_separator.empty?
         end
 
-        test "should make a new slug if the friendly_id method value has changed" do
+        test "should make a new slug if the slug has been set to nil changed" do
           with_instance_of model_class do |record|
             record.name = "Changed Value"
+            record.slug = nil
             record.save!
             assert_equal "changed-value", record.slug
           end
         end
 
-        test "should increment the slug sequence for duplicate friendly ids" do
+        test "should add a UUID for duplicate friendly ids" do
           with_instance_of model_class do |record|
             record2 = model_class.create! :name => record.name
-            assert record2.friendly_id.match(/2\z/)
+            assert record2.friendly_id.match(/([0-9a-z]+\-){4}[0-9a-z]+\z/)
           end
         end
 
@@ -32,12 +33,13 @@ module FriendlyId
           end
         end
 
-        test "should not increment sequence on save" do
+        test "should not change the sequence on save" do
           with_instance_of model_class do |record|
             record2 = model_class.create! :name => record.name
+            friendly_id = record2.friendly_id
             record2.active = !record2.active
             record2.save!
-            assert record2.friendly_id.match(/2\z/)
+            assert_equal friendly_id, record2.reload.friendly_id
           end
         end
 

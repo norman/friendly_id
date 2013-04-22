@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "friendly_id/slug_generator"
+require "friendly_id/candidates"
 
 module FriendlyId
 =begin
@@ -250,29 +251,20 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
     # You can override this method in your model if, for example, you only want
     # slugs to be generated once, and then never updated.
     def should_generate_new_friendly_id?
-      base       = send(friendly_id_config.base)
-      slug_value = send(friendly_id_config.slug_column)
+      send(friendly_id_config.slug_column).nil? && !send(friendly_id_config.base).nil?
+    end
 
-      # If the slug base is nil, and the slug field is nil, then we're going to
-      # leave the slug column NULL.
-      return false if base.nil? && slug_value.nil?
-      # Otherwise, if this is a new record, we're definitely going to try to
-      # create a new slug.
-      return true if new_record?
-      slug_base = normalize_friendly_id(base)
-      separator = Regexp.escape friendly_id_config.sequence_separator
-      # If the slug base is different from the current slug value (with or
-      # without sequence number) then we'll generate a new friendly_id.
-      !(slug_base == slug_value || slug_base == slug_value.try(:sub, /#{separator}[\d]*\z/, ''))
+    def resolve_friendly_id_conflict(candidates)
+      candidates.first + friendly_id_config.sequence_separator + SecureRandom.uuid
     end
 
     # Sets the slug.
-    # FIXME: This method sucks and the logic is pretty dubious.
     def set_slug(normalized_slug = nil)
-      if normalized_slug || should_generate_new_friendly_id?
-        normalized_slug ||= normalize_friendly_id send(friendly_id_config.base)
-        generator = friendly_id_config.slug_generator_class.new self, normalized_slug
-        send "#{friendly_id_config.slug_column}=", generator.generate
+      if should_generate_new_friendly_id?
+        generator = friendly_id_config.slug_generator_class.new(self.class.unscoped.friendly)
+        candidates = FriendlyId::Candidates.new(self, send(friendly_id_config.base))
+        slug = generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        send "#{friendly_id_config.slug_column}=", slug
       end
     end
     private :set_slug
