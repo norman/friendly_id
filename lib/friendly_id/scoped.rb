@@ -144,14 +144,8 @@ an example of one way to set this up:
 
       private
 
-      if ActiveRecord::VERSION::STRING < "3.1"
-        def reflection_foreign_key(scope)
-          model_class.reflections[scope].try(:primary_key_name)
-        end
-      else
-        def reflection_foreign_key(scope)
-          model_class.reflections[scope].try(:foreign_key)
-        end
+      def reflection_foreign_key(scope)
+        model_class.reflections[scope].try(:foreign_key)
       end
     end
 
