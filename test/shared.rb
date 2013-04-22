@@ -54,7 +54,7 @@ module FriendlyId
           self.class.const_set("Foo", my_model_class)
           with_instance_of my_model_class do |record|
             record.update_attributes my_model_class.friendly_id_config.slug_column => nil
-            record = my_model_class.find(record.id)
+            record = my_model_class.friendly.find(record.id)
             record.class.validate Proc.new {errors[:name] = "FAIL"}
             record.save
             assert_equal record.to_param, record.friendly_id
@@ -67,36 +67,39 @@ module FriendlyId
         test "finds should respect conditions" do
           with_instance_of(model_class) do |record|
             assert_raises(ActiveRecord::RecordNotFound) do
-              model_class.where("1 = 2").find record.friendly_id
+              model_class.where("1 = 2").friendly.find record.friendly_id
+            end
+            assert_raises(ActiveRecord::RecordNotFound) do
+              model_class.where("1 = 2").friendly.find record.id
             end
           end
         end
 
         test "should be findable by friendly id" do
-          with_instance_of(model_class) {|record| assert model_class.find record.friendly_id}
+          with_instance_of(model_class) {|record| assert model_class.friendly.find record.friendly_id}
         end
 
         test "should exist? by friendly id" do
           with_instance_of(model_class) do |record|
-            assert model_class.exists? record.id
-            assert model_class.exists? record.friendly_id
-            assert model_class.exists?({:id => record.id})
-            assert model_class.exists?(['id = ?', record.id])
-            assert !model_class.exists?(record.friendly_id + "-hello")
-            assert !model_class.exists?(0)
+            assert model_class.friendly.exists? record.id
+            assert model_class.friendly.exists? record.friendly_id
+            assert model_class.friendly.exists?({:id => record.id})
+            assert model_class.friendly.exists?(['id = ?', record.id])
+            assert !model_class.friendly.exists?(record.friendly_id + "-hello")
+            assert !model_class.friendly.exists?(0)
           end
         end
 
         test "should be findable by id as integer" do
-          with_instance_of(model_class) {|record| assert model_class.find record.id.to_i}
+          with_instance_of(model_class) {|record| assert model_class.friendly.find record.id.to_i}
         end
 
         test "should be findable by id as string" do
-          with_instance_of(model_class) {|record| assert model_class.find record.id.to_s}
+          with_instance_of(model_class) {|record| assert model_class.friendly.find record.id.to_s}
         end
 
         test "should be findable by numeric friendly_id" do
-          with_instance_of(model_class, :name => "206") {|record| assert model_class.find record.friendly_id}
+          with_instance_of(model_class, :name => "206") {|record| assert model_class.friendly.find record.friendly_id}
         end
 
         test "to_param should return the friendly_id" do
@@ -104,23 +107,23 @@ module FriendlyId
         end
 
         test "should be findable by themselves" do
-          with_instance_of(model_class) {|record| assert_equal record, model_class.find(record)}
+          with_instance_of(model_class) {|record| assert_equal record, model_class.friendly.find(record)}
         end
 
         test "updating record's other values should not change the friendly_id" do
           with_instance_of model_class do |record|
             old = record.friendly_id
             record.update_attributes! :active => false
-            assert model_class.find old
+            assert model_class.friendly.find old
           end
         end
 
         test "instances found by a single id should not be read-only" do
-          with_instance_of(model_class) {|record| assert !model_class.find(record.friendly_id).readonly?}
+          with_instance_of(model_class) {|record| assert !model_class.friendly.find(record.friendly_id).readonly?}
         end
 
         test "failing finds with unfriendly_id should raise errors normally" do
-          assert_raises(ActiveRecord::RecordNotFound) {model_class.find 0}
+          assert_raises(ActiveRecord::RecordNotFound) {model_class.friendly.find 0}
         end
 
         test "should return numeric id if the friendly_id is nil" do

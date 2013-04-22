@@ -202,68 +202,25 @@ often better and easier to use {FriendlyId::Slugged slugs}.
         @relation_class = base_class.send(:relation_class)
       end
     end
-
-    private
-
-    # Gets an instance of an the relation class.
-    #
-    # With FriendlyId this will be a subclass of ActiveRecord::Relation, rather than
-    # Relation itself, in order to avoid tainting all Active Record models with
-    # FriendlyId.
-    #
-    # Note that this method is essentially copied and pasted from Rails 3.2.9.rc1,
-    # with the exception of changing the relation class. Obviously this is less than
-    # ideal, but I know of no better way to accomplish this.
-    # @see #relation_class
-    def relation #:nodoc:
-      relation = relation_class.new(self, arel_table)
-
-      if finder_needs_type_condition?
-        relation.where(type_condition).create_with(inheritance_column.to_sym => sti_name)
-      else
-        relation
-      end
-    end
-
-    # Gets (and if necessary, creates) a subclass of the model's relation class.
-    #
-    # Rather than including FriendlyId's overridden finder methods in
-    # ActiveRecord::Relation directly, FriendlyId adds them to a subclass
-    # specific to the AR model, and makes #relation return an instance of this
-    # class. By doing this, we ensure that only models that specifically extend
-    # FriendlyId have their finder methods overridden.
-    #
-    # Note that this method does not directly subclass ActiveRecord::Relation,
-    # but rather whatever class the @relation class instance variable is an
-    # instance of.  In practice, this will almost always end up being
-    # ActiveRecord::Relation, but in case another plugin is using this same
-    # pattern to extend a model's finder functionality, FriendlyId will not
-    # replace it, but rather override it.
-    #
-    # This pattern can be seen as a poor man's "refinement"
-    # (http://timelessrepo.com/refinements-in-ruby), and while I **think** it
-    # will work quite well, I realize that it could cause unexpected issues,
-    # since the authors of Rails are probably not intending this kind of usage
-    # against a private API. If this ends up being problematic I will probably
-    # revert back to the old behavior of simply extending
-    # ActiveRecord::Relation.
-    def relation_class
-      @relation_class or begin
-        @relation_class = Class.new(relation_without_friendly_id.class) do
-          alias_method :find_one_without_friendly_id, :find_one
-          alias_method :exists_without_friendly_id?, :exists?
-          include FriendlyId::FinderMethods
-        end
-        # Set a name so that model instances can be marshalled. Use a
-        # ridiculously long name that will not conflict with anything.
-        # TODO: just use the constant, no need for the @relation_class variable.
-        const_set('FriendlyIdActiveRecordRelation', @relation_class)
-      end
-    end
   end
 
   # Instance methods that will be added to all classes using FriendlyId.
   module Model
+
+    def self.included(model_class)
+      model_class.scope :friendly do
+        def find(*args)
+          id = args.first
+          return super if args.count != 1 || id.unfriendly_id?
+          where(@klass.friendly_id_config.query_field => id).first or super
+        end
+
+        def exists?(id = false)
+          return super if id.unfriendly_id?
+          super(friendly_id_config.query_field => id)
+        end
+      end
+    end
 
     # Convenience method for accessing the class method of the same name.
     def friendly_id_config
