@@ -44,6 +44,7 @@ Here's a summary of the most important changes:
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
 
+* FriendlyId now requires Ruby 1.9.3 or higher.
 
 ## Docs
 

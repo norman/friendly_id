@@ -13,10 +13,12 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- {test}/*`.split("\n")
   s.require_paths     = ["lib"]
 
-  s.add_development_dependency "railties", ">= 3.0"
-  s.add_development_dependency "activerecord", ">= 3.0"
+  s.required_ruby_version = '>= 1.9.3'
+
+  s.add_development_dependency "railties", ">= 3.2"
+  s.add_development_dependency "activerecord", ">= 3.2"
   s.add_development_dependency "minitest", "~> 4.4.0"
-  s.add_development_dependency "mocha", "~> 0.13.1"
+  s.add_development_dependency "mocha", "~> 0.13.3"
   s.add_development_dependency "maruku"
   s.add_development_dependency "yard"
   s.add_development_dependency "i18n"
@@ -28,13 +30,4 @@ FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
 strings as if they were numeric ids for Active Record models.
 EOM
-
-  s.post_install_message = <<-EOM
-NOTE: FriendlyId 4.x breaks compatibility with 3.x. If you're upgrading
-from 3.x, please see this document:
-
-http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md
-
-EOM
-
 end
