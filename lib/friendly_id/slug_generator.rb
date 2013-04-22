@@ -2,7 +2,6 @@ module FriendlyId
   # The default slug generator offers functionality to check slug strings for
   # uniqueness and, if necessary, appends a sequence to guarantee it.
   class SlugGenerator
-    attr_accessor :model_class
 
     def initialize(scope)
       @scope = scope
