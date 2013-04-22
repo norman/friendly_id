@@ -156,8 +156,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # @option options [Symbol,Module] :use The addon or name of an addon to use.
     #   By default, FriendlyId provides {FriendlyId::Slugged :slugged},
     #   {FriendlyId::History :history}, {FriendlyId::Reserved :reserved}, and
-    #   {FriendlyId::Scoped :scoped}, {FriendlyId::SimpleI18n :simple_i18n},
-    #   and {FriendlyId::Globalize :globalize}.
+    #   {FriendlyId::Scoped :scoped}, and {FriendlyId::SimpleI18n :simple_i18n}.
     #
     # @option options [Array] :reserved_words Available when using +:reserved+,
     #   which is loaded by default. Sets an array of words banned for use as

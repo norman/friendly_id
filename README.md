@@ -18,8 +18,7 @@ instead of:
 ## FriendlyId Features
 
 FriendlyId offers many advanced features, including: slug history and
-versioning, i18n, Globalize support, scoped slugs, reserved words, and custom
-slug generators.
+versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
 FriendlyId is compatible with Active Record **3.0** and higher.
 
