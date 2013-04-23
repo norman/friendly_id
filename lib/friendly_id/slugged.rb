@@ -200,7 +200,7 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
     def self.included(model_class)
       model_class.friendly_id_config.instance_eval do
         self.class.send :include, Configuration
-        self.slug_generator_class     ||= Class.new(SlugGenerator)
+        self.slug_generator_class     ||= SlugGenerator
         defaults[:slug_column]        ||= 'slug'
         defaults[:sequence_separator] ||= '--'
       end
