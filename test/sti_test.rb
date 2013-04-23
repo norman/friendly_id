@@ -56,7 +56,7 @@ class StiTest < MiniTest::Unit::TestCase
       editoralist = model_class.create! :name => 'foo bar'
 
       assert_equal 'foo-bar', journalist.slug
-      assert_equal 'foo-bar--2', editoralist.slug
+      assert_match(/foo-bar-.+/, editoralist.slug)
     end
   end
 

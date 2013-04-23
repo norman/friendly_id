@@ -168,7 +168,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #
     # @option options [Symbol] :sequence_separator Available when using +:slugged+.
     #   Configures the sequence of characters used to separate a slug from a
-    #   sequence. Defaults to +--+.
+    #   sequence. Defaults to +-+.
     #
     # @option options [Symbol] :slug_column Available when using +:slugged+.
     #   Configures the name of the column where FriendlyId will store the slug.

@@ -83,11 +83,11 @@ FriendlyId will append a sequence to the generated slug to ensure uniqueness:
   car2 = Car.create :title => "Peugot 206"
 
   car.friendly_id #=> "peugot-206"
-  car2.friendly_id #=> "peugot-206--2"
+  car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
 
 ==== Sequence Separator - The Two Dashes
 
-By default, FriendlyId uses two dashes to separate the slug from a sequence.
+By default, FriendlyId uses a dash to separate the slug from a sequence.
 
 You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
 sequence_separator} configuration option.
@@ -202,7 +202,7 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
         self.class.send :include, Configuration
         self.slug_generator_class     ||= SlugGenerator
         defaults[:slug_column]        ||= 'slug'
-        defaults[:sequence_separator] ||= '--'
+        defaults[:sequence_separator] ||= '-'
       end
       model_class.before_validation :set_slug
     end
@@ -288,17 +288,10 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
 
       # The string used to separate a slug base from a numeric sequence.
       #
-      # By default, +--+ is used to separate the slug from the sequence.
-      # FriendlyId uses two dashes to distinguish sequences from slugs with
-      # numbers in their name.
-      #
       # You can change the default separator by setting the
       # {FriendlyId::Slugged::Configuration#sequence_separator
       # sequence_separator} configuration option.
-      #
-      # For obvious reasons, you should avoid setting it to "+-+" unless you're
-      # sure you will never want to have a friendly id with a number in it.
-      # @return String The sequence separator string. Defaults to "+--+".
+      # @return String The sequence separator string. Defaults to "+-+".
       def sequence_separator
         @sequence_separator or defaults[:sequence_separator]
       end

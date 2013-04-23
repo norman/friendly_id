@@ -117,7 +117,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
       record1 = model_class.create! :name => "Peugeuot 206"
       assert_equal "peugeuot-206", record1.slug
       record2 = model_class.create! :name => "Peugeuot 206"
-      assert_match(/\Apeugeuot-206--([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
+      assert_match(/\Apeugeuot-206-([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
     end
   end
 

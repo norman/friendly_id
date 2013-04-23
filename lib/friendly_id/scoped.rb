@@ -28,7 +28,7 @@ This allows, for example, two restaurants in different cities to have the slug
     City.find("chicago").restaurants.find("joes-diner")
 
 Without :scoped in this case, one of the restaurants would have the slug
-+joes-diner+ and the other would have +joes-diner--2+.
++joes-diner+ and the other would have +joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5+.
 
 The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
 a column.

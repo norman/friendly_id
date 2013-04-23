@@ -83,7 +83,7 @@ class SimpleI18nTest < MiniTest::Unit::TestCase
       journalist.save!
       assert_equal "john-smith", journalist.to_param
       I18n.with_locale(:es) do
-        assert_equal "juan-fulano--2", journalist.to_param
+        assert_match(/juan-fulano-.+/, journalist.to_param)
       end
     end
   end
