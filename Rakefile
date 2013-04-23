@@ -15,23 +15,28 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+desc "Remove temporary files"
 task :clean do
   %x{rm -rf *.gem doc pkg coverage}
   %x{rm -f `find . -name '*.rbc'`}
 end
 
+desc "Build the gem"
 task :gem do
   %x{gem build friendly_id.gemspec}
 end
 
+desc "Build YARD documentation"
 task :yard => :guide do
   puts %x{bundle exec yard}
 end
 
+desc "Run benchmarks"
 task :bench => :load_path do
   require File.expand_path("../bench", __FILE__)
 end
 
+desc "Generate Guide.rdoc"
 task :guide do
   def read_comments(path)
     path  = File.expand_path("../#{path}", __FILE__)
