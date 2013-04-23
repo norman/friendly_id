@@ -60,17 +60,24 @@ method.
     def self.included(model_class)
       model_class.instance_eval do
         @friendly_id_config.use :slugged
-        has_many :slugs, :as => :sluggable, :dependent => :destroy,
-          :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
+        has_many :slugs, {
+          :as         => :sluggable,
+          :dependent  => :destroy,
+          :class_name => Slug.to_s,
+          :order      => "#{Slug.quoted_table_name}.id DESC"
+        }
         after_save :create_slug
 
         def self.find_by_friendly_id(id)
-          includes(:slugs).where("#{Slug.table_name}.sluggable_type = ? AND #{Slug.table_name}.slug = ?", base_class.to_s, id).first
+          includes(:slugs).where(history_clause(id)).first
         end
 
         def self.exists_by_friendly_id?(id)
-          includes(:slugs).where("#{table_name}.#{friendly_id_config.query_field} = ?
-            OR #{Slug.table_name}.sluggable_type = ? AND #{Slug.table_name}.slug = ?", id, base_class.to_s, id).exists?
+          includes(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(history_clause(id))).exists?
+        end
+
+        def history_clause(id)
+          Slug.arel_table[:sluggable_type].eq(base_class.to_s).and(Slug.arel_table[:slug].eq(id))
         end
       end
     end
