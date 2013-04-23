@@ -69,14 +69,14 @@ method.
         after_save :create_slug
 
         def self.find_by_friendly_id(id)
-          includes(:slugs).where(history_clause(id)).first
+          includes(:slugs).where(slug_history_clause(id)).first
         end
 
         def self.exists_by_friendly_id?(id)
-          includes(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(history_clause(id))).exists?
+          includes(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
         end
 
-        def history_clause(id)
+        def self.slug_history_clause(id)
           Slug.arel_table[:sluggable_type].eq(base_class.to_s).and(Slug.arel_table[:slug].eq(id))
         end
       end
