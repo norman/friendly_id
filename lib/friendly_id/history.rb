@@ -89,8 +89,10 @@ method.
       return if slugs.first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
-      result = relation.select("id").lock(true)
-      relation.delete_all unless result.empty?
+      if friendly_id_config.uses?(:scoped)
+        relation = relation.where(:scope => serialized_scope)
+      end
+      relation.delete_all
       slugs.create! do |record|
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
