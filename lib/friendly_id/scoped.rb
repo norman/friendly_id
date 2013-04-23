@@ -118,11 +118,11 @@ an example of one way to set this up:
     end
 
     def slug_generator
-      scope = self.class.unscoped.friendly
+      relation = self.class.unscoped.friendly
       friendly_id_config.scope_columns.each do |column|
-        scope = scope.where(column => send(column))
+        relation = relation.where(column => send(column))
       end
-      friendly_id_config.slug_generator_class.new(scope)
+      friendly_id_config.slug_generator_class.new(relation)
     end
     private :slug_generator
 
