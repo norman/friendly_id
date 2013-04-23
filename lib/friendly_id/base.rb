@@ -189,6 +189,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       friendly_id_config.use options.delete :use
       friendly_id_config.send :set, base ? options.merge(:base => base) : options
       include Model
+      extend Scopes
     end
 
     # Returns the model class's {FriendlyId::Configuration friendly_id_config}.
@@ -205,20 +206,8 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
   # Instance methods that will be added to all classes using FriendlyId.
   module Model
-
     def self.included(model_class)
-      model_class.scope :friendly do
-        def find(*args)
-          id = args.first
-          return super if args.count != 1 || id.unfriendly_id?
-          where(@klass.friendly_id_config.query_field => id).first or super
-        end
-
-        def exists?(id = false)
-          return super if id.unfriendly_id?
-          super(friendly_id_config.query_field => id)
-        end
-      end
+      return if model_class.respond_to?(:friendly)
     end
 
     # Convenience method for accessing the class method of the same name.

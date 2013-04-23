@@ -108,15 +108,23 @@ an example of one way to set this up:
     # feature.
     def self.included(model_class)
       model_class.instance_eval do
-        include Slugged unless self < Slugged
+        friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
-        friendly_id_config.slug_generator_class.send :include, SlugGenerator
       end
     end
 
     def serialized_scope
       friendly_id_config.scope_columns.sort.map { |column| "#{column}:#{send(column)}" }.join(",")
     end
+
+    def slug_generator
+      scope = self.class.unscoped.friendly
+      friendly_id_config.scope_columns.each do |column|
+        scope = scope.where(column => send(column))
+      end
+      friendly_id_config.slug_generator_class.new(scope)
+    end
+    private :slug_generator
 
     # This module adds the +:scope+ configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
@@ -146,28 +154,6 @@ an example of one way to set this up:
 
       def reflection_foreign_key(scope)
         model_class.reflections[scope].try(:foreign_key)
-      end
-    end
-
-    # This module overrides {FriendlyId::SlugGenerator#conflict} to consider
-    # scope, to avoid adding sequences to slugs under different scopes.
-    module SlugGenerator
-
-      private
-
-      def conflict
-        if friendly_id_config.uses?(:history)
-          # When using the :history module +conflicts+ already returns only real conflicts, so there's no need to check
-          # for the scope columns again
-          conflicts.first
-        else
-          columns = friendly_id_config.scope_columns
-          matched = columns.inject(conflicts) do |memo, column|
-            memo.where(column => sluggable.send(column))
-          end
-
-          matched.first
-        end
       end
     end
   end

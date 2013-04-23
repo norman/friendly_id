@@ -3,6 +3,7 @@ require "thread"
 require "friendly_id/base"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
+require "friendly_id/scopes"
 
 =begin
 
@@ -83,6 +84,7 @@ module FriendlyId
       extend Base
       @friendly_id_config = Class.new(Configuration).new(self)
       FriendlyId.defaults.call @friendly_id_config
+      include Model
     end
   end
 

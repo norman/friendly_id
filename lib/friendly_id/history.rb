@@ -63,8 +63,15 @@ method.
         has_many :slugs, :as => :sluggable, :dependent => :destroy,
           :class_name => Slug.to_s, :order => "#{Slug.quoted_table_name}.id DESC"
         after_save :create_slug
-        relation_class.send :include, FinderMethods
-        friendly_id_config.slug_generator_class.send :include, SlugGenerator
+
+        def self.find_by_friendly_id(id)
+          includes(:slugs).where("#{Slug.table_name}.sluggable_type = ? AND #{Slug.table_name}.slug = ?", base_class.to_s, id).first
+        end
+
+        def self.exists_by_friendly_id?(id)
+          includes(:slugs).where("#{table_name}.#{friendly_id_config.query_field} = ?
+            OR #{Slug.table_name}.sluggable_type = ? AND #{Slug.table_name}.slug = ?", id, base_class.to_s, id).exists?
+        end
       end
     end
 
@@ -75,64 +82,11 @@ method.
       return if slugs.first.try(:slug) == friendly_id
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
-      result = relation.select("id").lock(true).all
+      result = relation.select("id").lock(true)
       relation.delete_all unless result.empty?
       slugs.create! do |record|
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
-      end
-    end
-
-    # Adds a finder that explictly uses slugs from the slug table.
-    module FinderMethods
-
-      # Search for a record in the slugs table using the specified slug.
-      def find_one(id)
-        return super(id) if id.unfriendly_id?
-        where(@klass.friendly_id_config.query_field => id).first or
-        with_old_friendly_id(id) {|x| where(:id => x).first} or
-        find_one_without_friendly_id(id)
-      end
-
-      # Search for a record in the slugs table using the specified slug.
-      def exists?(id = false)
-        return super if id.unfriendly_id?
-        exists_without_friendly_id?(@klass.friendly_id_config.query_field => id) or
-        with_old_friendly_id(id) {|x| exists_without_friendly_id?(:id => x)} or
-        exists_without_friendly_id?(id)
-      end
-
-      private
-
-      # Accepts a slug, and yields a corresponding sluggable_id into the block.
-      def with_old_friendly_id(slug, &block)
-        sql = "SELECT sluggable_id FROM #{Slug.quoted_table_name} WHERE sluggable_type = %s AND slug = %s"
-        sql = sql % [@klass.base_class.to_s, slug].map {|x| connection.quote(x)}
-        sluggable_ids = connection.select_values(sql)
-        yield sluggable_ids if sluggable_ids
-      end
-    end
-
-    # This module overrides {FriendlyId::SlugGenerator#conflicts} to consider
-    # all historic slugs for that model.
-    module SlugGenerator
-
-      private
-
-      def conflicts
-        sluggable_class = friendly_id_config.model_class.base_class
-        pkey            = sluggable_class.primary_key
-        value           = sluggable.send pkey
-
-        scope = Slug.where("slug = ? OR slug LIKE ?", normalized, wildcard)
-        scope = scope.where(:sluggable_type => sluggable_class.to_s)
-        scope = scope.where("sluggable_id <> ?", value) unless sluggable.new_record?
-        if sluggable.friendly_id_config.uses?(:scoped)
-          scope = scope.where("scope = ?", sluggable.serialized_scope)
-        end
-        length_command = "LENGTH"
-        length_command = "LEN" if sluggable.connection.adapter_name =~ /sqlserver/i
-        scope.order("#{length_command}(slug) DESC, slug DESC")
       end
     end
   end

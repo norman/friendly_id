@@ -261,13 +261,17 @@ issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
     # Sets the slug.
     def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
-        generator = friendly_id_config.slug_generator_class.new(self.class.unscoped.friendly)
         candidates = FriendlyId::Candidates.new(self, send(friendly_id_config.base))
-        slug = generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
         send "#{friendly_id_config.slug_column}=", slug
       end
     end
     private :set_slug
+
+    def slug_generator
+      friendly_id_config.slug_generator_class.new(self.class.unscoped.friendly)
+    end
+    private :slug_generator
 
     # This module adds the +:slug_column+, and +:sequence_separator+, and
     # +:slug_generator_class+ configuration options to

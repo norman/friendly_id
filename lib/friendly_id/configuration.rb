@@ -61,15 +61,16 @@ module FriendlyId
     #   +:simple_i18n+, and +:scoped+.
     def use(*modules)
       modules.to_a.flatten.compact.map do |object|
+        return if uses? object
         mod = object.kind_of?(Module) ? object : FriendlyId.const_get(object.to_s.classify)
-        model_class.send(:include, mod)
-        @modules << mod.name.split("::").last.downcase.to_sym if mod.name.present?
+        @model_class.send(:include, mod)
       end
     end
 
     # Returns whether the given module is in use
-    def uses?(modul)
-      @modules.include?(modul)
+    def uses?(mod)
+      mod = mod.kind_of?(Module) ? mod : FriendlyId.const_get(mod.to_s.classify)
+      @model_class < mod
     end
 
     # The column that FriendlyId will use to find the record when querying by
