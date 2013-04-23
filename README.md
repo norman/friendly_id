@@ -1,6 +1,6 @@
 # FriendlyId
 
-[![Build Status](https://travis-ci.org/norman/friendly_id.png)](https://travis-ci.org/norman/friendly_id)
+[![Build Status](https://travis-ci.org/FriendlyId/friendly_id.png)](https://travis-ci.org/FriendlyId/friendly_id)
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
@@ -27,7 +27,7 @@ FriendlyId is compatible with Active Record **3.2** and higher.
 As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
 infer from the version number, FriendlyId 5.0 introduces changes incompatible
 with 4.x. If you're upgrading, please [read the
-docs](http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md) to
+docs](http://rubydoc.info/github/FriendlyId/friendly_id/master/file/WhatsNew.md) to
 see what's new.
 
 Here's a summary of the most important changes:
@@ -51,10 +51,10 @@ Here's a summary of the most important changes:
 ## Docs
 
 The current docs can always be found
-[here](http://rubydoc.info/github/norman/friendly_id/master/frames).
+[here](http://rubydoc.info/github/FriendlyId/friendly_id/master/frames).
 
 The best place to start is with the
-[Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.rdoc),
+[Guide](http://rubydoc.info/github/FriendlyId/friendly_id/master/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
@@ -107,7 +107,7 @@ The latest benchmarks for FriendlyId are maintained
 ## Bugs
 
 Please report them on the [Github issue
-tracker](http://github.com/norman/friendly_id/issues) for this project.
+tracker](http://github.com/FriendlyId/friendly_id/issues) for this project.
 
 If you have a bug to report, please include the following information:
 
@@ -129,7 +129,7 @@ significant help early in its life by Emilio Tagua. It is now maintained by
 Norman Clarke and Philip Arndt.
 
 We're deeply grateful for the generous contributions over the years from [many
-volunteers](https://github.com/norman/friendly_id/contributors).
+volunteers](https://github.com/FriendlyId/friendly_id/contributors).
 
 ## License
 

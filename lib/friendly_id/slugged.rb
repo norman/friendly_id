@@ -186,11 +186,11 @@ second, in concurrent code, either in threads or multiple processes.
 
 To solve the nested attributes issue, I recommend simply avoiding them when
 creating more than one nested record for a model that uses FriendlyId. See {this
-Github issue}[https://github.com/norman/friendly_id/issues/185] for discussion.
+Github issue}[https://github.com/FriendlyId/friendly_id/issues/185] for discussion.
 
 To solve the concurrency issue, I recommend locking the model's table against
 inserts while when saving the record. See {this Github
-issue}[https://github.com/norman/friendly_id/issues/180] for discussion.
+issue}[https://github.com/FriendlyId/friendly_id/issues/180] for discussion.
 
 =end
   module Slugged
