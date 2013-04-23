@@ -58,7 +58,7 @@ method.
 
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
-      model_class.instance_eval do
+      model_class.class_eval do
         @friendly_id_config.use :slugged
         has_many :slugs, {
           :as         => :sluggable,
@@ -67,7 +67,6 @@ method.
           :order      => "#{Slug.quoted_table_name}.id DESC"
         }
         after_save :create_slug
-
         def self.find_by_friendly_id(id)
           includes(:slugs).where(slug_history_clause(id)).first
         end

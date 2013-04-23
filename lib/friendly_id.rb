@@ -80,7 +80,7 @@ module FriendlyId
     class << model_class
       alias relation_without_friendly_id relation
     end
-    model_class.instance_eval do
+    model_class.class_eval do
       extend Base
       @friendly_id_config = Class.new(Configuration).new(self)
       FriendlyId.defaults.call @friendly_id_config

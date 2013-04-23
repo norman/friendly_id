@@ -107,7 +107,7 @@ an example of one way to set this up:
     # Sets up behavior and configuration options for FriendlyId's scoped slugs
     # feature.
     def self.included(model_class)
-      model_class.instance_eval do
+      model_class.class_eval do
         friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
       end

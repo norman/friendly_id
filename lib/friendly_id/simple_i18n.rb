@@ -71,7 +71,7 @@ current locale:
   module SimpleI18n
 
     def self.included(model_class)
-      model_class.instance_eval do
+      model_class.class_eval do
         friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
         include Model
