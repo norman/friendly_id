@@ -3,9 +3,7 @@ require "rails/generators/active_record"
 
 # This generator adds a migration for the {FriendlyId::History
 # FriendlyId::History} addon.
-class FriendlyIdGenerator < Rails::Generators::Base
-  include Rails::Generators::Migration
-  extend ActiveRecord::Generators::Migration
+class FriendlyIdGenerator < ActiveRecord::Generators::Base
 
   source_root File.expand_path('../../friendly_id', __FILE__)
 

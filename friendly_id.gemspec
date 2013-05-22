@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_development_dependency "railties", ">= 3.2"
-  s.add_development_dependency "activerecord", ">= 3.2"
+  s.add_development_dependency "railties", ">= 4.0.0.beta1"
+  s.add_development_dependency "activerecord", ">= 4.0.0.beta1"
   s.add_development_dependency "minitest", "~> 4.4.0"
   s.add_development_dependency "mocha", "~> 0.13.3"
   s.add_development_dependency "maruku"
