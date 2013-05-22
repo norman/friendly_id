@@ -55,7 +55,7 @@ class HistoryTest < MiniTest::Unit::TestCase
       record = model_class.create! :name => "hello"
       assert_equal 1, FriendlyId::Slug.count
       record = model_class.friendly.find("hello")
-      record.name = "hello again",
+      record.name = "hello again"
       record.slug = nil
       record.save!
       assert_equal 2, FriendlyId::Slug.count
