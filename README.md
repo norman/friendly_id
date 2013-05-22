@@ -49,21 +49,21 @@ Here's a summary of the most important changes:
   set up a list of alternate slugs that can be used to uniquely distinguish
   records, rather than appending a sequence. For example:
 
-    class Restaurant < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :slug_candidates, use: :slugged
+      class Restaurant < ActiveRecord::Base
+        extend FriendlyId
+        friendly_id :slug_candidates, use: :slugged
 
-      # Try building a slug based on the following fields in
-      # increasing order of specificity.
-      def slug_candidates
-        [
-          :name,
-          [:name, :city],
-          [:name, :street, :city],
-          [:name, :street_number, :street, :city]
-        ]
+        # Try building a slug based on the following fields in
+        # increasing order of specificity.
+        def slug_candidates
+          [
+            :name,
+            [:name, :city],
+            [:name, :street, :city],
+            [:name, :street_number, :street, :city]
+          ]
+        end
       end
-    end
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
   sequence to differentiate conflicting slug, but rather a GUID. This makes the
