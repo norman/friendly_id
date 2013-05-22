@@ -1,6 +1,6 @@
 # FriendlyId
 
-**NOTE***
+**NOTE**
 
 The master branch of this repository now contains FriendlyId 5, which is in
 active development and not yet stable. This is the branch you need for Rails 4
