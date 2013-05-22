@@ -1,5 +1,15 @@
 # FriendlyId
 
+**NOTE***
+
+The master branch of this repository now contains FriendlyId 5, which is in
+active development and not yet stable. This is the branch you need for Rails 4
+compatibility.
+
+For FriendlyId 4, the current stable release, please see the [4.0-stable
+branch](https://github.com/FriendlyId/friendly_id/tree/4.0-stable). Note that
+this release is only compatible with Rails 3.2 and 3.1.
+
 [![Build Status](https://travis-ci.org/FriendlyId/friendly_id.png)](https://travis-ci.org/FriendlyId/friendly_id)
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
@@ -20,15 +30,15 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
-FriendlyId is compatible with Active Record **3.2** and higher.
+Note: FriendlyId 5.0 is compatible with Active Record **4.0** and higher only.
+For Rails 3.x, please use FriendlyId 4.x.
+
 
 ## Version 5.x
 
 As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
 infer from the version number, FriendlyId 5.0 introduces changes incompatible
-with 4.x. If you're upgrading, please [read the
-docs](http://rubydoc.info/github/FriendlyId/friendly_id/master/file/WhatsNew.md) to
-see what's new.
+with 4.x.
 
 Here's a summary of the most important changes:
 
@@ -37,16 +47,35 @@ Here's a summary of the most important changes:
 
 * Version 5.0 offers a new "candidates" functionality which makes it easy to
   set up a list of alternate slugs that can be used to uniquely distinguish
-  records, rather than appending a sequence.
+  records, rather than appending a sequence. For example:
+
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :slug_candidates, use: :slugged
+
+      # Try building a slug based on the following fields in
+      # increasing order of specificity.
+      def slug_candidates
+        [
+          :name,
+          [:name, :city],
+          [:name, :street, :city],
+          [:name, :street_number, :street, :city]
+        ]
+      end
+    end
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
   sequence to differentiate conflicting slug, but rather a GUID. This makes the
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
 
+* The Globalize module has been removed and will be released as its own gem.
+  Note that it has not yet been developed.
+
 * The default sequence separator is now `-` rather than `--`.
 
-* FriendlyId now requires Ruby 1.9.3 or higher.
+* Like Rails 4, FriendlyId now requires Ruby 1.9.3 or higher.
 
 ## Docs
 
