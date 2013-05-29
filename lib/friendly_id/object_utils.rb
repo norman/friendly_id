@@ -8,7 +8,7 @@ module FriendlyId
   # be sufficient to avoid conflicts with other libraries.
   module ObjectUtils
 
-    # True is the id is definitely friendly, false if definitely unfriendly,
+    # True if the id is definitely friendly, false if definitely unfriendly,
     # else nil.
     #
     # An object is considired "definitely unfriendly" if its class is or
