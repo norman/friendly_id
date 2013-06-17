@@ -31,8 +31,8 @@ module FriendlyId
     end
 
     def extract_sequence_from_slug(slug)
-      splitStr = slug.split("#{normalized}#{separator}")
-      splitStr.length > 1 ? splitStr.last.to_i : 1
+      split_slug = slug.split("#{normalized}#{separator}")
+      split_slug.length > 1 ? split_slug.last.to_i : 1
     end
 
     def column
