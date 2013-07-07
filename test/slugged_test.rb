@@ -89,7 +89,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
   test "should quote column names" do
     model_class = Class.new(ActiveRecord::Base) do
       # This has been added in 635731bb to fix MySQL/Rubinius. It may still
-      # be necessary, but causes an exception to be raised on Rails 4, so I'm 
+      # be necessary, but causes an exception to be raised on Rails 4, so I'm
       # commeting it out. If it causes MySQL/Rubinius to fail again we'll
       # look for another solution.
       # self.abstract_class = true
@@ -187,7 +187,7 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
   class Journalist < ActiveRecord::Base
     extend FriendlyId
     friendly_id :name, :use => :slugged
-    default_scope -> {where(:active => true).order('id ASC')}
+    default_scope -> { where(:active => true).order('id ASC') }
   end
 
   test "friendly_id should correctly sequence a default_scoped ordered table" do

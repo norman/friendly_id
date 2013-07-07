@@ -1,20 +1,14 @@
+language: ruby
 rvm:
+  - 2.0.0
   - 1.9.3
-  - 1.8.7
 #  - jruby
 #  - rbx
-
-branches:
-  only:
-    - master
 env:
   - DB=postgres
   - DB=mysql
   - DB=sqlite3
-
 gemfile:
-  - gemfiles/Gemfile.rails-3.0.rb
-  - gemfiles/Gemfile.rails-3.1.rb
-  - gemfiles/Gemfile.rails-3.2.rb
-before_script: 'bundle exec rake db:create db:up > /dev/null'
+  - gemfiles/Gemfile.rails-4.0.rb
+before_script: 'bundle exec rake db:create db:up'
 script: 'bundle exec rake test'

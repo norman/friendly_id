@@ -19,5 +19,6 @@ module FriendlyId
       candidates.each {|c| return add c if available?(c)}
       nil
     end
+
   end
 end
