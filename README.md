@@ -49,21 +49,23 @@ Here's a summary of the most important changes:
   set up a list of alternate slugs that can be used to uniquely distinguish
   records, rather than appending a sequence. For example:
 
-        class Restaurant < ActiveRecord::Base
-          extend FriendlyId
-          friendly_id :slug_candidates, use: :slugged
+```ruby
+class Restaurant < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :slug_candidates, use: :slugged
 
-          # Try building a slug based on the following fields in
-          # increasing order of specificity.
-          def slug_candidates
-            [
-              :name,
-              [:name, :city],
-              [:name, :street, :city],
-              [:name, :street_number, :street, :city]
-            ]
-          end
-        end
+  # Try building a slug based on the following fields in
+  # increasing order of specificity.
+  def slug_candidates
+    [
+      :name,
+      [:name, :city],
+      [:name, :street, :city],
+      [:name, :street_number, :street, :city]
+    ]
+  end
+end
+```
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
   sequence to differentiate conflicting slug, but rather a GUID. This makes the
@@ -91,41 +93,47 @@ which is now somewhat outdated but still mostly relevant.
 
 ## Rails Quickstart
 
-    gem install friendly_id
+```shell
+rails new my_app
+cd my_app
+```
+```ruby
+# Gemfile
+gem "friendly_id", "~> 5.0.0" # Note: You MUST use 5.0.0 or greater for Rails 4.0+
+```
+```shell
+rails generate scaffold user name:string slug:string
+```
+```ruby
+# edit db/migrate/*_create_users.rb
+add_index :users, :slug, unique: true
+```
+```shell
+rake db:migrate
+```
+```ruby
+# edit app/models/user.rb
+class User < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+end
 
-    rails new my_app
+User.create! name: "Joe Schmoe"
 
-    cd my_app
+# Change User.find to User.friendly.find in your controller
+User.friendly.find(params[:id])
+```
+```shell
+rails server
 
-    gem "friendly_id", "~> 5.0.0" # Note: You MUST use 5.0.0 or greater for Rails 4.0+
-
-    rails generate scaffold user name:string slug:string
-
-    # edit db/migrate/*_create_users.rb
-    add_index :users, :slug, unique: true
-
-    rake db:migrate
-
-    # edit app/models/user.rb
-    class User < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :name, use: :slugged
-    end
-
-    User.create! name: "Joe Schmoe"
-
-    # Change User.find to User.friendly.find in your controller
-    User.friendly.find(params[:id])
-
-    rails server
-
-    GET http://localhost:3000/users/joe-schmoe
-
-    # If you're adding FriendlyId to an existing app and need
-    # to generate slugs for existing users, do this from the
-    # console, runner, or add a Rake task:
-    User.find_each(&:save)
-
+GET http://localhost:3000/users/joe-schmoe
+```
+```ruby
+# If you're adding FriendlyId to an existing app and need
+# to generate slugs for existing users, do this from the
+# console, runner, or add a Rake task:
+User.find_each(&:save)
+```
 
 ## Benchmarks
 
