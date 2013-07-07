@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name              = "friendly_id"
   s.version           = FriendlyId::VERSION
   s.authors           = ["Norman Clarke", "Philip Arndt"]
-  s.email             = ["norman@njclarke.com", "parndt@gmail.com"]
+  s.email             = ["norman@njclarke.com", "p@arndt.io"]
   s.homepage          = "http://github.com/FriendlyId/friendly_id"
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.rubyforge_project = "friendly_id"
@@ -15,11 +15,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
 
-  s.add_development_dependency "railties", ">= 4.0.0.beta1"
-  s.add_development_dependency "activerecord", ">= 4.0.0.beta1"
-  s.add_development_dependency "minitest", "~> 4.4.0"
+  s.add_development_dependency "railties", "~> 4.0.0"
+  s.add_development_dependency "activerecord", "~> 4.0.0"
+  s.add_development_dependency "minitest", ">= 4.4.0"
   s.add_development_dependency "mocha", "~> 0.13.3"
-  s.add_development_dependency "maruku"
   s.add_development_dependency "yard"
   s.add_development_dependency "i18n"
   s.add_development_dependency "ffaker"
