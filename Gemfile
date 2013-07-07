@@ -5,7 +5,7 @@ gemspec
 # Database Configuration
 group :development, :test do
   platforms :jruby do
-    gem 'activerecord-jdbcsqlite3-adapter'
+    gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta2'
     gem 'jruby-openssl'
   end
 

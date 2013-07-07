@@ -90,7 +90,7 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     model_class = Class.new(ActiveRecord::Base) do
       # This has been added in 635731bb to fix MySQL/Rubinius. It may still
       # be necessary, but causes an exception to be raised on Rails 4, so I'm
-      # commeting it out. If it causes MySQL/Rubinius to fail again we'll
+      # commenting it out. If it causes MySQL/Rubinius to fail again we'll
       # look for another solution.
       # self.abstract_class = true
       self.table_name = "journalists"

@@ -2,13 +2,14 @@ language: ruby
 rvm:
   - 2.0.0
   - 1.9.3
-#  - jruby
-#  - rbx
+#  - jruby-19mode
+#  - rbx-19mode
 env:
   - DB=postgres
   - DB=mysql
   - DB=sqlite3
 gemfile:
   - gemfiles/Gemfile.rails-4.0.rb
+
 before_script: 'bundle exec rake db:create db:up'
 script: 'bundle exec rake test'
