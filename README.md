@@ -33,10 +33,10 @@ new.
 ## Docs
 
 The current docs can always be found
-[here](http://rubydoc.info/github/norman/friendly_id/master/frames).
+[here](http://rubydoc.info/github/FriendlyId/friendly_id/4.0-stable/frames).
 
 The best place to start is with the
-[Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.rdoc),
+[Guide](http://rubydoc.info/github/FriendlyId/friendly_id/4.0-stable/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid).
