@@ -99,7 +99,7 @@ cd my_app
 ```
 ```ruby
 # Gemfile
-gem "friendly_id", "~> 5.0.0" # Note: You MUST use 5.0.0 or greater for Rails 4.0+
+gem 'friendly_id', github: 'FriendlyId/friendly_id', branch: 'master' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 ```
 ```shell
 rails generate scaffold user name:string slug:string
