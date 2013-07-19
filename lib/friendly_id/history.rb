@@ -60,6 +60,7 @@ method.
     def self.included(model_class)
       model_class.class_eval do
         @friendly_id_config.use :slugged
+
         has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
           :as         => :sluggable,
           :dependent  => :destroy,
