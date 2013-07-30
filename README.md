@@ -1,14 +1,15 @@
 # FriendlyId
 
-**NOTE**
+**VERSION NOTE**
 
-The master branch of this repository now contains FriendlyId 5, which is in
-active development and not yet stable. This is the branch you need for Rails 4
-compatibility.
+**Rails 4**:
+Master branch of this repository contains FriendlyId 5 which is compatible with Rails 4. 
+This version is under active development and not yet fully stable.
 
-For FriendlyId 4, the current stable release, please see the [4.0-stable
-branch](https://github.com/FriendlyId/friendly_id/tree/4.0-stable). Note that
-this release is only compatible with Rails 3.2 and 3.1.
+**Rails 3**:
+If you wish to use this gem with Rails 3.1 or 3.2 you need to user FriendlyId version 4, which is current stable release.
+Please see [4.0-stable
+branch](https://github.com/FriendlyId/friendly_id/tree/4.0-stable).
 
 [![Build Status](https://travis-ci.org/FriendlyId/friendly_id.png)](https://travis-ci.org/FriendlyId/friendly_id)
 
