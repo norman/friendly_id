@@ -7,7 +7,7 @@ Master branch of this repository contains FriendlyId 5 which is compatible with 
 This version is under active development and not yet fully stable.
 
 **Rails 3**:
-If you wish to use this gem with Rails 3.1 or 3.2 you need to user FriendlyId version 4, which is current stable release.
+If you wish to use this gem with Rails 3.1 or 3.2 you need to use FriendlyId version 4, which is the current stable release.
 Please see [4.0-stable
 branch](https://github.com/FriendlyId/friendly_id/tree/4.0-stable).
 
