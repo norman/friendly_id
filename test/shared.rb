@@ -84,6 +84,7 @@ module FriendlyId
         test "should exist? by friendly id" do
           with_instance_of(model_class) do |record|
             assert model_class.friendly.exists? record.id
+            assert model_class.friendly.exists? record.id.to_s
             assert model_class.friendly.exists? record.friendly_id
             assert model_class.friendly.exists?({:id => record.id})
             assert model_class.friendly.exists?(['id = ?', record.id])
