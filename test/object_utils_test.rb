@@ -20,7 +20,6 @@ class ObjectUtilsTest < MiniTest::Unit::TestCase
 
   test "ActiveRecord::Base instances should be unfriendly_ids" do
     model_class = Class.new(ActiveRecord::Base) do
-      self.abstract_class = true
       self.table_name = "authors"
     end
     assert model_class.new.unfriendly_id?
