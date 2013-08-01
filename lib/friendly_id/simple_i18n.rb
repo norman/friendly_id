@@ -70,9 +70,14 @@ current locale:
 =end
   module SimpleI18n
 
+    # FriendlyId::Config.use will invoke this method when present, to allow
+    # loading dependent modules prior to overriding them when necessary.
+    def self.setup(model_class)
+      model_class.friendly_id_config.use :slugged
+    end
+
     def self.included(model_class)
       model_class.class_eval do
-        friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
         include Model
       end
@@ -83,6 +88,11 @@ current locale:
         I18n.with_locale(locale || I18n.locale) do
           set_slug(normalize_friendly_id(text))
         end
+      end
+
+      def slug=(value)
+        super
+        write_attribute friendly_id_config.slug_column, value
       end
     end
 
