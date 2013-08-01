@@ -129,6 +129,12 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should correctly sequence slugs that start with numbers" do
+    record1 = model_class.create! :name => '24-hour-testing'
+    assert_equal '24-hour-testing', record1.slug
+    record2 = model_class.create! :name => '24-hour-testing'
+    assert_equal '24-hour-testing--2', record2.slug
+  end
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
