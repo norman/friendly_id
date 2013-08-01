@@ -269,7 +269,7 @@ issue}[https://github.com/FriendlyId/friendly_id/issues/180] for discussion.
     private :set_slug
 
     def slug_generator
-      friendly_id_config.slug_generator_class.new(self.class.unscoped.friendly)
+      friendly_id_config.slug_generator_class.new(self.class.base_class.unscoped.friendly)
     end
     private :slug_generator
 

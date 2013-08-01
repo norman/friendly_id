@@ -50,7 +50,7 @@ class StiTest < MiniTest::Unit::TestCase
     assert_equal :bar, klass.friendly_id_config.slug_column
   end
 
-  test "friendly_id slugs should not clash with eachother" do
+  test "friendly_id slugs should not clash with each other" do
     transaction do
       journalist  = model_class.base_class.create! :name => 'foo bar'
       editoralist = model_class.create! :name => 'foo bar'
