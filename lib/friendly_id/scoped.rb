@@ -103,12 +103,16 @@ an example of one way to set this up:
 =end
   module Scoped
 
+    # FriendlyId::Config.use will invoke this method when present, to allow
+    # loading dependent modules prior to overriding them when necessary.
+    def self.setup(model_class)
+      model_class.friendly_id_config.use :slugged
+    end
 
     # Sets up behavior and configuration options for FriendlyId's scoped slugs
     # feature.
     def self.included(model_class)
       model_class.class_eval do
-        friendly_id_config.use :slugged
         friendly_id_config.class.send :include, Configuration
       end
     end

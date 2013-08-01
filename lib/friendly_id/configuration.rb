@@ -61,7 +61,9 @@ module FriendlyId
     #   +:simple_i18n+, and +:scoped+.
     def use(*modules)
       modules.to_a.flatten.compact.map do |object|
-        @model_class.send(:include, get_module(object)) unless uses? object
+        mod = get_module(object)
+        mod.setup(@model_class) if mod.respond_to?(:setup)
+        @model_class.send(:include, mod) unless uses? object
       end
     end
 
