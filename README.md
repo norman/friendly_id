@@ -3,7 +3,7 @@
 **VERSION NOTE**
 
 **Rails 4**:
-Master branch of this repository contains FriendlyId 5 which is compatible with Rails 4. 
+Master branch of this repository contains FriendlyId 5 which is compatible with Rails 4.
 This version is under active development and not yet fully stable.
 
 **Rails 3**:
@@ -77,6 +77,19 @@ end
   Note that it has not yet been developed.
 
 * The default sequence separator is now `-` rather than `--`.
+
+* Slugs are no longer regenerated when a record is saved. If you want to regenerate
+  a slug, you must explicitly set the slug column to nil:
+
+```ruby
+restaurant.friendly_id # joes-diner
+restaurant.name = "The Plaza Diner"
+restaurant.save!
+restaurant.friendly_id # joes-diner
+restaurant.slug = nil
+restaurant.save!
+restaurant.friendly_id # the-plaza-diner
+```
 
 * Like Rails 4, FriendlyId now requires Ruby 1.9.3 or higher.
 
