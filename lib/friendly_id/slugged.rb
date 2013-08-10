@@ -161,21 +161,6 @@ This functionality was in fact taken from earlier versions of FriendlyId.
 
 #### Gotchas: Common Problems
 
-##### Slugs That Begin With Numbers
-
-Ruby's `to_i` function casts strings to integers in such a way that +23abc.to_i+
-returns 23. Because FriendlyId falls back to finding by numeric id, this means
-that if you attempt to find a record with a non-existant slug, and that slug
-begins with a number, your find will probably return the wrong record.
-
-There are two fairly simple ways to avoid this:
-
-* Use validations to ensure that slugs don't begin with numbers.
-* Use explicit finders like +find_by_id+ to always find by the numeric id, or
-  +find_by_slug+ to always find using the friendly id.
-
-##### Concurrency Issues
-
 FriendlyId uses a before_validation callback to generate and set the slug. This
 means that if you create two model instances before saving them, it's possible
 they will generate the same slug, and the second save will fail.
@@ -187,10 +172,6 @@ second, in concurrent code, either in threads or multiple processes.
 To solve the nested attributes issue, I recommend simply avoiding them when
 creating more than one nested record for a model that uses FriendlyId. See [this
 Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussion.
-
-To solve the concurrency issue, I recommend locking the model's table against
-inserts while when saving the record. See [this Github
-issue](https://github.com/FriendlyId/friendly_id/issues/180) for discussion.
 
 =end
   module Slugged
