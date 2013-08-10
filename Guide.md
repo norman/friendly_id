@@ -250,7 +250,7 @@ second, in concurrent code, either in threads or multiple processes.
 
 To solve the nested attributes issue, I recommend simply avoiding them when
 creating more than one nested record for a model that uses FriendlyId. See [this
-Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussion.
+Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
 
 
 ## History: Avoiding 404's When Slugs Change

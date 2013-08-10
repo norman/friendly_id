@@ -224,7 +224,7 @@ class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
 
 end
 
-# https://github.com/FriendlyId/friendly_id/issues/148
+# https://github.com/norman/friendly_id/issues/148
 class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
