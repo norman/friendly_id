@@ -38,7 +38,7 @@ normal IDs. This means that you can perform finds with slugs just like you do
 with numeric ids:
 
     Person.find(82542335)
-    Person.find("joe")
+    Person.friendly.find("joe")
 
 =end
 module FriendlyId

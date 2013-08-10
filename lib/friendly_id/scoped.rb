@@ -24,8 +24,8 @@ This allows, for example, two restaurants in different cities to have the slug
       friendly_id :name, :use => :slugged
     end
 
-    City.find("seattle").restaurants.find("joes-diner")
-    City.find("chicago").restaurants.find("joes-diner")
+    City.friendly.find("seattle").restaurants.friendly.find("joes-diner")
+    City.friendly.find("chicago").restaurants.friendly.find("joes-diner")
 
 Without :scoped in this case, one of the restaurants would have the slug
 `joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
@@ -60,23 +60,23 @@ All supplied values will be used to determine scope.
 If you are using scopes your friendly ids may not be unique, so a simple find
 like
 
-    Restaurant.find("joes-diner")
+    Restaurant.friendly.find("joes-diner")
 
 may return the wrong record. In these cases it's best to query through the
 relation:
 
-    @city.restaurants.find("joes-diner")
+    @city.restaurants.friendly.find("joes-diner")
 
 Alternatively, you could pass the scope value as a query parameter:
 
-    Restaurant.find("joes-diner").where(:city_id => @city.id)
+    Restaurant.friendly.find("joes-diner").where(:city_id => @city.id)
 
 
 ### Finding All Records That Match a Scoped ID
 
 Query the slug column directly:
 
-    Restaurant.find_all_by_slug("joes-diner")
+    Restaurant.where(:slug => "joes-diner")
 
 ### Routes for Scoped Models
 
@@ -93,8 +93,8 @@ an example of one way to set this up:
     <%= link_to 'Show', [@city, @restaurant] %>
 
     # in controllers
-    @city = City.find(params[:city_id])
-    @restaurant = @city.restaurants.find(params[:id])
+    @city = City.friendly.find(params[:city_id])
+    @restaurant = @city.restaurants.friendly.find(params[:id])
 
     # URLs:
     http://example.org/cities/seattle/restaurants/joes-diner
