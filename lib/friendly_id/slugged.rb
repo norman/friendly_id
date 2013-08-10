@@ -30,7 +30,7 @@ To activate the slugging functionality, use the {FriendlyId::Slugged} module.
 
 FriendlyId will generate slugs from a method or column that you specify, and
 store them in a field in your model. By default, this field must be named
-+:slug+, though you may change this using the
+`:slug`, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
 option. You should add an index to this column, and in most cases, make it
 unique. You may also wish to constrain it to NOT NULL, but this depends on your
@@ -140,7 +140,7 @@ read-only:
 
 #### Locale-specific Transliterations
 
-Active Support's +parameterize+ uses
+Active Support's `parameterize` uses
 [transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
 which in turn can use I18n's transliteration rules to consider the current
 locale when replacing Latin characters:
@@ -254,8 +254,8 @@ Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussi
     end
     private :slug_generator
 
-    # This module adds the +:slug_column+, and +:sequence_separator+, and
-    # +:slug_generator_class+ configuration options to
+    # This module adds the `:slug_column`, and `:sequence_separator`, and
+    # `:slug_generator_class` configuration options to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_writer :slug_column, :sequence_separator
@@ -272,7 +272,7 @@ Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussi
       # You can change the default separator by setting the
       # {FriendlyId::Slugged::Configuration#sequence_separator
       # sequence_separator} configuration option.
-      # @return String The sequence separator string. Defaults to "+-+".
+      # @return String The sequence separator string. Defaults to "`-`".
       def sequence_separator
         @sequence_separator or defaults[:sequence_separator]
       end

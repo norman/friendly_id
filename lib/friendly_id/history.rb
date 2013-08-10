@@ -18,15 +18,15 @@ store the slug records. FriendlyId provides a generator for this purpose:
     rails generate friendly_id
     rake db:migrate
 
-This will add a table named +friendly_id_slugs+, used by the {FriendlyId::Slug}
+This will add a table named `friendly_id_slugs`, used by the {FriendlyId::Slug}
 model.
 
 ### Considerations
 
-This module is incompatible with the +:scoped+ module.
+This module is incompatible with the `:scoped` module.
 
 Because recording slug history requires creating additional database records,
-this module has an impact on the performance of the associated model's +create+
+this module has an impact on the performance of the associated model's `create`
 method.
 
 ### Example

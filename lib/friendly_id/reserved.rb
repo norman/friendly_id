@@ -17,7 +17,7 @@ FriendlyId.defaults}:
     config.reserved_words = %w(new edit nueva nuevo editar)
   end
 
-Note that the error message will appear on the field +:friendly_id+. If you are
+Note that the error message will appear on the field `:friendly_id`. If you are
 using Rails's scaffolded form errors display, then it will have no field to
 highlight. If you'd like to change this so that scaffolding works as expected,
 one way to accomplish this is to move the error message to a different field.
@@ -46,7 +46,7 @@ For example:
       end
     end
 
-    # This module adds the +:reserved_words+ configuration option to
+    # This module adds the `:reserved_words` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_writer :reserved_words

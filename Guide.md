@@ -63,9 +63,9 @@ updated. The most common example of this is a user name:
       validates_format_of :login, :with => /\A[a-z0-9]+\z/i
     end
 
-    @user = User.find "joe"   # the old User.find(1) still works, too
-    @user.to_param            # returns "joe"
-    redirect_to @user         # the URL will be /users/joe
+    @user = User.friendly.find "joe"   # the old User.find(1) still works, too
+    @user.to_param                     # returns "joe"
+    redirect_to @user                  # the URL will be /users/joe
 
 In this case, FriendlyId assumes you want to use the column as-is; it will never
 modify the value of the column, and your application should ensure that the
@@ -76,7 +76,7 @@ value is unique and admissible in a URL:
       friendly_id :name
     end
 
-    @city.find "Viña del Mar"
+    @city.friendly.find "Viña del Mar"
     redirect_to @city # the URL will be /cities/Viña%20del%20Mar
 
 Writing the code to process an arbitrary string into a good identifier for use
@@ -109,7 +109,7 @@ To activate the slugging functionality, use the {FriendlyId::Slugged} module.
 
 FriendlyId will generate slugs from a method or column that you specify, and
 store them in a field in your model. By default, this field must be named
-+:slug+, though you may change this using the
+`:slug`, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
 option. You should add an index to this column, and in most cases, make it
 unique. You may also wish to constrain it to NOT NULL, but this depends on your
@@ -219,7 +219,7 @@ read-only:
 
 #### Locale-specific Transliterations
 
-Active Support's +parameterize+ uses
+Active Support's `parameterize` uses
 [transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
 which in turn can use I18n's transliteration rules to consider the current
 locale when replacing Latin characters:
@@ -240,21 +240,6 @@ This functionality was in fact taken from earlier versions of FriendlyId.
 
 #### Gotchas: Common Problems
 
-##### Slugs That Begin With Numbers
-
-Ruby's `to_i` function casts strings to integers in such a way that +23abc.to_i+
-returns 23. Because FriendlyId falls back to finding by numeric id, this means
-that if you attempt to find a record with a non-existant slug, and that slug
-begins with a number, your find will probably return the wrong record.
-
-There are two fairly simple ways to avoid this:
-
-* Use validations to ensure that slugs don't begin with numbers.
-* Use explicit finders like +find_by_id+ to always find by the numeric id, or
-  +find_by_slug+ to always find using the friendly id.
-
-##### Concurrency Issues
-
 FriendlyId uses a before_validation callback to generate and set the slug. This
 means that if you create two model instances before saving them, it's possible
 they will generate the same slug, and the second save will fail.
@@ -266,10 +251,6 @@ second, in concurrent code, either in threads or multiple processes.
 To solve the nested attributes issue, I recommend simply avoiding them when
 creating more than one nested record for a model that uses FriendlyId. See [this
 Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussion.
-
-To solve the concurrency issue, I recommend locking the model's table against
-inserts while when saving the record. See [this Github
-issue](https://github.com/FriendlyId/friendly_id/issues/180) for discussion.
 
 
 ## History: Avoiding 404's When Slugs Change
@@ -288,15 +269,15 @@ store the slug records. FriendlyId provides a generator for this purpose:
     rails generate friendly_id
     rake db:migrate
 
-This will add a table named +friendly_id_slugs+, used by the {FriendlyId::Slug}
+This will add a table named `friendly_id_slugs`, used by the {FriendlyId::Slug}
 model.
 
 ### Considerations
 
-This module is incompatible with the +:scoped+ module.
+This module is incompatible with the `:scoped` module.
 
 Because recording slug history requires creating additional database records,
-this module has an impact on the performance of the associated model's +create+
+this module has an impact on the performance of the associated model's `create`
 method.
 
 ### Example
@@ -331,7 +312,7 @@ The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
 within a scope.
 
 This allows, for example, two restaurants in different cities to have the slug
-+joes-diner+:
+`joes-diner`:
 
     class Restaurant < ActiveRecord::Base
       extend FriendlyId
@@ -349,12 +330,12 @@ This allows, for example, two restaurants in different cities to have the slug
     City.find("chicago").restaurants.find("joes-diner")
 
 Without :scoped in this case, one of the restaurants would have the slug
-+joes-diner+ and the other would have +joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5+.
+`joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
 
-The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
+The value for the `:scope` option can be the name of a `belongs_to` relation, or
 a column.
 
-Additionally, the +:scope+ option can receive an array of scope values:
+Additionally, the `:scope` option can receive an array of scope values:
 
     class Cuisine < ActiveRecord::Base
       extend FriendlyId
@@ -430,7 +411,7 @@ FriendlyId.
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
 "slug_es", etc. The first part of the name can be configured by passing the
-+:slug_column+ option if you choose. Note that the column for the default locale
+`:slug_column` option if you choose. Note that the column for the default locale
 must also include the locale in its name.
 
 This module is most suitable to applications that need to support few locales.
@@ -460,7 +441,7 @@ Finds will take into consideration the current locale:
     Post.find("star-wars")
 
 To find a slug by an explicit locale, perform the find inside a block
-passed to I18n's +with_locale+ method:
+passed to I18n's `with_locale` method:
 
     I18n.with_locale(:es) do
       Post.find("la-guerra-de-las-galaxas")
@@ -502,7 +483,7 @@ FriendlyId.defaults}:
     config.reserved_words = %w(new edit nueva nuevo editar)
   end
 
-Note that the error message will appear on the field +:friendly_id+. If you are
+Note that the error message will appear on the field `:friendly_id`. If you are
 using Rails's scaffolded form errors display, then it will have no field to
 highlight. If you'd like to change this so that scaffolding works as expected,
 one way to accomplish this is to move the error message to a different field.

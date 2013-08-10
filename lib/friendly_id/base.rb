@@ -30,9 +30,9 @@ updated. The most common example of this is a user name:
       validates_format_of :login, :with => /\A[a-z0-9]+\z/i
     end
 
-    @user = User.find "joe"   # the old User.find(1) still works, too
-    @user.to_param            # returns "joe"
-    redirect_to @user         # the URL will be /users/joe
+    @user = User.friendly.find "joe"   # the old User.find(1) still works, too
+    @user.to_param                     # returns "joe"
+    redirect_to @user                  # the URL will be /users/joe
 
 In this case, FriendlyId assumes you want to use the column as-is; it will never
 modify the value of the column, and your application should ensure that the
@@ -43,7 +43,7 @@ value is unique and admissible in a URL:
       friendly_id :name
     end
 
-    @city.find "Viña del Mar"
+    @city.friendly.find "Viña del Mar"
     redirect_to @city # the URL will be /cities/Viña%20del%20Mar
 
 Writing the code to process an arbitrary string into a good identifier for use
@@ -112,7 +112,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # FriendlyId::Configuration's {FriendlyId::Configuration#use use} method
     # *prior* to the associated configuration options, because it will include
     # modules into your class, and these modules in turn may add required
-    # configuration options to the +@friendly_id_configuraton+'s class:
+    # configuration options to the `@friendly_id_configuraton`'s class:
     #
     #   class Person < ActiveRecord::Base
     #     friendly_id do |config|
@@ -158,23 +158,23 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #   {FriendlyId::History :history}, {FriendlyId::Reserved :reserved}, and
     #   {FriendlyId::Scoped :scoped}, and {FriendlyId::SimpleI18n :simple_i18n}.
     #
-    # @option options [Array] :reserved_words Available when using +:reserved+,
+    # @option options [Array] :reserved_words Available when using `:reserved`,
     #   which is loaded by default. Sets an array of words banned for use as
     #   the basis of a friendly_id. By default this includes "edit" and "new".
     #
-    # @option options [Symbol] :scope Available when using +:scoped+.
+    # @option options [Symbol] :scope Available when using `:scoped`.
     #   Sets the relation or column used to scope generated friendly ids. This
     #   option has no default value.
     #
-    # @option options [Symbol] :sequence_separator Available when using +:slugged+.
+    # @option options [Symbol] :sequence_separator Available when using `:slugged`.
     #   Configures the sequence of characters used to separate a slug from a
-    #   sequence. Defaults to +-+.
+    #   sequence. Defaults to `-`.
     #
-    # @option options [Symbol] :slug_column Available when using +:slugged+.
+    # @option options [Symbol] :slug_column Available when using `:slugged`.
     #   Configures the name of the column where FriendlyId will store the slug.
-    #   Defaults to +:slug+.
+    #   Defaults to `:slug`.
     #
-    # @option options [Symbol] :slug_generator_class Available when using +:slugged+.
+    # @option options [Symbol] :slug_generator_class Available when using `:slugged`.
     #   Sets the class used to generate unique slugs. You should not specify this
     #   unless you're doing some extensive hacking on FriendlyId. Defaults to
     #   {FriendlyId::SlugGenerator}.

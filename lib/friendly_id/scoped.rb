@@ -10,7 +10,7 @@ The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
 within a scope.
 
 This allows, for example, two restaurants in different cities to have the slug
-+joes-diner+:
+`joes-diner`:
 
     class Restaurant < ActiveRecord::Base
       extend FriendlyId
@@ -28,12 +28,12 @@ This allows, for example, two restaurants in different cities to have the slug
     City.find("chicago").restaurants.find("joes-diner")
 
 Without :scoped in this case, one of the restaurants would have the slug
-+joes-diner+ and the other would have +joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5+.
+`joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
 
-The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
+The value for the `:scope` option can be the name of a `belongs_to` relation, or
 a column.
 
-Additionally, the +:scope+ option can receive an array of scope values:
+Additionally, the `:scope` option can receive an array of scope values:
 
     class Cuisine < ActiveRecord::Base
       extend FriendlyId
@@ -130,21 +130,21 @@ an example of one way to set this up:
     end
     private :slug_generator
 
-    # This module adds the +:scope+ configuration option to
+    # This module adds the `:scope` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
 
       # Gets the scope value.
       #
       # When setting this value, the argument should be a symbol referencing a
-      # +belongs_to+ relation, or a column.
+      # `belongs_to` relation, or a column.
       #
       # @return Symbol The scope value
       attr_accessor :scope
 
       # Gets the scope columns.
       #
-      # Checks to see if the +:scope+ option passed to
+      # Checks to see if the `:scope` option passed to
       # {FriendlyId::Base#friendly_id} refers to a relation, and if so, returns
       # the realtion's foreign key. Otherwise it assumes the option value was
       # the name of column and returns it cast to a String.

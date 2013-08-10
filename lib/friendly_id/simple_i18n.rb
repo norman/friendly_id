@@ -12,7 +12,7 @@ FriendlyId.
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
 "slug_es", etc. The first part of the name can be configured by passing the
-+:slug_column+ option if you choose. Note that the column for the default locale
+`:slug_column` option if you choose. Note that the column for the default locale
 must also include the locale in its name.
 
 This module is most suitable to applications that need to support few locales.
@@ -42,7 +42,7 @@ Finds will take into consideration the current locale:
     Post.find("star-wars")
 
 To find a slug by an explicit locale, perform the find inside a block
-passed to I18n's +with_locale+ method:
+passed to I18n's `with_locale` method:
 
     I18n.with_locale(:es) do
       Post.find("la-guerra-de-las-galaxas")
