@@ -6,9 +6,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.0.10 (NOT RELEASED YET)
+## 4.0.10 (2013-08-10)
 
 * Fixed table prefixes/suffixes being ignored (Jesse Farless)
+* Fixed sequence generation for slugs containing numbers (Adam Carroll)
 
 ## 4.0.9 (2012-10-31)
 
