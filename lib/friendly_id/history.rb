@@ -23,8 +23,6 @@ model.
 
 ### Considerations
 
-This module is incompatible with the `:scoped` module.
-
 Because recording slug history requires creating additional database records,
 this module has an impact on the performance of the associated model's `create`
 method.
