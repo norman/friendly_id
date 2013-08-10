@@ -1,4 +1,4 @@
---files=WhatsNew.md,Changelog.md,Guide.md
+--files=Changelog.md,Guide.md
 --private
 --protected
 --exclude lib/friendly_id/migration
