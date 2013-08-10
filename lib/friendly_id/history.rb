@@ -78,15 +78,15 @@ method.
     module HistoryFinders
       include Finders
 
-      def find_by_friendly_id(id)
+      private
+
+      def first_by_friendly_id(id)
         joins(:slugs).where(slug_history_clause(id)).readonly(false).first
       end
 
       def exists_by_friendly_id?(id)
         joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
       end
-
-      private
 
       def slug_history_clause(id)
         Slug.arel_table[:sluggable_type].eq(base_class.to_s).and(Slug.arel_table[:slug].eq(id))

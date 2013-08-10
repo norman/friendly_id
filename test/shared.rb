@@ -101,6 +101,14 @@ module FriendlyId
           with_instance_of(model_class) {|record| assert model_class.friendly.find record.id.to_s}
         end
 
+        test "should treat numeric part of string as an integer id" do
+          with_instance_of(model_class) do |record|
+            assert_raises(ActiveRecord::RecordNotFound) do
+              model_class.friendly.find "#{record.id}-foo"
+            end
+          end
+        end
+
         test "should be findable by numeric friendly_id" do
           with_instance_of(model_class, :name => "206") {|record| assert model_class.friendly.find record.friendly_id}
         end
