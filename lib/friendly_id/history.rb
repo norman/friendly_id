@@ -66,13 +66,15 @@ method.
           :dependent  => :destroy,
           :class_name => Slug.to_s
         }
+
         after_save :create_slug
+
         def self.find_by_friendly_id(id)
-          includes(:slugs).where(slug_history_clause(id)).references(:slugs).first
+          joins(:slugs).where(slug_history_clause(id)).readonly(false).first
         end
 
         def self.exists_by_friendly_id?(id)
-          includes(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
+          joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
         end
 
         def self.slug_history_clause(id)
