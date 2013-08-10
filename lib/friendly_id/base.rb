@@ -1,7 +1,7 @@
 module FriendlyId
 =begin
 
-== Setting Up FriendlyId in Your Model
+## Setting Up FriendlyId in Your Model
 
 To use FriendlyId in your ActiveRecord models, you must first either extend or
 include the FriendlyId module (it makes no difference), then invoke the
@@ -18,7 +18,7 @@ addons it should use. See the documentation for this method for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.
 
-=== The Default Setup: Simple Models
+### The Default Setup: Simple Models
 
 The simplest way to use FriendlyId is with a model that has a uniquely indexed
 column with no spaces or special characters, and that is seldom or never
@@ -103,7 +103,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # between multiple models that can't be well encapsulated by
     # {FriendlyId.defaults}.
     #
-    # === Order Method Calls in a Block vs Ordering Options
+    # ### Order Method Calls in a Block vs Ordering Options
     #
     # When calling this method without a block, you may set the hash options in
     # any order.
@@ -130,7 +130,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #     end
     #   end
     #
-    # === Including Your Own Modules
+    # ### Including Your Own Modules
     #
     # Because :use can accept a name or a Module, {FriendlyId.defaults defaults}
     # can be a convenient place to set up behavior common to all classes using

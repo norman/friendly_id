@@ -1,7 +1,6 @@
-#encoding: utf-8
 
 
-== About FriendlyId
+## About FriendlyId
 
 FriendlyId is an add-on to Ruby's Active Record that allows you to replace ids
 in your URLs with strings:
@@ -15,18 +14,17 @@ in your URLs with strings:
 It requires few changes to your application code and offers flexibility,
 performance and a well-documented codebase.
 
-=== Core Concepts
+### Core Concepts
 
-==== Slugs
+#### Slugs
 
-The concept of "slugs[http://en.wikipedia.org/wiki/Slug_(web_publishing)]" is at
-the heart of FriendlyId.
+The concept of *slugs* is at the heart of FriendlyId.
 
 A slug is the part of a URL which identifies a page using human-readable
 keywords, rather than an opaque identifier such as a numeric id. This can make
 your application more friendly both for users and search engine.
 
-==== Finders: Slugs Act Like Numeric IDs
+#### Finders: Slugs Act Like Numeric IDs
 
 To the extent possible, FriendlyId lets you treat text-based identifiers like
 normal IDs. This means that you can perform finds with slugs just like you do
@@ -36,7 +34,7 @@ with numeric ids:
     Person.find("joe")
 
 
-== Setting Up FriendlyId in Your Model
+## Setting Up FriendlyId in Your Model
 
 To use FriendlyId in your ActiveRecord models, you must first either extend or
 include the FriendlyId module (it makes no difference), then invoke the
@@ -53,7 +51,7 @@ addons it should use. See the documentation for this method for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.
 
-=== The Default Setup: Simple Models
+### The Default Setup: Simple Models
 
 The simplest way to use FriendlyId is with a model that has a uniquely indexed
 column with no spaces or special characters, and that is seldom or never
@@ -86,7 +84,7 @@ in a URL can be repetitive and surprisingly tricky, so for this reason it's
 often better and easier to use {FriendlyId::Slugged slugs}.
 
 
-== Slugged Models
+## Slugged Models
 
 FriendlyId can use a separate column to store slugs for models which require
 some text processing.
@@ -117,7 +115,7 @@ option. You should add an index to this column, and in most cases, make it
 unique. You may also wish to constrain it to NOT NULL, but this depends on your
 app's behavior and requirements.
 
-=== Example Setup
+### Example Setup
 
     # your model
     class Post < ActiveRecord::Base
@@ -143,37 +141,37 @@ app's behavior and requirements.
       end
     end
 
-=== Working With Slugs
+### Working With Slugs
 
-==== Formatting
+#### Formatting
 
 By default, FriendlyId uses Active Support's
-paramaterize[http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize]
+[paramaterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
 method to create slugs. This method will intelligently replace spaces with
 dashes, and Unicode Latin characters with ASCII approximations:
 
-  movie = Movie.create! :title => "Der Preis fürs Überleben"
-  movie.slug #=> "der-preis-furs-uberleben"
+    movie = Movie.create! :title => "Der Preis fürs Überleben"
+    movie.slug #=> "der-preis-furs-uberleben"
 
-==== Uniqueness
+#### Uniqueness
 
 When you try to insert a record that would generate a duplicate friendly id,
 FriendlyId will append a sequence to the generated slug to ensure uniqueness:
 
-  car = Car.create :title => "Peugot 206"
-  car2 = Car.create :title => "Peugot 206"
+    car = Car.create :title => "Peugot 206"
+    car2 = Car.create :title => "Peugot 206"
 
-  car.friendly_id #=> "peugot-206"
-  car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
+    car.friendly_id #=> "peugot-206"
+    car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
 
-==== Sequence Separator - The Two Dashes
+#### Sequence Separator - The Two Dashes
 
 By default, FriendlyId uses a dash to separate the slug from a sequence.
 
 You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
 sequence_separator} configuration option.
 
-==== Column or Method?
+#### Column or Method?
 
 FriendlyId always uses a method as the basis of the slug text - not a column. It
 first glance, this may sound confusing, but remember that Active Record provides
@@ -182,67 +180,67 @@ FriendlyId uses.
 
 Here's an example of a class that uses a custom method to generate the slug:
 
-  class Person < ActiveRecord::Base
-    friendly_id :name_and_location
-    def name_and_location
-      "#{name} from #{location}"
+    class Person < ActiveRecord::Base
+      friendly_id :name_and_location
+      def name_and_location
+        "#{name} from #{location}"
+      end
     end
-  end
 
-  bob = Person.create! :name => "Bob Smith", :location => "New York City"
-  bob.friendly_id #=> "bob-smith-from-new-york-city"
+    bob = Person.create! :name => "Bob Smith", :location => "New York City"
+    bob.friendly_id #=> "bob-smith-from-new-york-city"
 
-==== Providing Your Own Slug Processing Method
+#### Providing Your Own Slug Processing Method
 
 You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
 total control over the slug format.
 
-==== Deciding When to Generate New Slugs
+#### Deciding When to Generate New Slugs
 
 Overriding {FriendlyId::Slugged#should_generate_new_friendly_id?} lets you
 control whether new friendly ids are created when a model is updated. For
 example, if you only want to generate slugs once and then treat them as
 read-only:
 
-  class Post < ActiveRecord::Base
-    extend FriendlyId
-    friendly_id :title, :use => :slugged
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
 
-    def should_generate_new_friendly_id?
-      new_record?
+      def should_generate_new_friendly_id?
+        new_record?
+      end
     end
-  end
 
-  post = Post.create!(:title => "Hello world!")
-  post.slug #=> "hello-world"
-  post.title = "Hello there, world!"
-  post.save!
-  post.slug #=> "hello-world"
+    post = Post.create!(:title => "Hello world!")
+    post.slug #=> "hello-world"
+    post.title = "Hello there, world!"
+    post.save!
+    post.slug #=> "hello-world"
 
-==== Locale-specific Transliterations
+#### Locale-specific Transliterations
 
 Active Support's +parameterize+ uses
-transliterate[http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate],
+[transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
 which in turn can use I18n's transliteration rules to consider the current
 locale when replacing Latin characters:
 
-  # config/locales/de.yml
-  de:
-    i18n:
-      transliterate:
-        rule:
-          ü: "ue"
-          ö: "oe"
-          etc...
+    # config/locales/de.yml
+    de:
+      i18n:
+        transliterate:
+          rule:
+            ü: "ue"
+            ö: "oe"
+            etc...
 
-  movie = Movie.create! :title => "Der Preis fürs Überleben"
-  movie.slug #=> "der-preis-fuers-ueberleben"
+    movie = Movie.create! :title => "Der Preis fürs Überleben"
+    movie.slug #=> "der-preis-fuers-ueberleben"
 
 This functionality was in fact taken from earlier versions of FriendlyId.
 
-==== Gotchas: Common Problems
+#### Gotchas: Common Problems
 
-===== Slugs That Begin With Numbers
+##### Slugs That Begin With Numbers
 
 Ruby's `to_i` function casts strings to integers in such a way that +23abc.to_i+
 returns 23. Because FriendlyId falls back to finding by numeric id, this means
@@ -255,7 +253,7 @@ There are two fairly simple ways to avoid this:
 * Use explicit finders like +find_by_id+ to always find by the numeric id, or
   +find_by_slug+ to always find using the friendly id.
 
-===== Concurrency Issues
+##### Concurrency Issues
 
 FriendlyId uses a before_validation callback to generate and set the slug. This
 means that if you create two model instances before saving them, it's possible
@@ -266,15 +264,15 @@ attributes creates more than one record for a model that uses friendly_id. The
 second, in concurrent code, either in threads or multiple processes.
 
 To solve the nested attributes issue, I recommend simply avoiding them when
-creating more than one nested record for a model that uses FriendlyId. See {this
-Github issue}[https://github.com/FriendlyId/friendly_id/issues/185] for discussion.
+creating more than one nested record for a model that uses FriendlyId. See [this
+Github issue](https://github.com/FriendlyId/friendly_id/issues/185) for discussion.
 
 To solve the concurrency issue, I recommend locking the model's table against
-inserts while when saving the record. See {this Github
-issue}[https://github.com/FriendlyId/friendly_id/issues/180] for discussion.
+inserts while when saving the record. See [this Github
+issue](https://github.com/FriendlyId/friendly_id/issues/180) for discussion.
 
 
-== History: Avoiding 404's When Slugs Change
+## History: Avoiding 404's When Slugs Change
 
 FriendlyId's {FriendlyId::History History} module adds the ability to store a
 log of a model's slugs, so that when its friendly id changes, it's still
@@ -282,18 +280,18 @@ possible to perform finds by the old id.
 
 The primary use case for this is avoiding broken URLs.
 
-=== Setup
+### Setup
 
 In order to use this module, you must add a table to your database schema to
 store the slug records. FriendlyId provides a generator for this purpose:
 
-  rails generate friendly_id
-  rake db:migrate
+    rails generate friendly_id
+    rake db:migrate
 
 This will add a table named +friendly_id_slugs+, used by the {FriendlyId::Slug}
 model.
 
-=== Considerations
+### Considerations
 
 This module is incompatible with the +:scoped+ module.
 
@@ -301,7 +299,7 @@ Because recording slug history requires creating additional database records,
 this module has an impact on the performance of the associated model's +create+
 method.
 
-=== Example
+### Example
 
     class Post < ActiveRecord::Base
       extend FriendlyId
@@ -327,7 +325,7 @@ method.
     end
 
 
-== Unique Slugs by Scope
+## Unique Slugs by Scope
 
 The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
 within a scope.
@@ -378,7 +376,7 @@ Additionally, the +:scope+ option can receive an array of scope values:
 
 All supplied values will be used to determine scope.
 
-=== Finding Records by Friendly ID
+### Finding Records by Friendly ID
 
 If you are using scopes your friendly ids may not be unique, so a simple find
 like
@@ -395,13 +393,13 @@ Alternatively, you could pass the scope value as a query parameter:
     Restaurant.find("joes-diner").where(:city_id => @city.id)
 
 
-=== Finding All Records That Match a Scoped ID
+### Finding All Records That Match a Scoped ID
 
 Query the slug column directly:
 
     Restaurant.find_all_by_slug("joes-diner")
 
-=== Routes for Scoped Models
+### Routes for Scoped Models
 
 Recall that FriendlyId is a database-centric library, and does not set up any
 routes for scoped models. You must do this yourself in your application. Here's
@@ -424,7 +422,7 @@ an example of one way to set this up:
     http://example.org/cities/chicago/restaurants/joes-diner
 
 
-== Translating Slugs Using Simple I18n
+## Translating Slugs Using Simple I18n
 
 The {FriendlyId::SimpleI18n SimpleI18n} module adds very basic i18n support to
 FriendlyId.
@@ -439,57 +437,57 @@ This module is most suitable to applications that need to support few locales.
 If you need to support two or more locales, you may wish to use the
 friendly_id_globalize gem instead.
 
-=== Example migration
+### Example migration
 
-  def self.up
-    create_table :posts do |t|
-      t.string :title
-      t.string :slug_en
-      t.string :slug_es
-      t.text   :body
+    def self.up
+      create_table :posts do |t|
+        t.string :title
+        t.string :slug_en
+        t.string :slug_es
+        t.text   :body
+      end
+      add_index :posts, :slug_en
+      add_index :posts, :slug_es
     end
-    add_index :posts, :slug_en
-    add_index :posts, :slug_es
-  end
 
-=== Finds
+### Finds
 
 Finds will take into consideration the current locale:
 
-  I18n.locale = :es
-  Post.find("la-guerra-de-las-galaxas")
-  I18n.locale = :en
-  Post.find("star-wars")
+    I18n.locale = :es
+    Post.find("la-guerra-de-las-galaxas")
+    I18n.locale = :en
+    Post.find("star-wars")
 
 To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's +with_locale+ method:
 
-  I18n.with_locale(:es) do
-    Post.find("la-guerra-de-las-galaxas")
-  end
+    I18n.with_locale(:es) do
+      Post.find("la-guerra-de-las-galaxas")
+    end
 
-=== Creating Records
+### Creating Records
 
 When new records are created, the slug is generated for the current locale only.
 
-=== Translating Slugs
+### Translating Slugs
 
 To translate an existing record's friendly_id, use
 {FriendlyId::SimpleI18n::Model#set_friendly_id}. This will ensure that the slug
 you add is properly escaped, transliterated and sequenced:
 
-  post = Post.create :name => "Star Wars"
-  post.set_friendly_id("La guerra de las galaxas", :es)
+    post = Post.create :name => "Star Wars"
+    post.set_friendly_id("La guerra de las galaxas", :es)
 
 If you don't pass in a locale argument, FriendlyId::SimpleI18n will just use the
 current locale:
 
-  I18n.with_locale(:es) do
-    post.set_friendly_id("La guerra de las galaxas")
-  end
+    I18n.with_locale(:es) do
+      post.set_friendly_id("La guerra de las galaxas")
+    end
 
 
-== Reserved Words
+## Reserved Words
 
 The {FriendlyId::Reserved Reserved} module adds the ability to exlude a list of
 words from use as FriendlyId slugs.

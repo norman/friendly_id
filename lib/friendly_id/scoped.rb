@@ -4,7 +4,7 @@ module FriendlyId
 
 =begin
 
-== Unique Slugs by Scope
+## Unique Slugs by Scope
 
 The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
 within a scope.
@@ -55,7 +55,7 @@ Additionally, the +:scope+ option can receive an array of scope values:
 
 All supplied values will be used to determine scope.
 
-=== Finding Records by Friendly ID
+### Finding Records by Friendly ID
 
 If you are using scopes your friendly ids may not be unique, so a simple find
 like
@@ -72,13 +72,13 @@ Alternatively, you could pass the scope value as a query parameter:
     Restaurant.find("joes-diner").where(:city_id => @city.id)
 
 
-=== Finding All Records That Match a Scoped ID
+### Finding All Records That Match a Scoped ID
 
 Query the slug column directly:
 
     Restaurant.find_all_by_slug("joes-diner")
 
-=== Routes for Scoped Models
+### Routes for Scoped Models
 
 Recall that FriendlyId is a database-centric library, and does not set up any
 routes for scoped models. You must do this yourself in your application. Here's

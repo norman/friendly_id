@@ -36,7 +36,7 @@ task :bench => :load_path do
   require File.expand_path("../bench", __FILE__)
 end
 
-desc "Generate Guide.rdoc"
+desc "Generate Guide.md"
 task :guide do
   def read_comments(path)
     path  = File.expand_path("../#{path}", __FILE__)
@@ -54,8 +54,7 @@ task :guide do
   buffer << read_comments("lib/friendly_id/simple_i18n.rb")
   buffer << read_comments("lib/friendly_id/reserved.rb")
 
-  File.open("Guide.rdoc", "w") do |file|
-    file.write("#encoding: utf-8\n")
+  File.open("Guide.md", "w") do |file|
     file.write(buffer.join("\n"))
   end
 end

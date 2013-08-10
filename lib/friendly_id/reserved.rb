@@ -2,7 +2,7 @@ module FriendlyId
 
 =begin
 
-== Reserved Words
+## Reserved Words
 
 The {FriendlyId::Reserved Reserved} module adds the ability to exlude a list of
 words from use as FriendlyId slugs.
