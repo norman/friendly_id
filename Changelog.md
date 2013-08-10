@@ -10,9 +10,10 @@ suggestions, ideas and improvements to FriendlyId.
 
 Made the :scoped and :history modules compatible with each other (Andre Duffeck)
 
-## 4.0.10 (NOT RELEASED YET)
+## 4.0.10 (2013-08-10)
 
 * Fixed table prefixes/suffixes being ignored (Jesse Farless)
+* Fixed sequence generation for slugs containing numbers (Adam Carroll)
 
 ## 4.0.9 (2012-10-31)
 
