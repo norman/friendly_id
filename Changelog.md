@@ -6,14 +6,23 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
-## 4.1.0.beta.1 (2013-01-09)
+## 5.0.0.beta1 (2013-08-10)
 
-Made the :scoped and :history modules compatible with each other (Andre Duffeck)
+* Support for Rails 4.
+* Made the :scoped and :history modules compatible with each other (Andre Duffeck).
+* Removed class-level finders in favor of `friendly` scope (Norman Clarke).
+* Implemented "candidates" support (Norman Clarke).
+* Slug "sequences" are now GUIDs rather than numbers (Norman Clarke).
+* `find` no longer falls back to super unless id is fully numeric string (Norman Clarke).
+* Default sequence separator is now '-' rather than '--'.
+* Support for Globalize has been removed until Globalize supports Rails 4.
+* Removed upport for Ruby < 1.9.3 and Rails < 4.0.
+
 
 ## 4.0.10 (2013-08-10)
 
-* Fixed table prefixes/suffixes being ignored (Jesse Farless)
-* Fixed sequence generation for slugs containing numbers (Adam Carroll)
+* Fixed table prefixes/suffixes being ignored (Jesse Farless).
+* Fixed sequence generation for slugs containing numbers (Adam Carroll).
 
 ## 4.0.9 (2012-10-31)
 
