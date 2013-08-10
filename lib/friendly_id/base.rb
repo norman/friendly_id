@@ -189,7 +189,21 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       friendly_id_config.use options.delete :use
       friendly_id_config.send :set, base ? options.merge(:base => base) : options
       include Model
-      extend Scopes
+    end
+
+    # Return a scope that includes the friendly finders.
+    # @see FriendlyId::Finders
+    def friendly
+      # Guess what? This causes Rails to invoke `extend` on the scope, which has
+      # the well-known effect of blowing away Ruby's method cache. It would be
+      # possible to make this more performant by subclassing the model's
+      # relation class, extending that, and returning an instance of it in this
+      # method. FriendlyId 4.0 did something similar. However in 5.0 I've
+      # decided to only use Rails's public API in order to improve compatibility
+      # and maintainability. If you'd like to improve the performance, your
+      # efforts would be best directed at improving it at the root cause
+      # of the problem - in Rails - because it would benefit more people.
+      all.extending(Finders)
     end
 
     # Returns the model class's {FriendlyId::Configuration friendly_id_config}.

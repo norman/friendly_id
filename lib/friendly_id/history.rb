@@ -69,17 +69,27 @@ method.
 
         after_save :create_slug
 
-        def self.find_by_friendly_id(id)
-          joins(:slugs).where(slug_history_clause(id)).readonly(false).first
+        def self.friendly
+          all.extending(HistoryFinders)
         end
+      end
+    end
 
-        def self.exists_by_friendly_id?(id)
-          joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
-        end
+    module HistoryFinders
+      include Finders
 
-        def self.slug_history_clause(id)
-          Slug.arel_table[:sluggable_type].eq(base_class.to_s).and(Slug.arel_table[:slug].eq(id))
-        end
+      def find_by_friendly_id(id)
+        joins(:slugs).where(slug_history_clause(id)).readonly(false).first
+      end
+
+      def exists_by_friendly_id?(id)
+        joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
+      end
+
+      private
+
+      def slug_history_clause(id)
+        Slug.arel_table[:sluggable_type].eq(base_class.to_s).and(Slug.arel_table[:slug].eq(id))
       end
     end
 

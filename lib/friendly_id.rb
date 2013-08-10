@@ -3,7 +3,7 @@ require "thread"
 require "friendly_id/base"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
-require "friendly_id/scopes"
+require "friendly_id/finders"
 
 =begin
 
