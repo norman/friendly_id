@@ -8,7 +8,7 @@ module FriendlyId
     end
 
     def exists?(conditions = :none)
-      return super if conditions.unfriendly_id? || conditions.unfriendly_id?.nil?
+      return super unless conditions.friendly_id?
       exists_by_friendly_id?(conditions)
     end
 
