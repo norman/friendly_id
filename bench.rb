@@ -43,10 +43,10 @@ Benchmark.bmbm do |x|
     N.times {Book.find BOOKS.rand}
   end
   x.report 'find (in-table slug)' do
-    N.times {Journalist.find JOURNALISTS.rand}
+    N.times {Journalist.friendly.find JOURNALISTS.rand}
   end
   x.report 'find (external slug)' do
-    N.times {Manual.find MANUALS.rand}
+    N.times {Manual.friendly.find MANUALS.rand}
   end
 
   x.report 'insert (without FriendlyId)' do
