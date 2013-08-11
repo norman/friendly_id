@@ -31,7 +31,7 @@ normal IDs. This means that you can perform finds with slugs just like you do
 with numeric ids:
 
     Person.find(82542335)
-    Person.find("joe")
+    Person.friendly.find("joe")
 
 
 ## Setting Up FriendlyId in Your Model
@@ -153,24 +153,6 @@ dashes, and Unicode Latin characters with ASCII approximations:
     movie = Movie.create! :title => "Der Preis fürs Überleben"
     movie.slug #=> "der-preis-furs-uberleben"
 
-#### Uniqueness
-
-When you try to insert a record that would generate a duplicate friendly id,
-FriendlyId will append a sequence to the generated slug to ensure uniqueness:
-
-    car = Car.create :title => "Peugot 206"
-    car2 = Car.create :title => "Peugot 206"
-
-    car.friendly_id #=> "peugot-206"
-    car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
-
-#### Sequence Separator - The Two Dashes
-
-By default, FriendlyId uses a dash to separate the slug from a sequence.
-
-You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
-sequence_separator} configuration option.
-
 #### Column or Method?
 
 FriendlyId always uses a method as the basis of the slug text - not a column. It
@@ -190,32 +172,90 @@ Here's an example of a class that uses a custom method to generate the slug:
     bob = Person.create! :name => "Bob Smith", :location => "New York City"
     bob.friendly_id #=> "bob-smith-from-new-york-city"
 
-#### Providing Your Own Slug Processing Method
+FriendlyId refers to this internally as the "base" method.
 
-You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
-total control over the slug format.
+#### Uniqueness
 
-#### Deciding When to Generate New Slugs
+When you try to insert a record that would generate a duplicate friendly id,
+FriendlyId will append a UUID to the generated slug to ensure uniqueness:
 
-Overriding {FriendlyId::Slugged#should_generate_new_friendly_id?} lets you
-control whether new friendly ids are created when a model is updated. For
-example, if you only want to generate slugs once and then treat them as
-read-only:
+    car = Car.create :title => "Peugot 206"
+    car2 = Car.create :title => "Peugot 206"
 
-    class Post < ActiveRecord::Base
+    car.friendly_id #=> "peugot-206"
+    car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
+
+Previous versions of FriendlyId appended a numeric sequence a to make slugs
+unique, but this was removed to simplify using FriendlyId in concurrent code.
+
+#### Candidates
+
+Since UUIDs are ugly, FriendlyId provides a "slug candidates" functionality to
+let you specify alternate slugs to use in the event the one you want to use is
+already taken. For example:
+
+    class Restaurant < ActiveRecord::Base
       extend FriendlyId
-      friendly_id :title, :use => :slugged
+      friendly_id :slug_candidates, use: :slugged
 
-      def should_generate_new_friendly_id?
-        new_record?
+      # Try building a slug based on the following fields in
+      # increasing order of specificity.
+      def slug_candidates
+        [
+          :name,
+          [:name, :city],
+          [:name, :street, :city],
+          [:name, :street_number, :street, :city]
+        ]
       end
     end
 
-    post = Post.create!(:title => "Hello world!")
-    post.slug #=> "hello-world"
-    post.title = "Hello there, world!"
-    post.save!
-    post.slug #=> "hello-world"
+    r1 = Restaurant.create! name: 'Plaza Diner', city: 'New Paltz'
+    r2 = Restaurant.create! name: 'Plaza Diner', city: 'Kingston'
+
+    r1.friendly_id  #=> 'plaza-diner'
+    r2.friendly_id  #=> 'plaza-diner-kingston'
+
+To use candidates, make your FriendlyId base method return an array. The
+method need not be named `slug_candidates`; it can be anything you want. The
+array may contain any combination of symbols, strings, procs or lambdas and
+will be evaluated lazily and in order. If you include symbols, FriendlyId will
+invoke a method on your model class with the same name. Strings will be
+interpreted literally. Procs and lambdas will be called and their return values
+used as the basis of the friendly id. If none of the candidates can generate a
+unique slug, then FriendlyId will append a UUID to the first candidate as a
+last resort.
+
+#### Sequence Separator
+
+By default, FriendlyId uses a dash to separate the slug from a sequence.
+
+You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
+sequence_separator} configuration option.
+
+#### Providing Your Own Slug Processing Method
+
+You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
+total control over the slug format. It will be invoked for any generated slug,
+whether for a single slug or for slug candidates.
+
+#### Deciding When to Generate New Slugs
+
+Previous versions of FriendlyId provided a method named
+`should_generate_new_friendly_id?` which you could override to control when new
+slugs were generated.
+
+As of FriendlyId 5.0, slugs are only generated when the `slug` field is nil. If
+you want a slug to be regenerated, you must explicity set the field to nil:
+
+    restaurant.friendly_id # joes-diner
+    restaurant.name = "The Plaza Diner"
+    restaurant.save!
+    restaurant.friendly_id # joes-diner
+    restaurant.slug = nil
+    restaurant.save!
+    restaurant.friendly_id # the-plaza-diner
+
 
 #### Locale-specific Transliterations
 
@@ -274,8 +314,6 @@ model.
 
 ### Considerations
 
-This module is incompatible with the `:scoped` module.
-
 Because recording slug history requires creating additional database records,
 this module has an impact on the performance of the associated model's `create`
 method.
@@ -326,8 +364,8 @@ This allows, for example, two restaurants in different cities to have the slug
       friendly_id :name, :use => :slugged
     end
 
-    City.find("seattle").restaurants.find("joes-diner")
-    City.find("chicago").restaurants.find("joes-diner")
+    City.friendly.find("seattle").restaurants.friendly.find("joes-diner")
+    City.friendly.find("chicago").restaurants.friendly.find("joes-diner")
 
 Without :scoped in this case, one of the restaurants would have the slug
 `joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
@@ -362,23 +400,23 @@ All supplied values will be used to determine scope.
 If you are using scopes your friendly ids may not be unique, so a simple find
 like
 
-    Restaurant.find("joes-diner")
+    Restaurant.friendly.find("joes-diner")
 
 may return the wrong record. In these cases it's best to query through the
 relation:
 
-    @city.restaurants.find("joes-diner")
+    @city.restaurants.friendly.find("joes-diner")
 
 Alternatively, you could pass the scope value as a query parameter:
 
-    Restaurant.find("joes-diner").where(:city_id => @city.id)
+    Restaurant.friendly.find("joes-diner").where(:city_id => @city.id)
 
 
 ### Finding All Records That Match a Scoped ID
 
 Query the slug column directly:
 
-    Restaurant.find_all_by_slug("joes-diner")
+    Restaurant.where(:slug => "joes-diner")
 
 ### Routes for Scoped Models
 
@@ -395,8 +433,8 @@ an example of one way to set this up:
     <%= link_to 'Show', [@city, @restaurant] %>
 
     # in controllers
-    @city = City.find(params[:city_id])
-    @restaurant = @city.restaurants.find(params[:id])
+    @city = City.friendly.find(params[:city_id])
+    @restaurant = @city.restaurants.friendly.find(params[:id])
 
     # URLs:
     http://example.org/cities/seattle/restaurants/joes-diner

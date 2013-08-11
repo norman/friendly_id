@@ -2,6 +2,8 @@ require 'securerandom'
 
 module FriendlyId
 
+  # This class provides the slug candidate functionality.
+  # @see FriendlyId::Slugged
   class Candidates
 
     include Enumerable
@@ -11,6 +13,8 @@ module FriendlyId
       @candidates = to_candidate_array(object, array.flatten(1))
     end
 
+
+    # Visits each slug candidate, calls it, passes it to `normalize_friendly_id` and yields the result.
     def each(*args, &block)
       @candidates.each(*args) do |candidate|
         yield @object.normalize_friendly_id(candidate.map(&:call).join(' '))

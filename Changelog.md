@@ -3,9 +3,6 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
-* Table of Contents
-{:toc}
-
 ## 5.0.0.beta1 (2013-08-10)
 
 * Support for Rails 4.
@@ -48,7 +45,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 4.0.7 (2012-06-06)
 
-* to_param just calls super when no friendly_id is present, to keep the model's
+* to_param just calls super when no friendly id is present, to keep the model's
   default behavior. (Andrew White)
 
 * FriendlyId can now properly sequence slugs that end in numbers even when a

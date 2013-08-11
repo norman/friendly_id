@@ -19,13 +19,13 @@ module FriendlyId
     # and its value when cast to an integer and then back to a string is
     # different from its value when merely cast to a string:
     #
-    #   123.friendly_id?                  #=> false
-    #   :id.friendly_id?                  #=> false
-    #   {:name => 'joe'}.friendly_id?     #=> false
-    #   ['name = ?', 'joe'].friendly_id?  #=> false
-    #   nil.friendly_id?                  #=> false
-    #   "123".friendly_id?                #=> nil
-    #   "abc123".friendly_id?             #=> true
+    #     123.friendly_id?                  #=> false
+    #     :id.friendly_id?                  #=> false
+    #     {:name => 'joe'}.friendly_id?     #=> false
+    #     ['name = ?', 'joe'].friendly_id?  #=> false
+    #     nil.friendly_id?                  #=> false
+    #     "123".friendly_id?                #=> nil
+    #     "abc123".friendly_id?             #=> true
     def friendly_id?
       # Considered unfriendly if this is an instance of an unfriendly class or
       # one of its descendants.

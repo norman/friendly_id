@@ -16,9 +16,9 @@ module FriendlyId
     # FriendlyId will take care of transforming the human-readable title into
     # something suitable for use in a URL.
     #
-    # @param [Symbol] A symbol referencing a column or method in the model. This
-    #   value is usually set by passing it as the first argument to
-    #   {FriendlyId::Base#friendly_id friendly_id}:
+    # A symbol referencing a column or method in the model. This
+    # value is usually set by passing it as the first argument to
+    # {FriendlyId::Base#friendly_id friendly_id}:
     #
     # @example
     #   class Book < ActiveRecord::Base
@@ -55,7 +55,7 @@ module FriendlyId
     #     extend FriendlyId
     #     friendly_id :name, :use => :slugged
     #   end
-    # @param [#to_s,Module] *modules Arguments should be Modules, or symbols or
+    # @param [#to_s,Module] modules Arguments should be Modules, or symbols or
     #   strings that correspond with the name of a module inside the FriendlyId
     #   namespace. By default FriendlyId provides +:slugged+, +:history+,
     #   +:simple_i18n+, and +:scoped+.
