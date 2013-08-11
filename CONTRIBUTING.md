@@ -16,6 +16,11 @@ Here are the answers to some common questions.
 Then you **must** use FriendlyId 5, which is currently available in the master
 branch of the repository, and will be released to Rubygems soon.
 
+### I'm seeing a bunch of odd characters at the end of the id
+
+For example: `2bc08962-b3dd-4f29-b2e6-244710c86106`. FriendlyId 5 uses a UUID 
+rather than a sequence to simplify slug generation and avoid concurrency problems.
+
 ### How do I set up my routes for FriendlyId?
 
 Exactly like in any other Rails app. FriendlyId doesn't change any routing
