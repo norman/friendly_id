@@ -51,6 +51,7 @@ module FriendlyId
   autoload :Reserved,   "friendly_id/reserved"
   autoload :Scoped,     "friendly_id/scoped"
   autoload :Slugged,    "friendly_id/slugged"
+  autoload :Globalize,  "friendly_id/Globalize"
 
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
   # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
