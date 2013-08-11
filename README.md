@@ -71,7 +71,8 @@ end
 ```
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
-  sequence to differentiate conflicting slug, but rather a GUID. This makes the
+  sequence to differentiate conflicting slug, but rather a UUID (e.g. something 
+  like `2bc08962-b3dd-4f29-b2e6-244710c86106`). This makes the
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
 
