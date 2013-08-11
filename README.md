@@ -4,7 +4,7 @@
 
 **Rails 4**:
 Master branch of this repository contains FriendlyId 5 which is compatible with Rails 4.
-This version is under active development and not yet fully stable.
+This version is in beta and will be released soon.
 
 **Rails 3**:
 If you wish to use this gem with Rails 3.1 or 3.2 you need to use FriendlyId version 4, which is the current stable release.
@@ -113,9 +113,10 @@ cd my_app
 ```
 ```ruby
 # Gemfile
-gem 'friendly_id', github: 'norman/friendly_id', branch: 'master' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
+gem 'friendly_id', '5.0.0.beta1' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 ```
 ```shell
+rails generate friendly_id
 rails generate scaffold user name:string slug:string
 ```
 ```ruby
