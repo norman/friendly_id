@@ -48,6 +48,7 @@ task :guide do
 
   buffer << read_comments("lib/friendly_id.rb")
   buffer << read_comments("lib/friendly_id/base.rb")
+  buffer << read_comments("lib/friendly_id/finders.rb")
   buffer << read_comments("lib/friendly_id/slugged.rb")
   buffer << read_comments("lib/friendly_id/history.rb")
   buffer << read_comments("lib/friendly_id/scoped.rb")

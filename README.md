@@ -44,7 +44,9 @@ with 4.x.
 Here's a summary of the most important changes:
 
 * FriendlyId no longer overrides `find`. If you want to do friendly finds, you
-  must do `Model.friendly.find` rather than `Model.find`.
+  must do `Model.friendly.find` rather than `Model.find`. You can however extend
+  FriendlyId::Finders in your model to restore some of this functionality; see
+  the API docs for that module for more details.
 
 * Version 5.0 offers a new "candidates" functionality which makes it easy to
   set up a list of alternate slugs that can be used to uniquely distinguish

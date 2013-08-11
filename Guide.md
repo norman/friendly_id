@@ -83,6 +83,53 @@ Writing the code to process an arbitrary string into a good identifier for use
 in a URL can be repetitive and surprisingly tricky, so for this reason it's
 often better and easier to use {FriendlyId::Slugged slugs}.
 
+## Performing Finds with FriendlyId
+
+FriendlyId offers enhanced finders which will search for your record by
+friendly id, and fall back to the numeric id if necessary. This makes it easy
+to add FriendlyId to an existing application with minimal code modification.
+
+To search by friendly id, use the `friendly` scope:
+
+    Restaurant.friendly.find('plaza-diner') #=> works
+    Restaurant.friendly.find(23)            #=> also works
+    Restaurant.find(23)                     #=> still works
+    Restaurant.find('plaza-diner')          #=> will not work
+
+When implementing FriendlyId in an application, be sure to modify the finders
+in your controllers to use `friendly` scope.
+
+### Restoring FriendlyId 4.0-style finders
+
+Prior to version 5.0, FriendlyId overrode the default finder methods to perform
+friendly finds all the time. This required modifying parts of Rails that did
+not have a public API and at times caused compatiblity problems. In 5.0 we
+decided to add the friendly finders only to the `friendly` scope. However, you
+can still restore some of the original functionality if you wish.
+
+Extending the {FriendlyId::Finders} module in an Active Record model will allow
+you to perform friendly finds at the root level, similar to previous versions
+of FriendlyId:
+
+    class Restaurant
+      extend FriendlyId
+      extend FriendlyId::Finders
+
+      scope :active, -> {where(:active => true)}
+
+      friendly_id :name, :use => :slugged
+    end
+
+    Restaurant.friendly.find('plaza-diner') #=> works
+    Restaurant.find('plaza-diner')          #=> now also works
+
+Note however, that since we're only extending the model and not its
+relation class, this will not let you perform `find` on scopes; only
+at the root:
+
+    Restaurant.active.find('plaza-diner')            #=> does not work
+    Restaurant.active.friendly.find('plaza-diner')   #=> works
+
 
 ## Slugged Models
 
