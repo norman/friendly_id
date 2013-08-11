@@ -25,15 +25,24 @@ class Manual < ActiveRecord::Base
   friendly_id :name, :use => :history
 end
 
+class Restaurant < ActiveRecord::Base
+  extend FriendlyId
+  relation.class.send(:include, FriendlyId::Finders)
+  friendly_id :name
+end
+
+
 BOOKS       = []
 JOURNALISTS = []
 MANUALS     = []
+RESTAURANTS = []
 
 100.times do
   name = Faker::Name.name
   BOOKS       << (Book.create! :name => name).id
   JOURNALISTS << (Journalist.create! :name => name).friendly_id
   MANUALS     << (Manual.create! :name => name).friendly_id
+  RESTAURANTS << (Restaurant.create! :name => name).friendly_id
 end
 
 ActiveRecord::Base.connection.execute "UPDATE manuals SET slug = NULL"
@@ -45,6 +54,10 @@ Benchmark.bmbm do |x|
 
   x.report 'find (in-table slug)' do
     N.times {Journalist.friendly.find JOURNALISTS.rand}
+  end
+
+  x.report 'find (in-table slug; included Finders)' do
+    N.times {Restaurant.find RESTAURANTS.rand}
   end
 
   x.report 'find (external slug)' do
