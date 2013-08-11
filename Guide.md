@@ -97,21 +97,32 @@ To search by friendly id, use the `friendly` scope:
     Restaurant.find('plaza-diner')          #=> will not work
 
 When implementing FriendlyId in an application, be sure to modify the finders
-in your controllers to use `friendly` scope.
+in your controllers to use the `friendly` scope. For example:
+
+    # before
+    def set_restaurant
+      @restaurant = Restaurant.find(params[:id])
+    end
+
+    # after
+    def set_restaurant
+      @restaurant = Restaurant.friendly.find(params[:id])
+    end
 
 ### Restoring FriendlyId 4.0-style finders
 
 Prior to version 5.0, FriendlyId overrode the default finder methods to perform
 friendly finds all the time. This required modifying parts of Rails that did
-not have a public API and at times caused compatiblity problems. In 5.0 we
-decided to add the friendly finders only to the `friendly` scope. However, you
-can still restore some of the original functionality if you wish.
+not have a public API, which was hard to maintain and at times caused
+compatiblity problems. In 5.0 we decided to add the friendly finders only to
+the `friendly` scope. However, you can still restore some of the original
+functionality if you wish.
 
 Extending the {FriendlyId::Finders} module in an Active Record model will allow
 you to perform friendly finds at the root level, similar to previous versions
 of FriendlyId:
 
-    class Restaurant
+    class Restaurant < ActiveRecord::Base
       extend FriendlyId
       extend FriendlyId::Finders
 
@@ -129,6 +140,25 @@ at the root:
 
     Restaurant.active.find('plaza-diner')            #=> does not work
     Restaurant.active.friendly.find('plaza-diner')   #=> works
+
+If you want to be able to perform friendly finds on any scope produced by a
+model, you can include the FriendlyId::Finders module in the model's relation
+class:
+
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      relation.class.send(:include, FriendlyId::Finders)
+
+      scope :active, -> {where(:active => true)}
+
+      friendly_id :name, :use => :slugged
+    end
+
+    Restaurant.find('plaza-diner')         #=> works
+    Restaurant.active.find('plaza-diner')  #=> also works
+
+Note that doing this is a bit of a hack and although it should work for most
+applications, it is not recommended.
 
 
 ## Slugged Models
