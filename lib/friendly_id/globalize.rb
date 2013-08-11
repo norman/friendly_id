@@ -64,20 +64,8 @@ current locale:
   module Globalize
 
     def self.included(model_class)
-      model_class.friendly_id_config.instance_eval do
-        self.class.send :include, Configuration
-        self.slug_generator_class     ||= SlugGenerator
-        defaults[:slug_column]        ||= 'slug'
-        defaults[:sequence_separator] ||= '-'
-      end
-      model_class.before_validation :set_globalized_slug
-
-      model_class.class_eval do
-        # Check if slug field is enabled to be translated with Globalize
-        unless respond_to?('translated_attribute_names') || translated_attribute_names.exclude?(friendly_id_config.query_field.to_sym)
-          puts "\n[FriendlyId] You need to translate '#{friendly_id_config.query_field}' field with Globalize (add 'translates :#{friendly_id_config.query_field}' in your model '#{self.class.name}')\n\n"
-        end
-      end
+      model_class.friendly_id_config.use :slugged
+      advise_against_untranslated_model(model_class)
     end
 
     def should_generate_new_friendly_id?
@@ -85,7 +73,7 @@ current locale:
         !send(friendly_id_config.base).nil?
     end
 
-    def set_globalized_slug(normalized_slug = nil)
+    def set_slug(normalized_slug = nil)
       ::Globalize.with_locale(::Globalize.locale) do
         if should_generate_new_friendly_id?
           candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
@@ -94,34 +82,14 @@ current locale:
         end
       end
     end
-    private :set_globalized_slug
 
-    # This module adds the `:slug_column`, and `:sequence_separator`, and
-    # `:slug_generator_class` configuration options to
-    # {FriendlyId::Configuration FriendlyId::Configuration}.
-    module Configuration
-      attr_writer :slug_column, :sequence_separator
-      attr_accessor :slug_generator_class
-
-      # Makes FriendlyId use the slug column for querying.
-      # @return String The slug column.
-      def query_field
-        slug_column
-      end
-
-      # The string used to separate a slug base from a numeric sequence.
-      #
-      # You can change the default separator by setting the
-      # {FriendlyId::Slugged::Configuration#sequence_separator
-      # sequence_separator} configuration option.
-      # @return String The sequence separator string. Defaults to "`-`".
-      def sequence_separator
-        @sequence_separator or defaults[:sequence_separator]
-      end
-
-      # The column that will be used to store the generated slug.
-      def slug_column
-        @slug_column or defaults[:slug_column]
+    private
+    def self.advise_against_untranslated_model(model)
+      field = model.friendly_id_config.query_field
+      unless model.respond_to?('translated_attribute_names') ||
+             model.translated_attribute_names.exclude?(field.to_sym)
+        puts "\n[FriendlyId] You need to translate the '#{field}' field with " \
+          "Globalize (add 'translates :#{field}' in your model '#{model.name}')\n\n"
       end
     end
   end
