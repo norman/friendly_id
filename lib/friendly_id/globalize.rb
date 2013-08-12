@@ -63,9 +63,16 @@ current locale:
 =end
   module Globalize
 
-    def self.included(model_class)
-      model_class.friendly_id_config.use :slugged
-      advise_against_untranslated_model(model_class)
+    class << self
+
+      def setup(model_class)
+        model_class.friendly_id_config.use :slugged
+      end
+
+      def included(model_class)
+        advise_against_untranslated_model(model_class)
+      end
+
     end
 
     def should_generate_new_friendly_id?
@@ -74,13 +81,7 @@ current locale:
     end
 
     def set_slug(normalized_slug = nil)
-      ::Globalize.with_locale(::Globalize.locale) do
-        if should_generate_new_friendly_id?
-          candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
-          slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
-          send "#{friendly_id_config.slug_column}=", slug
-        end
-      end
+      ::Globalize.with_locale(::Globalize.locale) { super }
     end
 
     private
@@ -88,7 +89,7 @@ current locale:
       field = model.friendly_id_config.query_field
       unless model.respond_to?('translated_attribute_names') ||
              model.translated_attribute_names.exclude?(field.to_sym)
-        puts "\n[FriendlyId] You need to translate the '#{field}' field with " \
+        raise "\n[FriendlyId] You need to translate the '#{field}' field with " \
           "Globalize (add 'translates :#{field}' in your model '#{model.name}')\n\n"
       end
     end
