@@ -82,7 +82,6 @@ current locale:
         end
       end
       private :advise_against_untranslated_model
-
     end
 
     def set_friendly_id(text, locale = nil)
@@ -92,8 +91,7 @@ current locale:
     end
 
     def should_generate_new_friendly_id?
-      translation_for(::Globalize.locale).send(friendly_id_config.slug_column).nil? &&
-        !send(friendly_id_config.base).nil?
+      translation_for(::Globalize.locale).send(friendly_id_config.slug_column).nil?
     end
 
     def set_slug(normalized_slug = nil)
