@@ -15,6 +15,13 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     I18n.locale = :en
   end
 
+  test 'should have a value for friendly_id after creation' do
+    transaction do
+      article = I18n.with_locale(:de) { TranslatedArticle.create!(:title => 'Der Herbst des Einsamen') }
+      refute_nil article.friendly_id
+    end
+  end
+
   test "should find slug in current locale if locale is set, otherwise in default locale" do
     transaction do
       I18n.default_locale = :en
