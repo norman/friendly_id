@@ -73,6 +73,16 @@ current locale:
         advise_against_untranslated_model(model_class)
       end
 
+      def advise_against_untranslated_model(model)
+        field = model.friendly_id_config.query_field
+        unless model.respond_to?('translated_attribute_names') ||
+               model.translated_attribute_names.exclude?(field.to_sym)
+          raise "\n[FriendlyId] You need to translate the '#{field}' field with " \
+            "Globalize (add 'translates :#{field}' in your model '#{model.name}')\n\n"
+        end
+      end
+      private :advise_against_untranslated_model
+
     end
 
     def should_generate_new_friendly_id?
@@ -82,16 +92,6 @@ current locale:
 
     def set_slug(normalized_slug = nil)
       ::Globalize.with_locale(::Globalize.locale) { super }
-    end
-
-    private
-    def self.advise_against_untranslated_model(model)
-      field = model.friendly_id_config.query_field
-      unless model.respond_to?('translated_attribute_names') ||
-             model.translated_attribute_names.exclude?(field.to_sym)
-        raise "\n[FriendlyId] You need to translate the '#{field}' field with " \
-          "Globalize (add 'translates :#{field}' in your model '#{model.name}')\n\n"
-      end
     end
   end
 end
