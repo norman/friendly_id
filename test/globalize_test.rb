@@ -22,16 +22,23 @@ class GlobalizeTest < MiniTest::Unit::TestCase
     end
   end
 
+  test 'should allow nil friendly_ids' do
+    transaction do
+      article = I18n.with_locale(:de) { TranslatedArticle.create!(:title => nil) }
+      assert_nil article.reload.friendly_id
+    end
+  end
+
   test "should find slug in current locale if locale is set, otherwise in default locale" do
     transaction do
       I18n.default_locale = :en
       article_en = I18n.with_locale(:en) { TranslatedArticle.create!(:title => 'a title') }
       article_de = I18n.with_locale(:de) { TranslatedArticle.create!(:title => 'titel') }
 
-      I18n.with_locale(:de) {
+      I18n.with_locale(:de) do
         assert_equal TranslatedArticle.friendly.find("titel"), article_de
         assert_equal TranslatedArticle.friendly.find("a-title"), article_en
-      }
+      end
     end
   end
 
