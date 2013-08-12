@@ -1,6 +1,6 @@
 # encoding: utf-8
-
 require "helper"
+require 'globalize3'
 
 class TranslatedArticle < ActiveRecord::Base
   translates :slug, :title
@@ -22,8 +22,8 @@ class GlobalizeTest < MiniTest::Unit::TestCase
       article_de = I18n.with_locale(:de) { TranslatedArticle.create(:title => 'titel') }
 
       I18n.with_locale(:de) {
-        assert_equal TranslatedArticle.find("titel"), article_de
-        assert_equal TranslatedArticle.find("a-title"), article_en
+        assert_equal TranslatedArticle.friendly.find("titel"), article_de
+        assert_equal TranslatedArticle.friendly.find("a-title"), article_en
       }
     end
   end
@@ -33,9 +33,9 @@ class GlobalizeTest < MiniTest::Unit::TestCase
       article = TranslatedArticle.create!(:title => "War and Peace")
       article.set_friendly_id("Guerra y paz", :es)
       article.save!
-      article = TranslatedArticle.find('war-and-peace')
-      I18n.with_locale(:es) { assert_equal "guerra-y-paz", article.friendly_id }
-      I18n.with_locale(:en) { assert_equal "war-and-peace", article.friendly_id }
+      TranslatedArticle.friendly.find('war-and-peace')
+      I18n.with_locale(:es) { assert_equal "guerra-y-paz", found_article.friendly_id }
+      I18n.with_locale(:en) { assert_equal "war-and-peace", found_article.friendly_id }
     end
   end
 
@@ -46,12 +46,11 @@ class GlobalizeTest < MiniTest::Unit::TestCase
       I18n.with_locale(:en) do
         article = TranslatedArticle.create(:title => 'a title')
         Globalize.with_locale(:ja) { article.update_attributes(:title => 'タイトル') }
-        article_by_friendly_id = TranslatedArticle.find("a-title")
+        article_by_friendly_id = TranslatedArticle.friendly.find("a-title")
         article.translations.each do |translation|
           assert_includes article_by_friendly_id.translations, translation
         end
       end
     end
   end
-
 end

@@ -74,7 +74,7 @@ module FriendlyId
         end
 
         def scoped_tables
-          ["restaurants"]
+          %w[restaurants]
         end
 
         def simple_tables
