@@ -191,7 +191,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       include Model
     end
 
-    # Return a scope that includes the friendly finders.
+    # Returns a scope that includes the friendly finders.
     # @see FriendlyId::Finders
     def friendly
       # Guess what? This causes Rails to invoke `extend` on the scope, which has

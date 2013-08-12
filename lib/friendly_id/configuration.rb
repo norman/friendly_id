@@ -67,7 +67,7 @@ module FriendlyId
       end
     end
 
-    # Returns whether the given module is in use
+    # Returns whether the given module is in use.
     def uses?(mod)
       @model_class < get_module(mod)
     end
