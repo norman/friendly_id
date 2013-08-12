@@ -76,9 +76,6 @@ end
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
 
-* The Globalize module has been removed and will be released as its own gem.
-  Note that it has not yet been developed.
-
 * The default sequence separator is now `-` rather than `--`.
 
 * Slugs are no longer regenerated when a record is saved. If you want to regenerate
