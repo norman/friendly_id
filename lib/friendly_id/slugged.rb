@@ -162,12 +162,8 @@ whether for a single slug or for slug candidates.
 
 #### Deciding When to Generate New Slugs
 
-Previous versions of FriendlyId provided a method named
-`should_generate_new_friendly_id?` which you could override to control when new
-slugs were generated.
-
 As of FriendlyId 5.0, slugs are only generated when the `slug` field is nil. If
-you want a slug to be regenerated, you must explicity set the field to nil:
+you want a slug to be regenerated,set the slug field to nil:
 
     restaurant.friendly_id # joes-diner
     restaurant.name = "The Plaza Diner"
@@ -177,6 +173,18 @@ you want a slug to be regenerated, you must explicity set the field to nil:
     restaurant.save!
     restaurant.friendly_id # the-plaza-diner
 
+You can also override the
+{FriendlyId::Slugged#should_generate_new_friendly_id?} method, which lets you
+control exactly when new friendly ids are set:
+
+    class Post < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :title, :use => :slugged
+
+      def should_generate_new_friendly_id?
+        title_changed?
+      end
+    end
 
 #### Locale-specific Transliterations
 
