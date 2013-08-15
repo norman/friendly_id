@@ -43,10 +43,15 @@ with 4.x.
 
 Here's a summary of the most important changes:
 
-* FriendlyId no longer overrides `find`. If you want to do friendly finds, you
-  must do `Model.friendly.find` rather than `Model.find`. You can however extend
-  FriendlyId::Finders in your model to restore some of this functionality; see
-  the API docs for that module for more details.
+* FriendlyId no longer overrides `find` by default. If you want to do friendly finds,
+  you must do `Model.friendly.find` rather than `Model.find`. You can however easily
+  restore FriendlyId 4-style finders by using the `:finders` addon:
+
+```ruby
+friendly_id :foo, use: :slugged # you must do MyClass.friendly.find('bar')
+# or...
+friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find('bar')
+```
 
 * Version 5.0 offers a new "candidates" functionality which makes it easy to
   set up a list of alternate slugs that can be used to uniquely distinguish
@@ -71,7 +76,7 @@ end
 ```
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
-  sequence to differentiate conflicting slug, but rather a UUID (e.g. something 
+  sequence to differentiate conflicting slug, but rather a UUID (e.g. something
   like `2bc08962-b3dd-4f29-b2e6-244710c86106`). This makes the
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
