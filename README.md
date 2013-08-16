@@ -1,4 +1,4 @@
-# FriendlyId
+[![Build Status](https://travis-ci.org/norman/friendly_id.png)](https://travis-ci.org/norman/friendly_id)
 
 **VERSION NOTE**
 
@@ -11,7 +11,9 @@ If you wish to use this gem with Rails 3.1 or 3.2 you need to use FriendlyId ver
 Please see [4.0-stable
 branch](https://github.com/norman/friendly_id/tree/4.0-stable).
 
-[![Build Status](https://travis-ci.org/norman/friendly_id.png)](https://travis-ci.org/norman/friendly_id)
+# FriendlyId
+
+<em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md).</em>
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
