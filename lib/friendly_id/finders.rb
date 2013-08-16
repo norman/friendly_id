@@ -51,8 +51,12 @@ in your controllers to use the `friendly` scope. For example:
     end
 =end
   module Finders
-    def self.included(base_class)
-      base_class.send(:relation).class.send(:include, FriendlyId::FinderMethods)
+    def self.included(model_class)
+      model_class.send(:relation).class.send(:include, FriendlyId::FinderMethods)
+
+      if model_class.friendly_id_config.uses? :history
+        model_class.send(:relation).class.send(:include, FriendlyId::History::HistoryFinderMethods)
+      end
     end
   end
 end
