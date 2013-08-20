@@ -27,16 +27,16 @@ FriendlyId is compatible with Active Record **3.0** and higher.
 
 FriendlyId 4.x introduces many changes incompatible with 3.x. If you're
 upgrading, please [read the
-docs](http://rubydoc.info/github/FriendlyId/friendly_id/4.0-stable/file/WhatsNew.md) to see what's
+docs](http://rubydoc.info/github/norman/friendly_id/4.0-stable/file/WhatsNew.md) to see what's
 new.
 
 ## Docs
 
 The current docs can always be found
-[here](http://rubydoc.info/github/FriendlyId/friendly_id/4.0-stable/frames).
+[here](http://rubydoc.info/github/norman/friendly_id/4.0-stable/frames).
 
 The best place to start is with the
-[Guide](http://rubydoc.info/github/FriendlyId/friendly_id/4.0-stable/file/Guide.rdoc),
+[Guide](http://rubydoc.info/github/norman/friendly_id/4.0-stable/file/Guide.rdoc),
 which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid).

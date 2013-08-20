@@ -114,9 +114,8 @@ store them in a field in your model. By default, this field must be named
 +:slug+, though you may change this using the
 {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
 option. You should add an index to this column, and in most cases, make it
-unique. Do not make the column unique in case you wish to scope the slug
-(more on this later). You may also wish to constrain it to NOT NULL, but this
-depends on your app's behavior and requirements.
+unique. You may also wish to constrain it to NOT NULL, but this depends on your
+app's behavior and requirements.
 
 === Example Setup
 
@@ -357,8 +356,27 @@ Without :scoped in this case, one of the restaurants would have the slug
 The value for the +:scope+ option can be the name of a +belongs_to+ relation, or
 a column.
 
-Please do note that you must drop the uniqueness constraint on the slug's
-column in the database when you're scoping the slug.
+Additionally, the +:scope+ option can receive an array of scope values:
+
+    class Cuisine < ActiveRecord::Base
+      extend FriendlyId
+      has_many :restaurants
+      friendly_id :name, :use => :slugged
+    end
+
+    class City < ActiveRecord::Base
+      extend FriendlyId
+      has_many :restaurants
+      friendly_id :name, :use => :slugged
+    end
+
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      belongs_to :city
+      friendly_id :name, :use => :scoped, :scope => [:city, :cuisine]
+    end
+
+All supplied values will be used to determine scope.
 
 === Finding Records by Friendly ID
 
@@ -467,7 +485,7 @@ If you don't pass in a locale argument, FriendlyId::SimpleI18n will just use the
 current locale:
 
   I18n.with_locale(:es) do
-    post.set_friendly_id("la-guerra-de-las-galaxas")
+    post.set_friendly_id("La guerra de las galaxas")
   end
 
 
@@ -499,12 +517,15 @@ Finds will take the current locale into consideration:
   I18n.locale = :en
   Post.find("star-wars")
 
+Additionally, finds will fall back to the default locale:
+
+  I18n.locale = :it
+  Post.find("star-wars")
+
 To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's +with_locale+ method:
 
-  I18n.with_locale(:it) do
-    Post.find("guerre-stellari")
-  end
+  I18n.with_locale(:it) { Post.find("guerre-stellari") }
 
 === Creating Records
 
@@ -512,12 +533,17 @@ When new records are created, the slug is generated for the current locale only.
 
 === Translating Slugs
 
-To translate an existing record's friendly_id, simply change the locale and
-assign a value to the +slug+ field:
+To translate an existing record's friendly_id, use
+{FriendlyId::Globalize::Model#set_friendly_id}. This will ensure that the slug
+you add is properly escaped, transliterated and sequenced:
 
-  I18n.with_locale(:it) do
-    post.slug = "guerre-stellari"
-  end
+  post = Post.create :name => "Star Wars"
+  post.set_friendly_id("Guerre stellari", :it)
+
+If you don't pass in a locale argument, FriendlyId::Globalize will just use the
+current locale:
+
+  I18n.with_locale(:it) { post.set_friendly_id("Guerre stellari") }
 
 
 == Reserved Words
@@ -548,6 +574,6 @@ For example:
     after_validation :move_friendly_id_error_to_name
 
     def move_friendly_id_error_to_name
-      errors.messages[:name] = errors.messages.delete(:friendly_id)
+      errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
     end
   end

@@ -6,6 +6,11 @@ suggestions, ideas and improvements to FriendlyId.
 * Table of Contents
 {:toc}
 
+## 4.0.10.1 (2013-08-20)
+
+* Update dependencies in gemspec to avoid using with Active Record 4.
+* Fixed links in docs.
+
 ## 4.0.10 (2013-08-10)
 
 * Fixed table prefixes/suffixes being ignored (Jesse Farless)
