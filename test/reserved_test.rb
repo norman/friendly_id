@@ -6,7 +6,7 @@ class ReservedTest < MiniTest::Unit::TestCase
 
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :name
+    friendly_id :name, :use => [:slugged, :reserved], :reserved_words => %w(new edit)
 
     after_validation :move_friendly_id_error_to_name
 
@@ -19,8 +19,8 @@ class ReservedTest < MiniTest::Unit::TestCase
     Journalist
   end
 
-  test "should reserve 'new' and 'edit' by default" do
-    %w(new edit).each do |word|
+  test "should reserve words" do
+    %w(new edit NEW Edit).each do |word|
       transaction do
         assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
       end

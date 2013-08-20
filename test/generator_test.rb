@@ -17,4 +17,13 @@ class FriendlyIdGeneratorTest < Rails::Generators::TestCase
       FileUtils.rm_rf self.destination_root
     end
   end
+
+  test "should generate an initializer" do
+    begin
+      run_generator
+      assert_file "config/initializers/friendly_id.rb"
+    ensure
+      FileUtils.rm_rf self.destination_root
+    end
+  end
 end

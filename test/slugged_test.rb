@@ -29,14 +29,6 @@ class SluggedTest < MiniTest::Unit::TestCase
     Journalist
   end
 
-  test "should not allow reserved words in resulting slug" do
-    ["new", "New", "NEW"].each do |word|
-      transaction do
-        assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
-      end
-    end
-  end
-
   test "should allow validations on the slug" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "articles"
