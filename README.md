@@ -31,7 +31,8 @@ instead of:
 ## FriendlyId Features
 
 FriendlyId offers many advanced features, including: slug history and
-versioning, i18n, scoped slugs, reserved words, and custom slug generators.
+versioning, i18n, Globalize support, scoped slugs, reserved words, and custom
+slug generators.
 
 Note: FriendlyId 5.0 is compatible with Active Record **4.0** and higher only.
 For Rails 3.x, please use FriendlyId 4.x.

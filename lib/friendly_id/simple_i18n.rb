@@ -17,7 +17,7 @@ must also include the locale in its name.
 
 This module is most suitable to applications that need to support few locales.
 If you need to support two or more locales, you may wish to use the
-friendly_id_globalize gem instead.
+{FriendlyId::Globalize Globalize} module instead.
 
 ### Example migration
 
@@ -86,7 +86,7 @@ current locale:
     module Model
       def set_friendly_id(text, locale = nil)
         I18n.with_locale(locale || I18n.locale) do
-          set_slug(normalize_friendly_id(text))
+          set_slug normalize_friendly_id(text)
         end
       end
 

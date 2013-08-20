@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version           = FriendlyId::VERSION
   s.authors           = ["Norman Clarke", "Philip Arndt"]
   s.email             = ["norman@njclarke.com", "p@arndt.io"]
-  s.homepage          = "http://github.com/FriendlyId/friendly_id"
+  s.homepage          = "http://github.com/norman/friendly_id"
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.rubyforge_project = "friendly_id"
   s.files             = `git ls-files`.split("\n")
@@ -26,10 +26,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'redcarpet'
+  s.add_development_dependency "globalize3"
 
   s.description = <<-EOM
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
-Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
-strings as if they were numeric ids for Active Record models.
+Active Record. It lets you create pretty URLs and work with human-friendly
+strings as if they were numeric ids.
 EOM
 end
