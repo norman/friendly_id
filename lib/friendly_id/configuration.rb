@@ -3,29 +3,7 @@ module FriendlyId
   # this object.
   class Configuration
 
-    # The base column or method used by FriendlyId as the basis of a friendly id
-    # or slug.
-    #
-    # For models that don't use FriendlyId::Slugged, the base is the column that
-    # is used as the FriendlyId directly. For models using FriendlyId::Slugged,
-    # the base is a column or method whose value is used as the basis of the
-    # slug.
-    #
-    # For example, if you have a model representing blog posts and that uses
-    # slugs, you likely will want to use the "title" attribute as the base, and
-    # FriendlyId will take care of transforming the human-readable title into
-    # something suitable for use in a URL.
-    #
-    # A symbol referencing a column or method in the model. This
-    # value is usually set by passing it as the first argument to
-    # {FriendlyId::Base#friendly_id friendly_id}:
-    #
-    # @example
-    #   class Book < ActiveRecord::Base
-    #     extend FriendlyId
-    #     friendly_id :name
-    #   end
-    attr_accessor :base
+    attr_writer :base
 
     # The default configuration options.
     attr_reader :defaults
@@ -44,10 +22,10 @@ module FriendlyId
       set values
     end
 
-    # Lets you specify the modules to use with FriendlyId.
+    # Lets you specify the addon modules to use with FriendlyId.
     #
     # This method is invoked by {FriendlyId::Base#friendly_id friendly_id} when
-    # passing the +:use+ option, or when using {FriendlyId::Base#friendly_id
+    # passing the `:use` option, or when using {FriendlyId::Base#friendly_id
     # friendly_id} with a block.
     #
     # @example
@@ -55,10 +33,11 @@ module FriendlyId
     #     extend FriendlyId
     #     friendly_id :name, :use => :slugged
     #   end
+    #
     # @param [#to_s,Module] modules Arguments should be Modules, or symbols or
-    #   strings that correspond with the name of a module inside the FriendlyId
-    #   namespace. By default FriendlyId provides +:slugged+, +:history+,
-    #   +:simple_i18n+, and +:scoped+.
+    #   strings that correspond with the name of an addon to use with FriendlyId.
+    #   By default FriendlyId provides `:slugged`, `:history`, `:simple_i18n`,
+    #   and `:scoped`.
     def use(*modules)
       modules.to_a.flatten.compact.map do |object|
         mod = get_module(object)
@@ -79,6 +58,33 @@ module FriendlyId
     # @return String
     def query_field
       base.to_s
+    end
+
+    # The base column or method used by FriendlyId as the basis of a friendly id
+    # or slug.
+    #
+    # For models that don't use {FriendlyId::Slugged}, this is the column that
+    # is used to store the friendly id. For models using {FriendlyId::Slugged},
+    # the base is a column or method whose value is used as the basis of the
+    # slug.
+    #
+    # For example, if you have a model representing blog posts and that uses
+    # slugs, you likely will want to use the "title" attribute as the base, and
+    # FriendlyId will take care of transforming the human-readable title into
+    # something suitable for use in a URL.
+    #
+    # If you pass an argument, it will be used as the base. Otherwise the current
+    # value is returned.
+    #
+    # @param value A symbol referencing a column or method in the model. This
+    #   value is usually set by passing it as the first argument to
+    #   {FriendlyId::Base#friendly_id friendly_id}.
+    def base(*value)
+      if value.empty?
+        @base
+      else
+        self.base = value.first
+      end
     end
 
     private

@@ -3,6 +3,10 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.beta4 (NOT RELEASED YET)
+
+* Allow assignment from {FriendlyId::Configuration#base}.
+
 ## 5.0.0.beta3 (2013-08-20)
 
 * Update gemspec to ensure FriendlyId 5.0 is only used with AR 4.0.x.

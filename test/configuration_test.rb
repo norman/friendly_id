@@ -45,4 +45,20 @@ class ConfigurationTest < MiniTest::Unit::TestCase
     assert @model_class < my_module
   end
 
+  test "#base should optionally set a value" do
+    config = FriendlyId::Configuration.new @model_class
+    assert_nil config.base
+    config.base = 'foo'
+    assert_equal 'foo', config.base
+  end
+
+  test "#base can set the value to nil" do
+    config = FriendlyId::Configuration.new @model_class
+    config.base 'foo'
+    config.base nil
+    assert_nil config.base
+
+  end
+
+
 end
