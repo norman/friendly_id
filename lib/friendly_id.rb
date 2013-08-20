@@ -96,7 +96,7 @@ module FriendlyId
   #
   # @example
   #   FriendlyId.defaults do |config|
-  #     config.base = :name
+  #     config.base :name
   #     config.use :slugged
   #   end
   def self.defaults(&block)

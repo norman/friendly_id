@@ -55,10 +55,10 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Configure FriendlyId's behavior in a model.
     #
-    #   class Post < ActiveRecord::Base
-    #     extend FriendlyId
-    #     friendly_id :title, :use => :slugged
-    #   end
+    #     class Post < ActiveRecord::Base
+    #       extend FriendlyId
+    #       friendly_id :title, :use => :slugged
+    #     end
     #
     # When given the optional block, this method will yield the class's instance
     # of {FriendlyId::Configuration} to the block before evaluating other
@@ -67,36 +67,36 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # multiple models, while being able to override the values it sets. Here is
     # a contrived example:
     #
-    #   $friendly_id_config_proc = Proc.new do |config|
-    #     config.base = :name
-    #     config.use :slugged
-    #   end
+    #     $friendly_id_config_proc = Proc.new do |config|
+    #       config.base = :name
+    #       config.use :slugged
+    #     end
     #
-    #   class Foo < ActiveRecord::Base
-    #     extend FriendlyId
-    #     friendly_id &$friendly_id_config_proc
-    #   end
+    #     class Foo < ActiveRecord::Base
+    #       extend FriendlyId
+    #       friendly_id &$friendly_id_config_proc
+    #     end
     #
-    #   class Bar < ActiveRecord::Base
-    #     extend FriendlyId
-    #     friendly_id :title, &$friendly_id_config_proc
-    #   end
+    #     class Bar < ActiveRecord::Base
+    #       extend FriendlyId
+    #       friendly_id :title, &$friendly_id_config_proc
+    #     end
     #
     # However, it's usually better to use {FriendlyId.defaults} for this:
     #
-    #   FriendlyId.defaults do |config|
-    #     config.base = :name
-    #     config.use :slugged
-    #   end
+    #     FriendlyId.defaults do |config|
+    #       config.base = :name
+    #       config.use :slugged
+    #     end
     #
-    #   class Foo < ActiveRecord::Base
-    #     extend FriendlyId
-    #   end
+    #     class Foo < ActiveRecord::Base
+    #       extend FriendlyId
+    #     end
     #
-    #   class Bar < ActiveRecord::Base
-    #     extend FriendlyId
-    #     friendly_id :title
-    #   end
+    #     class Bar < ActiveRecord::Base
+    #       extend FriendlyId
+    #       friendly_id :title
+    #     end
     #
     # In general you should use the block syntax either because of your personal
     # aesthetic preference, or because you need to share some functionality
@@ -114,21 +114,21 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # modules into your class, and these modules in turn may add required
     # configuration options to the `@friendly_id_configuraton`'s class:
     #
-    #   class Person < ActiveRecord::Base
-    #     friendly_id do |config|
-    #       # This will work
-    #       config.use :slugged
-    #       config.sequence_separator = ":"
+    #     class Person < ActiveRecord::Base
+    #       friendly_id do |config|
+    #         # This will work
+    #         config.use :slugged
+    #         config.sequence_separator = ":"
+    #       end
     #     end
-    #   end
     #
-    #   class Person < ActiveRecord::Base
-    #     friendly_id do |config|
-    #       # This will fail
-    #       config.sequence_separator = ":"
-    #       config.use :slugged
+    #     class Person < ActiveRecord::Base
+    #       friendly_id do |config|
+    #         # This will fail
+    #         config.sequence_separator = ":"
+    #         config.use :slugged
+    #       end
     #     end
-    #   end
     #
     # ### Including Your Own Modules
     #
@@ -136,21 +136,21 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # can be a convenient place to set up behavior common to all classes using
     # FriendlyId. You can include any module, or more conveniently, define one
     # on-the-fly. For example, let's say you want to make
-    # Babosa[http://github.com/norman/babosa] the default slugging library in
+    # [Babosa](http://github.com/norman/babosa) the default slugging library in
     # place of Active Support, and transliterate all slugs from Russian Cyrillic
     # to ASCII:
     #
-    #   require "babosa"
+    #     require "babosa"
     #
-    #   FriendlyId.defaults do |config|
-    #     config.base = :name
-    #     config.use :slugged
-    #     config.use Module.new {
-    #       def normalize_friendly_id(text)
-    #         text.to_slug.normalize(:transliterations => [:russian, :latin])
-    #       end
-    #     }
-    #   end
+    #     FriendlyId.defaults do |config|
+    #       config.base = :name
+    #       config.use :slugged
+    #       config.use Module.new {
+    #         def normalize_friendly_id(text)
+    #           text.to_slug.normalize! :transliterations => [:russian, :latin]
+    #         end
+    #       }
+    #     end
     #
     #
     # @option options [Symbol,Module] :use The addon or name of an addon to use.
