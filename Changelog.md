@@ -15,6 +15,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Support for Globalize has been removed until Globalize supports Rails 4.
 * Removed upport for Ruby < 1.9.3 and Rails < 4.0.
 
+## 4.0.10.1 (2013-08-20)
+
+* Update dependencies in gemspec to avoid using with Active Record 4.
+* Fixed links in docs.
 
 ## 4.0.10 (2013-08-10)
 
