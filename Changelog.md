@@ -3,6 +3,14 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.beta3 (2013-08-20)
+
+* Update gemspec to ensure FriendlyId 5.0 is only used with AR 4.0.x.
+
+## 5.0.0.beta2 (2013-08-16)
+
+* Add "finders" module to easily restore FriendlyId 4.0 finder behavior.
+
 ## 5.0.0.beta1 (2013-08-10)
 
 * Support for Rails 4.
