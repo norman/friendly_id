@@ -67,16 +67,20 @@ method.
           :class_name => Slug.to_s
         }
 
+        if model_class.friendly_id_config.uses? :finders
+          model_class.send(:relation).class.send(:include, HistoryFinderMethods)
+        end
+
         after_save :create_slug
 
         def self.friendly
-          all.extending(HistoryFinders)
+          all.extending(HistoryFinderMethods)
         end
       end
     end
 
-    module HistoryFinders
-      include Finders
+    module HistoryFinderMethods
+      include FinderMethods
 
       private
 

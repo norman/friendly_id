@@ -3,6 +3,14 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.beta3 (2013-08-20)
+
+* Update gemspec to ensure FriendlyId 5.0 is only used with AR 4.0.x.
+
+## 5.0.0.beta2 (2013-08-16)
+
+* Add "finders" module to easily restore FriendlyId 4.0 finder behavior.
+
 ## 5.0.0.beta1 (2013-08-10)
 
 * Support for Rails 4.
@@ -15,6 +23,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Support for Globalize has been removed until Globalize supports Rails 4.
 * Removed upport for Ruby < 1.9.3 and Rails < 4.0.
 
+## 4.0.10.1 (2013-08-20)
+
+* Update dependencies in gemspec to avoid using with Active Record 4.
+* Fixed links in docs.
 
 ## 4.0.10 (2013-08-10)
 

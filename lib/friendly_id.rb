@@ -3,7 +3,7 @@ require "thread"
 require "friendly_id/base"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
-require "friendly_id/finders"
+require "friendly_id/finder_methods"
 
 =begin
 
@@ -52,6 +52,7 @@ module FriendlyId
   autoload :Scoped,     "friendly_id/scoped"
   autoload :Slugged,    "friendly_id/slugged"
   autoload :Globalize,  "friendly_id/globalize"
+  autoload :Finders,    "friendly_id/finders"
 
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
   # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id

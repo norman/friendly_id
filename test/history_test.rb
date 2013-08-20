@@ -136,6 +136,37 @@ class HistoryTestWithSti < HistoryTest
   end
 end
 
+class HistoryTestWithFriendlyFinders < HistoryTest
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :finders, :history]
+  end
+
+  class Restaurant < ActiveRecord::Base
+    extend FriendlyId
+    belongs_to :city
+    friendly_id :name, :use => [:slugged, :history, :finders]
+  end
+
+
+  test "should be findable by old slugs" do
+    [Journalist, Restaurant].each do |model_class|
+      with_instance_of(model_class) do |record|
+        old_friendly_id = record.friendly_id
+        record.name = record.name + "b"
+        record.slug = nil
+        record.save!
+        begin
+          assert model_class.find(old_friendly_id)
+          assert model_class.exists?(old_friendly_id), "should exist? by old id"
+        rescue ActiveRecord::RecordNotFound
+          flunk "Could not find record by old id"
+        end
+      end
+    end
+  end
+end
+
 class City < ActiveRecord::Base
   has_many :restaurants
 end

@@ -84,7 +84,7 @@ module FriendlyId
     private
 
     def get_module(object)
-      Module === object ? object : FriendlyId.const_get(object.to_s.classify)
+      Module === object ? object : FriendlyId.const_get(object.to_s.titleize.camelize.gsub(/\s+/, ''))
     end
 
     def set(values)

@@ -193,7 +193,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     end
 
     # Returns a scope that includes the friendly finders.
-    # @see FriendlyId::Finders
+    # @see FriendlyId::FinderMethods
     def friendly
       # Guess what? This causes Rails to invoke `extend` on the scope, which has
       # the well-known effect of blowing away Ruby's method cache. It would be
@@ -204,7 +204,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       # and maintainability. If you'd like to improve the performance, your
       # efforts would be best directed at improving it at the root cause
       # of the problem - in Rails - because it would benefit more people.
-      all.extending(Finders)
+      all.extending(FinderMethods)
     end
 
     # Returns the model class's {FriendlyId::Configuration friendly_id_config}.
