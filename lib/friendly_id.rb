@@ -1,5 +1,4 @@
 # encoding: utf-8
-require "thread"
 require "friendly_id/base"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
@@ -42,8 +41,6 @@ with numeric ids:
 
 =end
 module FriendlyId
-
-  @mutex = Mutex.new
 
   autoload :History,    "friendly_id/history"
   autoload :Slug,       "friendly_id/slug"
@@ -95,7 +92,7 @@ module FriendlyId
 
   # Set global defaults for all models using FriendlyId.
   #
-  # The default defaults are to use the +:reserved+ module and nothing else.
+  # The default defaults are to use the `:reserved` module and nothing else.
   #
   # @example
   #   FriendlyId.defaults do |config|
@@ -103,10 +100,8 @@ module FriendlyId
   #     config.use :slugged
   #   end
   def self.defaults(&block)
-    @mutex.synchronize do
-      @defaults = block if block_given?
-      @defaults ||= lambda {|config| config.use :reserved}
-    end
+    @defaults = block if block_given?
+    @defaults ||= ->(config) {config.use :reserved}
   end
 
   # Set the ActiveRecord table name prefix to friendly_id_
