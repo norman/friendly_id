@@ -68,6 +68,15 @@ class SluggedTest < MiniTest::Unit::TestCase
       refute instance2.valid?
     end
   end
+
+  test 'should allow a record to reuse its own slug' do
+    with_instance_of(model_class) do |record|
+      old_id = record.friendly_id
+      record.slug = nil
+      record.save!
+      assert_equal old_id, record.friendly_id
+    end
+  end
 end
 
 class SlugGeneratorTest < MiniTest::Unit::TestCase
