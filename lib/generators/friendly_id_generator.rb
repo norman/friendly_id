@@ -22,19 +22,19 @@ class FriendlyIdGenerator < ActiveRecord::Generators::Base
 #
 # Use this to set up shared configuration options for your entire application.
 #
+# To learn more, check out the guide:
+#
+# http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md
+
 FriendlyId.defaults do |config|
-  # # FriendlyId Global Config
-  #
-  # To learn more, check out the guide:
-  #
-  # http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md
-  #
   # ## Reserved Words
   #
-  # Some words could conflict with Rails's routes when used as slugs. By default,
-  # forbid "new" and "edit".
+  # Some words could conflict with Rails's routes when used as slugs, or are
+  # undesirable to allow as slugs. Edit this list as needed for your app.
   config.use :reserved
-  config.reserved_words = %w(new edit)
+
+  config.reserved_words = %w(new edit index session login logout users admin
+    stylesheets assets javascripts images)
 
   #  ## Friendly Finders
   #
@@ -47,9 +47,9 @@ FriendlyId.defaults do |config|
   #
   #    MyModel.find('foo')
   #
-  # This is significantly more convenient, but may not be appropriate for
+  # This is significantly more convenient but may not be appropriate for
   # all applications, so you must explicity opt-in to this behavior. You can
-  # also configure it on a per-model basis if you prefer.
+  # always also configure it on a per-model basis if you prefer.
   #
   # config.use :finders
   #
@@ -60,20 +60,21 @@ FriendlyId.defaults do |config|
   #
   # config.use :slugged
   #
-  #  ## Tips and Tricks
+  # By default, FriendlyId's :slugged addon expects the slug column to be named
+  # 'slug', but you can change it if you wish.
+  # config.slug_column = 'slug'
   #
-  # The "use" method will add modules to your models, and can be a useful way
-  # to extend FriendlyId.
+  #
+  #  ## Tips and Tricks
   #
   #  ### Changing when slugs are generated
   #
-  # For example, by here we set up an alternate logic for when to generate new
-  # slugs by overriding FriendlyId's built-in method
-  # `should_generate_new_friendly_id`. By default, slugs are generated only when
-  # the base method returns `nil`, but here we change it to use Active Record's
-  # dirty tracking to determine when to generate the slug. The example assumes
-  # you are using a column "name" as the basis of your slug; if you use this,
-  # make sure you change it to whatever is appropriate for your application.
+  # By default, new slugs are generated only when the slug field is nil, but you
+  # can change this behavior by overriding the `should_generate_new_friendly_id`
+  # method that FriendlyId adds to your model. You can configure this globally by
+  # passing a module to the :use method. It can be a module that you declare
+  # elsewhere in your application, or an anonymous one that you create on-the-fly
+  # like here; it doesn't matter.
   #
   # config.use Model.new {
   #   def should_generate_new_friendly_id?
@@ -82,9 +83,9 @@ FriendlyId.defaults do |config|
   # }
   #
   #
-  # You can also override the built-in slugging method; by default FriendlyId uses
-  # Rails's `parameterize` method, but for Russian slugs that's not usually suffient.
-  # Here we use the Babosa library to transliterate Russian Cyrillic slugs to ASCII:
+  # By default FriendlyId uses Rails's `parameterize` method, but for languages
+  # that don't use the Roman alphabet, that's not usually suffient. Here we use
+  # the Babosa library to transliterate Russian Cyrillic slugs to ASCII:
   #
   # require 'babosa'
   #
