@@ -65,29 +65,33 @@ FriendlyId.defaults do |config|
   # config.slug_column = 'slug'
   #
   #
+  # When FriendlyId can not generate a unique ID from your base method, it appends
+  # a UUID, separated by a single dash. You can configure the character used as the
+  # separator. If you're upgrading from FriendlyId 4, you may wish to replace this
+  # with two dashes.
+  #
+  # config.sequence_separator = '-'
+  #
   #  ## Tips and Tricks
   #
-  #  ### Changing when slugs are generated
+  #  ### Controlling when slugs are generated
   #
-  # By default, new slugs are generated only when the slug field is nil, but you
-  # can change this behavior by overriding the `should_generate_new_friendly_id`
-  # method that FriendlyId adds to your model. You can configure this globally by
-  # passing a module to the :use method. It can be a module that you declare
-  # elsewhere in your application, or an anonymous one that you create on-the-fly
-  # like here; it doesn't matter.
+  # As of FriendlyId 5.0, new slugs are generated only when the slug field is
+  # nil, but you if you're using a column as your base method can change this
+  # behavior by overriding the `should_generate_new_friendly_id` method that
+  # FriendlyId adds to your model. The change below makes FriendlyId 5.0 behave
+  # more like 4.0.
   #
   # config.use Module.new {
   #   def should_generate_new_friendly_id?
-  #     slug.blank? || name_changed?
+  #     slug.blank? || <your_column_name_here>_changed?
   #   end
   # }
   #
-  #
-  # By default FriendlyId uses Rails's `parameterize` method, but for languages
-  # that don't use the Roman alphabet, that's not usually suffient. Here we use
-  # the Babosa library to transliterate Russian Cyrillic slugs to ASCII:
-  #
-  # require 'babosa'
+  # FriendlyId uses Rails's `parameterize` method to generate slugs, but for
+  # languages that don't use the Roman alphabet, that's not usually suffient. Here
+  # we use the Babosa library to transliterate Russian Cyrillic slugs to ASCII. If
+  # you use this, don't forget to add "babosa" to your Gemfile.
   #
   # config.use Module.new {
   #   def normalize_friendly_id(text)

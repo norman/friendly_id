@@ -3,12 +3,14 @@
 **VERSION NOTE**
 
 **Rails 4**:
-Master branch of this repository contains FriendlyId 5 which is compatible with Rails 4.
-This version is in beta and will be released soon.
+
+The master branch of this repository contains FriendlyId 5, which is compatible
+with Rails 4. This version is in beta and will be released soon.
 
 **Rails 3**:
-If you wish to use this gem with Rails 3.1 or 3.2 you need to use FriendlyId version 4, which is the current stable release.
-Please see [4.0-stable
+
+If you wish to use this gem with Rails 3.1 or 3.2 you must use FriendlyId 4,
+which is the current stable release. Please see the [4.0-stable
 branch](https://github.com/norman/friendly_id/tree/4.0-stable).
 
 # FriendlyId
@@ -16,10 +18,10 @@ branch](https://github.com/norman/friendly_id/tree/4.0-stable).
 <em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md).</em>
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
-Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
-strings as if they were numeric ids for Active Record models.
+Active Record. It lets you create pretty URLs and work with human-friendly
+strings as if they were numeric ids.
 
-Using FriendlyId, it's easy to make your application use URLs like:
+With FriendlyId, it's easy to make your application use URLs like:
 
     http://example.com/states/washington
 
@@ -33,49 +35,41 @@ instead of:
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
-Note: FriendlyId 5.0 is compatible with Active Record **4.0** and higher only.
-For Rails 3.x, please use FriendlyId 4.x.
-
-
-## Version 5.x
+### What Changed in Version 5.0
 
 As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
-infer from the version number, FriendlyId 5.0 introduces changes incompatible
-with 4.x.
+infer from the version number, 5.0 introduces changes incompatible with 4.0.
 
-Here's a summary of the most important changes:
+The most important changes are:
 
-* FriendlyId no longer overrides `find` by default. If you want to do friendly finds,
-  you must do `Model.friendly.find` rather than `Model.find`. You can however easily
+* Finders are no longer overridden by default. If you want to do friendly finds,
+  you must do `Model.friendly.find` rather than `Model.find`. You can however
   restore FriendlyId 4-style finders by using the `:finders` addon:
 
-```ruby
-friendly_id :foo, use: :slugged # you must do MyClass.friendly.find('bar')
-# or...
-friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find('bar')
-```
+          friendly_id :foo, use: :slugged # you must do MyClass.friendly.find('bar')
+          # or...
+          friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find('bar')
 
-* Version 5.0 offers a new "candidates" functionality which makes it easy to
-  set up a list of alternate slugs that can be used to uniquely distinguish
-  records, rather than appending a sequence. For example:
 
-```ruby
-class Restaurant < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :slug_candidates, use: :slugged
+* A new "candidates" functionality which makes it easy to set up a list of
+  alternate slugs that can be used to uniquely distinguish records, rather than
+  appending a sequence. For example:
 
-  # Try building a slug based on the following fields in
-  # increasing order of specificity.
-  def slug_candidates
-    [
-      :name,
-      [:name, :city],
-      [:name, :street, :city],
-      [:name, :street_number, :street, :city]
-    ]
-  end
-end
-```
+          class Restaurant < ActiveRecord::Base
+            extend FriendlyId
+            friendly_id :slug_candidates, use: :slugged
+
+            # Try building a slug based on the following fields in
+            # increasing order of specificity.
+            def slug_candidates
+              [
+                :name,
+                [:name, :city],
+                [:name, :street, :city],
+                [:name, :street_number, :street, :city]
+              ]
+            end
+          end
 
 * Now that candidates have been added, FriendlyId no longer uses a numeric
   sequence to differentiate conflicting slug, but rather a UUID (e.g. something
@@ -83,26 +77,56 @@ end
   codebase simpler and more reliable when running concurrently, at the expense
   of uglier ids being generated when there are conflicts.
 
-* The default sequence separator is now `-` rather than `--`.
+* The default sequence separator has been changed from two dashes to one dash.
 
 * Slugs are no longer regenerated when a record is saved. If you want to regenerate
   a slug, you must explicitly set the slug column to nil:
 
-```ruby
-restaurant.friendly_id # joes-diner
-restaurant.name = "The Plaza Diner"
-restaurant.save!
-restaurant.friendly_id # joes-diner
-restaurant.slug = nil
-restaurant.save!
-restaurant.friendly_id # the-plaza-diner
-```
+          restaurant.friendly_id # joes-diner
+          restaurant.name = "The Plaza Diner"
+          restaurant.save!
+          restaurant.friendly_id # joes-diner
+          restaurant.slug = nil
+          restaurant.save!
+          restaurant.friendly_id # the-plaza-diner
 
-* Like Rails 4, FriendlyId now requires Ruby 1.9.3 or higher.
+  You can restore some of the old behavior by overriding the
+  `should_generate_new_friendly_id` method.
+
+* The `friendly_id` Rails generator now generates an initializer showing you
+  how to do some commmon global configuration.
+
+* The `:reserved` module no longer includes any default reserved words.
+  Previously it blocked "edit" and "new" everywhere. The default word list has
+  been moved to `config/initializers/friendly_id.rb` and now includes many more
+  words.
+
+* The `:history` and `:scoped` addons can now be used together.
+
+* Since it now requires Rails 4, FriendlyId also now requires Ruby 1.9.3 or
+  higher.
+
+#### Upgrading from FriendlyId 4.0
+
+Run `rails generate friendly_id --skip-migration` and edit the initializer
+generated in `config/initializers/friendly_id.rb`. This file contains notes
+describing how to restore (or not) some of the defaults from FriendlyId 4.0.
+
+If you want to use the `:history` and `:scoped` addons together, you must add a
+`:scope` column to your friendly_id slugs table and replace the unique index on
+`:slug` and `:sluggable_type` with a unique index on those two columns, plus
+the new `:scope` column.
+
+A migration like this should be sufficient:
+
+    add_column   :friendly_id_slugs, :scope, :string
+    remove_index :friendly_id_slugs, [:slug, :sluggable_type]
+    add_index    :friendly_id_slugs, [:slug, :sluggable_type]
+    add_index    :friendly_id_slugs, [:slug, :sluggable_type, :scope], unique: true
 
 ## Docs
 
-The current docs can always be found
+The most current docs from the master branch can always be found
 [here](http://rubydoc.info/github/norman/friendly_id/master/frames).
 
 The best place to start is with the
@@ -110,7 +134,7 @@ The best place to start is with the
 which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
-which is now somewhat outdated but still mostly relevant.
+which is now somewhat outdated but still relevant.
 
 ## Rails Quickstart
 
