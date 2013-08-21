@@ -76,7 +76,7 @@ FriendlyId.defaults do |config|
   # elsewhere in your application, or an anonymous one that you create on-the-fly
   # like here; it doesn't matter.
   #
-  # config.use Model.new {
+  # config.use Module.new {
   #   def should_generate_new_friendly_id?
   #     slug.blank? || name_changed?
   #   end
@@ -89,7 +89,7 @@ FriendlyId.defaults do |config|
   #
   # require 'babosa'
   #
-  # config.use Model.new {
+  # config.use Module.new {
   #   def normalize_friendly_id(text)
   #     text.to_slug.normalize! :transliterations => [:russian, :latin]
   #   end
