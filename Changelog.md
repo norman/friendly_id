@@ -7,6 +7,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Add an initializer to the generator; move the default reserved words there.
 * Allow assignment from {FriendlyId::Configuration#base}.
+* Fix bug whereby records could not reuse their own slugs.
 
 ## 5.0.0.beta3 (2013-08-20)
 
