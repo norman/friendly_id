@@ -8,7 +8,7 @@ The {FriendlyId::Reserved Reserved} module adds the ability to exlude a list of
 words from use as FriendlyId slugs.
 
 With Ruby on Rails, FriendlyId's generator generates an initializer that
-reserves the words "new" and "edit" using {FriendlyId.defaults
+reserves some words such as "new" and "edit" using {FriendlyId.defaults
 FriendlyId.defaults}.
 
 Note that the error messages for fields will appear on the field
@@ -36,27 +36,16 @@ message to a different field. For example:
     def self.included(model_class)
       model_class.class_eval do
         friendly_id_config.class.send :include, Reserved::Configuration
-        friendly_id_config.defaults[:reserved_words] ||= []
+        validates_exclusion_of :friendly_id, :in => ->(_) {
+          friendly_id_config.reserved_words || []
+        }
       end
     end
 
     # This module adds the `:reserved_words` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
-      attr_writer :reserved_words
-
-      # Overrides {FriendlyId::Configuration#base} to add a validation to the
-      # model class.
-      def base=(base)
-        super
-        reserved_words = model_class.friendly_id_config.reserved_words
-        model_class.validates_exclusion_of :friendly_id, :in => reserved_words
-      end
-
-      # An array of words forbidden as slugs.
-      def reserved_words
-        @reserved_words ||= @defaults[:reserved_words]
-      end
+      attr_accessor :reserved_words
     end
   end
 end
