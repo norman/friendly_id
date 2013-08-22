@@ -50,6 +50,19 @@ module FriendlyId
   autoload :Slugged,    "friendly_id/slugged"
   autoload :Finders,    "friendly_id/finders"
 
+  # Instances of these classes will never be considered a friendly id.
+  # @see FriendlyId::ObjectUtils#friendly_id
+  UNFRIENDLY_CLASSES = [
+    ActiveRecord::Base,
+    Array,
+    FalseClass,
+    Hash,
+    NilClass,
+    Numeric,
+    Symbol,
+    TrueClass
+  ]
+
   # FriendlyId takes advantage of `extended` to do basic model setup, primarily
   # extending {FriendlyId::Base} to add {FriendlyId::Base#friendly_id
   # friendly_id} as a class method.
