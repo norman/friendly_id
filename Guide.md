@@ -1,5 +1,4 @@
 
-
 ## About FriendlyId
 
 FriendlyId is an add-on to Ruby's Active Record that allows you to replace ids
@@ -532,7 +531,7 @@ friendly_id_globalize gem instead.
 Finds will take into consideration the current locale:
 
     I18n.locale = :es
-    Post.find("la-guerra-de-las-galaxas")
+    Post.find("la-guerra-de-las-galaxias")
     I18n.locale = :en
     Post.find("star-wars")
 
@@ -540,7 +539,7 @@ To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's `with_locale` method:
 
     I18n.with_locale(:es) do
-      Post.find("la-guerra-de-las-galaxas")
+      Post.find("la-guerra-de-las-galaxias")
     end
 
 ### Creating Records
@@ -554,30 +553,30 @@ To translate an existing record's friendly_id, use
 you add is properly escaped, transliterated and sequenced:
 
     post = Post.create :name => "Star Wars"
-    post.set_friendly_id("La guerra de las galaxas", :es)
+    post.set_friendly_id("La guerra de las galaxias", :es)
 
 If you don't pass in a locale argument, FriendlyId::SimpleI18n will just use the
 current locale:
 
     I18n.with_locale(:es) do
-      post.set_friendly_id("La guerra de las galaxas")
+      post.set_friendly_id("La guerra de las galaxias")
     end
 
 
 ## Reserved Words
 
-The {FriendlyId::Reserved Reserved} module adds the ability to exlude a list of
+The {FriendlyId::Reserved Reserved} module adds the ability to exclude a list of
 words from use as FriendlyId slugs.
 
 By default, FriendlyId reserves the words "new" and "edit" when this module is
 included. You can configure this globally by using {FriendlyId.defaults
 FriendlyId.defaults}:
 
-  FriendlyId.defaults do |config|
-    config.use :reserved
-    # Reserve words for English and Spanish URLs
-    config.reserved_words = %w(new edit nueva nuevo editar)
-  end
+    FriendlyId.defaults do |config|
+        config.use :reserved
+        # Reserve words for English and Spanish URLs
+        config.reserved_words = %w(new edit nueva nuevo editar)
+    end
 
 Note that the error message will appear on the field `:friendly_id`. If you are
 using Rails's scaffolded form errors display, then it will have no field to
@@ -585,13 +584,13 @@ highlight. If you'd like to change this so that scaffolding works as expected,
 one way to accomplish this is to move the error message to a different field.
 For example:
 
-  class Person < ActiveRecord::Base
-    extend FriendlyId
-    friendly_id :name, use: :slugged
+    class Person < ActiveRecord::Base
+        extend FriendlyId
+        friendly_id :name, use: :slugged
 
-    after_validation :move_friendly_id_error_to_name
+        after_validation :move_friendly_id_error_to_name
 
-    def move_friendly_id_error_to_name
-      errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
+        def move_friendly_id_error_to_name
+            errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
+        end
     end
-  end
