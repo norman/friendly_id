@@ -1,3 +1,4 @@
+-e guide.rb
 --files=Changelog.md,Guide.md
 --private
 --protected

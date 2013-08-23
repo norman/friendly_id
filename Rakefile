@@ -27,7 +27,7 @@ task :gem do
 end
 
 desc "Build YARD documentation"
-task :yard => :guide do
+task :yard do
   puts %x{bundle exec yard}
 end
 
@@ -38,26 +38,7 @@ end
 
 desc "Generate Guide.md"
 task :guide do
-  def read_comments(path)
-    path  = File.expand_path("../#{path}", __FILE__)
-    match = File.read(path).match(/\n=begin(.*)\n=end/m)[1].to_s
-    match.split("\n").reject {|x| x =~ /^@/}.join("\n")
-  end
-
-  buffer = []
-
-  buffer << read_comments("lib/friendly_id.rb")
-  buffer << read_comments("lib/friendly_id/base.rb")
-  buffer << read_comments("lib/friendly_id/finders.rb")
-  buffer << read_comments("lib/friendly_id/slugged.rb")
-  buffer << read_comments("lib/friendly_id/history.rb")
-  buffer << read_comments("lib/friendly_id/scoped.rb")
-  buffer << read_comments("lib/friendly_id/simple_i18n.rb")
-  buffer << read_comments("lib/friendly_id/reserved.rb")
-
-  File.open("Guide.md", "w") do |file|
-    file.write(buffer.join("\n"))
-  end
+  load File.expand_path('../guide.rb', __FILE__)
 end
 
 namespace :test do
