@@ -37,7 +37,7 @@ friendly_id_globalize gem instead.
 Finds will take into consideration the current locale:
 
     I18n.locale = :es
-    Post.find("la-guerra-de-las-galaxas")
+    Post.find("la-guerra-de-las-galaxias")
     I18n.locale = :en
     Post.find("star-wars")
 
@@ -45,7 +45,7 @@ To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's `with_locale` method:
 
     I18n.with_locale(:es) do
-      Post.find("la-guerra-de-las-galaxas")
+      Post.find("la-guerra-de-las-galaxias")
     end
 
 ### Creating Records
@@ -59,13 +59,13 @@ To translate an existing record's friendly_id, use
 you add is properly escaped, transliterated and sequenced:
 
     post = Post.create :name => "Star Wars"
-    post.set_friendly_id("La guerra de las galaxas", :es)
+    post.set_friendly_id("La guerra de las galaxias", :es)
 
 If you don't pass in a locale argument, FriendlyId::SimpleI18n will just use the
 current locale:
 
     I18n.with_locale(:es) do
-      post.set_friendly_id("La guerra de las galaxas")
+      post.set_friendly_id("La guerra de las galaxias")
     end
 =end
   module SimpleI18n
