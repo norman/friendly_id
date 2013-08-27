@@ -21,7 +21,7 @@ end
 task 'doc' => [:master, '4.0-stable'] do
   sh %{git add .}
   sh %{git commit -m 'Regenerated docs'}
-  sh %{git push gh-pages origin/gh-pages}
+  sh %{git push}
 end
 
 task :default => 'doc'
