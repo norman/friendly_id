@@ -7,7 +7,7 @@
 #
 # To learn more, check out the guide:
 #
-# http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md
+# http://norman.github.io/friendly_id/file.Guide.html
 
 FriendlyId.defaults do |config|
   # ## Reserved Words

@@ -11,3 +11,4 @@ coverage
 *.lock
 .rbx
 Guide.md
+.friendly_id

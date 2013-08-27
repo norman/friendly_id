@@ -15,7 +15,7 @@ branch](https://github.com/norman/friendly_id/tree/4.0-stable).
 
 # FriendlyId
 
-<em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md).</em>
+<em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://norman.github.io/friendly_id/file.Guide.html).</em>
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Active Record. It lets you create pretty URLs and work with human-friendly
