@@ -10,3 +10,4 @@ coverage
 *.rbc
 *.lock
 .rbx
+.friendly_id

@@ -35,7 +35,7 @@ EOM
 NOTE: FriendlyId 4.x breaks compatibility with 3.x. If you're upgrading
 from 3.x, please see this document:
 
-http://rubydoc.info/github/norman/friendly_id/master/file/WhatsNew.md
+http://norman.github.io/friendly_id/4.0/file.Guide.html
 
 EOM
 
