@@ -127,7 +127,7 @@ A migration like this should be sufficient:
 ## Docs
 
 The most current docs from the master branch can always be found
-[here](http://rubydoc.info/github/norman/friendly_id/master/frames).
+[here](http://norman.github.io/friendly_id).
 
 Docs for older versions are also available:
 
@@ -135,7 +135,7 @@ Docs for older versions are also available:
 * [3.3](http://norman.github.io/friendly_id/3.3/)
 
 The best place to start is with the
-[Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md),
+[Guide](http://norman.github.io/friendly_id/file.Guide.html),
 which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
