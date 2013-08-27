@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>FriendlyId</h1>
+
+<p>FriendlyId is the &quot;Swiss Army bulldozer&quot; of slugging and permalink plugins for
+Ruby on Rails. It allows you to create pretty URL&#39;s and work with
+human-friendly strings as if they were numeric ids for Active Record models.</p>
+
+<p>Using FriendlyId, it&#39;s easy to make your application use URL&#39;s like:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='id identifier rubyid_washington'>washington</span>
+</code></pre>
+
+<p>instead of:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='int'>4323454</span>
+</code></pre>
+
+<h2>FriendlyId Features</h2>
+
+<p>FriendlyId offers many advanced features, including: slug history and
+versioning, scoped slugs, reserved words, custom slug generators, and
+excellent Unicode support. For complete information on using FriendlyId,
+please see the <a href="https://github.com/norman/friendly_id/blob/3.x/Guide.md">FriendlyId Guide</a></p>
+
+<h2>Compatibility</h2>
+
+<p>FriendlyId 3.3.0 is compatible with Active Record 3.0, 3.1 and 3.2.</p>
+
+<p>If you are still on Rails 2.3, please use FriendlyId 3.2.x.</p>
+
+<h2>Roadmap</h2>
+
+<p>FriendlyId 3.3 is now in <strong>long term maintenance mode.</strong> It will continue to be
+supported and maintained indefinitely, but no new features will be added to it.</p>
+
+<p><a href="https://github.com/norman/friendly_id/tree/4.0.0">FriendlyId 4.0</a> is a
+ground-up rewrite of FriendlyId, and is the project&#39;s future, and will be
+released by September, 2011.</p>
+
+<h2>Docs, Info and Support</h2>
+
+<ul>
+<li><a href="https://github.com/norman/friendly_id/blob/3.x/Guide.md">FriendlyId Guide</a></li>
+<li><a href="http://github.com/norman/friendly_id/">Source Code</a></li>
+<li><a href="http://github.com/norman/friendly_id/issues">Issue Tracker</a></li>
+</ul>
+
+<h2>Rails Quickstart</h2>
+
+<pre class="code ruby"><code class="ruby">gem install friendly_id
+
+rails new my_app
+
+cd my_app
+
+# add to Gemfile
+gem &quot;friendly_id&quot;, &quot;~&gt; 3.3.0&quot;
+
+rails generate friendly_id
+rails generate scaffold user name:string cached_slug:string
+
+rake db:migrate
+
+# edit app/models/user.rb
+class User &lt; ActiveRecord::Base
+  has_friendly_id :name, :use_slug =&gt; true
+end
+
+User.create! :name =&gt; &quot;Joe Schmoe&quot;
+
+rails server
+
+GET http://0.0.0.0:3000/users/joe-schmoe
+</code></pre>
+
+<h2>Sequel and DataMapper, too</h2>
+
+<p><a href="http://github.com/myabc">Alex Coles</a> maintains an implemntation of
+<a href="http://github.com/myabc/friendly_id_datamapper">FriendlyId for DataMapper</a> that supports almost
+all the features of the Active Record version.</p>
+
+<p>Norman Clarke maintains an implementation of
+<a href="http://github.com/norman/friendly_id_sequel">FriendlyId forSequel</a> with some of the features
+of the Active Record version.</p>
+
+<h2>Bugs</h2>
+
+<p>Please report them on the <a href="http://github.com/norman/friendly_id/issues">Github issue tracker</a>
+for this project.</p>
+
+<p>If you have a bug to report, please include the following information:</p>
+
+<ul>
+<li><strong>Version information for FriendlyId, Rails and Ruby.</strong></li>
+<li>Stack trace and error message.</li>
+<li>Any snippets of relevant model, view or controller code that shows how your
+are using FriendlyId.</li>
+</ul>
+
+<p>If you are able to, it helps even more if you can fork FriendlyId on Github,
+and add a test that reproduces the error you are experiencing.</p>
+
+<h2>Credits</h2>
+
+<p>FriendlyId was created by Norman Clarke, Adrian Mugnolo, and Emilio Tagua.</p>
+
+<p>If you like FriendlyId, please recommend us on Working With Rails:</p>
+
+<ul>
+<li><a href="http://bit.ly/recommend-norman">http://bit.ly/recommend-norman</a></li>
+<li><a href="http://bit.ly/recommend-emilio">http://bit.ly/recommend-emilio</a></li>
+<li><a href="http://bit.ly/recommend-adrian">http://bit.ly/recommend-adrian</a></li>
+</ul>
+
+<p>Thanks!</p>
+
+<p>Copyright (c) 2008-2010, released under the MIT license.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:24:44 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>
