@@ -91,7 +91,7 @@ The most important changes are:
           restaurant.friendly_id # the-plaza-diner
 
   You can restore some of the old behavior by overriding the
-  `should_generate_new_friendly_id` method.
+  `should_generate_new_friendly_id?` method.
 
 * The `friendly_id` Rails generator now generates an initializer showing you
   how to do some commmon global configuration.
