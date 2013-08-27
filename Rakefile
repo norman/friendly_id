@@ -91,3 +91,7 @@ namespace :db do
 end
 
 task :doc => :yard
+
+task :docs do
+  sh %{git checkout gh-pages && rake doc && git checkout @{-1}}
+end
