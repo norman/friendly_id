@@ -129,6 +129,11 @@ A migration like this should be sufficient:
 The most current docs from the master branch can always be found
 [here](http://rubydoc.info/github/norman/friendly_id/master/frames).
 
+Docs for older versions are also available:
+
+* [4.0](http://norman.github.io/friendly_id/4.0/)
+* [3.3](http://norman.github.io/friendly_id/3.3/)
+
 The best place to start is with the
 [Guide](http://rubydoc.info/github/norman/friendly_id/master/file/Guide.md),
 which compiles the top-level RDocs into one outlined document.
