@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: Changelog
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: Changelog</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>FriendlyId Changelog</h1>
+
+<p>We would like to think our many <a href="file.Contributors.html" title="contributors">contributors</a> for
+suggestions, ideas and improvements to FriendlyId.</p>
+
+<h2>5.0.0.beta4 (2013-08-21)</h2>
+
+<ul>
+<li>Add an initializer to the generator; move the default reserved words there.</li>
+<li>Allow assignment from <span class='object_link'><a href="FriendlyId/Configuration.html#base-instance_method" title="FriendlyId::Configuration#base (method)">FriendlyId::Configuration#base</a></span>.</li>
+<li>Fix bug whereby records could not reuse their own slugs.</li>
+</ul>
+
+<h2>5.0.0.beta3 (2013-08-20)</h2>
+
+<ul>
+<li>Update gemspec to ensure FriendlyId 5.0 is only used with AR 4.0.x.</li>
+</ul>
+
+<h2>5.0.0.beta2 (2013-08-16)</h2>
+
+<ul>
+<li>Add &quot;finders&quot; module to easily restore FriendlyId 4.0 finder behavior.</li>
+</ul>
+
+<h2>5.0.0.beta1 (2013-08-10)</h2>
+
+<ul>
+<li>Support for Rails 4.</li>
+<li>Made the :scoped and :history modules compatible with each other (Andre Duffeck).</li>
+<li>Removed class-level finders in favor of <code>friendly</code> scope (Norman Clarke).</li>
+<li>Implemented &quot;candidates&quot; support (Norman Clarke).</li>
+<li>Slug &quot;sequences&quot; are now GUIDs rather than numbers (Norman Clarke).</li>
+<li><code>find</code> no longer falls back to super unless id is fully numeric string (Norman Clarke).</li>
+<li>Default sequence separator is now &#39;-&#39; rather than &#39;--&#39;.</li>
+<li>Support for Globalize has been removed until Globalize supports Rails 4.</li>
+<li>Removed upport for Ruby &lt; 1.9.3 and Rails &lt; 4.0.</li>
+</ul>
+
+<h2>4.0.10.1 (2013-08-20)</h2>
+
+<ul>
+<li>Update dependencies in gemspec to avoid using with Active Record 4.</li>
+<li>Fixed links in docs.</li>
+</ul>
+
+<h2>4.0.10 (2013-08-10)</h2>
+
+<ul>
+<li>Fixed table prefixes/suffixes being ignored (Jesse Farless).</li>
+<li>Fixed sequence generation for slugs containing numbers (Adam Carroll).</li>
+</ul>
+
+<h2>4.0.9 (2012-10-31)</h2>
+
+<ul>
+<li>Fixed support for Rails 3.2.9.rc1</li>
+</ul>
+
+<h2>4.0.8 (2012-08-01)</h2>
+
+<ul>
+<li><p>Name internal anonymous class to fix marshall dump/load error (Jess Brown, Philip Arndt and Norman Clarke).</p></li>
+<li><p>Avoid using deprecated <code>update_attribute</code> (Philip Arndt).</p></li>
+<li><p>Added set_friendly_id method to Globalize module (Norman Clarke).</p></li>
+<li><p>autoload FriendlyId::Slug; previously this class was not accessible from
+migrations unless required explicitly, which could cause some queries to
+unexpectedly fail (Norman Clarke).</p></li>
+<li><p>Fix Mocha load order (Mark Turner).</p></li>
+<li><p>Minor doc updates (Rob Yurkowski).</p></li>
+<li><p>Other miscellaneous refactorings and doc updates.</p></li>
+</ul>
+
+<h2>4.0.7 (2012-06-06)</h2>
+
+<ul>
+<li><p>to_param just calls super when no friendly id is present, to keep the model&#39;s
+default behavior. (Andrew White)</p></li>
+<li><p>FriendlyId can now properly sequence slugs that end in numbers even when a
+single dash is used as the separator (Tomás Arribas).</p></li>
+</ul>
+
+<h2>4.0.6 (2012-05-21)</h2>
+
+<ul>
+<li>Fix nil return value from to_param when save fails because of validation errors (Tomás Arribas)</li>
+<li>Fix incorrect usage of i18n API (Vinicius Ferriani)</li>
+<li>Improve error handling in reserved module (Adrián Mugnolo and Github user &quot;nolamesa&quot;)</li>
+</ul>
+
+<h2>4.0.5 (2012-04-28)</h2>
+
+<ul>
+<li>Favor <code>includes</code> over <code>joins</code> in globalize to avoid read-only results (Jakub Wojtysiak)</li>
+<li>Fix globalize compatibility with results from dynamic finders (Chris Salzberg)</li>
+</ul>
+
+<h2>4.0.4 (2012-03-26)</h2>
+
+<ul>
+<li>Fix globalize plugin to avoid issues with asset precompilation (Philip Arndt)</li>
+</ul>
+
+<h2>4.0.3 (2012-03-14)</h2>
+
+<ul>
+<li>Fix escape for &#39;%&#39; and &#39;_&#39; on SQLite (Norman Clarke and Sergey Petrunin)</li>
+<li>Allow FriendlyId to be extended or included (Norman Clarke)</li>
+<li>Allow Configuration#use to accept a Module (Norman Clarke)</li>
+<li>Fix bugs with History module + STI (Norman Clarke and Sergey Petrunin)</li>
+</ul>
+
+<h2>4.0.2 (2012-03-12)</h2>
+
+<ul>
+<li>Improved conflict handling and performance in History module (Erik Ogan and Thomas Shafer)</li>
+<li>Fixed bug that impeded using underscores as a sequence separator (Erik Ogan and Thomas Shafer)</li>
+<li>Minor documentation improvements (Norman Clarke)</li>
+</ul>
+
+<h2>4.0.1 (2012-02-29)</h2>
+
+<ul>
+<li>Added support for Globalize 3 (Enrico Pilotto and Philip Arndt)</li>
+<li>Allow the scoped module to use multiple scopes (Ben Caldwell)</li>
+<li>Fixes for conflicting slugs in history module (Erik Ogan, Thomas Shafer, Evan Arnold)</li>
+<li>Fix for conflicting slugs when using STI (Danny van der Heiden, Diederick Lawson)</li>
+<li>Maintainence improvements (Norman Clarke, Philip Arndt, Thomas Darde, Lee Hambley)</li>
+</ul>
+
+<h2>4.0.0 (2011-12-27)</h2>
+
+<p>This is a complete rewrite of FriendlyId, and introduces a smaller, faster and
+less ambitious codebase. The primary change is the relegation of external slugs
+to an optional addon, and the adoption of what were formerly &quot;cached slugs&quot;
+as the primary way of handling slugging.</p>
+
+<h2>Older releases</h2>
+
+<p>Please see the 3.x branch.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:42 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

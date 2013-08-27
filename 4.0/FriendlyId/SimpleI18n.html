@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: FriendlyId::SimpleI18n
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../FriendlyId.html" title="FriendlyId (module)">FriendlyId</a></span></span>
+     &raquo; 
+    <span class="title">SimpleI18n</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: FriendlyId::SimpleI18n
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/friendly_id/simple_i18n.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<h2 id="label-Translating+Slugs+Using+Simple+I18n">Translating Slugs Using Simple I18n</h2>
+
+<p>The <span class='object_link'><a href="" title="FriendlyId::SimpleI18n (module)">SimpleI18n</a></span> module adds very basic i18n support
+to FriendlyId.</p>
+
+<p>In order to use this module, your model must have a slug column for each
+locale. By default FriendlyId looks for columns named, for example,
+“slug_en”, “slug_es”, etc. The first part of the name can be configured by
+passing the <code>:slug_column</code> option if you choose. Note that the
+column for the default locale must also include the locale in its name.</p>
+
+<p>This module is most suitable to applications that need to support few
+locales. If you need to support two or more locales, you may wish to use
+the <span class='object_link'><a href="Globalize.html" title="FriendlyId::Globalize (module)">Globalize</a></span> module instead.</p>
+
+<h3 id="label-Example+migration">Example migration</h3>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">up</span>
+  <span class="ruby-identifier">create_table</span> :<span class="ruby-identifier">posts</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">title</span>
+    <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">slug_en</span>
+    <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">slug_es</span>
+    <span class="ruby-identifier">t</span>.<span class="ruby-identifier">text</span>   :<span class="ruby-identifier">body</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">add_index</span> :<span class="ruby-identifier">posts</span>, :<span class="ruby-identifier">slug_en</span>
+  <span class="ruby-identifier">add_index</span> :<span class="ruby-identifier">posts</span>, :<span class="ruby-identifier">slug_es</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<h3 id="label-Finds">Finds</h3>
+
+<p>Finds will take into consideration the current locale:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span> <span class='op'>=</span> <span class='symbol'>:es</span>
+<span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>la-guerra-de-las-galaxas</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span> <span class='op'>=</span> <span class='symbol'>:en</span>
+<span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>star-wars</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
+
+<p>To find a slug by an explicit locale, perform the find inside a block
+passed to I18n&#39;s <code>with_locale</code> method:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_with_locale'>with_locale</span><span class='lparen'>(</span><span class='symbol'>:es</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>la-guerra-de-las-galaxas</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+
+<h3 id="label-Creating+Records">Creating Records</h3>
+
+<p>When new records are created, the slug is generated for the current locale
+only.</p>
+
+<h3 id="label-Translating+Slugs">Translating Slugs</h3>
+
+<p>To translate an existing record&#39;s friendly_id, use
+<span class='object_link'><a href="SimpleI18n/Model.html#set_friendly_id-instance_method" title="FriendlyId::SimpleI18n::Model#set_friendly_id (method)">Model#set_friendly_id</a></span>. This will ensure that the
+slug you add is properly escaped, transliterated and sequenced:</p>
+
+<pre class="ruby"><span class="ruby-identifier">post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Star Wars&quot;</span>
+<span class="ruby-identifier">post</span>.<span class="ruby-identifier">set_friendly_id</span>(<span class="ruby-string">&quot;La guerra de las galaxas&quot;</span>, :<span class="ruby-identifier">es</span>)
+</pre>
+
+<p>If you don&#39;t pass in a locale argument, FriendlyId::SimpleI18n will
+just use the current locale:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_with_locale'>with_locale</span><span class='lparen'>(</span><span class='symbol'>:es</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_set_friendly_id'>set_friendly_id</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>La guerra de las galaxas</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="SimpleI18n/Configuration.html" title="FriendlyId::SimpleI18n::Configuration (module)">Configuration</a></span>, <span class='object_link'><a href="SimpleI18n/Model.html" title="FriendlyId::SimpleI18n::Model (module)">Model</a></span>
+    
+  
+    
+  
+</p>
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#included-class_method" title="included (class method)">+ (Object) <strong>included</strong>(model_class) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="included-class_method">
+  
+    + (<tt>Object</tt>) <strong>included</strong>(model_class) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+73
+74
+75
+76
+77
+78
+79</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/simple_i18n.rb', line 73</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+    <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span> <span class='symbol'>:include</span><span class='comma'>,</span> <span class='const'>Configuration</span>
+    <span class='id identifier rubyid_include'>include</span> <span class='const'>Model</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:46 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: FriendlyId::Slugged
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (S)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../FriendlyId.html" title="FriendlyId (module)">FriendlyId</a></span></span>
+     &raquo; 
+    <span class="title">Slugged</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: FriendlyId::Slugged
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/friendly_id/slugged.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<h2 id="label-Slugged+Models">Slugged Models</h2>
+
+<p>FriendlyId can use a separate column to store slugs for models which
+require some text processing.</p>
+
+<p>For example, blog applications typically use a post title to provide the
+basis of a search engine friendly URL. Such identifiers typically lack
+uppercase characters, use ASCII to approximate UTF-8 character, and strip
+out other characters which may make them aesthetically unappealing or
+error-prone when used in a URL.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
+  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This is the first post!&quot;</span>)
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id</span>   <span class="ruby-comment"># returns &quot;this-is-the-first-post&quot;</span>
+<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@post</span>   <span class="ruby-comment"># the URL will be /posts/this-is-the-first-post</span>
+</pre>
+
+<p>In general, use slugs by default unless you know for sure you don&#39;t
+need them. To activate the slugging functionality, use the
+<span class='object_link'><a href="" title="FriendlyId::Slugged (module)">Slugged</a></span> module.</p>
+
+<p>FriendlyId will generate slugs from a method or column that you specify,
+and store them in a field in your model. By default, this field must be
+named <code>:slug</code>, though you may change this using the
+<span class='object_link'><a href="Slugged/Configuration.html#slug_column-instance_method" title="FriendlyId::Slugged::Configuration#slug_column (method)">slug_column</a></span> configuration
+option. You should add an index to this column, and in most cases, make it
+unique. You may also wish to constrain it to NOT NULL, but this depends on
+your app&#39;s behavior and requirements.</p>
+
+<h3 id="label-Example+Setup">Example Setup</h3>
+
+<pre class="ruby"><span class="ruby-comment"># your model</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
+  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
+  <span class="ruby-identifier">validates_presence_of</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">body</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># a migration</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">CreatePosts</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Migration</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">up</span>
+    <span class="ruby-identifier">create_table</span> :<span class="ruby-identifier">posts</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">null</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
+      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">null</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
+      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">text</span> :<span class="ruby-identifier">body</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">add_index</span> :<span class="ruby-identifier">posts</span>, :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">unique</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">down</span>
+    <span class="ruby-identifier">drop_table</span> :<span class="ruby-identifier">posts</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<h3 id="label-Working+With+Slugs">Working With Slugs</h3>
+
+<h4 id="label-Formatting">Formatting</h4>
+
+<p>By default, FriendlyId uses Active Support&#39;s <a
+href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize">paramaterize</a>
+method to create slugs. This method will intelligently replace spaces with
+dashes, and Unicode Latin characters with ASCII approximations:</p>
+
+<pre class="ruby"><span class="ruby-identifier">movie</span> = <span class="ruby-constant">Movie</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Der Preis fürs Überleben&quot;</span>
+<span class="ruby-identifier">movie</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;der-preis-furs-uberleben&quot;</span>
+</pre>
+
+<h4 id="label-Uniqueness">Uniqueness</h4>
+
+<p>When you try to insert a record that would generate a duplicate friendly
+id, FriendlyId will append a sequence to the generated slug to ensure
+uniqueness:</p>
+
+<pre class="ruby"><span class="ruby-identifier">car</span> = <span class="ruby-constant">Car</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Peugot 206&quot;</span>
+<span class="ruby-identifier">car2</span> = <span class="ruby-constant">Car</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Peugot 206&quot;</span>
+
+<span class="ruby-identifier">car</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;peugot-206&quot;</span>
+<span class="ruby-identifier">car2</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;peugot-206--2&quot;</span>
+</pre>
+
+<h4 id="label-Sequence+Separator+-+The+Two+Dashes">Sequence Separator - The Two Dashes</h4>
+
+<p>By default, FriendlyId uses two dashes to separate the slug from a
+sequence.</p>
+
+<p>You can change this with the
+<span class='object_link'><a href="Slugged/Configuration.html#sequence_separator-instance_method" title="FriendlyId::Slugged::Configuration#sequence_separator (method)">sequence_separator</a></span>
+configuration option.</p>
+
+<h4 id="label-Column+or+Method%3F">Column or Method?</h4>
+
+<p>FriendlyId always uses a method as the basis of the slug text - not a
+column. It first glance, this may sound confusing, but remember that Active
+Record provides methods for each column in a model&#39;s associated table,
+and that&#39;s what FriendlyId uses.</p>
+
+<p>Here&#39;s an example of a class that uses a custom method to generate the
+slug:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name_and_location</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_and_location</span>
+    <span class="ruby-node">&quot;#{name} from #{location}&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">bob</span> = <span class="ruby-constant">Person</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Bob Smith&quot;</span>, :<span class="ruby-identifier">location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;New York City&quot;</span>
+<span class="ruby-identifier">bob</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;bob-smith-from-new-york-city&quot;</span>
+</pre>
+
+<h4 id="label-Providing+Your+Own+Slug+Processing+Method">Providing Your Own Slug Processing Method</h4>
+
+<p>You can override <span class='object_link'><a href="#normalize_friendly_id-instance_method" title="FriendlyId::Slugged#normalize_friendly_id (method)">#normalize_friendly_id</a></span> in your model
+for total control over the slug format.</p>
+
+<h4 id="label-Deciding+When+to+Generate+New+Slugs">Deciding When to Generate New Slugs</h4>
+
+<p>Overriding <span class='object_link'><a href="#should_generate_new_friendly_id%3F-instance_method" title="FriendlyId::Slugged#should_generate_new_friendly_id? (method)">#should_generate_new_friendly_id?</a></span> lets you
+control whether new friendly ids are created when a model is updated. For
+example, if you only want to generate slugs once and then treat them as
+read-only:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
+  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">should_generate_new_friendly_id?</span>
+    <span class="ruby-identifier">new_record?</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create!</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Hello world!&quot;</span>)
+<span class="ruby-identifier">post</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;hello-world&quot;</span>
+<span class="ruby-identifier">post</span>.<span class="ruby-identifier">title</span> = <span class="ruby-string">&quot;Hello there, world!&quot;</span>
+<span class="ruby-identifier">post</span>.<span class="ruby-identifier">save!</span>
+<span class="ruby-identifier">post</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;hello-world&quot;</span>
+</pre>
+
+<h4 id="label-Locale-specific+Transliterations">Locale-specific Transliterations</h4>
+
+<p>Active Support&#39;s <code>parameterize</code> uses <a
+href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate">transliterate</a>,
+which in turn can use I18n&#39;s transliteration rules to consider the
+current locale when replacing Latin characters:</p>
+
+<pre class="ruby"><span class="ruby-comment"># config/locales/de.yml</span>
+<span class="ruby-identifier">de</span><span class="ruby-operator">:</span>
+  <span class="ruby-identifier">i18n</span><span class="ruby-operator">:</span>
+    <span class="ruby-identifier">transliterate</span><span class="ruby-operator">:</span>
+      <span class="ruby-identifier">rule</span><span class="ruby-operator">:</span>
+        <span class="ruby-identifier">ü</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;ue&quot;</span>
+        <span class="ruby-identifier">ö</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;oe&quot;</span>
+        <span class="ruby-identifier">etc</span><span class="ruby-operator">...</span>
+
+<span class="ruby-identifier">movie</span> = <span class="ruby-constant">Movie</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Der Preis fürs Überleben&quot;</span>
+<span class="ruby-identifier">movie</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;der-preis-fuers-ueberleben&quot;</span>
+</pre>
+
+<p>This functionality was in fact taken from earlier versions of FriendlyId.</p>
+
+<h4 id="label-Gotchas%3A+Common+Problems">Gotchas: Common Problems</h4>
+
+<h5 id="label-Slugs+That+Begin+With+Numbers">Slugs That Begin With Numbers</h5>
+
+<p>Ruby&#39;s `to_i` function casts strings to integers in such a way that
+<code>23abc.to_i</code> returns 23. Because FriendlyId falls back to
+finding by numeric id, this means that if you attempt to find a record with
+a non-existant slug, and that slug begins with a number, your find will
+probably return the wrong record.</p>
+
+<p>There are two fairly simple ways to avoid this:</p>
+<ul><li>
+<p>Use validations to ensure that slugs don&#39;t begin with numbers.</p>
+</li><li>
+<p>Use explicit finders like <code>find_by_id</code> to always find by the
+numeric id, or <code>find_by_slug</code> to always find using the friendly
+id.</p>
+</li></ul>
+
+<h5 id="label-Concurrency+Issues">Concurrency Issues</h5>
+
+<p>FriendlyId uses a before_validation callback to generate and set the slug.
+This means that if you create two model instances before saving them,
+it&#39;s possible they will generate the same slug, and the second save
+will fail.</p>
+
+<p>This can happen in two fairly normal cases: the first, when a model using
+nested attributes creates more than one record for a model that uses
+friendly_id. The second, in concurrent code, either in threads or multiple
+processes.</p>
+
+<p>To solve the nested attributes issue, I recommend simply avoiding them when
+creating more than one nested record for a model that uses FriendlyId. See
+<a href="https://github.com/norman/friendly_id/issues/185">this Github
+issue</a> for discussion.</p>
+
+<p>To solve the concurrency issue, I recommend locking the model&#39;s table
+against inserts while when saving the record. See <a
+href="https://github.com/norman/friendly_id/issues/180">this Github
+issue</a> for discussion.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Slugged/Configuration.html" title="FriendlyId::Slugged::Configuration (module)">Configuration</a></span>
+    
+  
+    
+  
+</p>
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#included-class_method" title="included (class method)">+ (Object) <strong>included</strong>(model_class) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sets up behavior and configuration options for FriendlyId&#39;s slugging
+feature.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#normalize_friendly_id-instance_method" title="#normalize_friendly_id (instance method)">- (Object) <strong>normalize_friendly_id</strong>(value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Process the given value to make it suitable for use as a slug.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#set_slug-instance_method" title="#set_slug (instance method)">- (Object) <strong>set_slug</strong>(normalized_slug = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sets the slug.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#should_generate_new_friendly_id%3F-instance_method" title="#should_generate_new_friendly_id? (instance method)">- (Boolean) <strong>should_generate_new_friendly_id?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Whether to generate a new slug.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="included-class_method">
+  
+    + (<tt>Object</tt>) <strong>included</strong>(model_class) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sets up behavior and configuration options for FriendlyId&#39;s slugging
+feature.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+199
+200
+201
+202
+203
+204
+205
+206
+207</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/slugged.rb', line 199</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span> <span class='symbol'>:include</span><span class='comma'>,</span> <span class='const'>Configuration</span>
+    <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_slug_generator_class'>slug_generator_class</span>     <span class='op'>||=</span> <span class='const'>Class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>SlugGenerator</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_defaults'>defaults</span><span class='lbracket'>[</span><span class='symbol'>:slug_column</span><span class='rbracket'>]</span>        <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>slug</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_defaults'>defaults</span><span class='lbracket'>[</span><span class='symbol'>:sequence_separator</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_before_validation'>before_validation</span> <span class='symbol'>:set_slug</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="normalize_friendly_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>normalize_friendly_id</strong>(value) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Process the given value to make it suitable for use as a slug.</p>
+
+<p>This method is not intended to be invoked directly; FriendlyId uses it
+internaly to process strings into slugs.</p>
+
+<p>However, if FriendlyId&#39;s default slug generation doesn&#39;t suite your
+needs, you can override this method in your model class to control exactly
+how slugs are generated.</p>
+
+<h3 id="label-Example">Example</h3>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name_and_location</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_and_location</span>
+    <span class="ruby-node">&quot;#{name} from #{location}&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Use default slug, but upper case and with underscores</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_friendly_id</span>(<span class="ruby-identifier">string</span>)
+    <span class="ruby-keyword">super</span>.<span class="ruby-identifier">upcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;-&quot;</span>, <span class="ruby-string">&quot;_&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">bob</span> = <span class="ruby-constant">Person</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Bob Smith&quot;</span>, :<span class="ruby-identifier">location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;New York City&quot;</span>
+<span class="ruby-identifier">bob</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;BOB_SMITH_FROM_NEW_YORK_CITY&quot;</span>
+</pre>
+
+<h3 id="label-More+Resources">More Resources</h3>
+
+<p>You might want to look into <a
+href="https://github.com/norman/babosa">Babosa</a>, which is the slugging
+library used by FriendlyId prior to version 4, which offers some
+specialized functionality missing from Active Support.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>value</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The value used as the basis of the slug.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>The candidate slug text, without a sequence.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+244
+245
+246</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/slugged.rb', line 244</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_parameterize'>parameterize</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_slug-instance_method">
+  
+    - (<tt>Object</tt>) <strong>set_slug</strong>(normalized_slug = nil)  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sets the slug. FIXME: This method sucks and the logic is pretty dubious.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+272
+273
+274
+275
+276
+277
+278</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/slugged.rb', line 272</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_slug'>set_slug</span><span class='lparen'>(</span><span class='id identifier rubyid_normalized_slug'>normalized_slug</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_normalized_slug'>normalized_slug</span> <span class='op'>||</span> <span class='id identifier rubyid_should_generate_new_friendly_id?'>should_generate_new_friendly_id?</span>
+    <span class='id identifier rubyid_normalized_slug'>normalized_slug</span> <span class='op'>||=</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_generator'>generator</span> <span class='op'>=</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_slug_generator_class'>slug_generator_class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_normalized_slug'>normalized_slug</span>
+    <span class='id identifier rubyid_send'>send</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_slug_column'>slug_column</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_generator'>generator</span><span class='period'>.</span><span class='id identifier rubyid_generate'>generate</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="should_generate_new_friendly_id?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>should_generate_new_friendly_id?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Whether to generate a new slug.</p>
+
+<p>You can override this method in your model if, for example, you only want
+slugs to be generated once, and then never updated.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/slugged.rb', line 252</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_should_generate_new_friendly_id?'>should_generate_new_friendly_id?</span>
+  <span class='id identifier rubyid_base'>base</span>       <span class='op'>=</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_slug_value'>slug_value</span> <span class='op'>=</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_slug_column'>slug_column</span><span class='rparen'>)</span>
+
+  <span class='comment'># If the slug base is nil, and the slug field is nil, then we&#39;re going to
+</span>  <span class='comment'># leave the slug column NULL.
+</span>  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_base'>base</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_slug_value'>slug_value</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='comment'># Otherwise, if this is a new record, we&#39;re definitely going to try to
+</span>  <span class='comment'># create a new slug.
+</span>  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_new_record?'>new_record?</span>
+  <span class='id identifier rubyid_slug_base'>slug_base</span> <span class='op'>=</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_base'>base</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_separator'>separator</span> <span class='op'>=</span> <span class='const'>Regexp</span><span class='period'>.</span><span class='id identifier rubyid_escape'>escape</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_sequence_separator'>sequence_separator</span>
+  <span class='comment'># If the slug base (with and without sequence) is different from either the current
+</span>  <span class='comment'># friendly id or the slug value, then we&#39;ll generate a new friendly_id.
+</span>  <span class='id identifier rubyid_compare'>compare</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_current_friendly_id'>current_friendly_id</span> <span class='op'>||</span> <span class='id identifier rubyid_slug_value'>slug_value</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_slug_base'>slug_base</span> <span class='op'>!=</span> <span class='id identifier rubyid_compare'>compare</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_slug_base'>slug_base</span> <span class='op'>!=</span> <span class='id identifier rubyid_compare'>compare</span><span class='period'>.</span><span class='id identifier rubyid_try'>try</span><span class='lparen'>(</span><span class='symbol'>:sub</span><span class='comma'>,</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_separator'>separator</span><span class='embexpr_end'>}</span><span class='tstring_content'>[\d]*\z</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:46 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>FriendlyId</h1>
+
+<p><a href="https://travis-ci.org/norman/friendly_id"><img src="https://travis-ci.org/norman/friendly_id.png" alt="Build Status"></a></p>
+
+<p>FriendlyId is the &quot;Swiss Army bulldozer&quot; of slugging and permalink plugins for
+Ruby on Rails. It allows you to create pretty URLs and work with human-friendly
+strings as if they were numeric ids for Active Record models.</p>
+
+<p>Using FriendlyId, it&#39;s easy to make your application use URLs like:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='id identifier rubyid_washington'>washington</span>
+</code></pre>
+
+<p>instead of:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='int'>4323454</span>
+</code></pre>
+
+<h2>FriendlyId Features</h2>
+
+<p>FriendlyId offers many advanced features, including: slug history and
+versioning, i18n, Globalize support, scoped slugs, reserved words, and custom
+slug generators.</p>
+
+<p>FriendlyId is compatible with Active Record <strong>3.0</strong> and higher.</p>
+
+<h2>Version 4.x</h2>
+
+<p>FriendlyId 4.x introduces many changes incompatible with 3.x. If you&#39;re
+upgrading, please <a href="http://rubydoc.info/github/norman/friendly_id/4.0-stable/file/WhatsNew.md">read the
+docs</a> to see what&#39;s
+new.</p>
+
+<h2>Docs</h2>
+
+<p>The current docs can always be found
+<a href="http://rubydoc.info/github/norman/friendly_id/4.0-stable/frames">here</a>.</p>
+
+<p>The best place to start is with the
+<a href="http://rubydoc.info/github/norman/friendly_id/4.0-stable/file/Guide.rdoc">Guide</a>,
+which compiles the top-level RDocs into one outlined document.</p>
+
+<p>You might also want to watch Ryan Bates&#39;s <a href="http://railscasts.com/episodes/314-pretty-urls-with-friendlyid">Railscast on FriendlyId</a>.</p>
+
+<h2>Rails Quickstart</h2>
+
+<pre class="code ruby"><code class="ruby">gem install friendly_id
+
+rails new my_app
+
+cd my_app
+
+gem &quot;friendly_id&quot;, &quot;~&gt; 4.0.9&quot; # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
+
+rails generate scaffold user name:string slug:string
+
+# edit db/migrate/*_create_users.rb
+add_index :users, :slug, unique: true
+
+rake db:migrate
+
+# edit app/models/user.rb
+class User &lt; ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+end
+
+User.create! name: &quot;Joe Schmoe&quot;
+
+rails server
+
+GET http://localhost:3000/users/joe-schmoe
+
+# If you&#39;re adding FriendlyId to an existing app and need
+# to generate slugs for existing users, do this from the
+# console, runner, or add a Rake task:
+User.find_each(&amp;:save)
+</code></pre>
+
+<h2>Benchmarks</h2>
+
+<p>The latest benchmarks for FriendlyId are maintained
+<a href="http://bit.ly/friendly-id-benchmarks">here</a>.</p>
+
+<h2>Bugs</h2>
+
+<p>Please report them on the <a href="http://github.com/norman/friendly_id/issues">Github issue
+tracker</a> for this project.</p>
+
+<p>If you have a bug to report, please include the following information:</p>
+
+<ul>
+<li><strong>Version information for FriendlyId, Rails and Ruby.</strong></li>
+<li>Full stack trace and error message (if you have them).</li>
+<li>Any snippets of relevant model, view or controller code that shows how you
+are using FriendlyId.</li>
+</ul>
+
+<p>If you are able to, it helps even more if you can fork FriendlyId on Github,
+and add a test that reproduces the error you are experiencing.</p>
+
+<p>For more info on how to report bugs, please see <a href="http://yourbugreportneedsmore.info/">this
+article</a>.</p>
+
+<h2>Thanks and Credits</h2>
+
+<p>FriendlyId was originally created by Norman Clarke and Adrian Mugnolo, with
+significant help early in its life by Emilio Tagua. I&#39;m deeply grateful for the
+generous contributions over the years from <a href="https://github.com/norman/friendly_id/contributors">many
+volunteers</a>.</p>
+
+<p>Part of the inspiration to rework FriendlyId came from Darcy Laycock&#39;s library
+<a href="https://github.com/Sutto/slugged">Slugged</a>, which he was inspired to create
+because of frustrations he experienced while using FriendlyId 3.x. Seeing a
+smart programmer become frustrated with my code was enough of a kick in the
+butt to make me want to significantly improve this library.</p>
+
+<p>Many thanks to him for providing valid, real criticism while still being a cool
+about it. I definitely recommend you check out his library if for some reason
+FriendlyId doesn&#39;t do it for you.</p>
+
+<p>Thanks also to Loren Segal and Nick Plante for YARD and the
+<a href="http://rubydoc.info/">rubydoc.info</a> website which FriendlyId uses for
+documentation.</p>
+
+<p>Lastly, FriendlyId uses <a href="http://travis-ci.org/">Travis</a> for continuous
+integration. It&#39;s an excellent, free service created by a whole bunch of <a href="https://github.com/travis-ci">good
+people</a> - if you&#39;re not already using it, you
+should be!</p>
+
+<h2>License</h2>
+
+<p>Copyright (c) 2008-2012 Norman Clarke and contributors, released under the MIT
+license.</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:45 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

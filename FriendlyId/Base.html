@@ -1,0 +1,674 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: FriendlyId::Base
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (B)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../FriendlyId.html" title="FriendlyId (module)">FriendlyId</a></span></span>
+     &raquo; 
+    <span class="title">Base</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: FriendlyId::Base
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/friendly_id/base.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <h2>Setting Up FriendlyId in Your Model</h2>
+
+<p>To use FriendlyId in your ActiveRecord models, you must first either extend or
+include the FriendlyId module (it makes no difference), then invoke the
+<span class='object_link'><a href="#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">friendly_id</a></span> method to configure your desired
+options:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_include'>include</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:bar</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:simple_i18n</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>The most important option is <code>:use</code>, which you use to tell FriendlyId which
+addons it should use. See the documentation for this method for a list of all
+available addons, or skim through the rest of the docs to get a high-level
+overview.</p>
+
+<h3>The Default Setup: Simple Models</h3>
+
+<p>The simplest way to use FriendlyId is with a model that has a uniquely indexed
+column with no spaces or special characters, and that is seldom or never
+updated. The most common example of this is a user name:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:login</span>
+  <span class='id identifier rubyid_validates_format_of'>validates_format_of</span> <span class='symbol'>:login</span><span class='comma'>,</span> <span class='symbol'>:with</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[a-z0-9]+\z</span><span class='regexp_end'>/i</span></span>
+<span class='kw'>end</span>
+
+<span class='ivar'>@user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe</span><span class='tstring_end'>&quot;</span></span>   <span class='comment'># the old User.find(1) still works, too
+</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_to_param'>to_param</span>                     <span class='comment'># returns &quot;joe&quot;
+</span><span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@user</span>                  <span class='comment'># the URL will be /users/joe
+</span></code></pre>
+
+<p>In this case, FriendlyId assumes you want to use the column as-is; it will never
+modify the value of the column, and your application should ensure that the
+value is unique and admissible in a URL:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span>
+<span class='kw'>end</span>
+
+<span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Viña del Mar</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@city</span> <span class='comment'># the URL will be /cities/Viña%20del%20Mar
+</span></code></pre>
+
+<p>Writing the code to process an arbitrary string into a good identifier for use
+in a URL can be repetitive and surprisingly tricky, so for this reason it&#39;s
+often better and easier to use <span class='object_link'><a href="Slugged.html" title="FriendlyId::Slugged (module)">slugs</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#friendly-instance_method" title="#friendly (instance method)">- (Object) <strong>friendly</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns a scope that includes the friendly finders.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#friendly_id-instance_method" title="#friendly_id (instance method)">- (Object) <strong>friendly_id</strong>(base = nil, options = {}) {|config| ... }</a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Configure FriendlyId&#39;s behavior in a model.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#friendly_id_config-instance_method" title="#friendly_id_config (instance method)">- (Object) <strong>friendly_id_config</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns the model class&#39;s <span class='object_link'><a href="Configuration.html" title="FriendlyId::Configuration (class)">friendly_id_config</a></span>.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="friendly-instance_method">
+  
+    - (<tt>Object</tt>) <strong>friendly</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns a scope that includes the friendly finders.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><span class='object_link'><a href="FinderMethods.html" title="FriendlyId::FinderMethods (module)">FinderMethods</a></span></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 196</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_friendly'>friendly</span>
+  <span class='comment'># Guess what? This causes Rails to invoke `extend` on the scope, which has
+</span>  <span class='comment'># the well-known effect of blowing away Ruby&#39;s method cache. It would be
+</span>  <span class='comment'># possible to make this more performant by subclassing the model&#39;s
+</span>  <span class='comment'># relation class, extending that, and returning an instance of it in this
+</span>  <span class='comment'># method. FriendlyId 4.0 did something similar. However in 5.0 I&#39;ve
+</span>  <span class='comment'># decided to only use Rails&#39;s public API in order to improve compatibility
+</span>  <span class='comment'># and maintainability. If you&#39;d like to improve the performance, your
+</span>  <span class='comment'># efforts would be best directed at improving it at the root cause
+</span>  <span class='comment'># of the problem - in Rails - because it would benefit more people.
+</span>  <span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_extending'>extending</span><span class='lparen'>(</span><span class='const'>FinderMethods</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="friendly_id-instance_method">
+  
+    - (<tt>Object</tt>) <strong>friendly_id</strong>(base = nil, options = {}) {|config| ... }
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Configure FriendlyId&#39;s behavior in a model.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>When given the optional block, this method will yield the class&#39;s instance
+of <span class='object_link'><a href="Configuration.html" title="FriendlyId::Configuration (class)">Configuration</a></span> to the block before evaluating other
+arguments, so configuration values set in the block may be overwritten by
+the arguments. This order was chosen to allow passing the same proc to
+multiple models, while being able to override the values it sets. Here is
+a contrived example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='gvar'>$friendly_id_config_proc</span> <span class='op'>=</span> <span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='op'>&amp;</span><span class='gvar'>$friendly_id_config_proc</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Bar</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='gvar'>$friendly_id_config_proc</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>However, it&#39;s usually better to use <span class='object_link'><a href="../FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">FriendlyId.defaults</a></span> for this:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Bar</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>In general you should use the block syntax either because of your personal
+aesthetic preference, or because you need to share some functionality
+between multiple models that can&#39;t be well encapsulated by
+<span class='object_link'><a href="../FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">FriendlyId.defaults</a></span>.</p>
+
+<h3>Order Method Calls in a Block vs Ordering Options</h3>
+
+<p>When calling this method without a block, you may set the hash options in
+any order.</p>
+
+<p>However, when using block-style invocation, be sure to call
+FriendlyId::Configuration&#39;s <span class='object_link'><a href="Configuration.html#use-instance_method" title="FriendlyId::Configuration#use (method)">use</a></span> method
+<em>prior</em> to the associated configuration options, because it will include
+modules into your class, and these modules in turn may add required
+configuration options to the <code>@friendly_id_configuraton</code>&#39;s class:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+    <span class='comment'># This will work
+</span>    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_sequence_separator'>sequence_separator</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+    <span class='comment'># This will fail
+</span>    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_sequence_separator'>sequence_separator</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3>Including Your Own Modules</h3>
+
+<p>Because :use can accept a name or a Module, <span class='object_link'><a href="../FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">defaults</a></span>
+can be a convenient place to set up behavior common to all classes using
+FriendlyId. You can include any module, or more conveniently, define one
+on-the-fly. For example, let&#39;s say you want to make
+<a href="http://github.com/norman/babosa">Babosa</a> the default slugging library in
+place of Active Support, and transliterate all slugs from Russian Cyrillic
+to ASCII:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>babosa</span><span class='tstring_end'>&quot;</span></span>
+
+<span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='const'>Module</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span>
+    <span class='kw'>def</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_to_slug'>to_slug</span><span class='period'>.</span><span class='id identifier rubyid_normalize!'>normalize!</span> <span class='symbol'>:transliterations</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:russian</span><span class='comma'>,</span> <span class='symbol'>:latin</span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
+  <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>a customizable set of options</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:use</span>
+          <span class="type">(<tt>Symbol</tt>, <tt>Module</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>The addon or name of an addon to use.
+By default, FriendlyId provides <span class='object_link'><a href="Slugged.html" title="FriendlyId::Slugged (module)">:slugged</a></span>,
+<span class='object_link'><a href="History.html" title="FriendlyId::History (module)">:history</a></span>, <span class='object_link'><a href="Reserved.html" title="FriendlyId::Reserved (module)">:reserved</a></span>, and
+<span class='object_link'><a href="Scoped.html" title="FriendlyId::Scoped (module)">:scoped</a></span>, and <span class='object_link'><a href="SimpleI18n.html" title="FriendlyId::SimpleI18n (module)">:simple_i18n</a></span>.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:reserved_words</span>
+          <span class="type">(<tt>Array</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Available when using <code>:reserved</code>,
+which is loaded by default. Sets an array of words banned for use as
+the basis of a friendly_id. By default this includes &quot;edit&quot; and &quot;new&quot;.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:scope</span>
+          <span class="type">(<tt>Symbol</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Available when using <code>:scoped</code>.
+Sets the relation or column used to scope generated friendly ids. This
+option has no default value.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:sequence_separator</span>
+          <span class="type">(<tt>Symbol</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Available when using <code>:slugged</code>.
+Configures the sequence of characters used to separate a slug from a
+sequence. Defaults to <code>-</code>.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:slug_column</span>
+          <span class="type">(<tt>Symbol</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Available when using <code>:slugged</code>.
+Configures the name of the column where FriendlyId will store the slug.
+Defaults to <code>:slug</code>.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:slug_generator_class</span>
+          <span class="type">(<tt>Symbol</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Available when using <code>:slugged</code>.
+Sets the class used to generate unique slugs. You should not specify this
+unless you&#39;re doing some extensive hacking on FriendlyId. Defaults to
+<span class='object_link'><a href="SlugGenerator.html" title="FriendlyId::SlugGenerator (class)">SlugGenerator</a></span>.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>Provides access to the model class&#39;s friendly_id_config, which
+allows an alternate configuration syntax, and conditional configuration
+logic.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>config</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>The model class&#39;s <span class='object_link'><a href="Configuration.html" title="FriendlyId::Configuration (class)">friendly_id_config</a></span>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+187
+188
+189
+190
+191
+192</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 187</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='kw'>yield</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+  <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span> <span class='symbol'>:use</span>
+  <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span> <span class='symbol'>:set</span><span class='comma'>,</span> <span class='id identifier rubyid_base'>base</span> <span class='op'>?</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='symbol'>:base</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_base'>base</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_options'>options</span>
+  <span class='id identifier rubyid_include'>include</span> <span class='const'>Model</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="friendly_id_config-instance_method">
+  
+    - (<tt>Object</tt>) <strong>friendly_id_config</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'><p>In the case of Single Table Inheritance (STI), this method will
+duplicate the parent class&#39;s FriendlyId::Configuration and relation class
+on first access. If you&#39;re concerned about thread safety, then be sure
+to invoke <span class='object_link'><a href="#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">#friendly_id</a></span> in your class for each model.</p>
+</div>
+  </div>
+
+<p>Returns the model class&#39;s <span class='object_link'><a href="Configuration.html" title="FriendlyId::Configuration (class)">friendly_id_config</a></span>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+214
+215
+216
+217
+218</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 214</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
+  <span class='ivar'>@friendly_id_config</span> <span class='op'>||=</span> <span class='id identifier rubyid_base_class'>base_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_model_class'>model_class</span> <span class='op'>=</span> <span class='kw'>self</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:42 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: WhatsNew
+  
+    &mdash; Documentation by YARD 0.8.7
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: WhatsNew</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>What&#39;s New in FriendlyId 4?</h1>
+
+<h2>Back to basics</h2>
+
+<p>FriendlyId is mostly a different codebase from FriendlyId 3. However, this isn&#39;t
+the &quot;big rewrite,&quot; it&#39;s the &quot;small rewrite:&quot;</p>
+
+<p>Adding new features with each release is not sustainable. This release <em>removes</em>
+features, but makes it possible to add them back as addons. We can also remove
+some complexity by relying on the better default functionality provided by newer
+versions of Active Support and Active Record.</p>
+
+<p>Here&#39;s what&#39;s changed:</p>
+
+<h2>New configuration and setup</h2>
+
+<p>FriendlyId is no longer added to Active Record by default, you must explicitly
+add it to each model you want to use it in. The method and options have also
+changed:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># FriendlyId 3
+</span><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_has_friendly_id'>has_friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use_slugs</span> <span class='op'>=&gt;</span> <span class='kw'>true</span>
+<span class='kw'>end</span>
+
+<span class='comment'># FriendlyId 4
+</span><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>It also adds a new &quot;defaults&quot; method for configuring all models:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:reserved</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h2>Active Record 3+ only</h2>
+
+<p>For 2.3 support, you can use FriendlyId 3.x, which will continue to be
+maintained until people don&#39;t want it any more.</p>
+
+<h2>In-table slugs</h2>
+
+<p>FriendlyId no longer creates a separate slugs table - it just stores the
+generated slug value in the model table, which is simpler, faster and what most
+want by default. Keeping slug history in a separate table is an
+<span class='object_link'><a href="FriendlyId/History.html" title="FriendlyId::History (module)">optional add-on</a></span> for FriendlyId 4.</p>
+
+<h2>No more multiple finds</h2>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe-schmoe</span><span class='tstring_end'>&quot;</span></span>               <span class='comment'># Supported
+</span><span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe-schmoe</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>john-doe</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='comment'># No longer supported
+</span></code></pre>
+
+<p>If you want find by more than one friendly id, build your own query:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:slug</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe-schmoe</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>john-doe</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>This lets us do <em>far</em> less monkeypatching in Active Record. How much less?
+FriendlyId overrides the base find with a mere 2 lines of code, and otherwise
+changes nothing else. This means more stability and less breakage between Rails
+updates.</p>
+
+<h2>No more finder status</h2>
+
+<p>FriendlyId 3 offered finder statuses to help you determine when an outdated
+or non-friendly id was used to find the record, so that you could decide whether
+to permanently redirect to the canonical URL. However, there&#39;s a simpler way to
+do that, so this feature has been removed:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>if</span> <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span> <span class='op'>!=</span> <span class='id identifier rubyid_person_path'>person_path</span><span class='lparen'>(</span><span class='ivar'>@person</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@person</span><span class='comma'>,</span> <span class='symbol'>:status</span> <span class='op'>=&gt;</span> <span class='symbol'>:moved_permanently</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h2>Bye-bye Babosa</h2>
+
+<p><a href="http://github.com/norman/babosa">Babosa</a> is FriendlyId 3&#39;s slugging library.</p>
+
+<p>FriendlyId 4 doesn&#39;t use it by default because the most important pieces of it
+were already accepted into Active Support 3.</p>
+
+<p>However, Babosa is still useful, for example, for idiomatically transliterating
+Cyrillic (<a href="https://github.com/norman/babosa/tree/master/lib/babosa/transliterator">or other
+language</a>)
+strings to ASCII. It&#39;s very easy to include - just override
+<code>#normalize_friendly_id</code> in your model:</p>
+
+<pre class="code ruby"><code class="ruby">class MyModel &lt; ActiveRecord::Base
+  ...
+
+  def normalize_friendly_id(text)
+    text.to_slug.normalize! :transliterations =&gt; :russian
+  end
+end
+</code></pre>
+</div></div>
+
+    <div id="footer">
+  Generated on Tue Aug 27 04:03:45 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>
