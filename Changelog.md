@@ -3,6 +3,13 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.rc1 (2013-08-28)
+
+* Removed some outdated tests.
+* Improved documentation.
+* Removed Guide from repository and added tasks to maintain docs up to date
+  on Github pages at http://norman.github.io/friendly_id.
+
 ## 5.0.0.beta4 (2013-08-21)
 
 * Add an initializer to the generator; move the default reserved words there.
