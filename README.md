@@ -115,7 +115,7 @@ generated in `config/initializers/friendly_id.rb`. This file contains notes
 describing how to restore (or not) some of the defaults from FriendlyId 4.0.
 
 If you want to use the `:history` and `:scoped` addons together, you must add a
-`:scope` column to your friendly_id slugs table and replace the unique index on
+`:scope` column to your friendly_id_slugs table and replace the unique index on
 `:slug` and `:sluggable_type` with a unique index on those two columns, plus
 the new `:scope` column.
 
