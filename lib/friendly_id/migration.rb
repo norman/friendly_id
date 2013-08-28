@@ -1,6 +1,6 @@
 class CreateFriendlyIdSlugs < ActiveRecord::Migration
 
-  def self.up
+  def up
     create_table :friendly_id_slugs do |t|
       t.string   :slug,           :null => false
       t.integer  :sluggable_id,   :null => false
@@ -14,7 +14,7 @@ class CreateFriendlyIdSlugs < ActiveRecord::Migration
     add_index :friendly_id_slugs, :sluggable_type
   end
 
-  def self.down
+  def down
     drop_table :friendly_id_slugs
   end
 end
