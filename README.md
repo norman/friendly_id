@@ -96,6 +96,8 @@ The most important changes are:
 * The `friendly_id` Rails generator now generates an initializer showing you
   how to do some commmon global configuration.
 
+* The Globalize plugin has moved to a separate gem (currently in alpha).
+
 * The `:reserved` module no longer includes any default reserved words.
   Previously it blocked "edit" and "new" everywhere. The default word list has
   been moved to `config/initializers/friendly_id.rb` and now includes many more
