@@ -47,7 +47,7 @@ app's behavior and requirements.
 
     # a migration
     class CreatePosts < ActiveRecord::Migration
-      def self.up
+      def up
         create_table :posts do |t|
           t.string :title, :null => false
           t.string :slug, :null => false
@@ -57,7 +57,7 @@ app's behavior and requirements.
         add_index :posts, :slug, :unique => true
       end
 
-      def self.down
+      def down
         drop_table :posts
       end
     end
