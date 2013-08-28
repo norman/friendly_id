@@ -21,7 +21,7 @@ friendly_id_globalize gem instead.
 
 ### Example migration
 
-    def self.up
+    def up
       create_table :posts do |t|
         t.string :title
         t.string :slug_en
