@@ -3,6 +3,10 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.rc2 (NOT RELEASED YET)
+
+* Use instance methods rather than class methods in migrations.
+
 ## 5.0.0.rc1 (2013-08-28)
 
 * Removed some outdated tests.
