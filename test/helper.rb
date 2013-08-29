@@ -53,7 +53,7 @@ module FriendlyId
         puts "-" * 72
         if in_memory?
           ActiveRecord::Migration.verbose = false
-          Schema.up
+          Schema.migrate :up
           puts "#{message} (in-memory)"
         else
           puts message

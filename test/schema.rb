@@ -14,7 +14,7 @@ module FriendlyId
         def up
           # TODO: use schema version to avoid ugly hacks like this
           return if @done
-          CreateFriendlyIdSlugs.up
+          CreateFriendlyIdSlugs.migrate :up
 
           tables.each do |table_name|
             create_table table_name do |t|
