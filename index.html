@@ -157,6 +157,7 @@ a slug, you must explicitly set the slug column to nil:</p>
 <code>should_generate_new_friendly_id?</code> method.</p></li>
 <li><p>The <code>friendly_id</code> Rails generator now generates an initializer showing you
 how to do some commmon global configuration.</p></li>
+<li><p>The Globalize plugin has moved to a separate gem (currently in alpha).</p></li>
 <li><p>The <code>:reserved</code> module no longer includes any default reserved words.
 Previously it blocked &quot;edit&quot; and &quot;new&quot; everywhere. The default word list has
 been moved to <code>config/initializers/friendly_id.rb</code> and now includes many more
@@ -173,7 +174,7 @@ generated in <code>config/initializers/friendly_id.rb</code>. This file contains
 describing how to restore (or not) some of the defaults from FriendlyId 4.0.</p>
 
 <p>If you want to use the <code>:history</code> and <code>:scoped</code> addons together, you must add a
-<code>:scope</code> column to your friendly_id slugs table and replace the unique index on
+<code>:scope</code> column to your friendly_id_slugs table and replace the unique index on
 <code>:slug</code> and <code>:sluggable_type</code> with a unique index on those two columns, plus
 the new <code>:scope</code> column.</p>
 
@@ -307,7 +308,7 @@ SOFTWARE.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Tue Aug 27 14:25:16 2013 by
+  Generated on Wed Aug 28 23:16:36 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>
