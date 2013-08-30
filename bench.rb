@@ -72,6 +72,10 @@ Benchmark.bmbm do |x|
     N.times {transaction {Journalist.create :name => Faker::Name.name}}
   end
 
+  x.report 'insert (in-table-slug; included FinderMethods)' do
+    N.times {transaction {Restaurant.create :name => Faker::Name.name}}
+  end
+
   x.report 'insert (external slug)' do
     N.times {transaction {Manual.create :name => Faker::Name.name}}
   end
