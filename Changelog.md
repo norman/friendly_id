@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 5.0.0.rc2 (NOT RELEASED YET)
 
+* When the :finders addon has been included, use it in FriendlyId's internal
+  finds to boost performance.
 * Use instance methods rather than class methods in migrations.
 
 ## 5.0.0.rc1 (2013-08-28)

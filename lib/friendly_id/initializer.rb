@@ -34,6 +34,10 @@ FriendlyId.defaults do |config|
   # all applications, so you must explicity opt-in to this behavior. You can
   # always also configure it on a per-model basis if you prefer.
   #
+  # Something else to consider is that using the :finders addon boosts
+  # performance because it will avoid Rails-internal code that makes runtime
+  # calls to `Module.extend`.
+  #
   # config.use :finders
   #
   # ## Slugs
