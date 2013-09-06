@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/norman/friendly_id.png)](https://travis-ci.org/norman/friendly_id)
 
-** GETTING HELP ***
+**GETTING HELP**
 
 Please ask questions on [Stack
 Overflow](http://stackoverflow.com/questions/tagged/friendly-id) using the
