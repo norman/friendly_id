@@ -62,6 +62,14 @@ class HistoryTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should not be read only when found by slug" do
+    with_instance_of(model_class) do |record|
+      refute model_class.friendly.find(record.friendly_id).readonly?
+      assert record.update_attribute :name, 'foo'
+      assert record.update_attributes name: 'foo'
+    end
+  end
+
   test "should not be read only when found by old slug" do
     with_instance_of(model_class) do |record|
       old_friendly_id = record.friendly_id
