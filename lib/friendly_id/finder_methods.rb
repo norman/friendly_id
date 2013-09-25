@@ -19,7 +19,7 @@ module FriendlyId
       id = args.first
       return super if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap {|result| return result unless result.nil?}
-      return super if Integer(id, 10) rescue nil
+      return super if columns.find{|c| c.primary }.type != :integer || Integer(id, 10) rescue nil
       raise ActiveRecord::RecordNotFound
     end
 
