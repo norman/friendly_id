@@ -19,7 +19,7 @@ module FriendlyId
       id = args.first
       return super if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap {|result| return result unless result.nil?}
-      return super if Integer(id, 10) rescue nil
+      return super if potential_primary_key?(id)
       raise ActiveRecord::RecordNotFound
     end
 
@@ -37,6 +37,17 @@ module FriendlyId
     end
 
     private
+
+    def potential_primary_key?(id)
+      case primary_key_type
+      when :integer
+        Integer(id, 10) rescue false
+      when :uuid
+        id.match /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+      else
+        true
+      end
+    end
 
     def first_by_friendly_id(id)
       where(friendly_id_config.query_field => id).first

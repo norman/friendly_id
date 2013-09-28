@@ -23,6 +23,15 @@ module FriendlyId
             end
           end
 
+          tables_with_string_primary_key.each do |table_name|
+            create_table table_name, primary_key: :string_key, id: false do |t|
+              t.string :name
+              t.string :string_key, null: false
+              t.string :slug
+            end
+            add_index table_name, :slug, unique: true
+          end
+
           slugged_tables.each do |table_name|
             add_column table_name, :slug, :string
             add_index  table_name, :slug, :unique => true
@@ -62,6 +71,10 @@ module FriendlyId
 
         def slugged_tables
           %w[journalists articles novelists novels manuals]
+        end
+
+        def tables_with_string_primary_key
+          ["menu_items"]
         end
 
         def scoped_tables
