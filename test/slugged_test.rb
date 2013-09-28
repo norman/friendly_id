@@ -205,6 +205,40 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
   end
 end
 
+class StringAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
+  include FriendlyId::Test
+
+  class MenuItem < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged
+    before_create :init_primary_key
+
+    def self.primary_key 
+      "string_key"
+    end
+
+    private
+    def init_primary_key
+      self.string_key = SecureRandom.uuid
+    end
+  end
+
+  def model_class
+    MenuItem
+  end
+
+  test "should have a string as a primary key" do
+    assert_equal model_class.primary_key, "string_key"
+    assert_equal model_class.columns.find(&:primary).name, "string_key"
+  end
+
+  test "should be findable by the string primary key" do
+    with_instance_of(model_class) do |record|
+      assert model_class.friendly.find record.id
+    end
+  end
+end
+
 class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 

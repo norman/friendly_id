@@ -216,6 +216,10 @@ often better and easier to use {FriendlyId::Slugged slugs}.
         config.model_class = self
       end
     end
+
+    def primary_key_type
+      @primary_key_type ||= columns.find(&:primary).type
+    end
   end
 
   # Instance methods that will be added to all classes using FriendlyId.
