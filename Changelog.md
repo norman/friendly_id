@@ -8,6 +8,8 @@ suggestions, ideas and improvements to FriendlyId.
 * When the :finders addon has been included, use it in FriendlyId's internal
   finds to boost performance.
 * Use instance methods rather than class methods in migrations.
+* On find, fall back to super when the primary key is a character type. Thanks
+  to [Jamie Davidson](https://github.com/jhdavids8).
 
 ## 5.0.0.rc1 (2013-08-28)
 
