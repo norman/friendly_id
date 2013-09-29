@@ -12,6 +12,7 @@ suggestions, ideas and improvements to FriendlyId.
   to [Jamie Davidson](https://github.com/jhdavids8).
 * Fix reversion to previously used slug from history table when
   `should_generate_new_friendly_id?` is overridden.
+* Fix sequencing of numeric slugs
 
 ## 5.0.0.rc1 (2013-08-28)
 

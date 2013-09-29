@@ -82,14 +82,14 @@ method.
     module HistoryFinderMethods
       include FinderMethods
 
+      def exists_by_friendly_id?(id)
+        joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
+      end
+
       private
 
       def first_by_friendly_id(id)
         joins(:slugs).where(slug_history_clause(id)).readonly(false).first
-      end
-
-      def exists_by_friendly_id?(id)
-        joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
       end
 
       def slug_history_clause(id)

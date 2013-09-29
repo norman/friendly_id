@@ -1,7 +1,7 @@
 module FriendlyId
 
   module FinderMethods
-    
+
     # Finds a record using the given id.
     #
     # If the id is "unfriendly", it will call the original find method.
@@ -36,6 +36,10 @@ module FriendlyId
       first_by_friendly_id(id) or raise ActiveRecord::RecordNotFound
     end
 
+    def exists_by_friendly_id?(id)
+      where(friendly_id_config.query_field => id).exists?
+    end
+
     private
 
     def potential_primary_key?(id)
@@ -51,10 +55,6 @@ module FriendlyId
 
     def first_by_friendly_id(id)
       where(friendly_id_config.query_field => id).first
-    end
-
-    def exists_by_friendly_id?(id)
-      where(friendly_id_config.query_field => id).exists?
     end
 
   end

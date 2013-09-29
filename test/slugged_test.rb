@@ -134,6 +134,13 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should correctly sequence numeric slugs" do
+    transaction do
+      n2 = 2.times.map {Article.create :name => '123'}.last
+      assert_match(/\A123-.*/, n2.friendly_id)
+    end
+  end
+
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase

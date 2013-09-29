@@ -8,7 +8,7 @@ module FriendlyId
     end
 
     def available?(slug)
-      !@scope.exists?(slug)
+      !@scope.exists_by_friendly_id?(slug)
     end
 
     def add(slug)
