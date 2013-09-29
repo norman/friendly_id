@@ -3,7 +3,7 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
-## 5.0.0.rc2 (NOT RELEASED YET)
+## 5.0.0.rc2 (2013-09-29)
 
 * When the :finders addon has been included, use it in FriendlyId's internal
   finds to boost performance.
