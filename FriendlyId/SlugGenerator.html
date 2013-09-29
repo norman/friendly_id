@@ -344,7 +344,7 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/slug_generator.rb', line 10</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_available?'>available?</span><span class='lparen'>(</span><span class='id identifier rubyid_slug'>slug</span><span class='rparen'>)</span>
-  <span class='op'>!</span><span class='ivar'>@scope</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='id identifier rubyid_slug'>slug</span><span class='rparen'>)</span>
+  <span class='op'>!</span><span class='ivar'>@scope</span><span class='period'>.</span><span class='id identifier rubyid_exists_by_friendly_id?'>exists_by_friendly_id?</span><span class='lparen'>(</span><span class='id identifier rubyid_slug'>slug</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -388,7 +388,7 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:17 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>

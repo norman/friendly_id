@@ -233,12 +233,12 @@
       <pre class="lines">
 
 
-223
-224
-225</pre>
+227
+228
+229</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 227</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:friendly</span><span class='rparen'>)</span>
@@ -279,12 +279,12 @@
       <pre class="lines">
 
 
-233
-234
-235</pre>
+237
+238
+239</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 233</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 237</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
   <span class='id identifier rubyid_send'>send</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span>
@@ -319,12 +319,12 @@
       <pre class="lines">
 
 
-228
-229
-230</pre>
+232
+233
+234</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 232</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
@@ -359,16 +359,16 @@
       <pre class="lines">
 
 
-238
-239
-240
-241
 242
 243
-244</pre>
+244
+245
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 238</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_param'>to_param</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_diff'>diff</span> <span class='op'>=</span> <span class='id identifier rubyid_changes'>changes</span><span class='lbracket'>[</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span><span class='rbracket'>]</span>
@@ -387,7 +387,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>

@@ -245,6 +245,29 @@ end
 </li>
 
       
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#scope_for_slug_generator-instance_method" title="#scope_for_slug_generator (instance method)">- (Object) <strong>scope_for_slug_generator</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>If we&#39;re updating, don&#39;t consider historic slugs for the same record to be conflicts.</p>
+</div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -377,23 +400,23 @@ end
       <pre class="lines">
 
 
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115</pre>
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 115</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_slug'>create_slug</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
@@ -414,12 +437,66 @@ end
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="scope_for_slug_generator-instance_method">
+  
+    - (<tt>Object</tt>) <strong>scope_for_slug_generator</strong>  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>If we&#39;re updating, don&#39;t consider historic slugs for the same record
+to be conflicts. This will allow a record to revert to a previously
+used slug.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+105
+106
+107
+108
+109
+110
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 105</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_scope_for_slug_generator'>scope_for_slug_generator</span>
+  <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='kw'>super</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_relation'>relation</span> <span class='kw'>if</span> <span class='id identifier rubyid_new_record?'>new_record?</span>
+  <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='const'>Slug</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sluggable_id &lt;&gt; ?</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_uses?'>uses?</span><span class='lparen'>(</span><span class='symbol'>:scoped</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_serialized_scope'>serialized_scope</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_relation'>relation</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>

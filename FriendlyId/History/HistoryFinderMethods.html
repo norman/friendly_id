@@ -103,7 +103,7 @@
 
     <ul class="summary">
       
-        <li class="private ">
+        <li class="public ">
   <span class="summary_signature">
     
       <a href="#exists_by_friendly_id%3F-instance_method" title="#exists_by_friendly_id? (instance method)">- (Boolean) <strong>exists_by_friendly_id?</strong>(id) </a>
@@ -114,7 +114,7 @@
   
   
   
-  <span class="note title private">private</span>
+  
   
   
   
@@ -182,7 +182,7 @@
   
   
   <h3 class="inherited">Methods included from <span class='object_link'><a href="../FinderMethods.html" title="FriendlyId::FinderMethods (module)">FinderMethods</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="../FinderMethods.html#exists%3F-instance_method" title="FriendlyId::FinderMethods#exists? (method)">#exists?</a></span>, <span class='object_link'><a href="../FinderMethods.html#find-instance_method" title="FriendlyId::FinderMethods#find (method)">#find</a></span>, <span class='object_link'><a href="../FinderMethods.html#find_by_friendly_id-instance_method" title="FriendlyId::FinderMethods#find_by_friendly_id (method)">#find_by_friendly_id</a></span></p>
+  <p class="inherited"><span class='object_link'><a href="../FinderMethods.html#exists%3F-instance_method" title="FriendlyId::FinderMethods#exists? (method)">#exists?</a></span>, <span class='object_link'><a href="../FinderMethods.html#find-instance_method" title="FriendlyId::FinderMethods#find (method)">#find</a></span>, <span class='object_link'><a href="../FinderMethods.html#find_by_friendly_id-instance_method" title="FriendlyId::FinderMethods#find_by_friendly_id (method)">#find_by_friendly_id</a></span>, <span class='object_link'><a href="../FinderMethods.html#potential_primary_key%3F-instance_method" title="FriendlyId::FinderMethods#potential_primary_key? (method)">#potential_primary_key?</a></span></p>
 
 
   <div id="instance_method_details" class="method_details_list">
@@ -192,7 +192,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="exists_by_friendly_id?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>exists_by_friendly_id?</strong>(id)  <span class="extras">(private)</span>
+    - (<tt>Boolean</tt>) <strong>exists_by_friendly_id?</strong>(id) 
   
 
   
@@ -226,12 +226,12 @@
       <pre class="lines">
 
 
-91
-92
-93</pre>
+85
+86
+87</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 91</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 85</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exists_by_friendly_id?'>exists_by_friendly_id?</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:slugs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_arel_table'>arel_table</span><span class='lbracket'>[</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_eq'>eq</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_or'>or</span><span class='lparen'>(</span><span class='id identifier rubyid_slug_history_clause'>slug_history_clause</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span>
@@ -256,12 +256,12 @@
       <pre class="lines">
 
 
-87
-88
-89</pre>
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_by_friendly_id'>first_by_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_joins'>joins</span><span class='lparen'>(</span><span class='symbol'>:slugs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_slug_history_clause'>slug_history_clause</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_readonly'>readonly</span><span class='lparen'>(</span><span class='kw'>false</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
@@ -306,7 +306,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>

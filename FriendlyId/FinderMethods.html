@@ -126,7 +126,7 @@
 </li>
 
       
-        <li class="private ">
+        <li class="public ">
   <span class="summary_signature">
     
       <a href="#exists_by_friendly_id%3F-instance_method" title="#exists_by_friendly_id? (instance method)">- (Boolean) <strong>exists_by_friendly_id?</strong>(id) </a>
@@ -137,7 +137,7 @@
   
   
   
-  <span class="note title private">private</span>
+  
   
   
   
@@ -198,6 +198,28 @@
   <span class="summary_signature">
     
       <a href="#first_by_friendly_id-instance_method" title="#first_by_friendly_id (instance method)">- (Object) <strong>first_by_friendly_id</strong>(id) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  <span class="note title private">private</span>
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="private ">
+  <span class="summary_signature">
+    
+      <a href="#potential_primary_key%3F-instance_method" title="#potential_primary_key? (instance method)">- (Boolean) <strong>potential_primary_key?</strong>(id) </a>
     
 
     
@@ -283,7 +305,7 @@
       <div class="method_details ">
   <h3 class="signature " id="exists_by_friendly_id?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>exists_by_friendly_id?</strong>(id)  <span class="extras">(private)</span>
+    - (<tt>Boolean</tt>) <strong>exists_by_friendly_id?</strong>(id) 
   
 
   
@@ -317,12 +339,12 @@
       <pre class="lines">
 
 
-45
-46
-47</pre>
+39
+40
+41</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/finder_methods.rb', line 45</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finder_methods.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exists_by_friendly_id?'>exists_by_friendly_id?</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span>
@@ -400,7 +422,7 @@ method.</p>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
   <span class='kw'>return</span> <span class='kw'>super</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='op'>!=</span> <span class='int'>1</span> <span class='op'>||</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_unfriendly_id?'>unfriendly_id?</span>
   <span class='id identifier rubyid_first_by_friendly_id'>first_by_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_result'>result</span><span class='op'>|</span> <span class='kw'>return</span> <span class='id identifier rubyid_result'>result</span> <span class='kw'>unless</span> <span class='id identifier rubyid_result'>result</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span><span class='rbrace'>}</span>
-  <span class='kw'>return</span> <span class='kw'>super</span> <span class='kw'>if</span> <span class='const'>Integer</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span> <span class='kw'>rescue</span> <span class='kw'>nil</span>
+  <span class='kw'>return</span> <span class='kw'>super</span> <span class='kw'>if</span> <span class='id identifier rubyid_potential_primary_key?'>potential_primary_key?</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>RecordNotFound</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -481,15 +503,81 @@ method.</p>
       <pre class="lines">
 
 
-41
-42
-43</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/finder_methods.rb', line 41</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finder_methods.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first_by_friendly_id'>first_by_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="potential_primary_key?-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>potential_primary_key?</strong>(id)  <span class="extras">(private)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finder_methods.rb', line 45</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_potential_primary_key?'>potential_primary_key?</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_primary_key_type'>primary_key_type</span>
+  <span class='kw'>when</span> <span class='symbol'>:integer</span>
+    <span class='const'>Integer</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span> <span class='kw'>rescue</span> <span class='kw'>false</span>
+  <span class='kw'>when</span> <span class='symbol'>:uuid</span>
+    <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}</span><span class='regexp_end'>/</span></span>
+  <span class='kw'>else</span>
+    <span class='kw'>true</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -501,7 +589,7 @@ method.</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:17 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>

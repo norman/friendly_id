@@ -66,6 +66,19 @@
 <p>We would like to think our many <a href="file.Contributors.html" title="contributors">contributors</a> for
 suggestions, ideas and improvements to FriendlyId.</p>
 
+<h2>5.0.0.rc2 (2013-09-29)</h2>
+
+<ul>
+<li>When the :finders addon has been included, use it in FriendlyId&#39;s internal
+finds to boost performance.</li>
+<li>Use instance methods rather than class methods in migrations.</li>
+<li>On find, fall back to super when the primary key is a character type. Thanks
+to <a href="https://github.com/jhdavids8">Jamie Davidson</a>.</li>
+<li>Fix reversion to previously used slug from history table when
+<code>should_generate_new_friendly_id?</code> is overridden.</li>
+<li>Fix sequencing of numeric slugs</li>
+</ul>
+
 <h2>5.0.0.rc1 (2013-08-28)</h2>
 
 <ul>
@@ -213,7 +226,7 @@ as the primary way of handling slugging.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Wed Aug 28 23:16:36 2013 by
+  Generated on Sun Sep 29 12:39:16 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7 (ruby-2.0.0).
 </div>
