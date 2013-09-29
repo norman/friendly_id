@@ -10,6 +10,8 @@ suggestions, ideas and improvements to FriendlyId.
 * Use instance methods rather than class methods in migrations.
 * On find, fall back to super when the primary key is a character type. Thanks
   to [Jamie Davidson](https://github.com/jhdavids8).
+* Fix reversion to previously used slug from history table when
+  `should_generate_new_friendly_id?` is overridden.
 
 ## 5.0.0.rc1 (2013-08-28)
 

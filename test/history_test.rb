@@ -82,10 +82,13 @@ class HistoryTest < MiniTest::Unit::TestCase
   test "should handle renames" do
     with_instance_of(model_class) do |record|
       record.name = 'x'
+      record.slug = nil
       assert record.save
       record.name = 'y'
+      record.slug = nil
       assert record.save
       record.name = 'x'
+      record.slug = nil
       assert record.save
     end
   end
@@ -126,6 +129,32 @@ class HistoryTest < MiniTest::Unit::TestCase
         ActiveRecord::Base.table_name_prefix = ""
         FriendlyId::Slug.table_name = without_prefix
       end
+    end
+  end
+end
+
+class HistoryTestWithAutomaticSlugRegeneration < HistoryTest
+  class Manual < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :history]
+
+    def should_generate_new_friendly_id?
+      slug.blank? or name_changed?
+    end
+  end
+
+  def model_class
+    Manual
+  end
+
+  test 'should allow reversion back to a previously used slug' do
+    with_instance_of(model_class, name: 'foo') do |record|
+      record.name = 'bar'
+      record.save!
+      assert_equal 'bar', record.friendly_id
+      record.name = 'foo'
+      record.save!
+      assert_equal 'foo', record.friendly_id
     end
   end
 end

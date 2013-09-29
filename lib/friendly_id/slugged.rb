@@ -297,7 +297,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     end
     private :set_slug
 
-    def slug_generator
+    def scope_for_slug_generator
       scope = self.class.base_class.unscoped
       scope = scope.friendly unless friendly_id_config.uses? :finders
 
@@ -305,7 +305,12 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
         column = self.class.quoted_table_name + '.' + self.class.quoted_primary_key
         scope = scope.where("#{column} <> ?", send(self.class.primary_key))
       end
-      friendly_id_config.slug_generator_class.new(scope)
+      scope
+    end
+    private :scope_for_slug_generator
+
+    def slug_generator
+      friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
     end
     private :slug_generator
 

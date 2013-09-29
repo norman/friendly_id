@@ -99,6 +99,19 @@ method.
 
     private
 
+    # If we're updating, don't consider historic slugs for the same record
+    # to be conflicts. This will allow a record to revert to a previously
+    # used slug.
+    def scope_for_slug_generator
+      relation = super
+      return relation if new_record?
+      relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+      if friendly_id_config.uses?(:scoped)
+        relation = relation.where(:scope => serialized_scope)
+      end
+      relation
+    end
+
     def create_slug
       return unless friendly_id
       return if slugs.first.try(:slug) == friendly_id
