@@ -89,7 +89,7 @@ method.
       private
 
       def first_by_friendly_id(id)
-        joins(:slugs).where(slug_history_clause(id)).readonly(false).first
+        select(quoted_table_name + '.*').joins(:slugs).where(slug_history_clause(id)).first
       end
 
       def slug_history_clause(id)
