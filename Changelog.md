@@ -3,6 +3,18 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0.rc.3 (NOT RELEASED YET)
+
+* Support friendly finds on associations in Rails 4.0.1 and up. They will
+  currently work on Rails 4.0 associations only if `:inverse_of` is not used.
+  In Rails 4-0-stable, associations have been modified to use a special
+  relation class, giving FriendlyId a consistent extension point. Since the
+  behavior in 4.0.0 is considered defective and fixed in 4-0-stable, FriendlyId
+  5.0 will not support friendly finds on inverse relelations in 4.0.0. For a
+  reliable workaround, use the `friendly` scope for friendly finds on
+  associations; this works on all Rails 4.0.x versions and will continue to be
+  supported.
+
 ## 5.0.0.rc2 (2013-09-29)
 
 * When the :finders addon has been included, use it in FriendlyId's internal
