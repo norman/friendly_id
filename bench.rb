@@ -27,8 +27,7 @@ end
 
 class Restaurant < ActiveRecord::Base
   extend FriendlyId
-  relation.class.send(:include, FriendlyId::FinderMethods)
-  friendly_id :name
+  friendly_id :name, :use => :finders
 end
 
 
@@ -56,7 +55,7 @@ Benchmark.bmbm do |x|
     N.times {Journalist.friendly.find JOURNALISTS.rand}
   end
 
-  x.report 'find (in-table slug; included FinderMethods)' do
+  x.report 'find (in-table slug; using finders module)' do
     N.times {Restaurant.find RESTAURANTS.rand}
   end
 
@@ -72,7 +71,7 @@ Benchmark.bmbm do |x|
     N.times {transaction {Journalist.create :name => Faker::Name.name}}
   end
 
-  x.report 'insert (in-table-slug; included FinderMethods)' do
+  x.report 'insert (in-table-slug; using finders module)' do
     N.times {transaction {Restaurant.create :name => Faker::Name.name}}
   end
 
