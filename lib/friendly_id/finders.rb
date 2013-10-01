@@ -79,10 +79,16 @@ in your controllers to use the `friendly` scope. For example:
 =end
   module Finders
     def self.included(model_class)
-      model_class.send(:relation).class.send(:include, FriendlyId::FinderMethods)
+      model_class.instance_eval do
+        relation.class.send(:include, friendly_id_config.finder_methods)
+      end
 
-      if model_class.friendly_id_config.uses? :history
-        model_class.send(:relation).class.send(:include, FriendlyId::History::HistoryFinderMethods)
+      # Support for friendly finds on associations for Rails 4.0.1 and above.
+      # As of 1 October 2013 this works on Rails 4-0-stable, but may change.
+      if ::ActiveRecord.const_defined?('AssociationRelation')
+        assocation_relation_class_name = :"ActiveRecord_AssociationRelation_#{model_class.to_s.gsub('::', '_')}"
+        association_relation_class = ::ActiveRecord::AssociationRelation.const_get(assocation_relation_class_name)
+        association_relation_class.send(:include, model_class.friendly_id_config.finder_methods)
       end
     end
   end

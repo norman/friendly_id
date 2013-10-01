@@ -15,10 +15,14 @@ module FriendlyId
     # @return ActiveRecord::Base
     attr_accessor :model_class
 
+    # The module to use for finders
+    attr_accessor :finder_methods
+
     def initialize(model_class, values = nil)
-      @model_class = model_class
-      @defaults    = {}
-      @modules     = []
+      @model_class    = model_class
+      @defaults       = {}
+      @modules        = []
+      @finder_methods = FriendlyId::FinderMethods
       set values
     end
 

@@ -203,7 +203,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       # and maintainability. If you'd like to improve the performance, your
       # efforts would be best directed at improving it at the root cause
       # of the problem - in Rails - because it would benefit more people.
-      all.extending(FinderMethods)
+      all.extending(friendly_id_config.finder_methods)
     end
 
     # Returns the model class's {FriendlyId::Configuration friendly_id_config}.

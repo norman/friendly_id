@@ -55,7 +55,13 @@ method.
   module History
 
     def self.setup(model_class)
-      model_class.friendly_id_config.use :slugged
+      model_class.instance_eval do
+        friendly_id_config.use :slugged
+        friendly_id_config.finder_methods = FriendlyId::History::FinderMethods
+        if friendly_id_config.uses? :finders
+          relation.class.send(:include, friendly_id_config.finder_methods)
+        end
+      end
     end
 
     # Configures the model instance to use the History add-on.
@@ -67,20 +73,12 @@ method.
           :class_name => Slug.to_s
         }
 
-        if model_class.friendly_id_config.uses? :finders
-          model_class.send(:relation).class.send(:include, HistoryFinderMethods)
-        end
-
         after_save :create_slug
-
-        def self.friendly
-          all.extending(HistoryFinderMethods)
-        end
       end
     end
 
-    module HistoryFinderMethods
-      include FinderMethods
+    module FinderMethods
+      include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
         joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
