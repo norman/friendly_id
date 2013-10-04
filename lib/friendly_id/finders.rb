@@ -35,33 +35,6 @@ easily by using the `:finders` addon:
     Restaurant.find('plaza-diner')          #=> now also works
     Restaurant.active.find('plaza-diner')   #=> now also works
 
-### `has_many` and other associations
-
-If you want to perform friendly finds on associations, you must extend the
-FriendlyId::Finder methods module, or use the `friendly` scope:
-
-    class Account < ActiveRecord::Base
-      extend FriendlyId
-
-      friendly_id :name, use: :slugged
-      belongs_to :person
-    end
-
-    class Person < ActiveRecord::Base
-      has_many :accounts
-    end
-
-    person.accounts.find 'bank-of-america'          # This will fail
-    person.accounts.friendly.find 'bank-of-america' # OK
-
-    class Person < ActiveRecord::Base
-      has_many :accounts, extend: FriendlyId::FinderMethods
-    end
-
-    person.accounts.find 'bank-of-america'          # OK
-    person.accounts.friendly.find 'bank-of-america' # OK
-
-
 ### Updating your application to use FriendlyId's finders
 
 Unless you've chosen to use the `:finders` addon, be sure to modify the finders
