@@ -69,7 +69,7 @@ relation:
 
 Alternatively, you could pass the scope value as a query parameter:
 
-    Restaurant.friendly.find("joes-diner").where(:city_id => @city.id)
+    Restaurant.where(:city_id => @city.id).friendly.find("joes-diner")
 
 
 ### Finding All Records That Match a Scoped ID
