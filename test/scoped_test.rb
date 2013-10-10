@@ -69,4 +69,13 @@ class ScopedTest < MiniTest::Unit::TestCase
       assert novel3.friendly_id != novel4.friendly_id
     end
   end
+
+  test 'should allow a record to reuse its own slug' do
+    with_instance_of(model_class) do |record|
+      old_id = record.friendly_id
+      record.slug = nil
+      record.save!
+      assert_equal old_id, record.friendly_id
+    end
+  end
 end
