@@ -3,6 +3,11 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.0 (NOT RELEASED YET)
+
+* Fix to let scoped records reuse their slugs (thanks [Donny
+  Kurnia](https://github.com/donnykurnia)).
+
 ## 5.0.0.rc.3 (2013-10-04)
 
 * Support friendly finds on associations in Rails 4.0.1 and up. They will
