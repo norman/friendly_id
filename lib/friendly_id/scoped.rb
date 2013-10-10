@@ -126,6 +126,10 @@ an example of one way to set this up:
       friendly_id_config.scope_columns.each do |column|
         relation = relation.where(column => send(column))
       end
+      if changed.include?(friendly_id_config.slug_column)
+        column = self.class.quoted_table_name + '.' + self.class.quoted_primary_key
+        relation = relation.where("#{column} <> ?", send(self.class.primary_key))
+      end
       friendly_id_config.slug_generator_class.new(relation)
     end
     private :slug_generator
