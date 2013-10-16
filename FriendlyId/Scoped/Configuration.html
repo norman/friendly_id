@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Scoped::Configuration
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -240,12 +240,12 @@
       <pre class="lines">
 
 
-143
-144
-145</pre>
+147
+148
+149</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 147</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scope'>scope</span>
   <span class='ivar'>@scope</span>
@@ -277,12 +277,12 @@
       <pre class="lines">
 
 
-159
-160
-161</pre>
+163
+164
+165</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 159</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 163</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_reflection_foreign_key'>reflection_foreign_key</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_reflections'>reflections</span><span class='lbracket'>[</span><span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_try'>try</span><span class='lparen'>(</span><span class='symbol'>:foreign_key</span><span class='rparen'>)</span>
@@ -339,12 +339,12 @@ the name of column and returns it cast to a String.</p>
       <pre class="lines">
 
 
-153
-154
-155</pre>
+157
+158
+159</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 153</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 157</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scope_columns'>scope_columns</span>
   <span class='lbracket'>[</span><span class='ivar'>@scope</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_s'>s</span><span class='op'>|</span> <span class='lparen'>(</span><span class='id identifier rubyid_reflection_foreign_key'>reflection_foreign_key</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span> <span class='kw'>or</span> <span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='rbrace'>}</span>
@@ -359,9 +359,9 @@ the name of column and returns it cast to a String.</p>
 </div>
 
     <div id="footer">
-  Generated on Mon Sep 30 14:00:37 2013 by
+  Generated on Wed Oct 16 09:19:57 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-2.0.0).
+  0.8.7.2 (ruby-2.0.0).
 </div>
 
   </body>

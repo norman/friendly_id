@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::History
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -148,7 +148,7 @@ end
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="History/HistoryFinderMethods.html" title="FriendlyId::History::HistoryFinderMethods (module)">HistoryFinderMethods</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="History/FinderMethods.html" title="FriendlyId::History::FinderMethods (module)">FinderMethods</a></span>
     
   
     
@@ -302,12 +302,6 @@ end
       <pre class="lines">
 
 
-62
-63
-64
-65
-66
-67
 68
 69
 70
@@ -318,12 +312,10 @@ end
 75
 76
 77
-78
-79
-80</pre>
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_class_eval'>class_eval</span> <span class='kw'>do</span>
@@ -333,15 +325,7 @@ end
       <span class='symbol'>:class_name</span> <span class='op'>=&gt;</span> <span class='const'>Slug</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
     <span class='rbrace'>}</span>
 
-    <span class='kw'>if</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_uses?'>uses?</span> <span class='symbol'>:finders</span>
-      <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:relation</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='const'>HistoryFinderMethods</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-
     <span class='id identifier rubyid_after_save'>after_save</span> <span class='symbol'>:create_slug</span>
-
-    <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span>
-      <span class='id identifier rubyid_all'>all</span><span class='period'>.</span><span class='id identifier rubyid_extending'>extending</span><span class='lparen'>(</span><span class='const'>HistoryFinderMethods</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -366,13 +350,25 @@ end
 
 57
 58
-59</pre>
+59
+60
+61
+62
+63
+64
+65</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_setup'>setup</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+    <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span> <span class='op'>=</span> <span class='const'>FriendlyId</span><span class='op'>::</span><span class='const'>History</span><span class='op'>::</span><span class='const'>FinderMethods</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_uses?'>uses?</span> <span class='symbol'>:finders</span>
+      <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -400,6 +396,8 @@ end
       <pre class="lines">
 
 
+113
+114
 115
 116
 117
@@ -411,12 +409,10 @@ end
 123
 124
 125
-126
-127
-128</pre>
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_slug'>create_slug</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
@@ -464,18 +460,18 @@ used slug.</p>
       <pre class="lines">
 
 
+103
+104
 105
 106
 107
 108
 109
 110
-111
-112
-113</pre>
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 105</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scope_for_slug_generator'>scope_for_slug_generator</span>
   <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='kw'>super</span>
@@ -496,9 +492,9 @@ used slug.</p>
 </div>
 
     <div id="footer">
-  Generated on Mon Sep 30 14:00:38 2013 by
+  Generated on Wed Oct 16 09:19:57 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-2.0.0).
+  0.8.7.2 (ruby-2.0.0).
 </div>
 
   </body>

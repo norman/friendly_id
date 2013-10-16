@@ -6,7 +6,7 @@
 <title>
   File: Guide
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -185,33 +185,6 @@ easily by using the <code>:finders</code> addon:</p>
 </span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_active'>active</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>   <span class='comment'>#=&gt; now also works
 </span></code></pre>
 
-<h3><code>has_many</code> and other associations</h3>
-
-<p>If you want to perform friendly finds on associations, you must extend the
-FriendlyId::Finder methods module, or use the <code>friendly</code> scope:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Account</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
-  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
-
-  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
-  <span class='id identifier rubyid_belongs_to'>belongs_to</span> <span class='symbol'>:person</span>
-<span class='kw'>end</span>
-
-<span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
-  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:accounts</span>
-<span class='kw'>end</span>
-
-<span class='id identifier rubyid_person'>person</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bank-of-america</span><span class='tstring_end'>&#39;</span></span>          <span class='comment'># This will fail
-</span><span class='id identifier rubyid_person'>person</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bank-of-america</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># OK
-</span>
-<span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
-  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:accounts</span><span class='comma'>,</span> <span class='label'>extend:</span> <span class='const'>FriendlyId</span><span class='op'>::</span><span class='const'>FinderMethods</span>
-<span class='kw'>end</span>
-
-<span class='id identifier rubyid_person'>person</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bank-of-america</span><span class='tstring_end'>&#39;</span></span>          <span class='comment'># OK
-</span><span class='id identifier rubyid_person'>person</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bank-of-america</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># OK
-</span></code></pre>
-
 <h3>Updating your application to use FriendlyId&#39;s finders</h3>
 
 <p>Unless you&#39;ve chosen to use the <code>:finders</code> addon, be sure to modify the finders
@@ -225,6 +198,18 @@ in your controllers to use the <code>friendly</code> scope. For example:</p>
 <span class='comment'># after
 </span><span class='kw'>def</span> <span class='id identifier rubyid_set_restaurant'>set_restaurant</span>
   <span class='ivar'>@restaurant</span> <span class='op'>=</span> <span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4>Active Admin</h4>
+
+<p>Unless you use the <code>:finders</code> addon, you should modify your admin controllers
+for models that use FriendlyId with something similar to the following:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_controller'>controller</span> <span class='kw'>do</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_find_resource'>find_resource</span>
+    <span class='id identifier rubyid_scoped_collection'>scoped_collection</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span>
 </code></pre>
 
@@ -573,7 +558,7 @@ relation:</p>
 
 <p>Alternatively, you could pass the scope value as a query parameter:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:city_id</span> <span class='op'>=&gt;</span> <span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:city_id</span> <span class='op'>=&gt;</span> <span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 </code></pre>
 
 <h3>Finding All Records That Match a Scoped ID</h3>
@@ -703,9 +688,9 @@ message to a different field. For example:</p>
 </div></div>
 
     <div id="footer">
-  Generated on Mon Sep 30 14:00:37 2013 by
+  Generated on Wed Oct 16 09:19:57 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-2.0.0).
+  0.8.7.2 (ruby-2.0.0).
 </div>
 
   </body>

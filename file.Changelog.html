@@ -6,7 +6,7 @@
 <title>
   File: Changelog
   
-    &mdash; Documentation by YARD 0.8.7
+    &mdash; Documentation by YARD 0.8.7.2
   
 </title>
 
@@ -65,6 +65,28 @@
 
 <p>We would like to think our many <a href="file.Contributors.html" title="contributors">contributors</a> for
 suggestions, ideas and improvements to FriendlyId.</p>
+
+<h2>5.0.0 (2013-10-16)</h2>
+
+<ul>
+<li>Fix to let scoped records reuse their slugs (thanks <a href="https://github.com/donnykurnia">Donny
+Kurnia</a>).</li>
+</ul>
+
+<h2>5.0.0.rc.3 (2013-10-04)</h2>
+
+<ul>
+<li>Support friendly finds on associations in Rails 4.0.1 and up. They will
+currently work on Rails 4.0 associations only if <code>:inverse_of</code> is not used.
+In Rails 4-0-stable, associations have been modified to use a special
+relation class, giving FriendlyId a consistent extension point. Since the
+behavior in 4.0.0 is considered defective and fixed in 4-0-stable, FriendlyId
+5.0 will not support friendly finds on inverse relelations in 4.0.0. For a
+reliable workaround, use the <code>friendly</code> scope for friendly finds on
+associations; this works on all Rails 4.0.x versions and will continue to be
+supported.</li>
+<li>Documentation fixes.</li>
+</ul>
 
 <h2>5.0.0.rc2 (2013-09-29)</h2>
 
@@ -226,9 +248,9 @@ as the primary way of handling slugging.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Mon Sep 30 14:00:37 2013 by
+  Generated on Wed Oct 16 09:19:57 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7 (ruby-2.0.0).
+  0.8.7.2 (ruby-2.0.0).
 </div>
 
   </body>
