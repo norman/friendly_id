@@ -49,6 +49,18 @@ in your controllers to use the `friendly` scope. For example:
     def set_restaurant
       @restaurant = Restaurant.friendly.find(params[:id])
     end
+
+#### Active Admin
+
+Unless you use the `:finders` addon, you should modify your admin controllers
+for models that use FriendlyId with something similar to the following:
+
+    controller do
+      def find_resource
+        scoped_collection.friendly.find(params[:id])
+      end
+    end
+
 =end
   module Finders
     def self.included(model_class)
