@@ -3,7 +3,7 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
-## 5.0.0 (NOT RELEASED YET)
+## 5.0.0 (2013-10-16)
 
 * Fix to let scoped records reuse their slugs (thanks [Donny
   Kurnia](https://github.com/donnykurnia)).
