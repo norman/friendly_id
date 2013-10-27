@@ -3,6 +3,10 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.1 (2013-10-27)
+
+* Fix compatibility with Rails 4.0.1.rc3 (thanks [Herman verschooten](https://github.com/Hermanverschooten)).
+
 ## 5.0.0 (2013-10-16)
 
 * Fix to let scoped records reuse their slugs (thanks [Donny
