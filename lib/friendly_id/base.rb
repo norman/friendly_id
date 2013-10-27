@@ -243,7 +243,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       if diff = changes[friendly_id_config.query_field]
         diff.first || diff.second
       else
-        friendly_id.presence || super
+        friendly_id.presence.to_param || super
       end
     end
   end
