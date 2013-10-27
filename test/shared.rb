@@ -151,6 +151,13 @@ module FriendlyId
           end
         end
 
+        test "should return the friendly_id as a string" do
+          with_instance_of(model_class) do |record|
+            record.expects(:friendly_id).returns(5)
+            assert_equal "5", record.to_param
+          end
+        end
+
         test "should return numeric id if the friendly_id is blank" do
           with_instance_of(model_class) do |record|
             record.expects(:friendly_id).returns("  ")
