@@ -374,7 +374,7 @@
   <span class='kw'>if</span> <span class='id identifier rubyid_diff'>diff</span> <span class='op'>=</span> <span class='id identifier rubyid_changes'>changes</span><span class='lbracket'>[</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span><span class='rbracket'>]</span>
     <span class='id identifier rubyid_diff'>diff</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span> <span class='op'>||</span> <span class='id identifier rubyid_diff'>diff</span><span class='period'>.</span><span class='id identifier rubyid_second'>second</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_friendly_id'>friendly_id</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span> <span class='op'>||</span> <span class='kw'>super</span>
+    <span class='id identifier rubyid_friendly_id'>friendly_id</span><span class='period'>.</span><span class='id identifier rubyid_presence'>presence</span><span class='period'>.</span><span class='id identifier rubyid_to_param'>to_param</span> <span class='op'>||</span> <span class='kw'>super</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -387,7 +387,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Oct 16 09:19:57 2013 by
+  Generated on Sun Oct 27 19:22:37 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.2 (ruby-2.0.0).
 </div>
