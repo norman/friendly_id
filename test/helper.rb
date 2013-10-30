@@ -1,5 +1,9 @@
-require "rubygems"
 require "bundler/setup"
+if ENV['COVERAGE']
+  require 'coveralls'
+  Coveralls.wear!
+end
+
 require "minitest/unit"
 require "mocha/setup"
 require "active_record"

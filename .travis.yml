@@ -10,4 +10,4 @@ gemfile:
   - gemfiles/Gemfile.rails-stable.rb
 
 before_script: 'bundle exec rake db:create db:up'
-script: 'bundle exec rake test'
+script: 'COVERAGE=true bundle exec rake test'

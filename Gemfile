@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'coveralls', require: false
+
+
 # Database Configuration
 group :development, :test do
   platforms :jruby do
