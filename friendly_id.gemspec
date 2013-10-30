@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activerecord', '~> 4.0.0'
 
+  s.add_development_dependency 'coveralls'
   s.add_development_dependency 'railties', '~> 4.0.0'
   s.add_development_dependency 'minitest', '>= 4.4.0'
   s.add_development_dependency 'mocha', '~> 0.13.3'
