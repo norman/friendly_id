@@ -51,6 +51,13 @@ module FriendlyId
           end
         end
 
+        test "should set the slug to nil on dup" do
+          with_instance_of model_class do |record|
+            record2 = record.dup
+            assert_nil record2.slug
+          end
+        end
+
         test "when validations block save, to_param should return friendly_id rather than nil" do
           my_model_class = Class.new(model_class)
           self.class.const_set("Foo", my_model_class)

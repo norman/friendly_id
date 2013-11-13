@@ -246,5 +246,10 @@ often better and easier to use {FriendlyId::Slugged slugs}.
         friendly_id.presence.to_param || super
       end
     end
+
+    # Clears slug on duplicate records when calling `dup`.
+    def dup
+      super.tap { |duplicate| duplicate.slug = nil }
+    end
   end
 end
