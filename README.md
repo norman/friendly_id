@@ -106,7 +106,7 @@ The most important changes are:
   `should_generate_new_friendly_id?` method.
 
 * The `friendly_id` Rails generator now generates an initializer showing you
-  how to do some commmon global configuration.
+  how to do some common global configuration.
 
 * The Globalize plugin has moved to a separate gem (currently in alpha).
 
