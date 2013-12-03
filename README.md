@@ -49,7 +49,7 @@ versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
 ### What Changed in Version 5.0
 
-As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
+As of version 5.0, FriendlyId uses [semantic versioning](http://semver.org/). Therefore, as you might
 infer from the version number, 5.0 introduces changes incompatible with 4.0.
 
 The most important changes are:
