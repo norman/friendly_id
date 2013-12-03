@@ -65,6 +65,7 @@ The most important changes are:
 * A new "candidates" functionality which makes it easy to set up a list of
   alternate slugs that can be used to uniquely distinguish records, rather than
   appending a sequence. For example:
+
   ```ruby
   class Restaurant < ActiveRecord::Base
     extend FriendlyId
@@ -90,6 +91,7 @@ The most important changes are:
 * The default sequence separator has been changed from two dashes to one dash.
 * Slugs are no longer regenerated when a record is saved. If you want to regenerate
   a slug, you must explicitly set the slug column to nil:
+
   ```ruby
   restaurant.friendly_id # joes-diner
   restaurant.name = "The Plaza Diner"
@@ -99,6 +101,7 @@ The most important changes are:
   restaurant.save!
   restaurant.friendly_id # the-plaza-diner
   ```
+
   You can restore some of the old behavior by overriding the
   `should_generate_new_friendly_id?` method.
 * The `friendly_id` Rails generator now generates an initializer showing you
