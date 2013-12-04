@@ -184,6 +184,9 @@ User.create! name: "Joe Schmoe"
 
 # Change User.find to User.friendly.find in your controller
 User.friendly.find(params[:id])
+
+# In Rails 3.2 with gem 4.x method "friendly" is not available so do not change the controller.
+
 ```
 ```shell
 rails server
