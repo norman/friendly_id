@@ -81,7 +81,7 @@ method.
       include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
-        joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id).or(slug_history_clause(id))).exists?
+        where(arel_table[friendly_id_config.query_field].eq(id)).exists? || joins(:slugs).where(slug_history_clause(id)).exists?
       end
 
       private
