@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Model
   
-    &mdash; Documentation by YARD 0.8.7.2
+    &mdash; Documentation by YARD 0.8.7.3
   
 </title>
 
@@ -143,6 +143,29 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#dup-instance_method" title="#dup (instance method)">- (Object) <strong>dup</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Clears slug on duplicate records when calling <code>dup</code>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#friendly_id-instance_method" title="#friendly_id (instance method)">- (Object) <strong>friendly_id</strong> </a>
     
 
@@ -255,7 +278,47 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="friendly_id-instance_method">
+  <h3 class="signature first" id="dup-instance_method">
+  
+    - (<tt>Object</tt>) <strong>dup</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Clears slug on duplicate records when calling <code>dup</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+251
+252
+253</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 251</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_dup'>dup</span>
+  <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_duplicate'>duplicate</span><span class='op'>|</span> <span class='id identifier rubyid_duplicate'>duplicate</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="friendly_id-instance_method">
   
     - (<tt>Object</tt>) <strong>friendly_id</strong> 
   
@@ -387,9 +450,9 @@
 </div>
 
     <div id="footer">
-  Generated on Sun Oct 27 19:22:37 2013 by
+  Generated on Tue Dec 10 15:15:06 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.2 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.0.0).
 </div>
 
   </body>

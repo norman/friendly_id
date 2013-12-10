@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.8.7.2
+    &mdash; Documentation by YARD 0.8.7.3
   
 </title>
 
@@ -79,13 +79,13 @@ over and over and over again in the issues.</p>
 
 <p><strong>Rails 4</strong>:</p>
 
-<p>The master branch of this repository contains FriendlyId 5, which is compatible
-with Rails 4. This version is in beta and will be released soon.</p>
+<p>The master branch of this repository contains FriendlyId 5, the current stable version.
+5.x is the only version that is compatible with Rails 4.</p>
 
 <p><strong>Rails 3</strong>:</p>
 
 <p>If you wish to use this gem with Rails 3.1 or 3.2 you must use FriendlyId 4,
-which is the current stable release. Please see the <a href="https://github.com/norman/friendly_id/tree/4.0-stable">4.0-stable
+which is the previous stable release. Please see the <a href="https://github.com/norman/friendly_id/tree/4.0-stable">4.0-stable
 branch</a>.</p>
 
 <h1>FriendlyId</h1>
@@ -113,39 +113,39 @@ versioning, i18n, scoped slugs, reserved words, and custom slug generators.</p>
 
 <h3>What Changed in Version 5.0</h3>
 
-<p>As of version 5.0, FriendlyId uses semantic versioning. Therefore, as you might
+<p>As of version 5.0, FriendlyId uses <a href="http://semver.org/">semantic versioning</a>. Therefore, as you might
 infer from the version number, 5.0 introduces changes incompatible with 4.0.</p>
 
 <p>The most important changes are:</p>
 
 <ul>
-<li><p>Finders are no longer overridden by default. If you want to do friendly finds,
+<li>Finders are no longer overridden by default. If you want to do friendly finds,
 you must do <code>Model.friendly.find</code> rather than <code>Model.find</code>. You can however
-restore FriendlyId 4-style finders by using the <code>:finders</code> addon:</p>
-
-<pre class="code ruby"><code class="ruby">  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span> <span class='comment'># you must do MyClass.friendly.find(&#39;bar&#39;)
-</span>  <span class='comment'># or...
-</span>  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:finders</span><span class='rbracket'>]</span> <span class='comment'># you can now do MyClass.find(&#39;bar&#39;)
-</span></code></pre></li>
+restore FriendlyId 4-style finders by using the <code>:finders</code> addon:
+<code>ruby
+friendly_id :foo, use: :slugged # you must do MyClass.friendly.find(&#39;bar&#39;)
+# or...
+friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find(&#39;bar&#39;)
+</code></li>
 <li><p>A new &quot;candidates&quot; functionality which makes it easy to set up a list of
 alternate slugs that can be used to uniquely distinguish records, rather than
 appending a sequence. For example:</p>
 
-<pre class="code ruby"><code class="ruby">  <span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
-    <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
-    <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:slug_candidates</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+<span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+<span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:slug_candidates</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
 
-    <span class='comment'># Try building a slug based on the following fields in
-</span>    <span class='comment'># increasing order of specificity.
-</span>    <span class='kw'>def</span> <span class='id identifier rubyid_slug_candidates'>slug_candidates</span>
-      <span class='lbracket'>[</span>
-        <span class='symbol'>:name</span><span class='comma'>,</span>
-        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
-        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
-        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street_number</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span>
-      <span class='rbracket'>]</span>
-    <span class='kw'>end</span>
-  <span class='kw'>end</span>
+<span class='comment'># Try building a slug based on the following fields in
+</span><span class='comment'># increasing order of specificity.
+</span><span class='kw'>def</span> <span class='id identifier rubyid_slug_candidates'>slug_candidates</span>
+  <span class='lbracket'>[</span>
+    <span class='symbol'>:name</span><span class='comma'>,</span>
+    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street_number</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span>
+  <span class='rbracket'>]</span>
+<span class='kw'>end</span>
+<span class='kw'>end</span>
 </code></pre></li>
 <li><p>Now that candidates have been added, FriendlyId no longer uses a numeric
 sequence to differentiate conflicting slug, but rather a UUID (e.g. something
@@ -156,19 +156,19 @@ of uglier ids being generated when there are conflicts.</p></li>
 <li><p>Slugs are no longer regenerated when a record is saved. If you want to regenerate
 a slug, you must explicitly set the slug column to nil:</p>
 
-<pre class="code ruby"><code class="ruby">  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
-</span>  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Plaza Diner</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
-  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
-</span>  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span>
-  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
-  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># the-plaza-diner
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Plaza Diner</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># the-plaza-diner
 </span></code></pre>
 
 <p>You can restore some of the old behavior by overriding the
 <code>should_generate_new_friendly_id?</code> method.</p></li>
 <li><p>The <code>friendly_id</code> Rails generator now generates an initializer showing you
-how to do some commmon global configuration.</p></li>
+how to do some common global configuration.</p></li>
 <li><p>The Globalize plugin has moved to a separate gem (currently in alpha).</p></li>
 <li><p>The <code>:reserved</code> module no longer includes any default reserved words.
 Previously it blocked &quot;edit&quot; and &quot;new&quot; everywhere. The default word list has
@@ -320,9 +320,9 @@ SOFTWARE.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Sun Oct 27 19:22:37 2013 by
+  Generated on Tue Dec 10 15:15:06 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.2 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.0.0).
 </div>
 
   </body>
