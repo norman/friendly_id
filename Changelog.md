@@ -3,6 +3,13 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.2 (2013-12-10)
+
+* Query performance improvements ([#497](https://github.com/norman/friendly_id/pull/497)).
+* Documentation improvements (thanks [John Bachir](https://github.com/jjb)).
+* Minor refactoring of internals (thanks [Gagan Ahwad](https://github.com/gaganawhad)).
+* Set slug to `nil` on call to `dup` to ensure slug is generated ([#483](https://github.com/norman/friendly_id/pull/483)).
+
 ## 5.0.1 (2013-10-27)
 
 * Fix compatibility with Rails 4.0.1.rc3 (thanks [Herman verschooten](https://github.com/Hermanverschooten)).
