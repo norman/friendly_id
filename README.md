@@ -16,13 +16,13 @@ over and over and over again in the issues.
 
 **Rails 4**:
 
-The master branch of this repository contains FriendlyId 5, which is compatible
-with Rails 4. This version is in beta and will be released soon.
+The master branch of this repository contains FriendlyId 5, the current stable version.
+5.x is the only version that is compatible with Rails 4.
 
 **Rails 3**:
 
 If you wish to use this gem with Rails 3.1 or 3.2 you must use FriendlyId 4,
-which is the current stable release. Please see the [4.0-stable
+which is the previous stable release. Please see the [4.0-stable
 branch](https://github.com/norman/friendly_id/tree/4.0-stable).
 
 # FriendlyId
@@ -57,7 +57,7 @@ The most important changes are:
 * Finders are no longer overridden by default. If you want to do friendly finds,
   you must do `Model.friendly.find` rather than `Model.find`. You can however
   restore FriendlyId 4-style finders by using the `:finders` addon:
-  ```ruby  
+  ```ruby
   friendly_id :foo, use: :slugged # you must do MyClass.friendly.find('bar')
   # or...
   friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find('bar')
