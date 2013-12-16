@@ -6,10 +6,16 @@ gemspec
 group :development, :test do
   platforms :jruby do
     gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta2'
-    gem 'jruby-openssl'
+    gem 'kramdown'
   end
 
-  platforms :ruby do
+  platforms :ruby, :rbx do
     gem 'sqlite3'
+    gem 'redcarpet'
+  end
+
+  platforms :rbx do
+    gem 'rubysl', '~> 2.0'
+    gem 'rubinius-developer_tools'
   end
 end

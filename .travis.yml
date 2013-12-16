@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.0.0
+  - jruby-19mode
+  - rbx
 env:
   - DB=postgres
   - DB=mysql
