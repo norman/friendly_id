@@ -57,6 +57,7 @@ The most important changes are:
 * Finders are no longer overridden by default. If you want to do friendly finds,
   you must do `Model.friendly.find` rather than `Model.find`. You can however
   restore FriendlyId 4-style finders by using the `:finders` addon:
+
   ```ruby
   friendly_id :foo, use: :slugged # you must do MyClass.friendly.find('bar')
   # or...
