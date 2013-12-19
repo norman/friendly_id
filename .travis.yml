@@ -6,7 +6,6 @@ rvm:
 env:
   - DB=postgres
   - DB=mysql
-  - DB=sqlite3
 gemfile:
   - gemfiles/Gemfile.rails-4.0.rb
   - gemfiles/Gemfile.rails-stable.rb
