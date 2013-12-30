@@ -87,6 +87,7 @@ method.
       private
 
       def first_by_friendly_id(id)
+        where(friendly_id_config.query_field => id).first ||
         select(quoted_table_name + '.*').joins(:slugs).where(slug_history_clause(id)).first
       end
 
