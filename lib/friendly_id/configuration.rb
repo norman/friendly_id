@@ -1,5 +1,5 @@
 module FriendlyId
-  # The configuration paramters passed to {Base#friendly_id} will be stored in
+  # The configuration parameters passed to {Base#friendly_id} will be stored in
   # this object.
   class Configuration
 
