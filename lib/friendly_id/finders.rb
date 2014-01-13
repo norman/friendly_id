@@ -66,10 +66,10 @@ for models that use FriendlyId with something similar to the following:
 
     module ClassMethods
       if (ActiveRecord::VERSION::MAJOR == 4) && (ActiveRecord::VERSION::MINOR == 0)
-         def relation_delegate_class(klass)
-            relation_class_name = :"#{klass.to_s.gsub('::', '_')}_#{self.to_s.gsub('::', '_')}"
-            klass.const_get(relation_class_name)
-          end
+        def relation_delegate_class(klass)
+          relation_class_name = :"#{klass.to_s.gsub('::', '_')}_#{self.to_s.gsub('::', '_')}"
+          klass.const_get(relation_class_name)
+        end
       end
     end
 
