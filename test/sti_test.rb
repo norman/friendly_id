@@ -8,7 +8,7 @@ class StiTest < MiniTest::Unit::TestCase
 
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :name, :use => :slugged
+    friendly_id :name, :use => [:slugged]
   end
 
   class Editorialist < Journalist
@@ -59,7 +59,6 @@ class StiTest < MiniTest::Unit::TestCase
       assert_match(/foo-bar-.+/, editoralist.slug)
     end
   end
-
 end
 
 class StiTestWithHistory < StiTest
@@ -74,4 +73,64 @@ class StiTestWithHistory < StiTest
   def model_class
     Editorialist
   end
+end
+
+
+class StiTestWithFinders < MiniTest::Unit::TestCase
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :finders]
+  end
+
+  class Editorialist < Journalist
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :finders]
+  end
+
+  def model_class
+    Editorialist
+  end
+
+  test "friendly_id slugs should be looked up from sub class with friendly" do
+    transaction do
+      editoralist = model_class.create! :name => 'foo bar'
+      assert_equal editoralist, model_class.friendly.find(editoralist.slug)
+    end
+  end
+
+  test "friendly_id slugs should be looked up from sub class" do
+    transaction do
+      editoralist = model_class.create! :name => 'foo bar'
+      assert_equal editoralist, model_class.find(editoralist.slug)
+    end
+  end
+
+end
+
+class StiTestSubClass < MiniTest::Unit::TestCase
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+  end
+
+  class Editorialist < Journalist
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :finders]
+  end
+
+  def model_class
+    Editorialist
+  end
+
+  test "friendly_id slugs can be created and looked up from sub class" do
+    transaction do
+      editoralist = model_class.create! :name => 'foo bar'
+      assert_equal editoralist, model_class.find(editoralist.slug)
+    end
+  end
+
 end
