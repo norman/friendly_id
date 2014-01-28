@@ -302,8 +302,8 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       scope = scope.friendly unless friendly_id_config.uses? :finders
 
       if changed.include?(friendly_id_config.slug_column)
-        column = self.class.quoted_table_name + '.' + self.class.quoted_primary_key
-        scope = scope.where("#{column} <> ?", send(self.class.primary_key))
+        primary_key_name = self.class.primary_key
+        scope = scope.where.not(primary_key_name => send(primary_key_name))
       end
       scope
     end

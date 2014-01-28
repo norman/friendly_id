@@ -10,6 +10,10 @@ class Novel < ActiveRecord::Base
   belongs_to :novelist
   belongs_to :publisher
   friendly_id :name, :use => :scoped, :scope => [:publisher, :novelist]
+
+  def should_generate_new_friendly_id?
+    new_record? || super
+  end
 end
 
 class Publisher < ActiveRecord::Base
@@ -50,6 +54,36 @@ class ScopedTest < MiniTest::Unit::TestCase
     with_instance_of Novelist do |novelist|
       novel1 = Novel.create! :name => "a", :novelist => novelist
       novel2 = Novel.create! :name => "a", :novelist => novelist
+      assert novel1.friendly_id != novel2.friendly_id
+    end
+  end
+
+  test "should not allow duplicate slugs inside scope after regeneration for persisted record" do
+    with_instance_of Novelist do |novelist|
+      novel1 = Novel.create! :name => "a", :novelist => novelist
+      novel2 = Novel.new :name => "a", :novelist => novelist
+      novel2.save!
+
+      novel2.send(:set_slug)
+      first_generated_friendly_id = novel2.friendly_id
+      novel2.send(:set_slug)
+      second_generated_friendly_id = novel2.friendly_id
+
+      assert novel1.friendly_id != novel2.friendly_id
+    end
+  end
+
+  test "should not allow duplicate slugs inside scope after regeneration for new record" do
+    with_instance_of Novelist do |novelist|
+      novel1 = Novel.create! :name => "a", :novelist => novelist
+      novel2 = Novel.new :name => "a", :novelist => novelist
+
+      novel2.send(:set_slug)
+      first_generated_friendly_id = novel2.friendly_id
+      novel2.send(:set_slug)
+      second_generated_friendly_id = novel2.friendly_id
+      novel2.save!
+
       assert novel1.friendly_id != novel2.friendly_id
     end
   end
