@@ -64,7 +64,7 @@ FriendlyId.defaults do |config|
   #  ### Controlling when slugs are generated
   #
   # As of FriendlyId 5.0, new slugs are generated only when the slug field is
-  # nil, but you if you're using a column as your base method can change this
+  # nil, but if you're using a column as your base method can change this
   # behavior by overriding the `should_generate_new_friendly_id` method that
   # FriendlyId adds to your model. The change below makes FriendlyId 5.0 behave
   # more like 4.0.
