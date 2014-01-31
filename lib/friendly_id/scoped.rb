@@ -58,7 +58,7 @@ All supplied values will be used to determine scope.
 ### Finding Records by Friendly ID
 
 If you are using scopes your friendly ids may not be unique, so a simple find
-like
+like:
 
     Restaurant.friendly.find("joes-diner")
 

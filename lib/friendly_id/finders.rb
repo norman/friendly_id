@@ -18,7 +18,7 @@ By default, these methods are available only on the `friendly` scope:
 Prior to version 5.0, FriendlyId overrode the default finder methods to perform
 friendly finds all the time. This required modifying parts of Rails that did
 not have a public API, which was harder to maintain and at times caused
-compatiblity problems. In 5.0 we decided change the library's defaults and add
+compatiblity problems. In 5.0 we decided to change the library's defaults and add
 the friendly finder methods only to the `friendly` scope in order to boost
 compatiblity. However, you can still opt-in to original functionality very
 easily by using the `:finders` addon:
