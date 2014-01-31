@@ -76,7 +76,7 @@ dashes, and Unicode Latin characters with ASCII approximations:
 
 #### Column or Method?
 
-FriendlyId always uses a method as the basis of the slug text - not a column. It
+FriendlyId always uses a method as the basis of the slug text - not a column. At
 first glance, this may sound confusing, but remember that Active Record provides
 methods for each column in a model's associated table, and that's what
 FriendlyId uses.
@@ -106,7 +106,7 @@ FriendlyId will append a UUID to the generated slug to ensure uniqueness:
     car.friendly_id #=> "peugot-206"
     car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
 
-Previous versions of FriendlyId appended a numeric sequence a to make slugs
+Previous versions of FriendlyId appended a numeric sequence to make slugs
 unique, but this was removed to simplify using FriendlyId in concurrent code.
 
 #### Candidates
