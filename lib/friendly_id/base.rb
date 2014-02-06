@@ -249,7 +249,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Clears slug on duplicate records when calling `dup`.
     def dup
-      super.tap { |duplicate| duplicate.slug = nil }
+      super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?('slug=') }
     end
   end
 end
