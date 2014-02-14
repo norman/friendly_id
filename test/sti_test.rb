@@ -115,6 +115,7 @@ class StiTestSubClass < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
+    extend FriendlyId
   end
 
   class Editorialist < Journalist
