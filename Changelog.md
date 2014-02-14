@@ -9,6 +9,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Documentation improvements (thanks [John Bachir](https://github.com/jjb)).
 * Minor refactoring of internals (thanks [Gagan Ahwad](https://github.com/gaganawhad)).
 * Set slug to `nil` on call to `dup` to ensure slug is generated ([#483](https://github.com/norman/friendly_id/pull/483)).
+* Bug fixes for STI ([#516](https://github.com/norman/friendly_id/pull/516)).
 
 ## 5.0.1 (2013-10-27)
 

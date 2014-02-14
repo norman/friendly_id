@@ -73,10 +73,13 @@ for models that use FriendlyId with something similar to the following:
       end
     end
 
-    def self.included(model_class)
+    def self.setup(model_class)
       model_class.instance_eval do
         relation.class.send(:include, friendly_id_config.finder_methods)
       end
+    end
+
+    def self.included(model_class)
       model_class.extend(ClassMethods)
 
       # Support for friendly finds on associations for Rails 4.0.1 and above.
