@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
+gem 'activerecord', '~> 4.1.0.beta1'
+gem 'railties', '~> 4.1.0.beta1'
+
 # Database Configuration
 group :development, :test do
   platforms :jruby do

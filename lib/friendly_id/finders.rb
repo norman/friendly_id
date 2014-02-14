@@ -18,7 +18,7 @@ By default, these methods are available only on the `friendly` scope:
 Prior to version 5.0, FriendlyId overrode the default finder methods to perform
 friendly finds all the time. This required modifying parts of Rails that did
 not have a public API, which was harder to maintain and at times caused
-compatiblity problems. In 5.0 we decided change the library's defaults and add
+compatiblity problems. In 5.0 we decided to change the library's defaults and add
 the friendly finder methods only to the `friendly` scope in order to boost
 compatiblity. However, you can still opt-in to original functionality very
 easily by using the `:finders` addon:
@@ -63,17 +63,29 @@ for models that use FriendlyId with something similar to the following:
 
 =end
   module Finders
-    def self.included(model_class)
+
+    module ClassMethods
+      if (ActiveRecord::VERSION::MAJOR == 4) && (ActiveRecord::VERSION::MINOR == 0)
+        def relation_delegate_class(klass)
+          relation_class_name = :"#{klass.to_s.gsub('::', '_')}_#{self.to_s.gsub('::', '_')}"
+          klass.const_get(relation_class_name)
+        end
+      end
+    end
+
+    def self.setup(model_class)
       model_class.instance_eval do
         relation.class.send(:include, friendly_id_config.finder_methods)
       end
+    end
+
+    def self.included(model_class)
+      model_class.extend(ClassMethods)
 
       # Support for friendly finds on associations for Rails 4.0.1 and above.
-      # As of 1 October 2013 this works on Rails 4-0-stable, but may change.
       if ::ActiveRecord.const_defined?('AssociationRelation')
-        assocation_relation_class_name = :"ActiveRecord_AssociationRelation_#{model_class.to_s.gsub('::', '_')}"
-        association_relation_class = ::ActiveRecord::AssociationRelation.const_get(assocation_relation_class_name)
-        association_relation_class.send(:include, model_class.friendly_id_config.finder_methods)
+        association_relation_delegate_class = model_class.relation_delegate_class(::ActiveRecord::AssociationRelation)
+        association_relation_delegate_class.send(:include, model_class.friendly_id_config.finder_methods)
       end
     end
   end

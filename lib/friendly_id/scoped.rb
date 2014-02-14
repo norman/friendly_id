@@ -58,7 +58,7 @@ All supplied values will be used to determine scope.
 ### Finding Records by Friendly ID
 
 If you are using scopes your friendly ids may not be unique, so a simple find
-like
+like:
 
     Restaurant.friendly.find("joes-diner")
 
@@ -127,13 +127,13 @@ an example of one way to set this up:
         relation = relation.where(column => send(column))
       end
       if changed.include?(friendly_id_config.slug_column)
-        column = self.class.quoted_table_name + '.' + self.class.quoted_primary_key
-        relation = relation.where("#{column} <> ?", send(self.class.primary_key))
+        primary_key_name = self.class.primary_key
+        relation = relation.where.not(primary_key_name => send(primary_key_name))
       end
       relation
     end
     private :scope_for_slug_generator
-    
+
     def slug_generator
       friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
     end

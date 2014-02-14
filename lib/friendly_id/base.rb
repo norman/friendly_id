@@ -18,6 +18,10 @@ addons it should use. See the documentation for this method for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.
 
+*A note about single table inheritance (STI): you must extend FriendlyId in
+all classes that participate in STI, both your parent classes and their
+children.*
+
 ### The Default Setup: Simple Models
 
 The simplest way to use FriendlyId is with a model that has a uniquely indexed
@@ -249,7 +253,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Clears slug on duplicate records when calling `dup`.
     def dup
-      super.tap { |duplicate| duplicate.slug = nil }
+      super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?('slug=') }
     end
   end
 end
