@@ -94,11 +94,11 @@ or include the FriendlyId module (it makes no difference), then invoke the
 <span class='object_link'><a href="#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">friendly_id</a></span> method to configure your desired
 options:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">include</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">bar</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> [:<span class="ruby-identifier">slugged</span>, :<span class="ruby-identifier">simple_i18n</span>]
-<span class="ruby-keyword">end</span>
-</pre>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_include'>include</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:bar</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:simple_i18n</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>The most important option is `:use`, which you use to tell FriendlyId which
 addons it should use. See the documentation for this method for a list of
@@ -111,29 +111,29 @@ high-level overview.</p>
 indexed column with no spaces or special characters, and that is seldom or
 never updated. The most common example of this is a user name:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">User</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">login</span>
-  <span class="ruby-identifier">validates_format_of</span> :<span class="ruby-identifier">login</span>, :<span class="ruby-identifier">with</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-regexp">/\A[a-z0-9]+\z/</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:login</span>
+  <span class='id identifier rubyid_validates_format_of'>validates_format_of</span> <span class='symbol'>:login</span><span class='comma'>,</span> <span class='symbol'>:with</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[a-z0-9]+\z</span><span class='regexp_end'>/i</span></span>
+<span class='kw'>end</span>
 
-<span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span> <span class="ruby-string">&quot;joe&quot;</span>   <span class="ruby-comment"># the old User.find(1) still works, too</span>
-<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">to_param</span>            <span class="ruby-comment"># returns &quot;joe&quot;</span>
-<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@user</span>         <span class="ruby-comment"># the URL will be /users/joe</span>
-</pre>
+<span class='ivar'>@user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe</span><span class='tstring_end'>&quot;</span></span>   <span class='comment'># the old User.find(1) still works, too
+</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_to_param'>to_param</span>            <span class='comment'># returns &quot;joe&quot;
+</span><span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@user</span>         <span class='comment'># the URL will be /users/joe
+</span></code></pre>
 
 <p>In this case, FriendlyId assumes you want to use the column as-is; it will
 never modify the value of the column, and your application should ensure
 that the value is unique and admissible in a URL:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span>
+<span class='kw'>end</span>
 
-<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">find</span> <span class="ruby-string">&quot;Viña del Mar&quot;</span>
-<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@city</span> <span class="ruby-comment"># the URL will be /cities/Viña%20del%20Mar</span>
-</pre>
+<span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Viña del Mar</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@city</span> <span class='comment'># the URL will be /cities/Viña%20del%20Mar
+</span></code></pre>
 
 <p>Writing the code to process an arbitrary string into a good identifier for
 use in a URL can be repetitive and surprisingly tricky, so for this reason
@@ -280,11 +280,11 @@ class.</p>
     
 <p>Configure FriendlyId&#39;s behavior in a model.</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
-</pre>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>When given the optional block, this method will yield the class&#39;s
 instance of <span class='object_link'><a href="Configuration.html" title="FriendlyId::Configuration (class)">Configuration</a></span> to the block before evaluating
@@ -293,38 +293,38 @@ overwritten by the arguments. This order was chosen to allow passing the
 same proc to multiple models, while being able to override the values it
 sets. Here is a contrived example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">$friendly_id_config_proc</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">base</span> = :<span class="ruby-identifier">name</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='gvar'>$friendly_id_config_proc</span> <span class='op'>=</span> <span class='const'>Proc</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">$friendly_id_config_proc</span>
-<span class="ruby-keyword">end</span>
+<span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='op'>&amp;</span><span class='gvar'>$friendly_id_config_proc</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Bar</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">$friendly_id_config_proc</span>
-<span class="ruby-keyword">end</span>
-</pre>
+<span class='kw'>class</span> <span class='const'>Bar</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='gvar'>$friendly_id_config_proc</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>However, it&#39;s usually better to use <span class='object_link'><a href="../FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">FriendlyId.defaults</a></span> for this:</p>
 
-<pre class="ruby"><span class="ruby-constant">FriendlyId</span>.<span class="ruby-identifier">defaults</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">base</span> = :<span class="ruby-identifier">name</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Foo</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-<span class="ruby-keyword">end</span>
+<span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Bar</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>
-<span class="ruby-keyword">end</span>
-</pre>
+<span class='kw'>class</span> <span class='const'>Bar</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>In general you should use the block syntax either because of your personal
 aesthetic preference, or because you need to share some functionality
@@ -343,22 +343,22 @@ will include modules into your class, and these modules in turn may add
 required configuration options to the <tt>@friendly_id_configuraton</tt>&#39;s
 class:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">friendly_id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># This will work</span>
-    <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">slugged</span>
-    <span class="ruby-identifier">config</span>.<span class="ruby-identifier">sequence_separator</span> = <span class="ruby-string">&quot;:&quot;</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+    <span class='comment'># This will work
+</span>    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_sequence_separator'>sequence_separator</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">friendly_id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-    <span class="ruby-comment"># This will fail</span>
-    <span class="ruby-identifier">config</span>.<span class="ruby-identifier">sequence_separator</span> = <span class="ruby-string">&quot;:&quot;</span>
-    <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">slugged</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
+<span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+    <span class='comment'># This will fail
+</span>    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_sequence_separator'>sequence_separator</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <h3 id="label-Including+Your+Own+Modules">Including Your Own Modules</h3>
 
@@ -370,18 +370,18 @@ href="http://github.com/norman/babosa">Babosa</a> the default slugging
 library in place of Active Support, and transliterate all slugs from
 Russian Cyrillic to ASCII:</p>
 
-<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;babosa&quot;</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>babosa</span><span class='tstring_end'>&quot;</span></span>
 
-<span class="ruby-constant">FriendlyId</span>.<span class="ruby-identifier">defaults</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">base</span> = :<span class="ruby-identifier">name</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">slugged</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span> {
-    <span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_friendly_id</span>(<span class="ruby-identifier">text</span>)
-      <span class="ruby-identifier">text</span>.<span class="ruby-identifier">to_slug</span>.<span class="ruby-identifier">normalize</span>(:<span class="ruby-identifier">transliterations</span> =<span class="ruby-operator">&gt;</span> [:<span class="ruby-identifier">russian</span>, :<span class="ruby-identifier">latin</span>])
-    <span class="ruby-keyword">end</span>
-  }
-<span class="ruby-keyword">end</span>
-</pre>
+<span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='symbol'>:name</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:slugged</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='const'>Module</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='lbrace'>{</span>
+    <span class='kw'>def</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_to_slug'>to_slug</span><span class='period'>.</span><span class='id identifier rubyid_normalize'>normalize</span><span class='lparen'>(</span><span class='symbol'>:transliterations</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:russian</span><span class='comma'>,</span> <span class='symbol'>:latin</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
 
 
   </div>
@@ -794,9 +794,9 @@ of simply extending ActiveRecord::Relation.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:10 2013 by
+  Generated on Fri Feb 14 12:31:09 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

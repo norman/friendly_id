@@ -256,12 +256,12 @@
       <pre class="lines">
 
 
-227
-228
-229</pre>
+231
+232
+233</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 227</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 231</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:friendly</span><span class='rparen'>)</span>
@@ -302,15 +302,15 @@
       <pre class="lines">
 
 
-251
-252
-253</pre>
+255
+256
+257</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 251</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 255</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dup'>dup</span>
-  <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_duplicate'>duplicate</span><span class='op'>|</span> <span class='id identifier rubyid_duplicate'>duplicate</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='rbrace'>}</span>
+  <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_duplicate'>duplicate</span><span class='op'>|</span> <span class='id identifier rubyid_duplicate'>duplicate</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_duplicate'>duplicate</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>slug=</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -342,12 +342,12 @@
       <pre class="lines">
 
 
-237
-238
-239</pre>
+241
+242
+243</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 237</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 241</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
   <span class='id identifier rubyid_send'>send</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span>
@@ -382,12 +382,12 @@
       <pre class="lines">
 
 
-232
-233
-234</pre>
+236
+237
+238</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 232</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
@@ -422,16 +422,16 @@
       <pre class="lines">
 
 
-242
-243
-244
-245
 246
 247
-248</pre>
+248
+249
+250
+251
+252</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 242</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 246</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_param'>to_param</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_diff'>diff</span> <span class='op'>=</span> <span class='id identifier rubyid_changes'>changes</span><span class='lbracket'>[</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_query_field'>query_field</span><span class='rbracket'>]</span>
@@ -450,9 +450,9 @@
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:06 2013 by
+  Generated on Fri Feb 14 12:31:05 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

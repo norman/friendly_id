@@ -104,6 +104,10 @@ addons it should use. See the documentation for this method for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.</p>
 
+<p><em>A note about single table inheritance (STI): you must extend FriendlyId in
+all classes that participate in STI, both your parent classes and their
+children.</em></p>
+
 <h3>The Default Setup: Simple Models</h3>
 
 <p>The simplest way to use FriendlyId is with a model that has a uniquely indexed
@@ -291,10 +295,6 @@ often better and easier to use <span class='object_link'><a href="Slugged.html" 
       <pre class="lines">
 
 
-196
-197
-198
-199
 200
 201
 202
@@ -302,10 +302,14 @@ often better and easier to use <span class='object_link'><a href="Slugged.html" 
 204
 205
 206
-207</pre>
+207
+208
+209
+210
+211</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 196</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 200</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly'>friendly</span>
   <span class='comment'># Guess what? This causes Rails to invoke `extend` on the scope, which has
@@ -607,15 +611,15 @@ logic.</p>
       <pre class="lines">
 
 
-187
-188
-189
-190
 191
-192</pre>
+192
+193
+194
+195
+196</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 187</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 191</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_base'>base</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>yield</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -663,14 +667,14 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
       <pre class="lines">
 
 
-214
-215
-216
-217
-218</pre>
+218
+219
+220
+221
+222</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 214</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 218</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span>
   <span class='ivar'>@friendly_id_config</span> <span class='op'>||=</span> <span class='id identifier rubyid_base_class'>base_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_dup'>dup</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
@@ -697,12 +701,12 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
       <pre class="lines">
 
 
-220
-221
-222</pre>
+224
+225
+226</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 220</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primary_key_type'>primary_key_type</span>
   <span class='ivar'>@primary_key_type</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:primary</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
@@ -717,9 +721,9 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:06 2013 by
+  Generated on Fri Feb 14 12:31:05 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

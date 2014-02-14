@@ -95,12 +95,12 @@ list of words from use as FriendlyId slugs.</p>
 <p>By default, FriendlyId reserves the words “new” and “edit” when this module
 is included. You can configure this globally by using <span class='object_link'><a href="../FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">FriendlyId.defaults</a></span>:</p>
 
-<pre class="ruby"><span class="ruby-constant">FriendlyId</span>.<span class="ruby-identifier">defaults</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">config</span><span class="ruby-operator">|</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">use</span> :<span class="ruby-identifier">reserved</span>
-  <span class="ruby-comment"># Reserve words for English and Spanish URLs</span>
-  <span class="ruby-identifier">config</span>.<span class="ruby-identifier">reserved_words</span> = <span class="ruby-node">%w(new edit nueva nuevo editar)</span>
-<span class="ruby-keyword">end</span>
-</pre>
+<pre class="code ruby"><code class="ruby"><span class='const'>FriendlyId</span><span class='period'>.</span><span class='id identifier rubyid_defaults'>defaults</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_use'>use</span> <span class='symbol'>:reserved</span>
+  <span class='comment'># Reserve words for English and Spanish URLs
+</span>  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_reserved_words'>reserved_words</span> <span class='op'>=</span> <span class='qwords_beg'>%w(</span><span class='tstring_content'>new</span><span class='words_sep'> </span><span class='tstring_content'>edit</span><span class='words_sep'> </span><span class='tstring_content'>nueva</span><span class='words_sep'> </span><span class='tstring_content'>nuevo</span><span class='words_sep'> </span><span class='tstring_content'>editar</span><span class='words_sep'>)</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>Note that the error message will appear on the field
 <code>:friendly_id</code>. If you are using Rails&#39;s scaffolded form
@@ -108,17 +108,17 @@ errors display, then it will have no field to highlight. If you&#39;d like
 to change this so that scaffolding works as expected, one way to accomplish
 this is to move the error message to a different field. For example:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, <span class="ruby-identifier">use</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">slugged</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
 
-  <span class="ruby-identifier">after_validation</span> :<span class="ruby-identifier">move_friendly_id_error_to_name</span>
+  <span class='id identifier rubyid_after_validation'>after_validation</span> <span class='symbol'>:move_friendly_id_error_to_name</span>
 
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">move_friendly_id_error_to_name</span>
-    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> :<span class="ruby-identifier">name</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">errors</span>.<span class="ruby-identifier">delete</span>(:<span class="ruby-identifier">friendly_id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">errors</span>[:<span class="ruby-identifier">friendly_id</span>].<span class="ruby-identifier">present?</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
+  <span class='kw'>def</span> <span class='id identifier rubyid_move_friendly_id_error_to_name'>move_friendly_id_error_to_name</span>
+    <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:friendly_id</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_errors'>errors</span><span class='lbracket'>[</span><span class='symbol'>:friendly_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
 
 
   </div>
@@ -238,9 +238,9 @@ class&#39;s friendly_id_config.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:11 2013 by
+  Generated on Fri Feb 14 12:31:10 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

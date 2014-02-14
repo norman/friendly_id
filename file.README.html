@@ -119,14 +119,14 @@ infer from the version number, 5.0 introduces changes incompatible with 4.0.</p>
 <p>The most important changes are:</p>
 
 <ul>
-<li>Finders are no longer overridden by default. If you want to do friendly finds,
+<li><p>Finders are no longer overridden by default. If you want to do friendly finds,
 you must do <code>Model.friendly.find</code> rather than <code>Model.find</code>. You can however
-restore FriendlyId 4-style finders by using the <code>:finders</code> addon:
-<code>ruby
-friendly_id :foo, use: :slugged # you must do MyClass.friendly.find(&#39;bar&#39;)
-# or...
-friendly_id :foo, use: [:slugged, :finders] # you can now do MyClass.find(&#39;bar&#39;)
-</code></li>
+restore FriendlyId 4-style finders by using the <code>:finders</code> addon:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span> <span class='comment'># you must do MyClass.friendly.find(&#39;bar&#39;)
+</span><span class='comment'># or...
+</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:finders</span><span class='rbracket'>]</span> <span class='comment'># you can now do MyClass.find(&#39;bar&#39;)
+</span></code></pre></li>
 <li><p>A new &quot;candidates&quot; functionality which makes it easy to set up a list of
 alternate slugs that can be used to uniquely distinguish records, rather than
 appending a sequence. For example:</p>
@@ -320,9 +320,9 @@ SOFTWARE.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:06 2013 by
+  Generated on Fri Feb 14 12:31:05 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

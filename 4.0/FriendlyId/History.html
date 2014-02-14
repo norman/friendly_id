@@ -117,29 +117,29 @@ model&#39;s <code>create</code> method.</p>
 
 <h3 id="label-Example">Example</h3>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">history</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby">class Post &lt; ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :title, :use =&gt; :history
+end
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">PostsController</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ApplicationController</span>
+class PostsController &lt; ApplicationController
 
-  <span class="ruby-identifier">before_filter</span> :<span class="ruby-identifier">find_post</span>
+  before_filter :find_post
 
-  <span class="ruby-operator">...</span>
+  ...
 
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">find_post</span>
-    <span class="ruby-ivar">@post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">find</span> <span class="ruby-identifier">params</span>[:<span class="ruby-identifier">id</span>]
+  def find_post
+    @post = Post.find params[:id]
 
-    <span class="ruby-comment"># If an old id or a numeric id was used to find the record, then</span>
-    <span class="ruby-comment"># the request path will not match the post_path, and we should do</span>
-    <span class="ruby-comment"># a 301 redirect that uses the current friendly id.</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">path</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">post_path</span>(<span class="ruby-ivar">@post</span>)
-      <span class="ruby-keyword">return</span> <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@post</span>, :<span class="ruby-identifier">status</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">moved_permanently</span>
-    <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
+    # If an old id or a numeric id was used to find the record, then
+    # the request path will not match the post_path, and we should do
+    # a 301 redirect that uses the current friendly id.
+    if request.path != post_path(@post)
+      return redirect_to @post, :status =&gt; :moved_permanently
+    end
+  end
+end
+</code></pre>
 
 
   </div>
@@ -350,9 +350,9 @@ model&#39;s <code>create</code> method.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:10 2013 by
+  Generated on Fri Feb 14 12:31:09 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

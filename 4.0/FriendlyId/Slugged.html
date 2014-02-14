@@ -98,15 +98,15 @@ uppercase characters, use ASCII to approximate UTF-8 character, and strip
 out other characters which may make them aesthetically unappealing or
 error-prone when used in a URL.</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-ivar">@post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This is the first post!&quot;</span>)
-<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id</span>   <span class="ruby-comment"># returns &quot;this-is-the-first-post&quot;</span>
-<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@post</span>   <span class="ruby-comment"># the URL will be /posts/this-is-the-first-post</span>
-</pre>
+<span class='ivar'>@post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>This is the first post!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='ivar'>@post</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span>   <span class='comment'># returns &quot;this-is-the-first-post&quot;
+</span><span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@post</span>   <span class='comment'># the URL will be /posts/this-is-the-first-post
+</span></code></pre>
 
 <p>In general, use slugs by default unless you know for sure you don&#39;t
 need them. To activate the slugging functionality, use the
@@ -122,30 +122,30 @@ your app&#39;s behavior and requirements.</p>
 
 <h3 id="label-Example+Setup">Example Setup</h3>
 
-<pre class="ruby"><span class="ruby-comment"># your model</span>
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-  <span class="ruby-identifier">validates_presence_of</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">body</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='comment'># your model
+</span><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+  <span class='id identifier rubyid_validates_presence_of'>validates_presence_of</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:body</span>
+<span class='kw'>end</span>
 
-<span class="ruby-comment"># a migration</span>
-<span class="ruby-keyword">class</span> <span class="ruby-constant">CreatePosts</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Migration</span>
-  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">up</span>
-    <span class="ruby-identifier">create_table</span> :<span class="ruby-identifier">posts</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
-      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">null</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
-      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">string</span> :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">null</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>
-      <span class="ruby-identifier">t</span>.<span class="ruby-identifier">text</span> :<span class="ruby-identifier">body</span>
-    <span class="ruby-keyword">end</span>
+<span class='comment'># a migration
+</span><span class='kw'>class</span> <span class='const'>CreatePosts</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Migration</span>
+  <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_up'>up</span>
+    <span class='id identifier rubyid_create_table'>create_table</span> <span class='symbol'>:posts</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:null</span> <span class='op'>=&gt;</span> <span class='kw'>false</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:null</span> <span class='op'>=&gt;</span> <span class='kw'>false</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span> <span class='symbol'>:body</span>
+    <span class='kw'>end</span>
 
-    <span class="ruby-identifier">add_index</span> :<span class="ruby-identifier">posts</span>, :<span class="ruby-identifier">slug</span>, :<span class="ruby-identifier">unique</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
-  <span class="ruby-keyword">end</span>
+    <span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:posts</span><span class='comma'>,</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:unique</span> <span class='op'>=&gt;</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
 
-  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">down</span>
-    <span class="ruby-identifier">drop_table</span> :<span class="ruby-identifier">posts</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-</pre>
+  <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_down'>down</span>
+    <span class='id identifier rubyid_drop_table'>drop_table</span> <span class='symbol'>:posts</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <h3 id="label-Working+With+Slugs">Working With Slugs</h3>
 
@@ -156,9 +156,9 @@ href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-p
 method to create slugs. This method will intelligently replace spaces with
 dashes, and Unicode Latin characters with ASCII approximations:</p>
 
-<pre class="ruby"><span class="ruby-identifier">movie</span> = <span class="ruby-constant">Movie</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Der Preis fürs Überleben&quot;</span>
-<span class="ruby-identifier">movie</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;der-preis-furs-uberleben&quot;</span>
-</pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_movie'>movie</span> <span class='op'>=</span> <span class='const'>Movie</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Der Preis fürs Überleben</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_movie'>movie</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='comment'>#=&gt; &quot;der-preis-furs-uberleben&quot;
+</span></code></pre>
 
 <h4 id="label-Uniqueness">Uniqueness</h4>
 
@@ -166,12 +166,12 @@ dashes, and Unicode Latin characters with ASCII approximations:</p>
 id, FriendlyId will append a sequence to the generated slug to ensure
 uniqueness:</p>
 
-<pre class="ruby"><span class="ruby-identifier">car</span> = <span class="ruby-constant">Car</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Peugot 206&quot;</span>
-<span class="ruby-identifier">car2</span> = <span class="ruby-constant">Car</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Peugot 206&quot;</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_car'>car</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_car2'>car2</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
 
-<span class="ruby-identifier">car</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;peugot-206&quot;</span>
-<span class="ruby-identifier">car2</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;peugot-206--2&quot;</span>
-</pre>
+<span class='id identifier rubyid_car'>car</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206&quot;
+</span><span class='id identifier rubyid_car2'>car2</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206--2&quot;
+</span></code></pre>
 
 <h4 id="label-Sequence+Separator+-+The+Two+Dashes">Sequence Separator - The Two Dashes</h4>
 
@@ -192,16 +192,16 @@ and that&#39;s what FriendlyId uses.</p>
 <p>Here&#39;s an example of a class that uses a custom method to generate the
 slug:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name_and_location</span>
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_and_location</span>
-    <span class="ruby-node">&quot;#{name} from #{location}&quot;</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name_and_location</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_name_and_location'>name_and_location</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> from </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_location'>location</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
 
-<span class="ruby-identifier">bob</span> = <span class="ruby-constant">Person</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Bob Smith&quot;</span>, :<span class="ruby-identifier">location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;New York City&quot;</span>
-<span class="ruby-identifier">bob</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;bob-smith-from-new-york-city&quot;</span>
-</pre>
+<span class='id identifier rubyid_bob'>bob</span> <span class='op'>=</span> <span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='symbol'>:name</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Bob Smith</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:location</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>New York City</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_bob'>bob</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;bob-smith-from-new-york-city&quot;
+</span></code></pre>
 
 <h4 id="label-Providing+Your+Own+Slug+Processing+Method">Providing Your Own Slug Processing Method</h4>
 
@@ -215,21 +215,21 @@ control whether new friendly ids are created when a model is updated. For
 example, if you only want to generate slugs once and then treat them as
 read-only:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
 
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">should_generate_new_friendly_id?</span>
-    <span class="ruby-identifier">new_record?</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_should_generate_new_friendly_id?'>should_generate_new_friendly_id?</span>
+    <span class='id identifier rubyid_new_record?'>new_record?</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
 
-<span class="ruby-identifier">post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create!</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Hello world!&quot;</span>)
-<span class="ruby-identifier">post</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;hello-world&quot;</span>
-<span class="ruby-identifier">post</span>.<span class="ruby-identifier">title</span> = <span class="ruby-string">&quot;Hello there, world!&quot;</span>
-<span class="ruby-identifier">post</span>.<span class="ruby-identifier">save!</span>
-<span class="ruby-identifier">post</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;hello-world&quot;</span>
-</pre>
+<span class='id identifier rubyid_post'>post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span><span class='lparen'>(</span><span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hello world!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='comment'>#=&gt; &quot;hello-world&quot;
+</span><span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_title'>title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Hello there, world!</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+<span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='comment'>#=&gt; &quot;hello-world&quot;
+</span></code></pre>
 
 <h4 id="label-Locale-specific+Transliterations">Locale-specific Transliterations</h4>
 
@@ -238,18 +238,18 @@ href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-t
 which in turn can use I18n&#39;s transliteration rules to consider the
 current locale when replacing Latin characters:</p>
 
-<pre class="ruby"><span class="ruby-comment"># config/locales/de.yml</span>
-<span class="ruby-identifier">de</span><span class="ruby-operator">:</span>
-  <span class="ruby-identifier">i18n</span><span class="ruby-operator">:</span>
-    <span class="ruby-identifier">transliterate</span><span class="ruby-operator">:</span>
-      <span class="ruby-identifier">rule</span><span class="ruby-operator">:</span>
-        <span class="ruby-identifier">ü</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;ue&quot;</span>
-        <span class="ruby-identifier">ö</span><span class="ruby-operator">:</span> <span class="ruby-string">&quot;oe&quot;</span>
-        <span class="ruby-identifier">etc</span><span class="ruby-operator">...</span>
+<pre class="code ruby"><code class="ruby"># config/locales/de.yml
+de:
+  i18n:
+    transliterate:
+      rule:
+        ü: &quot;ue&quot;
+        ö: &quot;oe&quot;
+        etc...
 
-<span class="ruby-identifier">movie</span> = <span class="ruby-constant">Movie</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Der Preis fürs Überleben&quot;</span>
-<span class="ruby-identifier">movie</span>.<span class="ruby-identifier">slug</span> <span class="ruby-comment">#=&gt; &quot;der-preis-fuers-ueberleben&quot;</span>
-</pre>
+movie = Movie.create! :title =&gt; &quot;Der Preis fürs Überleben&quot;
+movie.slug #=&gt; &quot;der-preis-fuers-ueberleben&quot;
+</code></pre>
 
 <p>This functionality was in fact taken from earlier versions of FriendlyId.</p>
 
@@ -523,22 +523,22 @@ how slugs are generated.</p>
 
 <h3 id="label-Example">Example</h3>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name_and_location</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name_and_location</span>
 
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_and_location</span>
-    <span class="ruby-node">&quot;#{name} from #{location}&quot;</span>
-  <span class="ruby-keyword">end</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_name_and_location'>name_and_location</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> from </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_location'>location</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
 
-  <span class="ruby-comment"># Use default slug, but upper case and with underscores</span>
-  <span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_friendly_id</span>(<span class="ruby-identifier">string</span>)
-    <span class="ruby-keyword">super</span>.<span class="ruby-identifier">upcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;-&quot;</span>, <span class="ruby-string">&quot;_&quot;</span>)
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
+  <span class='comment'># Use default slug, but upper case and with underscores
+</span>  <span class='kw'>def</span> <span class='id identifier rubyid_normalize_friendly_id'>normalize_friendly_id</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='rparen'>)</span>
+    <span class='kw'>super</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>_</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
 
-<span class="ruby-identifier">bob</span> = <span class="ruby-constant">Person</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Bob Smith&quot;</span>, :<span class="ruby-identifier">location</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;New York City&quot;</span>
-<span class="ruby-identifier">bob</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment">#=&gt; &quot;BOB_SMITH_FROM_NEW_YORK_CITY&quot;</span>
-</pre>
+<span class='id identifier rubyid_bob'>bob</span> <span class='op'>=</span> <span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='symbol'>:name</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Bob Smith</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:location</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>New York City</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_bob'>bob</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;BOB_SMITH_FROM_NEW_YORK_CITY&quot;
+</span></code></pre>
 
 <h3 id="label-More+Resources">More Resources</h3>
 
@@ -751,9 +751,9 @@ slugs to be generated once, and then never updated.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:11 2013 by
+  Generated on Fri Feb 14 12:31:10 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

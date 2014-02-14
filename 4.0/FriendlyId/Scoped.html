@@ -95,21 +95,21 @@ within a scope.</p>
 <p>This allows, for example, two restaurants in different cities to have the
 slug <code>joes-diner</code>:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Restaurant</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">city</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">scoped</span>, :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">city</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_belongs_to'>belongs_to</span> <span class='symbol'>:city</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:scoped</span><span class='comma'>,</span> <span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='symbol'>:city</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">has_many</span> :<span class="ruby-identifier">restaurants</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-constant">City</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;seattle&quot;</span>).<span class="ruby-identifier">restaurants</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>)
-<span class="ruby-constant">City</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;chicago&quot;</span>).<span class="ruby-identifier">restaurants</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>)
-</pre>
+<span class='const'>City</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>seattle</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_restaurants'>restaurants</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'>City</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>chicago</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_restaurants'>restaurants</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
 
 <p>Without :scoped in this case, one of the restaurants would have the slug
 <code>joes-diner</code> and the other would have
@@ -121,24 +121,24 @@ slug <code>joes-diner</code>:</p>
 <p>Additionally, the <code>:scope</code> option can receive an array of scope
 values:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Cuisine</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">has_many</span> :<span class="ruby-identifier">restaurants</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Cuisine</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">has_many</span> :<span class="ruby-identifier">restaurants</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">slugged</span>
-<span class="ruby-keyword">end</span>
+<span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
 
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Restaurant</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
-  <span class="ruby-identifier">extend</span> <span class="ruby-constant">FriendlyId</span>
-  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">city</span>
-  <span class="ruby-identifier">friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">scoped</span>, :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> [:<span class="ruby-identifier">city</span>, :<span class="ruby-identifier">cuisine</span>]
-<span class="ruby-keyword">end</span>
-</pre>
+<span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_belongs_to'>belongs_to</span> <span class='symbol'>:city</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:scoped</span><span class='comma'>,</span> <span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:city</span><span class='comma'>,</span> <span class='symbol'>:cuisine</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+</code></pre>
 
 <p>All supplied values will be used to determine scope.</p>
 
@@ -156,8 +156,8 @@ the relation:</p>
 
 <p>Alternatively, you could pass the scope value as a query parameter:</p>
 
-<pre class="ruby"><span class="ruby-constant">Restaurant</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>).<span class="ruby-identifier">where</span>(:<span class="ruby-identifier">city_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@city</span>.<span class="ruby-identifier">id</span>)
-</pre>
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:city_id</span> <span class='op'>=&gt;</span> <span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+</code></pre>
 
 <h3 id="label-Finding+All+Records+That+Match+a+Scoped+ID">Finding All Records That Match a Scoped ID</h3>
 
@@ -309,9 +309,9 @@ slugs feature.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:10 2013 by
+  Generated on Fri Feb 14 12:31:09 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>

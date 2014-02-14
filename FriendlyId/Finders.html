@@ -105,7 +105,7 @@ to add FriendlyId to an existing application with minimal code modification.</p>
 <p>Prior to version 5.0, FriendlyId overrode the default finder methods to perform
 friendly finds all the time. This required modifying parts of Rails that did
 not have a public API, which was harder to maintain and at times caused
-compatiblity problems. In 5.0 we decided change the library&#39;s defaults and add
+compatiblity problems. In 5.0 we decided to change the library&#39;s defaults and add
 the friendly finder methods only to the <code>friendly</code> scope in order to boost
 compatiblity. However, you can still opt-in to original functionality very
 easily by using the <code>:finders</code> addon:</p>
@@ -157,7 +157,17 @@ for models that use FriendlyId with something similar to the following:</p>
 <div class="tags">
   
 
-</div>
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Finders/ClassMethods.html" title="FriendlyId::Finders::ClassMethods (module)">ClassMethods</a></span>
+    
+  
+    
+  
+</p>
+
 
 
 
@@ -176,6 +186,28 @@ for models that use FriendlyId with something similar to the following:</p>
   <span class="summary_signature">
     
       <a href="#included-class_method" title="included (class method)">+ (Object) <strong>included</strong>(model_class) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#setup-class_method" title="setup (class method)">+ (Object) <strong>setup</strong>(model_class) </a>
     
 
     
@@ -218,34 +250,60 @@ for models that use FriendlyId with something similar to the following:</p>
       <pre class="lines">
 
 
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78</pre>
+82
+83
+84
+85
+86
+87
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 66</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
-    <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'>ClassMethods</span><span class='rparen'>)</span>
 
   <span class='comment'># Support for friendly finds on associations for Rails 4.0.1 and above.
-</span>  <span class='comment'># As of 1 October 2013 this works on Rails 4-0-stable, but may change.
 </span>  <span class='kw'>if</span> <span class='op'>::</span><span class='const'>ActiveRecord</span><span class='period'>.</span><span class='id identifier rubyid_const_defined?'>const_defined?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>AssociationRelation</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_assocation_relation_class_name'>assocation_relation_class_name</span> <span class='op'>=</span> <span class='symbol'>:ActiveRecord_AssociationRelation_</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>::</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-    <span class='id identifier rubyid_association_relation_class'>association_relation_class</span> <span class='op'>=</span> <span class='op'>::</span><span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>AssociationRelation</span><span class='period'>.</span><span class='id identifier rubyid_const_get'>const_get</span><span class='lparen'>(</span><span class='id identifier rubyid_assocation_relation_class_name'>assocation_relation_class_name</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_association_relation_class'>association_relation_class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_association_relation_delegate_class'>association_relation_delegate_class</span> <span class='op'>=</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_relation_delegate_class'>relation_delegate_class</span><span class='lparen'>(</span><span class='op'>::</span><span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>AssociationRelation</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_association_relation_delegate_class'>association_relation_delegate_class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="setup-class_method">
+  
+    + (<tt>Object</tt>) <strong>setup</strong>(model_class) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+76
+77
+78
+79
+80</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 76</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_setup'>setup</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -258,9 +316,9 @@ for models that use FriendlyId with something similar to the following:</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Dec 10 15:15:06 2013 by
+  Generated on Fri Feb 14 12:31:06 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.3 (ruby-2.1.0).
 </div>
 
   </body>
