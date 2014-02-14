@@ -299,7 +299,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
 
     def scope_for_slug_generator
       scope = self.class.base_class.unscoped
-      scope = scope.friendly unless friendly_id_config.uses? :finders
+      scope = scope.friendly unless scope.respond_to?(:exists_by_friendly_id?)
 
       if changed.include?(friendly_id_config.slug_column)
         primary_key_name = self.class.primary_key
