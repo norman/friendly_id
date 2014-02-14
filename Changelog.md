@@ -3,14 +3,18 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.3 (2013-02-14)
+
+* Bug fix for calls to #dup with unslugged models ([#518](https://github.com/norman/friendly_id/pull/518)).
+* Bug fixes for STI ([#516](https://github.com/norman/friendly_id/pull/516)).
+* Bug fix for finds with models that use the :history module ([#509](https://github.com/norman/friendly_id/pull/509)).
+
 ## 5.0.2 (2013-12-10)
 
 * Query performance improvements ([#497](https://github.com/norman/friendly_id/pull/497)).
 * Documentation improvements (thanks [John Bachir](https://github.com/jjb)).
 * Minor refactoring of internals (thanks [Gagan Ahwad](https://github.com/gaganawhad)).
 * Set slug to `nil` on call to `dup` to ensure slug is generated ([#483](https://github.com/norman/friendly_id/pull/483)).
-* Bug fixes for STI ([#516](https://github.com/norman/friendly_id/pull/516)).
-* Bug fix for finds with models that use the :history module ([#509](https://github.com/norman/friendly_id/pull/509)).
 
 ## 5.0.1 (2013-10-27)
 
