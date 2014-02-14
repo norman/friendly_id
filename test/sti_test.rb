@@ -94,14 +94,14 @@ class StiTestWithFinders < MiniTest::Unit::TestCase
     Editorialist
   end
 
-  test "friendly_id slugs should be looked up from sub class with friendly" do
+  test "friendly_id slugs should be looked up from subclass with friendly" do
     transaction do
       editoralist = model_class.create! :name => 'foo bar'
       assert_equal editoralist, model_class.friendly.find(editoralist.slug)
     end
   end
 
-  test "friendly_id slugs should be looked up from sub class" do
+  test "friendly_id slugs should be looked up from subclass" do
     transaction do
       editoralist = model_class.create! :name => 'foo bar'
       assert_equal editoralist, model_class.find(editoralist.slug)
@@ -127,7 +127,7 @@ class StiTestSubClass < MiniTest::Unit::TestCase
     Editorialist
   end
 
-  test "friendly_id slugs can be created and looked up from sub class" do
+  test "friendly_id slugs can be created and looked up from subclass" do
     transaction do
       editoralist = model_class.create! :name => 'foo bar'
       assert_equal editoralist, model_class.find(editoralist.slug)
