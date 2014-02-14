@@ -75,7 +75,9 @@ You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://rails
     # console, runner, or add a Rake task:
     User.find_each(&:save)
 
-
+    # To generate slugs for all your models, try this from the console
+    ActiveRecord::Base.descendants.each { |model| model.find_each(&:save) if model.column_names.include? "slug" }
+    
 ## Benchmarks
 
 The latest benchmarks for FriendlyId are maintained
