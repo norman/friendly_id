@@ -7,6 +7,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Bug fix for calls to #dup with unslugged models ([#518](https://github.com/norman/friendly_id/pull/518)).
 * Bug fixes for STI ([#516](https://github.com/norman/friendly_id/pull/516)).
+* Bug fix for slug regeneration (both scoped and unscoped) ([#513](https://github.com/norman/friendly_id/pull/513)).
 * Bug fix for finds with models that use the :history module ([#509](https://github.com/norman/friendly_id/pull/509)).
 
 ## 5.0.2 (2013-12-10)
