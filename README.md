@@ -145,6 +145,7 @@ Docs for older versions are also available:
 
 * [4.0](http://norman.github.io/friendly_id/4.0/)
 * [3.3](http://norman.github.io/friendly_id/3.3/)
+* [2.3](http://norman.github.io/friendly_id/2.3/)
 
 The best place to start is with the
 [Guide](http://norman.github.io/friendly_id/file.Guide.html),
