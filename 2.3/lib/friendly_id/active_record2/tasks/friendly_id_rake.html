@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>friendly_id.rake - RDoc Documentation</title>
+
+<link href="../../../../fonts.css" rel="stylesheet">
+<link href="../../../../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../../../";
+</script>
+
+<script src="../../../../js/jquery.js"></script>
+<script src="../../../../js/navigation.js"></script>
+<script src="../../../../js/search_index.js"></script>
+<script src="../../../../js/search.js"></script>
+<script src="../../../../js/searcher.js"></script>
+<script src="../../../../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../../../table_of_contents.html#pages">Pages</a>
+    <a href="../../../../table_of_contents.html#classes">Classes</a>
+    <a href="../../../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../../../../Changelog_md.html">Changelog</a>
+  
+    <li><a href="../../../../Contributors_md.html">Contributors</a>
+  
+    <li><a href="../../../../Gemfile.html">Gemfile</a>
+  
+    <li><a href="../../../../Guide_md.html">Guide</a>
+  
+    <li><a href="../../../../LICENSE.html">LICENSE</a>
+  
+    <li><a href="../../../../README_md.html">README</a>
+  
+    <li><a href="../../../../Rakefile.html">Rakefile</a>
+  
+    <li><a href="../../../../extras/README_txt.html">README</a>
+  
+    <li><a href="../../../../friendly_id_gemspec.html">friendly_id.gemspec</a>
+  
+    <li><a href="../../../../lib/friendly_id/active_record2/tasks/friendly_id_rake.html">friendly_id.rake</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page lib/friendly_id/active_record2/tasks/friendly_id.rake">
+
+<p>namespace :friendly_id do</p>
+
+<pre class="ruby"><span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Make slugs for a model.&quot;</span>
+<span class="ruby-identifier">task</span> :<span class="ruby-identifier">make_slugs</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">environment</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">TaskRunner</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">make_slugs</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">record</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;%s(%d): friendly_id set to &#39;%s&#39;&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">record</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">record</span>.<span class="ruby-identifier">id</span>, <span class="ruby-identifier">record</span>.<span class="ruby-identifier">slug</span>.<span class="ruby-identifier">name</span>]
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Regenereate slugs for a model.&quot;</span>
+<span class="ruby-identifier">task</span> :<span class="ruby-identifier">redo_slugs</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">environment</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">TaskRunner</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">delete_slugs</span>
+  <span class="ruby-constant">Rake</span><span class="ruby-operator">::</span><span class="ruby-constant">Task</span>[<span class="ruby-string">&quot;friendly_id:make_slugs&quot;</span>].<span class="ruby-identifier">invoke</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Kill obsolete slugs older than DAYS=45 days.&quot;</span>
+<span class="ruby-identifier">task</span> :<span class="ruby-identifier">remove_old_slugs</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">environment</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">TaskRunner</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">delete_old_slugs</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

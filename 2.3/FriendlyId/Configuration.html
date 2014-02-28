@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class FriendlyId::Configuration - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="../Object.html">Object</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-normalizer-3D">#normalizer=</a>
+    
+    <li ><a href="#method-i-reserved-3D">#reserved=</a>
+    
+    <li ><a href="#method-i-reserved-3F">#reserved?</a>
+    
+    <li ><a href="#method-i-reserved_error_message">#reserved_error_message</a>
+    
+    <li ><a href="#method-i-reserved_words-3D">#reserved_words=</a>
+    
+    <li ><a href="#method-i-strip_diacritics-3D">#strip_diacritics=</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-FriendlyId::Configuration">
+  <h1 id="class-FriendlyId::Configuration" class="class">
+    class FriendlyId::Configuration
+  </h1>
+
+  <section class="description">
+    
+<p>This class is not intended to be used on its own, it is used internally by
+`has_friendly_id` to store a model&#39;s configuration and
+configuration-related methods.</p>
+
+<p>The arguments accepted by <code>has_friendly_id</code> correspond to the
+writeable instance attributes of this class; please see the description of
+the attributes below for information on the possible options.</p>
+
+<p>@example has_friendly_id :name,</p>
+
+<pre class="ruby">:<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+:<span class="ruby-identifier">max_length</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">150</span>,
+:<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+:<span class="ruby-identifier">ascii_approximation_options</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">german</span>,
+:<span class="ruby-identifier">sequence_separator</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;:&quot;</span>,
+:<span class="ruby-identifier">reserved_words</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;reserved&quot;</span>, <span class="ruby-string">&quot;words&quot;</span>],
+:<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">country</span>,
+:<span class="ruby-identifier">cache_column</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">my_cache_column_name</span>
+<span class="ruby-comment"># etc.</span>
+</pre>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="DEFAULTS">DEFAULTS
+        
+        <dd>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-approximate_ascii" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">approximate_ascii</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Strip diacritics from Western characters.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-ascii_approximation_options" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">ascii_approximation_options</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Locale-type options for ASCII approximations. These can be any of the
+values supported by {SlugString#approximate_ascii!}.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-column" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">column</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The method or column that will be used as the basis of the friendly_id
+string.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-configured_class" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">configured_class</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The class that&#39;s using the configuration.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-max_length" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">max_length</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The maximum allowed length for a friendly_id string. This is checked
+<strong>after</strong> a string is processed by <a
+href="../FriendlyId.html">FriendlyId</a> to remove spaces, special
+characters, etc.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-method" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">method</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The method or column that will be used as the basis of the friendly_id
+string.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-normalizer" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">normalizer</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>A block or proc through which to filter the friendly_id text. This method
+will be removed from <a href="../FriendlyId.html">FriendlyId</a> 3.0.
+@deprecated Please override the <code>normalize_friendly_id</code></p>
+
+<pre class="ruby"><span class="ruby-identifier">method</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">your</span> <span class="ruby-identifier">model</span> <span class="ruby-keyword">class</span> <span class="ruby-identifier">rather</span> <span class="ruby-identifier">than</span> <span class="ruby-identifier">passing</span> <span class="ruby-identifier">a</span> <span class="ruby-identifier">block</span> <span class="ruby-identifier">to</span> <span class="ruby-value">%xhas_friendly_id`</span>.
+</pre>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-reserved_message" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">reserved_message</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The message shown when a reserved word is used. @see <a
+href="Configuration.html#attribute-i-reserved_words">reserved_words</a></p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-reserved_words" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">reserved_words</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p><a href="../Array.html">Array</a> of words that are reserved and can&#39;t
+be used as friendly_id strings. If a listed word is used in a sluggable
+model, it will raise a <a
+href="SlugGenerationError.html">FriendlyId::SlugGenerationError</a>. For
+Rails applications, you are recommended to include “index” and “new”, which
+used as the defaults unless overridden.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-scope" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">scope</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The method or relation to use as the friendly_id&#39;s scope.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-sequence_separator" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">sequence_separator</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>The string that separates slug names from slug sequences. Defaults to “–”.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-strip_non_ascii" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">strip_non_ascii</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Strip non-ASCII characters from the friendly_id string.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-use_slug" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">use_slug</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Use slugs for storing the friendly_id string.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-use_slugs-3D" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">use_slugs=</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Use slugs for storing the friendly_id string.</p>
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(configured_class, method, options = nil) { |self| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">configured_class</span>, <span class="ruby-identifier">method</span>, <span class="ruby-identifier">options</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-ivar">@configured_class</span> = <span class="ruby-identifier">configured_class</span>
+  <span class="ruby-ivar">@method</span> = <span class="ruby-identifier">method</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-constant">DEFAULTS</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span> <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">send</span> <span class="ruby-node">&quot;#{key}=&quot;</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-normalizer-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">normalizer=</span><span
+            class="method-args">(arg)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="normalizer-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 88</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">normalizer=</span>(<span class="ruby-identifier">arg</span>)
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">warn</span>(<span class="ruby-node">&quot;passing a block to has_friendly_id is deprecated and will be removed from 3.0. Please override #normalize_friendly_id.&quot;</span>)
+  <span class="ruby-ivar">@normalizer</span> = <span class="ruby-identifier">arg</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-reserved-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reserved=</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method will be removed from <a
+href="../FriendlyId.html">FriendlyId</a> 3.0. @deprecated Please use
+{#reserved_words <a
+href="Configuration.html#attribute-i-reserved_words">#reserved_words</a>}.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="reserved-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 108</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reserved=</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;The &quot;reserved&quot; option is deprecated and will be removed from FriendlyId 3.0. Please use &quot;reserved_words&quot;.&#39;</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">reserved_words</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-reserved-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reserved?</span><span
+            class="method-args">(word)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="reserved-3F-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 98</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reserved?</span>(<span class="ruby-identifier">word</span>)
+  <span class="ruby-identifier">reserved_words</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">word</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-reserved_error_message" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reserved_error_message</span><span
+            class="method-args">(word)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="reserved_error_message-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 102</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reserved_error_message</span>(<span class="ruby-identifier">word</span>)
+  [<span class="ruby-identifier">method</span>, <span class="ruby-identifier">reserved_message</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">word</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">reserved?</span> <span class="ruby-identifier">word</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-reserved_words-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reserved_words=</span><span
+            class="method-args">(*words)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="reserved_words-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 94</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reserved_words=</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">words</span>)
+  <span class="ruby-ivar">@reserved_words</span> = <span class="ruby-identifier">words</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-strip_diacritics-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">strip_diacritics=</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method will be removed from <a
+href="../FriendlyId.html">FriendlyId</a> 3.0. @deprecated Please use
+{#approximate_ascii <a
+href="Configuration.html#attribute-i-approximate_ascii">#approximate_ascii</a>}.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="strip_diacritics-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/configuration.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">strip_diacritics=</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;strip_diacritics is deprecated and will be removed from 3.0. Please use #approximate_ascii&#39;</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">approximate_ascii</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

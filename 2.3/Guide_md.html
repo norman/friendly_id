@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Guide - RDoc Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-FriendlyId+Guide">FriendlyId Guide</a>
+    <li><a href="#label-Overview">Overview</a>
+    <li><a href="#label-Simple+Models">Simple Models</a>
+    <li><a href="#label-Slugged+Models">Slugged Models</a>
+    <li><a href="#label-Installation">Installation</a>
+    <li><a href="#label-As+a+Gem">As a Gem</a>
+    <li><a href="#label-Rails+2.2.x+-+2.3.x">Rails 2.2.x - 2.3.x</a>
+    <li><a href="#label-As+a+Plugin">As a Plugin</a>
+    <li><a href="#label-Setup">Setup</a>
+    <li><a href="#label-Configuration">Configuration</a>
+    <li><a href="#label-Features">Features</a>
+    <li><a href="#label-FriendlyId+Strings">FriendlyId Strings</a>
+    <li><a href="#label-Replacing+Accented+Characters">Replacing Accented Characters</a>
+    <li><a href="#label-German+Approximations">German Approximations</a>
+    <li><a href="#label-Spanish+Approximations">Spanish Approximations</a>
+    <li><a href="#label-Approximations+for+Other+Languages">Approximations for Other Languages</a>
+    <li><a href="#label-Unicode+Slugs">Unicode Slugs</a>
+    <li><a href="#label-ASCII+Slugs">ASCII Slugs</a>
+    <li><a href="#label-Using+a+Custom+Method+to+Generate+the+Slug+Text">Using a Custom Method to Generate the Slug Text</a>
+    <li><a href="#label-Using+a+Custom+Method+to+Process+the+Slug+Text">Using a Custom Method to Process the Slug Text</a>
+    <li><a href="#label-Converting+non-Western+characters+to+ASCII+with+Stringex">Converting non-Western characters to ASCII with Stringex</a>
+    <li><a href="#label-Redirecting+to+the+Current+Friendly+URL">Redirecting to the Current Friendly URL</a>
+    <li><a href="#label-Non-unique+Slugs">Non-unique Slugs</a>
+    <li><a href="#label-Reserved+Words">Reserved Words</a>
+    <li><a href="#label-Caching+the+FriendlyId+Slug+for+Better+Performance">Caching the FriendlyId Slug for Better Performance</a>
+    <li><a href="#label-Automatic+setup">Automatic setup</a>
+    <li><a href="#label-Using+a+custom+column+name">Using a custom column name</a>
+    <li><a href="#label-Scoped+Slugs">Scoped Slugs</a>
+    <li><a href="#label-Updating+a+Relation%27s+Scoped+Slugs">Updating a Relation&#39;s Scoped Slugs</a>
+    <li><a href="#label-Routes+for+Scoped+Models">Routes for Scoped Models</a>
+    <li><a href="#label-FriendlyId+Rake+Tasks">FriendlyId Rake Tasks</a>
+    <li><a href="#label-Generating+New+Slugs+For+the+First+Time">Generating New Slugs For the First Time</a>
+    <li><a href="#label-Regenerating+Slugs">Regenerating Slugs</a>
+    <li><a href="#label-Deleting+Old+Slugs">Deleting Old Slugs</a>
+    <li><a href="#label-Hacking+FriendlyId">Hacking FriendlyId</a>
+    <li><a href="#label-Some+Benchmarks">Some Benchmarks</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Changelog_md.html">Changelog</a>
+  
+    <li><a href="./Contributors_md.html">Contributors</a>
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Guide_md.html">Guide</a>
+  
+    <li><a href="./LICENSE.html">LICENSE</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./Rakefile.html">Rakefile</a>
+  
+    <li><a href="./extras/README_txt.html">README</a>
+  
+    <li><a href="./friendly_id_gemspec.html">friendly_id.gemspec</a>
+  
+    <li><a href="./lib/friendly_id/active_record2/tasks/friendly_id_rake.html">friendly_id.rake</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page Guide.md">
+
+<h1 id="label-FriendlyId+Guide"><a href="FriendlyId.html">FriendlyId</a> <a href="Guide_md.html">Guide</a><span><a href="#label-FriendlyId+Guide">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+<ul><li>
+<p>Table of Contents {:toc}</p>
+</li></ul>
+
+<h2 id="label-Overview">Overview<span><a href="#label-Overview">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> is a Ruby gem which allows you to
+work with human-friendly strings as if they were numeric ids for
+ActiveRecord models. This facilitates replacing “unfriendly” URL&#39;s like</p>
+
+<pre>http://example.com/states/4323454</pre>
+
+<p>with “friendly” ones such as:</p>
+
+<pre>http://example.com/states/washington</pre>
+
+<h2 id="label-Simple+Models">Simple Models<span><a href="#label-Simple+Models">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>The simplest way to use <a href="FriendlyId.html">FriendlyId</a> is with a
+model that has a uniquely indexed column with no spaces or special
+characters, and that is seldom or never updated. The most common example of
+this is a user name or login column:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">User</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">validates_format_of</span> :<span class="ruby-identifier">login</span>, :<span class="ruby-identifier">with</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-regexp">/\A[a-z0-9]+\z/i</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">login</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find</span> <span class="ruby-string">&quot;joe&quot;</span>   <span class="ruby-comment"># the old User.find(1) still works, too</span>
+<span class="ruby-ivar">@user</span>.<span class="ruby-identifier">to_param</span>            <span class="ruby-comment"># returns &quot;joe&quot;</span>
+<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@user</span>         <span class="ruby-comment"># the URL will be /users/joe</span>
+</pre>
+
+<p>In this case, <a href="FriendlyId.html">FriendlyId</a> assumes you want to
+use the column as-is; <a href="FriendlyId.html">FriendlyId</a> will never
+modify the value of the column, and your application must ensure that the
+value is admissible in a URL:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">find</span> <span class="ruby-string">&quot;Viña del Mar&quot;</span>
+<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@city</span> <span class="ruby-comment"># the URL will be /cities/Viña%20del%20Mar</span>
+</pre>
+
+<p>For this reason, it is often more convenient to use Slugs rather than a
+single column.</p>
+
+<h2 id="label-Slugged+Models">Slugged Models<span><a href="#label-Slugged+Models">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> uses a separate table to store
+slugs for models which require some processing of the friendly_id text. The
+most common example is a blog post&#39;s title, which may have spaces,
+uppercase characters, or other attributes you wish to modify to make them
+more suitable for use in URL&#39;s.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@post</span> = <span class="ruby-constant">Post</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;This is the first post!&quot;</span>)
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id</span>   <span class="ruby-comment"># returns &quot;this-is-the-first-post&quot;</span>
+<span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@post</span>   <span class="ruby-comment"># the URL will be /posts/this-is-the-first-post</span>
+</pre>
+
+<p>If you are unsure whether to use slugs, then your best bet is to use them,
+because <a href="FriendlyId.html">FriendlyId</a> provides many useful
+features that only work with slugs. These features are explained in detail
+{file:Guide.md#features below}.</p>
+
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> can be installed as a gem, or as a
+Rails plugin. It is compatible with Rails 2.2.x, 2.3.x. Support for Rails
+3.x is in progress.</p>
+
+<h3 id="label-As+a+Gem">As a Gem<span><a href="#label-As+a+Gem">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre>gem install friendly_id</pre>
+
+<h4 id="label-Rails+2.2.x+-+2.3.x">Rails 2.2.x - 2.3.x<span><a href="#label-Rails+2.2.x+-+2.3.x">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+
+<p>After installing the gem, add an entry in environment.rb:</p>
+
+<pre class="ruby"><span class="ruby-identifier">config</span>.<span class="ruby-identifier">gem</span> <span class="ruby-string">&quot;friendly_id&quot;</span>, :<span class="ruby-identifier">version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&gt;= 2.3&quot;</span>
+</pre>
+
+<h3 id="label-As+a+Plugin">As a Plugin<span><a href="#label-As+a+Plugin">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Plugin installation is simple for all supported versions of Rails:</p>
+
+<pre>./script/plugin install git://github.com/norman/friendly_id.git</pre>
+
+<p>However, installing as a gem offers simpler version control than plugin
+installation. Whenever possible, install as a gem instead. Plugin support
+will probably be removed in version 3.0.</p>
+
+<h3 id="label-Setup">Setup<span><a href="#label-Setup">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>After installing either as a gem or plugin, run:</p>
+
+<pre>./script/generate friendly_id
+rake db:migrate</pre>
+
+<p>This will install the Rake tasks and slug migration for <a
+href="FriendlyId.html">FriendlyId</a>. If you are not going to use slugs,
+you can do:</p>
+
+<pre>./script/generate friendly_id --skip-migration</pre>
+
+<p><a href="FriendlyId.html">FriendlyId</a> is now set up and ready for you to
+use.</p>
+
+<h2 id="label-Configuration">Configuration<span><a href="#label-Configuration">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> is configured in your model using
+the <code>has_friendly_id</code> method:</p>
+
+<pre class="ruby"><span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">a_column_or_method</span> <span class="ruby-identifier">options_hash</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-comment"># use the &quot;title&quot; column as the basis of the friendly_id, and use slugs</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+    <span class="ruby-comment"># remove accents and other diacritics from Western characters</span>
+    :<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+    <span class="ruby-comment"># don&#39;t use slugs longer than 50 chars</span>
+    :<span class="ruby-identifier">max_length</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">50</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>Read on to learn about the various features that can be configured. For the
+full list of valid configuration options, see the instance attribute
+summary for {FriendlyId::Configuration}.</p>
+
+<h1 id="label-Features">Features<span><a href="#label-Features">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+
+<h2 id="label-FriendlyId+Strings"><a href="FriendlyId.html">FriendlyId</a> Strings<span><a href="#label-FriendlyId+Strings">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> comes with {FriendlyId::SlugString
+excellent support for Unicode strings}. When using slugs, <a
+href="FriendlyId.html">FriendlyId</a> will automatically modify the slug
+text to make it more suitable for use in a URL:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Viña del Mar&quot;</span>
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">friendly_id</span>  <span class="ruby-comment"># will be &quot;viña-del-mar&quot;</span>
+</pre>
+
+<p>By default, the string is {FriendlyId::SlugString#downcase! downcased} and
+{FriendlyId::SlugString#clean! stripped},
+{FriendlyId::SlugString#with_dashes! spaces are replaced with dashes}, and
+{FriendlyId::SlugString#word_chars! non-word characters are removed}.</p>
+
+<h3 id="label-Replacing+Accented+Characters">Replacing Accented Characters<span><a href="#label-Replacing+Accented+Characters">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>If your strings use Western characters, you can use the
+<code>:approximate_ascii</code> option to remove accents and other
+diacritics:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Łódź, Poland&quot;</span>
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">friendly_id</span>  <span class="ruby-comment"># will be &quot;lodz-poland&quot;</span>
+</pre>
+
+<p>There are special options for some languages:</p>
+
+<h3 id="label-German+Approximations">German Approximations<span><a href="#label-German+Approximations">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Person</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+    :<span class="ruby-identifier">ascii_approximation_options</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">german</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@person</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Jürgen Müller&quot;</span>
+<span class="ruby-ivar">@person</span>.<span class="ruby-identifier">friendly_id</span>  <span class="ruby-comment"># will be &quot;juergen-mueller&quot;</span>
+</pre>
+
+<h3 id="label-Spanish+Approximations">Spanish Approximations<span><a href="#label-Spanish+Approximations">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,
+    :<span class="ruby-identifier">ascii_approximation_options</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">spanish</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;¡Feliz año!&quot;</span>)
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">title</span>  <span class="ruby-comment"># will be &quot;feliz-anno&quot;</span>
+</pre>
+
+<h3 id="label-Approximations+for+Other+Languages">Approximations for Other Languages<span><a href="#label-Approximations+for+Other+Languages">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>You can add custom approximations for your language by adding Hash of
+approximations to {FriendlyId::SlugString::APPROXIMATIONS}. The
+approximations must be listed as Unicode decimal numbers, and arrays of
+numbers.</p>
+
+<h3 id="label-Unicode+Slugs">Unicode Slugs<span><a href="#label-Unicode+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>By default, any character outside the Unicode Western character sets will
+be passed through untouched, allowing you to have slugs in Arabic,
+Japanese, Greek, etc:</p>
+
+<pre class="ruby"><span class="ruby-ivar">@post</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;katakana: ゲコゴサザシジ!&quot;</span>
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment"># will be: &quot;katakana-ゲコゴサザシジ&quot;</span>
+</pre>
+
+<h3 id="label-ASCII+Slugs">ASCII Slugs<span><a href="#label-ASCII+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>You can also configure <a href="FriendlyId.html">FriendlyId</a> using
+<code>:strip_non_ascii</code> to completely delete any non-ascii
+characters:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">strip_non_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">create</span> :<span class="ruby-identifier">title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;katakana: ゲコゴサザシジ!&quot;</span>
+<span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment"># will be: &quot;katakana&quot;</span>
+</pre>
+
+<h3 id="label-Using+a+Custom+Method+to+Generate+the+Slug+Text">Using a Custom Method to Generate the <a href="Slug.html">Slug</a> Text<span><a href="#label-Using+a+Custom+Method+to+Generate+the+Slug+Text">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p><a href="FriendlyId.html">FriendlyId</a> can use either a column or a
+method to generate the slug text for your model:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+
+  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">country</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name_and_country</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">name_and_country</span>
+    <span class="ruby-comment">#{name} #{country.name}</span>
+  <span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-ivar">@country</span> = <span class="ruby-constant">Country</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Argentina&quot;</span>)
+<span class="ruby-ivar">@city</span> = <span class="ruby-constant">City</span>.<span class="ruby-identifier">create</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Buenos Aires&quot;</span>, :<span class="ruby-identifier">country</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@country</span>)
+<span class="ruby-ivar">@city</span>.<span class="ruby-identifier">friendly_id</span> <span class="ruby-comment"># will be &quot;buenos-aires-argentina&quot;</span>
+</pre>
+
+<p>One word of caution: in the example above, if the country&#39;s name were
+updated, say, to “Argentine Republic”, the city&#39;s friendly_id would not
+be automatically updated. For this reason, it&#39;s a good idea to avoid
+using frequently-updated relations as a part of the friendly_id.</p>
+
+<h2 id="label-Using+a+Custom+Method+to+Process+the+Slug+Text">Using a Custom Method to Process the <a href="Slug.html">Slug</a> Text<span><a href="#label-Using+a+Custom+Method+to+Process+the+Slug+Text">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>If the built-in slug text handling options don&#39;t work for your
+application, you can override the <code>normalize_friendly_id</code> method
+in your model class in order to fine-tune the output:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_friendly_id</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">my_text_modifier_method</span>(<span class="ruby-identifier">text</span>)
+  <span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>The normalize_friendly_id method takes a single argument and receives an
+instance of {FriendlyId::SlugString}, a class which wraps a regular Ruby
+string with some additional formatting options inherits Multibyte support
+from ActiveSupport::Multibyte::Chars.</p>
+
+<h3 id="label-Converting+non-Western+characters+to+ASCII+with+Stringex">Converting non-Western characters to ASCII with Stringex<span><a href="#label-Converting+non-Western+characters+to+ASCII+with+Stringex">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Stringex is a library which provides some interesting options for
+transliterating non-Western strings to ASCII:</p>
+
+<pre class="ruby"><span class="ruby-string">&quot;你好&quot;</span>.<span class="ruby-identifier">to_url</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;ni-hao&quot;</span>
+</pre>
+
+<p>Using Stringex with <a href="FriendlyId.html">FriendlyId</a> is a simple
+matter of installing and requiring the <code>stringex</code> gem, and
+overriding the <code>normalize_friendly_id</code> method in your model:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_friendly_id</span>(<span class="ruby-identifier">text</span>)
+    <span class="ruby-identifier">text</span>.<span class="ruby-identifier">to_url</span>
+  <span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">end</span>
+</pre>
+
+<h2 id="label-Redirecting+to+the+Current+Friendly+URL">Redirecting to the Current Friendly URL<span><a href="#label-Redirecting+to+the+Current+Friendly+URL">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> maintains a history of your
+record&#39;s older slugs, so if your record&#39;s friendly_id changes, your
+URL&#39;s won&#39;t break. It offers several methods to determine whether
+the model instance was found using the most recent friendly_id. This helps
+you redirect to your “unfriendly” URL&#39;s to your new “friendly” ones
+when adding <a href="FriendlyId.html">FriendlyId</a> to an existing
+application:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">PostsController</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ApplicationController</span>
+
+  <span class="ruby-identifier">before_filter</span> <span class="ruby-identifier">ensure_current_post_url</span>, :<span class="ruby-identifier">only</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">show</span>
+
+  <span class="ruby-operator">...</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier">ensure_current_post_url</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@post</span>, :<span class="ruby-identifier">status</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">moved_permanently</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@post</span>.<span class="ruby-identifier">friendly_id_status</span>.<span class="ruby-identifier">best?</span>
+  <span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>For more information, take a look at the documentation for
+{FriendlyId::Status}.</p>
+
+<h2 id="label-Non-unique+Slugs">Non-unique Slugs<span><a href="#label-Non-unique+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> will append a arbitrary number to
+the end of the id to keep it unique if necessary:</p>
+
+<pre>/posts/new-version-released
+/posts/new-version-released--2
+/posts/new-version-released--3
+...
+etc.</pre>
+
+<p>Note that the number is preceded by “–” to distinguish it from the rest of
+the slug. This is important to enable having slugs like:</p>
+
+<pre>/cars/peugeot-206
+/cars/peugeot-206--2</pre>
+
+<p>You can configure the separator string used by your model by setting the
+<code>:sequence_separator</code> option in <code>has_friendly_id</code>:</p>
+
+<pre class="ruby"><span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">sequence_separator</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;;&quot;</span>
+</pre>
+
+<p>You can also override the default used in
+{FriendlyId::Configuration::DEFAULTS} to set the value for any model using
+<a href="FriendlyId.html">FriendlyId</a>. If you change this value in an
+existing application, be sure to {file:Guide.md#regenerating_slugs
+regenerate the slugs} afterwards.</p>
+
+<h2 id="label-Reserved+Words">Reserved Words<span><a href="#label-Reserved+Words">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>You can configure a list of strings as reserved so that, for example, you
+don&#39;t end up with this problem:</p>
+
+<pre>/users/joe-schmoe # A user chose &quot;joe schmoe&quot; as his user name - no worries.
+/users/new        # A user chose &quot;new&quot; as his user name, and now no one can sign up.</pre>
+
+<p>Reserved words are configured using the <code>:reserved_words</code>
+option:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Restaurant</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">city</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">reserved_words</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;my&quot;</span>, <span class="ruby-string">&quot;values&quot;</span>]
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>The strings “new” and “index” are reserved by default. When you attempt to
+store a reserved value, <a href="FriendlyId.html">FriendlyId</a> raises a
+{FriendlyId::ReservedError}. You can also override the default reserved
+words in {FriendlyId::Configuration::DEFAULTS} to set the value for any
+model using <a href="FriendlyId.html">FriendlyId</a>.</p>
+
+<h2 id="label-Caching+the+FriendlyId+Slug+for+Better+Performance">Caching the <a href="FriendlyId.html">FriendlyId</a> <a href="Slug.html">Slug</a> for Better Performance<span><a href="#label-Caching+the+FriendlyId+Slug+for+Better+Performance">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>Checking the slugs table all the time has an impact on performance, so as
+of 2.2.0, <a href="FriendlyId.html">FriendlyId</a> offers slug caching.</p>
+
+<h3 id="label-Automatic+setup">Automatic setup<span><a href="#label-Automatic+setup">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>To enable slug caching, simply add a column named “cached_slug” to your
+model. <a href="FriendlyId.html">FriendlyId</a> will automatically use this
+column if it detects it:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">AddCachedSlugToUsers</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Migration</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">up</span>
+    <span class="ruby-identifier">add_column</span> :<span class="ruby-identifier">users</span>, :<span class="ruby-identifier">cached_slug</span>, :<span class="ruby-identifier">string</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">down</span>
+    <span class="ruby-identifier">remove_column</span> :<span class="ruby-identifier">users</span>, :<span class="ruby-identifier">cached_slug</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>Then, redo the slugs:</p>
+
+<pre>rake friendly_id:redo_slugs MODEL=User</pre>
+
+<p><a href="FriendlyId.html">FriendlyId</a> will also query against the cache
+column if it&#39;s available, which can significantly improve the
+performance of many queries, particularly when passing an array of friendly
+ids to find.</p>
+
+<p>A few warnings when using this feature:</p>
+<ul><li>
+<p><em>DO NOT</em> forget to redo the slugs, or else this feature will not
+work!</p>
+</li><li>
+<p>This feature uses <code>attr_protected</code> to protect the
+<code>cached_slug</code> column,  unless you have already invoked
+<code>attr_accessible</code>. If you wish to use 
+<code>attr_accessible</code>, you must invoke it BEFORE you invoke
+<code>has_friendly_id</code> in  your class.</p>
+</li><li>
+<p><a href="FriendlyId.html">FriendlyId</a> can not query against the slug
+cache when you pass a :scope  argument to find. Try to avoid passing an
+array of friendly id&#39;s and a  scope to find, as this will result in
+weak performance.</p>
+</li></ul>
+
+<h3 id="label-Using+a+custom+column+name">Using a custom column name<span><a href="#label-Using+a+custom+column+name">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>You can also use a different name for the column if you choose, via the
+<code>:cache_column</code> config option:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">User</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">cache_column</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;my_cached_slug&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<h2 id="label-Scoped+Slugs">Scoped Slugs<span><a href="#label-Scoped+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> can generate unique slugs within a
+given scope. For example, assume you have an application that displays
+restaurants. Without scoped slugs, if two restaurants are named “Joe&#39;s
+Diner,” the second one will end up with “joes-diner–2” as its friendly_id.
+Using scoped allows you to keep the slug names unique for each city, so
+that the second “Joe&#39;s Diner” could have the slug “joes-diner” if
+it&#39;s located in a different city:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Restaurant</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">belongs_to</span> :<span class="ruby-identifier">city</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">city</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">City</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_many</span> :<span class="ruby-identifier">restaurants</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">http</span>:<span class="ruby-operator">/</span><span class="ruby-regexp">/example.org/</span><span class="ruby-identifier">cities</span><span class="ruby-operator">/</span><span class="ruby-identifier">seattle</span><span class="ruby-operator">/</span><span class="ruby-identifier">restaurants</span><span class="ruby-operator">/</span><span class="ruby-identifier">joes</span><span class="ruby-operator">-</span><span class="ruby-identifier">diner</span>
+<span class="ruby-identifier">http</span>:<span class="ruby-operator">/</span><span class="ruby-regexp">/example.org/</span><span class="ruby-identifier">cities</span><span class="ruby-operator">/</span><span class="ruby-identifier">chicago</span><span class="ruby-operator">/</span><span class="ruby-identifier">restaurants</span><span class="ruby-operator">/</span><span class="ruby-identifier">joes</span><span class="ruby-operator">-</span><span class="ruby-identifier">diner</span>
+
+<span class="ruby-constant">Restaurant</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>, :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;seattle&quot;</span>)  <span class="ruby-comment"># returns 1 record</span>
+<span class="ruby-constant">Restaurant</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>, :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;chicago&quot;</span>)  <span class="ruby-comment"># returns 1 record</span>
+<span class="ruby-constant">Restaurant</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&quot;joes-diner&quot;</span>)                       <span class="ruby-comment"># returns both records</span>
+</pre>
+
+<p>The value for the <code>:scope</code> key in your model can be a custom
+method you define, or the name of a relation. If it&#39;s the name of a
+relation, then the scope&#39;s text value will be the result of calling
+<code>to_param</code> on the related model record. In the example above,
+the city model also uses <a href="FriendlyId.html">FriendlyId</a> and so
+its <code>to_param</code> method returns its friendly_id: “chicago” or
+“seattle”.</p>
+
+<h3 id="label-Updating+a+Relation%27s+Scoped+Slugs">Updating a Relation&#39;s Scoped Slugs<span><a href="#label-Updating+a+Relation%27s+Scoped+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>When using a relation as the scope, updating the relation will update the
+slugs, but only if both models have specified the relationship. In the
+above example, updates to <a href="City.html">City</a> will update the
+slugs for Restaurant because <a href="City.html">City</a> specifies that it
+<code>has_many :restaurants</code>.</p>
+
+<h3 id="label-Routes+for+Scoped+Models">Routes for Scoped Models<span><a href="#label-Routes+for+Scoped+Models">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Note that <a href="FriendlyId.html">FriendlyId</a> does not set up any
+routes for scoped models; you must do this yourself in your application.
+Here&#39;s an example of one way to set this up:</p>
+
+<pre class="ruby"><span class="ruby-comment"># in routes.rb</span>
+<span class="ruby-identifier">map</span>.<span class="ruby-identifier">resources</span> :<span class="ruby-identifier">restaurants</span>
+<span class="ruby-identifier">map</span>.<span class="ruby-identifier">restaurant</span> <span class="ruby-string">&quot;/restaurants/:scope/:id&quot;</span>, :<span class="ruby-identifier">controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;restaurants&quot;</span>
+
+<span class="ruby-comment"># in views</span>
+<span class="ruby-identifier">link_to</span> <span class="ruby-string">&#39;Show&#39;</span>, <span class="ruby-identifier">restaurant_path</span>(<span class="ruby-identifier">restaurant</span>.<span class="ruby-identifier">city</span>, <span class="ruby-identifier">restaurant</span>)
+
+<span class="ruby-comment"># in controllers</span>
+<span class="ruby-ivar">@restaurant</span> = <span class="ruby-constant">Restaurant</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[:<span class="ruby-identifier">id</span>], :<span class="ruby-identifier">scope</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">params</span>[:<span class="ruby-identifier">scope</span>])
+</pre>
+
+<h2 id="label-FriendlyId+Rake+Tasks"><a href="FriendlyId.html">FriendlyId</a> Rake Tasks<span><a href="#label-FriendlyId+Rake+Tasks">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> provides several tasks to help
+maintain your application.</p>
+
+<h3 id="label-Generating+New+Slugs+For+the+First+Time">Generating New Slugs For the First Time<span><a href="#label-Generating+New+Slugs+For+the+First+Time">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre>friendly_id:make_slugs MODEL=&lt;model name&gt;</pre>
+
+<p>Use this task to generate slugs after installing <a
+href="FriendlyId.html">FriendlyId</a> in a new application.</p>
+
+<h3 id="label-Regenerating+Slugs">Regenerating Slugs<span><a href="#label-Regenerating+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre>friendly_id:redo_slugs MODEL=&lt;model name&gt;</pre>
+
+<p>Use this task to regenerate slugs after making any changes to your
+model&#39;s <a href="FriendlyId.html">FriendlyId</a> configuration options
+that affect slug generation. For example, if you introduce a
+<code>cached_slug</code> column or change the
+<code>:seqence_separator</code>.</p>
+
+<h3 id="label-Deleting+Old+Slugs">Deleting Old Slugs<span><a href="#label-Deleting+Old+Slugs">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<pre>rake friendly_id:remove_old_slugs MODEL=&lt;model name&gt; DAYS=&lt;days&gt;</pre>
+
+<p>Use this task if you wish to delete expired slugs; manually or perhaps via
+cron. If you don&#39;t specify the days option, the default is to remove
+unused slugs older than 45 days.</p>
+
+<h1 id="label-Hacking+FriendlyId">Hacking <a href="FriendlyId.html">FriendlyId</a><span><a href="#label-Hacking+FriendlyId">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+
+<p>A couple of notes for programmers intending to work on FriendlyId:</p>
+
+<p>If you intend to send a pull request, in general it&#39;s best to make
+minor changes in the master branch, and major changes in the edge branch.</p>
+
+<p>Before removing any public or protected methods, <a
+href="FriendlyId.html">FriendlyId</a> will deprecate them through one major
+release cycle. Private methods may, however, change at any time.</p>
+
+<h2 id="label-Some+Benchmarks">Some Benchmarks<span><a href="#label-Some+Benchmarks">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>These benchmarks can give you an idea of FriendlyId&#39;s impact on the
+performance of your application. Of course your results may vary.</p>
+
+<p>Note that much of the performance difference can be attributed to finding
+an SQL record by a text column. Finding a single record by numeric primary
+key is always the fastest operation, and thus the best choice when
+possible. If you decide not to use <a href="FriendlyId.html">FriendlyId</a>
+for performance reasons, keep in mind that your own solution is unlikely to
+be any faster than <a href="FriendlyId.html">FriendlyId</a> with cached
+slugs enabled. But if it is, then your patches would be very welcome!</p>
+
+<pre>ruby 1.9.1p378 (2010-01-10 revision 26273) [i386-darwin10.2.0]
+friendly_id (2.3.0)
+sqlite3 3.6.19 in-memory database
+------------------------------------------------------------------------------------------------
+find model using id                                                 x10000 |   2.948 |       0 |
+find model using array of ids                                       x10000 |   6.020 |       0 |
+find unslugged model using friendly id                              x10000 |   4.474 |     52% |
+find unslugged model using array of friendly ids                    x10000 |   6.498 |      7% |
+find slugged model using friendly id                                x10000 |   7.536 |    155% |
+find slugged model using array of friendly ids                      x10000 |  18.020 |    200% |
+find cached slugged model using friendly id                         x10000 |   4.791 |     63% |
+find cached slugged model using array of friendly ids               x10000 |   7.275 |     21% |
+find model using id, then to_param                                  x10000 |   2.974 |       0 |
+find unslugged model using friendly id, then to_param               x10000 |   4.608 |     55% |
+find slugged model using friendly id, then to_param                 x10000 |  12.589 |    323% |
+find cached slugged model using friendly id, then to_param          x10000 |   5.037 |     69% |
+------------------------------------------------------------------------------------------------</pre>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

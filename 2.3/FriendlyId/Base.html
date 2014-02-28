@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module FriendlyId::Base - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-has_friendly_id">#has_friendly_id</a>
+    
+    <li ><a href="#method-i-uses_friendly_id-3F">#uses_friendly_id?</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-FriendlyId::Base">
+  <h1 id="module-FriendlyId::Base" class="module">
+    module FriendlyId::Base
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-has_friendly_id" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">has_friendly_id</span><span
+            class="method-args">(method, options = {}, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set up a model to use a friendly_id. This method accepts a hash with
+{FriendlyId::Configuration several possible options}.</p>
+
+<p>@param [#to_sym] method The column or method that should be used as the</p>
+
+<pre>basis of the friendly_id string.</pre>
+
+<p>@param [Hash] options For valid configuration options, see</p>
+
+<pre>{FriendlyId::Configuration}.</pre>
+
+<p>@param [block] block An optional block through which to filter the</p>
+
+<pre>friendly_id text; see {FriendlyId::Configuration#normalizer}. Note that
+passing a block parameter is now deprecated and will be removed
+from FriendlyId 3.0.</pre>
+
+<p>@example</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">User</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">user_name</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Post</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">title</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, :<span class="ruby-identifier">approximate_ascii</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>@see <a href="Configuration.html">FriendlyId::Configuration</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="has_friendly_id-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">has_friendly_id</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">options</span> = {}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotImplementedError</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-uses_friendly_id-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">uses_friendly_id?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Does the model class use the <a href="../FriendlyId.html">FriendlyId</a>
+plugin?</p>
+          
+          
+
+          
+          <div class="method-source-code" id="uses_friendly_id-3F-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">uses_friendly_id?</span>
+  <span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:friendly_id_config</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

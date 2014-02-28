@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Rakefile - RDoc Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Changelog_md.html">Changelog</a>
+  
+    <li><a href="./Contributors_md.html">Contributors</a>
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Guide_md.html">Guide</a>
+  
+    <li><a href="./LICENSE.html">LICENSE</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./Rakefile.html">Rakefile</a>
+  
+    <li><a href="./extras/README_txt.html">README</a>
+  
+    <li><a href="./friendly_id_gemspec.html">friendly_id.gemspec</a>
+  
+    <li><a href="./lib/friendly_id/active_record2/tasks/friendly_id_rake.html">friendly_id.rake</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page Rakefile">
+
+<p>require “rake” require “rake/testtask” require “rake/gempackagetask”
+require “rake/rdoctask” require “rake/clean”</p>
+
+<p>CLEAN &lt;&lt; “pkg” &lt;&lt; “doc” &lt;&lt; “coverage” &lt;&lt; “.yardoc”</p>
+
+<p>Rake::GemPackageTask.new(eval(File.read(“friendly_id.gemspec”))) { |pkg| }
+Rake::RDocTask.new do |r|</p>
+
+<pre>r.rdoc_dir = &quot;doc&quot;
+r.rdoc_files.include &quot;lib   /*.rb&quot;</pre>
+
+<p>end</p>
+
+<p>begin</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;yard&quot;</span>
+<span class="ruby-constant">YARD</span><span class="ruby-operator">::</span><span class="ruby-constant">Rake</span><span class="ruby-operator">::</span><span class="ruby-constant">YardocTask</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">t</span>.<span class="ruby-identifier">options</span> = [<span class="ruby-string">&quot;--output-dir=doc&quot;</span>]
+  <span class="ruby-identifier">t</span>.<span class="ruby-identifier">options</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;--files&quot;</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-string">&quot;Guide.md&quot;</span>, <span class="ruby-string">&quot;Contributors.md&quot;</span>, <span class="ruby-string">&quot;Changelog.md&quot;</span>].<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>rescue LoadError end</p>
+
+<p>begin</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rcov/rcovtask&quot;</span>
+<span class="ruby-constant">Rcov</span><span class="ruby-operator">::</span><span class="ruby-constant">RcovTask</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">test_files</span> = <span class="ruby-constant">FileList</span>[<span class="ruby-string">&quot;test/   *_test.rb&quot;</span>]
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">verbose</span> = <span class="ruby-keyword">true</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">rcov_opts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;--exclude gems/*&quot;</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>rescue LoadError end</p>
+
+<p>task :test do</p>
+
+<pre>Rake::Task[&quot;test:friendly_id&quot;].invoke
+Rake::Task[&quot;test:ar&quot;].invoke</pre>
+
+<p>end</p>
+
+<p>namespace :test do</p>
+
+<pre class="ruby"><span class="ruby-identifier">task</span> :<span class="ruby-identifier">rails</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">rm_rf</span> <span class="ruby-string">&quot;fid&quot;</span>
+  <span class="ruby-identifier">sh</span> <span class="ruby-string">&quot;rails --template extras/template-gem.rb fid&quot;</span>
+  <span class="ruby-identifier">sh</span> <span class="ruby-string">&quot;cd fid; rake test&quot;</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-constant">Rake</span><span class="ruby-operator">::</span><span class="ruby-constant">TestTask</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">friendly_id</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">pattern</span> = <span class="ruby-string">&quot;test/*_test.rb&quot;</span> }
+<span class="ruby-constant">Rake</span><span class="ruby-operator">::</span><span class="ruby-constant">TestTask</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">ar</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">pattern</span> = <span class="ruby-string">&quot;test/active_record2/*_test.rb&quot;</span> }
+
+<span class="ruby-identifier">namespace</span> :<span class="ruby-identifier">rails</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">task</span> :<span class="ruby-identifier">plugin</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">rm_rf</span> <span class="ruby-string">&quot;fid&quot;</span>
+    <span class="ruby-identifier">sh</span> <span class="ruby-string">&quot;rails --template extras/template-plugin.rb fid&quot;</span>
+    <span class="ruby-identifier">sh</span> <span class="ruby-string">&quot;cd fid; rake test&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+
+<p>task :pushdocs do</p>
+
+<pre>branch = `git branch | grep &quot;*&quot;`.chomp.gsub(&quot;* &quot;, &quot;&quot;)
+sh &quot;git stash&quot;
+sh &quot;git checkout gh-pages&quot;
+sh &quot;cp -rp doc/* .&quot;
+sh &#39;git commit -a -m &quot;Regenerated docs&quot;&#39;
+sh &quot;git push origin gh-pages&quot;
+sh &quot;git checkout #{branch}&quot;
+sh &quot;git stash apply&quot;</pre>
+
+<p>end</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

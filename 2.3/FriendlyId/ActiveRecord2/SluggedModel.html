@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module FriendlyId::ActiveRecord2::SluggedModel - RDoc Documentation</title>
+
+<link href="../../fonts.css" rel="stylesheet">
+<link href="../../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/navigation.js"></script>
+<script src="../../js/search_index.js"></script>
+<script src="../../js/search.js"></script>
+<script src="../../js/searcher.js"></script>
+<script src="../../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../table_of_contents.html#pages">Pages</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><a class="include" href="../Slugged/Model.html">FriendlyId::Slugged::Model</a>
+  
+  
+  
+    <li><a class="include" href="SluggedModel/DeprecatedMethods.html">FriendlyId::ActiveRecord2::SluggedModel::DeprecatedMethods</a>
+  
+  
+  </ul>
+</div>
+
+    <div id="extends-section" class="nav-section">
+  <h3>Extended With Modules</h3>
+
+  <ul class="link-list">
+    
+  
+    <li><a class="extend" href="SluggedModel/FinderMethods.html">FriendlyId::ActiveRecord2::SluggedModel::FinderMethods</a>
+  
+  
+  </ul>
+</div>
+
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-included">::included</a>
+    
+    <li ><a href="#method-i-find_slug">#find_slug</a>
+    
+    <li ><a href="#method-i-slug">#slug</a>
+    
+    <li class="calls-super" ><a href="#method-i-slug-3D">#slug=</a>
+    
+    <li ><a href="#method-i-to_param">#to_param</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-FriendlyId::ActiveRecord2::SluggedModel">
+  <h1 id="module-FriendlyId::ActiveRecord2::SluggedModel" class="module">
+    module FriendlyId::ActiveRecord2::SluggedModel
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-included" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">included</span><span
+            class="method-args">(base)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="included-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/slugged_model.rb, line 216</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
+  <span class="ruby-identifier">base</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">has_many</span> <span class="ruby-value">:slugs</span>, <span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;id DESC&#39;</span>, <span class="ruby-value">:as</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:sluggable</span>, <span class="ruby-value">:dependent</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:destroy</span>
+    <span class="ruby-identifier">before_save</span> <span class="ruby-value">:build_slug</span>
+    <span class="ruby-identifier">after_save</span> <span class="ruby-value">:set_slug_cache</span>
+    <span class="ruby-identifier">after_update</span> <span class="ruby-value">:update_scope</span>
+    <span class="ruby-identifier">after_update</span> <span class="ruby-value">:update_dependent_scopes</span>
+    <span class="ruby-identifier">protect_friendly_id_attributes</span>
+    <span class="ruby-identifier">extend</span> <span class="ruby-constant">FinderMethods</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-find_slug" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_slug</span><span
+            class="method-args">(name, sequence)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_slug-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/slugged_model.rb, line 231</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_slug</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">sequence</span>)
+  <span class="ruby-identifier">slugs</span>.<span class="ruby-identifier">find_by_name_and_sequence</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">sequence</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-slug" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">slug</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>The model instance&#39;s current {FriendlyId::ActiveRecord2::Slug slug}.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="slug-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/slugged_model.rb, line 236</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">slug</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@slug</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">new_record?</span>
+  <span class="ruby-ivar">@slug</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">slugs</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;id DESC&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-slug-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">slug=</span><span
+            class="method-args">(slug)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Set the slug.</p>
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              
+            </div>
+          
+
+          
+          <div class="method-source-code" id="slug-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/slugged_model.rb, line 242</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">slug=</span>(<span class="ruby-identifier">slug</span>)
+  <span class="ruby-ivar">@new_friendly_id</span> = <span class="ruby-identifier">slug</span>.<span class="ruby-identifier">to_friendly_id</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">slug</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-keyword">super</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-to_param" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_param</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the friendly id, or if none is available, the numeric id.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="to_param-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/slugged_model.rb, line 248</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
+  <span class="ruby-identifier">friendly_id_config</span>.<span class="ruby-identifier">cache_column</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">to_param_from_cache</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">to_param_from_slug</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

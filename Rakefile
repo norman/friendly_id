@@ -20,7 +20,7 @@ task '4.0-stable' => '.friendly_id' do
   end
 end
 
-task '3.x' => '.friendly_id' do
+task '3.3' => '.friendly_id' do
   Dir.chdir '.friendly_id' do
     sh %{git clean -f}
     sh %{git checkout 3.x}
@@ -29,7 +29,15 @@ task '3.x' => '.friendly_id' do
   end
 end
 
-task 'doc' => [:master, '4.0-stable', '3.x'] do
+task '2.3' => '.friendly_id' do
+  Dir.chdir '.friendly_id' do
+    sh %{git clean -f}
+    sh %{git checkout 2.3.4}
+    sh %{rdoc -o ../2.3}
+  end
+end
+
+task 'doc' => [:master, '4.0-stable', '3.3', '2.3'] do
   sh %{git add .}
   sh %{git commit -m 'Regenerated docs'}
   sh %{git push}

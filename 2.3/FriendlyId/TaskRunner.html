@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class FriendlyId::TaskRunner - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="../Object.html">Object</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-days-3D">#days=</a>
+    
+    <li ><a href="#method-i-delete_old_slugs">#delete_old_slugs</a>
+    
+    <li ><a href="#method-i-delete_slugs">#delete_slugs</a>
+    
+    <li ><a href="#method-i-klass-3D">#klass=</a>
+    
+    <li ><a href="#method-i-make_slugs">#make_slugs</a>
+    
+    <li ><a href="#method-i-method_missing">#method_missing</a>
+    
+    <li ><a href="#method-i-validate_uses_slugs">#validate_uses_slugs</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-FriendlyId::TaskRunner">
+  <h1 id="class-FriendlyId::TaskRunner" class="class">
+    class FriendlyId::TaskRunner
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="OLD_SLUG_DAYS">OLD_SLUG_DAYS
+        
+        <dd>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-days" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">days</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-klass" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">klass</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-task_options" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">task_options</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(&block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">klass</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;MODEL&quot;</span>]
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">days</span>  = <span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;DAYS&quot;</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-days-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">days=</span><span
+            class="method-args">(days)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="days-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">days=</span>(<span class="ruby-identifier">days</span>)
+  <span class="ruby-ivar">@days</span> = <span class="ruby-identifier">days</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-constant">OLD_SLUG_DAYS</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">days</span>.<span class="ruby-identifier">to_i</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-delete_old_slugs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_old_slugs</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delete_old_slugs-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 47</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_old_slugs</span>
+  <span class="ruby-identifier">conditions</span> = [<span class="ruby-string">&quot;created_at &lt; ?&quot;</span>, <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">days</span>.<span class="ruby-identifier">days</span>]
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">klass</span>
+    <span class="ruby-identifier">conditions</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot; AND sluggable_type = ?&quot;</span>
+    <span class="ruby-identifier">conditions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-constant">Slug</span>.<span class="ruby-identifier">all</span>(<span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>).<span class="ruby-identifier">select</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:outdated?</span>).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:destroy</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-delete_slugs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">delete_slugs</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="delete_slugs-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_slugs</span>
+  <span class="ruby-identifier">validate_uses_slugs</span>
+  <span class="ruby-constant">Slug</span>.<span class="ruby-identifier">destroy_all</span>([<span class="ruby-string">&quot;sluggable_type = ?&quot;</span>, <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">column</span> = <span class="ruby-identifier">friendly_id_config</span>.<span class="ruby-identifier">cache_column</span>
+    <span class="ruby-identifier">update_all</span>(<span class="ruby-node">&quot;#{column} = NULL&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-klass-3D" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">klass=</span><span
+            class="method-args">(klass)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="klass-3D-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">klass=</span>(<span class="ruby-identifier">klass</span>)
+  <span class="ruby-ivar">@klass</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">blank?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-make_slugs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">make_slugs</span><span
+            class="method-args">() { |record| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="make_slugs-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 27</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">make_slugs</span>
+  <span class="ruby-identifier">validate_uses_slugs</span>
+  <span class="ruby-identifier">options</span> = {<span class="ruby-value">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span>, <span class="ruby-value">:include</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">:slugs</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;slugs.id IS NULL&quot;</span>}.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">task_options</span> <span class="ruby-operator">||</span> {})
+  <span class="ruby-keyword">while</span> <span class="ruby-identifier">records</span> = <span class="ruby-identifier">find</span>(<span class="ruby-value">:all</span>, <span class="ruby-identifier">options</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">break</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">records</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">records</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">record</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">record</span>.<span class="ruby-identifier">save!</span>
+      <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">record</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-method_missing" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">method_missing</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="method_missing-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-validate_uses_slugs" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">validate_uses_slugs</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="validate_uses_slugs-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/active_record2/tasks.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">validate_uses_slugs</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">friendly_id_config</span>.<span class="ruby-identifier">use_slug?</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Class &#39;%s&#39; doesn&#39;t use slugs&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">NoMethodError</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-string">&quot;Class &#39;%s&#39; doesn&#39;t use FriendlyId&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

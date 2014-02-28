@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class FriendlyId::SlugString - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">ActiveSupport::Multibyte::Chars
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-dump_approximations">::dump_approximations</a>
+    
+    <li class="calls-super" ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-approximate_ascii-21">#approximate_ascii!</a>
+    
+    <li ><a href="#method-i-clean-21">#clean!</a>
+    
+    <li ><a href="#method-i-downcase-21">#downcase!</a>
+    
+    <li ><a href="#method-i-normalize-21">#normalize!</a>
+    
+    <li ><a href="#method-i-normalize_for-21">#normalize_for!</a>
+    
+    <li ><a href="#method-i-to_ascii-21">#to_ascii!</a>
+    
+    <li ><a href="#method-i-truncate-21">#truncate!</a>
+    
+    <li ><a href="#method-i-upcase-21">#upcase!</a>
+    
+    <li ><a href="#method-i-validate_for-21">#validate_for!</a>
+    
+    <li ><a href="#method-i-with_dashes-21">#with_dashes!</a>
+    
+    <li ><a href="#method-i-word_chars-21">#word_chars!</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-FriendlyId::SlugString">
+  <h1 id="class-FriendlyId::SlugString" class="class">
+    class FriendlyId::SlugString
+  </h1>
+
+  <section class="description">
+    
+<p>This class provides some string-manipulation methods specific to slugs. Its
+Unicode support is provided by ActiveSupport::Multibyte::Chars; this is
+needed primarily for Unicode encoding normalization and proper calculation
+of string lengths.</p>
+
+<p>Note that this class includes many “bang methods” such as {#clean!} and
+{#normalize!} that perform actions on the string in-place. Each of these
+methods has a corresponding “bangless” method (i.e., +SlugString#clean!+
+and +SlugString#clean+) which does not appear in the documentation because
+it is generated dynamically.</p>
+
+<p>All of the bang methods return an instance of <a
+href="../String.html">String</a>, while the bangless versions return an
+instance of <a href="SlugString.html">FriendlyId::SlugString</a>, so that
+calls to methods specific to this class can be chained:</p>
+
+<pre class="ruby"><span class="ruby-identifier">string</span> = <span class="ruby-constant">SlugString</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&quot;hello world&quot;</span>)
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">with_dashes!</span> <span class="ruby-comment"># =&gt; &quot;hello-world&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">with_dashes</span>  <span class="ruby-comment"># =&gt; &lt;FriendlyId::SlugString:0x000001013e1590 @wrapped_string=&quot;hello-world&quot;&gt;</span>
+</pre>
+
+<p>@see <a
+href="http://www.utf8-chartable.de/unicode-utf8-table.pl?utf8=dec">www.utf8-chartable.de/unicode-utf8-table.pl?utf8=dec</a>
+Unicode character table @see <a
+href="SlugString.html#method-c-dump_approximations">::dump_approximations</a></p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="APPROXIMATIONS">APPROXIMATIONS
+        
+        <dd><p>All values are Unicode decimal characters or character arrays.</p>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-dump_approximations" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">dump_approximations</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>This method can be used by developers wishing to debug the {APPROXIMATIONS}
+hashes, which are written in a hard-to-read format. @return Hash @example</p>
+
+<pre>&gt; ruby -rrubygems -rlib/friendly_id -e &#39;p FriendlyId::SlugString.dump_approximations&#39;</pre>
+
+<p>{:common =&gt; {“À”=&gt;“A”, “Á”=&gt;“A”, “Â”=&gt;“A”, “Ã”=&gt;“A”,
+“Ä”=&gt;“A”, “Å”=&gt;“A”, “Æ”=&gt;“AE”, “Ç”=&gt;“C”, “È”=&gt;“E”,
+“É”=&gt;“E”, “Ê”=&gt;“E”, “Ë”=&gt;“E”, “Ì”=&gt;“I”, “Í”=&gt;“I”,
+“Î”=&gt;“I”, “Ï”=&gt;“I”, “Ð”=&gt;“D”, “Ñ”=&gt;“N”, “Ò”=&gt;“O”,
+“Ó”=&gt;“O”, “Ô”=&gt;“O”, “Õ”=&gt;“O”, “Ö”=&gt;“O”, “×”=&gt;“x”,
+“Ø”=&gt;“O”, “Ù”=&gt;“U”, “Ú”=&gt;“U”, “Û”=&gt;“U”, “Ü”=&gt;“U”,
+“Ý”=&gt;“Y”, “Þ”=&gt;“Th”, “ß”=&gt;“ss”, “à”=&gt;“a”, “á”=&gt;“a”,
+“â”=&gt;“a”, “ã”=&gt;“a”, “ä”=&gt;“a”, “å”=&gt;“a”, “æ”=&gt;“ae”,
+“ç”=&gt;“c”, “è”=&gt;“e”, “é”=&gt;“e”, “ê”=&gt;“e”, “ë”=&gt;“e”,
+“ì”=&gt;“i”, “í”=&gt;“i”, “î”=&gt;“i”, “ï”=&gt;“i”, “ð”=&gt;“d”,
+“ñ”=&gt;“n”, “ò”=&gt;“o”, “ó”=&gt;“o”, “ô”=&gt;“o”, “õ”=&gt;“o”,
+“ö”=&gt;“o”, “ø”=&gt;“o”, “ù”=&gt;“u”, “ú”=&gt;“u”, “û”=&gt;“u”,
+“ü”=&gt;“u”, “ý”=&gt;“y”, “þ”=&gt;“th”, “ÿ”=&gt;“y”, “Ā”=&gt;“A”,
+“ā”=&gt;“a”, “Ă”=&gt;“A”, “ă”=&gt;“a”, “Ą”=&gt;“A”, “ą”=&gt;“a”,
+“Ć”=&gt;“C”, “ć”=&gt;“c”, “Ĉ”=&gt;“C”, “ĉ”=&gt;“c”, “Ċ”=&gt;“C”,
+“ċ”=&gt;“c”, “Č”=&gt;“C”, “č”=&gt;“c”, “Ď”=&gt;“D”, “ď”=&gt;“d”,
+“Đ”=&gt;“D”, “đ”=&gt;“d”, “Ē”=&gt;“E”, “ē”=&gt;“e”, “Ĕ”=&gt;“E”,
+“ĕ”=&gt;“e”, “Ė”=&gt;“E”, “ė”=&gt;“e”, “Ę”=&gt;“E”, “ę”=&gt;“e”,
+“Ě”=&gt;“E”, “ě”=&gt;“e”, “Ĝ”=&gt;“G”, “ĝ”=&gt;“g”, “Ğ”=&gt;“G”,
+“ğ”=&gt;“g”, “Ġ”=&gt;“G”, “ġ”=&gt;“g”, “Ģ”=&gt;“G”, “ģ”=&gt;“g”,
+“Ĥ”=&gt;“H”, “ĥ”=&gt;“h”, “Ħ”=&gt;“H”, “ħ”=&gt;“h”, “Ĩ”=&gt;“I”,
+“ĩ”=&gt;“i”, “Ī”=&gt;“I”, “ī”=&gt;“i”, “Ĭ”=&gt;“I”, “ĭ”=&gt;“i”,
+“Į”=&gt;“I”, “į”=&gt;“i”, “İ”=&gt;“I”, “ı”=&gt;“i”, “Ĳ”=&gt;“IJ”,
+“ĳ”=&gt;“ij”, “Ĵ”=&gt;“J”, “ĵ”=&gt;“j”, “Ķ”=&gt;“K”, “ķ”=&gt;“k”,
+“ĸ”=&gt;“k”, “Ĺ”=&gt;“L”, “ĺ”=&gt;“l”, “Ļ”=&gt;“L”, “ļ”=&gt;“l”,
+“Ľ”=&gt;“L”, “ľ”=&gt;“l”, “Ŀ”=&gt;“L”, “ŀ”=&gt;“l”, “Ł”=&gt;“L”,
+“ł”=&gt;“l”, “Ń”=&gt;“N”, “ń”=&gt;“n”, “Ņ”=&gt;“N”, “ņ”=&gt;“n”,
+“Ň”=&gt;“N”, “ň”=&gt;“n”, “ŉ”=&gt;“&#39;n”, “Ŋ”=&gt;“NG”, “ŋ”=&gt;“ng”,
+“Ō”=&gt;“O”, “ō”=&gt;“o”, “Ŏ”=&gt;“O”, “ŏ”=&gt;“o”, “Ő”=&gt;“O”,
+“ő”=&gt;“o”, “Œ”=&gt;“OE”, “œ”=&gt;“oe”, “Ŕ”=&gt;“R”, “ŕ”=&gt;“r”,
+“Ŗ”=&gt;“R”, “ŗ”=&gt;“r”, “Ř”=&gt;“R”, “ř”=&gt;“r”, “Ś”=&gt;“S”,
+“ś”=&gt;“s”, “Ŝ”=&gt;“S”, “ŝ”=&gt;“s”, “Ş”=&gt;“S”, “ş”=&gt;“s”,
+“Š”=&gt;“S”, “š”=&gt;“s”, “Ţ”=&gt;“T”, “ţ”=&gt;“t”, “Ť”=&gt;“T”,
+“ť”=&gt;“t”, “Ŧ”=&gt;“T”, “ŧ”=&gt;“t”, “Ũ”=&gt;“U”, “ũ”=&gt;“u”,
+“Ū”=&gt;“U”, “ū”=&gt;“u”, “Ŭ”=&gt;“U”, “ŭ”=&gt;“u”, “Ů”=&gt;“U”,
+“ů”=&gt;“u”, “Ű”=&gt;“U”, “ű”=&gt;“u”, “Ų”=&gt;“U”, “ų”=&gt;“u”,
+“Ŵ”=&gt;“W”, “ŵ”=&gt;“w”, “Ŷ”=&gt;“Y”, “ŷ”=&gt;“y”, “Ÿ”=&gt;“Y”,
+“Ź”=&gt;“Z”, “ź”=&gt;“z”, “Ż”=&gt;“Z”, “ż”=&gt;“z”, “Ž”=&gt;“Z”,
+“ž”=&gt;“z”}, :german =&gt; {“ü”=&gt;“ue”, “ö”=&gt;“oe”, “ä”=&gt;“ae”},
+:spanish =&gt; {“Ñ”=&gt;“Nn”, “ñ”=&gt;“nn”}}</p>
+          
+          
+
+          
+          <div class="method-source-code" id="dump_approximations-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 102</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">dump_approximations</span>
+  <span class="ruby-constant">Hash</span>[<span class="ruby-constant">APPROXIMATIONS</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">approx</span><span class="ruby-operator">|</span>
+    [<span class="ruby-identifier">name</span>, <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">approx</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> [[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">pack</span>(<span class="ruby-string">&quot;U*&quot;</span>), [<span class="ruby-identifier">value</span>].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">pack</span>(<span class="ruby-string">&quot;U*&quot;</span>)]}]]
+  <span class="ruby-keyword">end</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(string)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>@param string [String] The string to use as the basis of the <a
+href="SlugString.html">SlugString</a>.</p>
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              
+            </div>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 110</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">string</span>)
+  <span class="ruby-keyword">super</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-approximate_ascii-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">approximate_ascii!</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Approximate an ASCII string. This works only for Western strings using
+characters that are Roman-alphabet characters + diacritics. Non-letter
+characters are left unmodified.</p>
+
+<pre class="ruby"><span class="ruby-identifier">string</span> = <span class="ruby-constant">SlugString</span>.<span class="ruby-identifier">new</span> <span class="ruby-string">&quot;Łódź, Poland&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span>                 <span class="ruby-comment"># =&gt; &quot;Lodz, Poland&quot;</span>
+<span class="ruby-identifier">string</span> = <span class="ruby-constant">SlugString</span>.<span class="ruby-identifier">new</span> <span class="ruby-string">&quot;日本&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span>                 <span class="ruby-comment"># =&gt; &quot;日本&quot;</span>
+</pre>
+
+<p>You can pass any key(s) from {APPROXIMATIONS} as arguments. This allows for
+contextual approximations. By default; <code>:spanish</code> and
+<code>:german</code> are provided:</p>
+
+<pre class="ruby"><span class="ruby-identifier">string</span> = <span class="ruby-constant">SlugString</span>.<span class="ruby-identifier">new</span> <span class="ruby-string">&quot;Jürgen Müller&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span>                 <span class="ruby-comment"># =&gt; &quot;Jurgen Muller&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span> :<span class="ruby-identifier">german</span>        <span class="ruby-comment"># =&gt; &quot;Juergen Mueller&quot;</span>
+<span class="ruby-identifier">string</span> = <span class="ruby-constant">SlugString</span>.<span class="ruby-identifier">new</span> <span class="ruby-string">&quot;¡Feliz año!&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span>                 <span class="ruby-comment"># =&gt; &quot;¡Feliz ano!&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii</span> :<span class="ruby-identifier">spanish</span>       <span class="ruby-comment"># =&gt; &quot;¡Feliz anno!&quot;</span>
+</pre>
+
+<p>You can modify the built-in approximations, or add your own:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Make Spanish use &quot;nh&quot; rather than &quot;nn&quot;</span>
+<span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">SlugString</span><span class="ruby-operator">::</span><span class="ruby-constant">APPROXIMATIONS</span>[:<span class="ruby-identifier">spanish</span>] = {
+  <span class="ruby-comment"># Ñ =&gt; &quot;Nh&quot;</span>
+  <span class="ruby-value">209</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">78</span>, <span class="ruby-value">104</span>],
+  <span class="ruby-comment"># ñ =&gt; &quot;nh&quot;</span>
+  <span class="ruby-value">241</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">110</span>, <span class="ruby-value">104</span>]
+}
+</pre>
+
+<p>It&#39;s also possible to use a custom approximation for all strings:</p>
+
+<pre>FriendlyId::SlugString.approximations &lt;&lt; :german</pre>
+
+<p>Notice that this method does not simply convert to ASCII; if you want to
+remove non-ASCII characters such as “¡” and “¿”, use {#to_ascii!}:</p>
+
+<pre class="ruby"><span class="ruby-identifier">string</span>.<span class="ruby-identifier">approximate_ascii!</span>(:<span class="ruby-identifier">spanish</span>)       <span class="ruby-comment"># =&gt; &quot;¡Feliz anno!&quot;</span>
+<span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_ascii!</span>                          <span class="ruby-comment"># =&gt; &quot;Feliz anno!&quot;</span>
+</pre>
+
+<p>@param *args &lt;Symbol&gt; @return <a href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="approximate_ascii-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 155</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">approximate_ascii!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-ivar">@maps</span> = (<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">approximations</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span> <span class="ruby-operator">+</span> [<span class="ruby-value">:common</span>]).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">normalize_utf8</span>(<span class="ruby-value">:c</span>).<span class="ruby-identifier">unpack</span>(<span class="ruby-string">&quot;U*&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span> <span class="ruby-identifier">approx_char</span>(<span class="ruby-identifier">char</span>) }.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">pack</span>(<span class="ruby-string">&quot;U*&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-clean-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">clean!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Removes leading and trailing spaces or dashses, and replaces multiple
+whitespace characters with a single space. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="clean-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 163</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">clean!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-ivar">@wrapped_string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\A\-|\-\z/</span>, <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\s+/u</span>, <span class="ruby-string">&#39; &#39;</span>).<span class="ruby-identifier">strip</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-downcase-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">downcase!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Lowercases the string. Note that this works for Unicode strings, though
+your milage may vary with Greek and Turkic strings. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="downcase-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 170</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">downcase!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">apply_mapping</span> <span class="ruby-value">:lowercase_mapping</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-normalize-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">normalize!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Normalize the string for use as a <a
+href="../FriendlyId.html">FriendlyId</a>. Note that in this context,
+<code>normalize</code> means, strip, remove non-letters/numbers, downcasing
+and converting whitespace to dashes.
+ActiveSupport::Multibyte::Chars#normalize is aliased to
+<code>normalize_utf8</code> in this subclass. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="normalize-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 217</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize!</span>
+  <span class="ruby-identifier">clean!</span>
+  <span class="ruby-identifier">word_chars!</span>
+  <span class="ruby-identifier">downcase!</span>
+  <span class="ruby-identifier">with_dashes!</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-normalize_for-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">normalize_for!</span><span
+            class="method-args">(config)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Normalize the string for a given {FriendlyId::Configuration}. @param config
+[FriendlyId::Configuration] @return <a href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="normalize_for-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 199</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">normalize_for!</span>(<span class="ruby-identifier">config</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">config</span>.<span class="ruby-identifier">normalizer?</span>
+    <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">config</span>.<span class="ruby-identifier">normalizer</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">approximate_ascii!</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">config</span>.<span class="ruby-identifier">approximate_ascii?</span>
+    <span class="ruby-identifier">to_ascii!</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">config</span>.<span class="ruby-identifier">strip_non_ascii?</span>
+    <span class="ruby-identifier">normalize!</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-to_ascii-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">to_ascii!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Delete any non-ascii characters. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="to_ascii-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 232</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">to_ascii!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">normalize_utf8</span>(<span class="ruby-value">:c</span>).<span class="ruby-identifier">unpack</span>(<span class="ruby-string">&quot;U*&quot;</span>).<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span> <span class="ruby-identifier">char</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">127</span>}.<span class="ruby-identifier">pack</span>(<span class="ruby-string">&quot;U*&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-truncate-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">truncate!</span><span
+            class="method-args">(max)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Truncate the string to <code>max</code> length. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="truncate-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 226</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">truncate!</span>(<span class="ruby-identifier">max</span>)
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-keyword">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">max</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-upcase-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">upcase!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Upper-cases the string. Note that this works for Unicode strings, though
+your milage may vary with Greek and Turkic strings. @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="upcase-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 239</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">upcase!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">apply_mapping</span> <span class="ruby-value">:uppercase_mapping</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-validate_for-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">validate_for!</span><span
+            class="method-args">(config)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Validate that the slug string is not blank or reserved, and truncate it to
+the max length if necessary. @param config [FriendlyId::Configuration]
+@return <a href="../String.html">String</a> @raise <a
+href="BlankError.html">FriendlyId::BlankError</a> @raise <a
+href="ReservedError.html">FriendlyId::ReservedError</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="validate_for-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 249</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">validate_for!</span>(<span class="ruby-identifier">config</span>)
+  <span class="ruby-identifier">truncate!</span>(<span class="ruby-identifier">config</span>.<span class="ruby-identifier">max_length</span>)
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">BlankError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">blank?</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-constant">FriendlyId</span><span class="ruby-operator">::</span><span class="ruby-constant">ReservedError</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">config</span>.<span class="ruby-identifier">reserved?</span>(<span class="ruby-keyword">self</span>)
+  <span class="ruby-keyword">self</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-with_dashes-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">with_dashes!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Replaces whitespace with dashes (“-”). @return <a
+href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="with_dashes-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 258</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_dashes!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-ivar">@wrapped_string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[\s\-]+/u</span>, <span class="ruby-string">&#39;-&#39;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-word_chars-21" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">word_chars!</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Remove any non-word characters. @return <a href="../String.html">String</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="word_chars-21-source">
+            <pre><span class="ruby-comment"># File lib/friendly_id/slug_string.rb, line 176</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">word_chars!</span>
+  <span class="ruby-ivar">@wrapped_string</span> = <span class="ruby-identifier">normalize_utf8</span>(<span class="ruby-value">:c</span>).<span class="ruby-identifier">unpack</span>(<span class="ruby-string">&quot;U*&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">char</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">char</span>
+    <span class="ruby-comment"># control chars</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">31</span>
+    <span class="ruby-comment"># punctuation; 45 is &quot;-&quot; (HYPHEN-MINUS) and allowed</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">33</span><span class="ruby-operator">..</span><span class="ruby-value">44</span>
+    <span class="ruby-comment"># more puncuation</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">46</span><span class="ruby-operator">..</span><span class="ruby-value">47</span>
+    <span class="ruby-comment"># more puncuation and other symbols</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">58</span><span class="ruby-operator">..</span><span class="ruby-value">64</span>
+    <span class="ruby-comment"># brackets and other symbols</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">91</span><span class="ruby-operator">..</span><span class="ruby-value">96</span>
+    <span class="ruby-comment"># braces, pipe, tilde, etc.</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-value">123</span><span class="ruby-operator">..</span><span class="ruby-value">191</span>
+    <span class="ruby-keyword">else</span> <span class="ruby-identifier">char</span>
+    <span class="ruby-keyword">end</span>
+  }.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">pack</span>(<span class="ruby-string">&quot;U*&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

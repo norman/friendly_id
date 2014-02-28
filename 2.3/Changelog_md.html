@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Changelog - RDoc Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-FriendlyId+Changelog">FriendlyId Changelog</a>
+    <li><a href="#label-2.3.4+%282010-03-22%29">2.3.4 (2010-03-22)</a>
+    <li><a href="#label-2.3.3+%282010-03-10%29">2.3.3 (2010-03-10)</a>
+    <li><a href="#label-2.3.2+%282010-02-14%29">2.3.2 (2010-02-14)</a>
+    <li><a href="#label-2.3.1+%282010-02-09%29">2.3.1 (2010-02-09)</a>
+    <li><a href="#label-2.3.0+%282010-02-04%29">2.3.0 (2010-02-04)</a>
+    <li><a href="#label-2.2.7+%282009-12-16%29">2.2.7 (2009-12-16)</a>
+    <li><a href="#label-2.2.6+%282009-12-10%29">2.2.6 (2009-12-10)</a>
+    <li><a href="#label-2.2.5+%282009-11-30%29">2.2.5 (2009-11-30)</a>
+    <li><a href="#label-2.2.4+%282009-11-12%29">2.2.4 (2009-11-12)</a>
+    <li><a href="#label-2.2.3+%282009-11-12%29">2.2.3 (2009-11-12)</a>
+    <li><a href="#label-2.2.2+%282009-10-26%29">2.2.2 (2009-10-26)</a>
+    <li><a href="#label-2.2.1+%282009-10-23%29">2.2.1 (2009-10-23)</a>
+    <li><a href="#label-2.2.0+%282009-10-19%29">2.2.0 (2009-10-19)</a>
+    <li><a href="#label-2.1.4+%282009-09-01%29">2.1.4 (2009-09-01)</a>
+    <li><a href="#label-2.1.3+%282009-06-03%29">2.1.3 (2009-06-03)</a>
+    <li><a href="#label-2.1.2+%282009-05-21%29">2.1.2 (2009-05-21)</a>
+    <li><a href="#label-2.1.1+%282009-03-25%29">2.1.1 (2009-03-25)</a>
+    <li><a href="#label-2.1.0+%282009-03-25%29">2.1.0 (2009-03-25)</a>
+    <li><a href="#label-2.0.4+%282009-02-12%29">2.0.4 (2009-02-12)</a>
+    <li><a href="#label-2.0.3+%282009-02-11%29">2.0.3 (2009-02-11)</a>
+    <li><a href="#label-2.0.2+%282009-02-09%29">2.0.2 (2009-02-09)</a>
+    <li><a href="#label-2.0.1+%282009-01-19%29">2.0.1 (2009-01-19)</a>
+    <li><a href="#label-2.0.0+%282009-01-03%29">2.0.0 (2009-01-03)</a>
+    <li><a href="#label-1.0+%282008-12-11%29">1.0 (2008-12-11)</a>
+    <li><a href="#label-2008-10-31">2008-10-31</a>
+    <li><a href="#label-2008-10-22">2008-10-22</a>
+    <li><a href="#label-2008-10-09">2008-10-09</a>
+    <li><a href="#label-0.5+%282008-08-25%29">0.5 (2008-08-25)</a>
+    <li><a href="#label-2008-07-14">2008-07-14</a>
+    <li><a href="#label-2008-06-23">2008-06-23</a>
+    <li><a href="#label-2008-06-10">2008-06-10</a>
+    <li><a href="#label-2008-05-15">2008-05-15</a>
+    <li><a href="#label-2008-05-12">2008-05-12</a>
+    <li><a href="#label-2008-04-18">2008-04-18</a>
+    <li><a href="#label-2008-03-13">2008-03-13</a>
+    <li><a href="#label-2008-02-07">2008-02-07</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Changelog_md.html">Changelog</a>
+  
+    <li><a href="./Contributors_md.html">Contributors</a>
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Guide_md.html">Guide</a>
+  
+    <li><a href="./LICENSE.html">LICENSE</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./Rakefile.html">Rakefile</a>
+  
+    <li><a href="./extras/README_txt.html">README</a>
+  
+    <li><a href="./friendly_id_gemspec.html">friendly_id.gemspec</a>
+  
+    <li><a href="./lib/friendly_id/active_record2/tasks/friendly_id_rake.html">friendly_id.rake</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page Changelog.md">
+
+<h1 id="label-FriendlyId+Changelog"><a href="FriendlyId.html">FriendlyId</a> <a href="Changelog_md.html">Changelog</a><span><a href="#label-FriendlyId+Changelog">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+
+<p>We would like to think our many {file:Contributors contributors} for
+suggestions, ideas and improvements to <a
+href="FriendlyId.html">FriendlyId</a>.</p>
+<ul><li>
+<p>Table of Contents {:toc}</p>
+</li></ul>
+
+<h2 id="label-2.3.4+%282010-03-22%29">2.3.4 (2010-03-22)<span><a href="#label-2.3.4+%282010-03-22%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Made slugged status use the slug sequence. This fixes problems with best? 
+returning false when finding with a sequenced slug.</p>
+</li><li>
+<p>Doc fixes. (Juan Schiwndt)</p>
+</li><li>
+<p>Misc cleanups.</p>
+</li></ul>
+
+<h2 id="label-2.3.3+%282010-03-10%29">2.3.3 (2010-03-10)<span><a href="#label-2.3.3+%282010-03-10%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed sequence regexp to grab all trailing digits. (Nash Kabbara)</p>
+</li><li>
+<p><a href="Block.html">Block</a> param now warns, not raises. (Kamal Fariz
+Mahyuddin)</p>
+</li><li>
+<p>Misc doc fixes. (Kamal Fariz Mahyuddin)</p>
+</li></ul>
+
+<h2 id="label-2.3.2+%282010-02-14%29">2.3.2 (2010-02-14)<span><a href="#label-2.3.2+%282010-02-14%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed finding by old slug when using cached slugs.</p>
+</li><li>
+<p>Sequence separator parsing now correctly handles occurrences of the
+sequence  separator string inside the friendly_id text (Johan Kok).</p>
+</li><li>
+<p>Fixed missing quotes on table names in a few places (Brian Collins).</p>
+</li></ul>
+
+<h2 id="label-2.3.1+%282010-02-09%29">2.3.1 (2010-02-09)<span><a href="#label-2.3.1+%282010-02-09%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed stack level too deep error on strip_diacritics.</p>
+</li></ul>
+
+<h2 id="label-2.3.0+%282010-02-04%29">2.3.0 (2010-02-04)<span><a href="#label-2.3.0+%282010-02-04%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>This is a major update à la “Snow Leopard” that adds no new major features,
+but significantly improves the underlying code. Most users should be able
+to upgrade with no issues other than new deprecation messages appearing in
+the logs.</p>
+
+<p>If, however, you have monkey-patched <a
+href="FriendlyId.html">FriendlyId</a>, or are maintaining your own fork,
+then this upgrade may causes issues.</p>
+
+<p><strong>Changes:</strong></p>
+<ul><li>
+<p>Sequence separator can now be configured to something other than “–”.</p>
+</li><li>
+<p>New option to pass arguments to
+{FriendlyId::SlugString#approximate_ascii!},  allowing custom
+approximations specific to German or Spanish.</p>
+</li><li>
+<p><a href="FriendlyId.html">FriendlyId</a> now queries against the
+cached_slug column, which improves performance.</p>
+</li><li>
+<p>{FriendlyId::SlugString} class added, allowing finer-grained control over 
+Unicode friendly_id strings.</p>
+</li><li>
+<p>{FriendlyId::Configuration} class added, offering more flexible/hackable 
+options.</p>
+</li><li>
+<p><a href="FriendlyId.html">FriendlyId</a> now raises subclasses of
+{FriendlyId::SlugGenerationError}  depending on the error context.</p>
+</li><li>
+<p>Simple models now correctly validate friendly_id length.</p>
+</li><li>
+<p>Passing block into <a href="FriendlyId.html">FriendlyId</a> deprecated in
+favor of overriding  the model&#39;s <code>normalize_friendly_id</code>
+method.</p>
+</li><li>
+<p>Updating only the model&#39;s scope now also updates the slug.</p>
+</li><li>
+<p>Major refactorings, cleanups and deprecations en route to the 3.0 release.</p>
+</li></ul>
+
+<h2 id="label-2.2.7+%282009-12-16%29">2.2.7 (2009-12-16)<span><a href="#label-2.2.7+%282009-12-16%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed typo in Rake tasks which caused delete_old_slugs to fail. (Diego
+R.V.)</p>
+</li></ul>
+
+<h2 id="label-2.2.6+%282009-12-10%29">2.2.6 (2009-12-10)<span><a href="#label-2.2.6+%282009-12-10%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Made cached_slug automagic configuration occur outside of has_friendly_id. 
+This was causing problems in code where the class is loaded before 
+ActiveRecord has established its connection.</p>
+</li><li>
+<p>Fixes for scope feature with Postgres (Ben Woosley)</p>
+</li><li>
+<p>Migrated away from Hoe/Newgem for gem management.</p>
+</li><li>
+<p>Made tests database-agnostic (Ben Woosley)</p>
+</li></ul>
+
+<h2 id="label-2.2.5+%282009-11-30%29">2.2.5 (2009-11-30)<span><a href="#label-2.2.5+%282009-11-30%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed typo in config options (Steven Noble).</p>
+</li></ul>
+
+<h2 id="label-2.2.4+%282009-11-12%29">2.2.4 (2009-11-12)<span><a href="#label-2.2.4+%282009-11-12%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed typo in post-install message.</p>
+</li></ul>
+
+<h2 id="label-2.2.3+%282009-11-12%29">2.2.3 (2009-11-12)<span><a href="#label-2.2.3+%282009-11-12%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed some issues with gem load order under 1.8.x (closes GH Issue #20)</p>
+</li><li>
+<p>Made sure friendly_id generator makes a lib/tasks directory (Josh Nichols)</p>
+</li><li>
+<p>Finders now accept instances of ActiveRecord::Base, matching AR&#39;s
+behavior  (Josh Nichols)</p>
+</li><li>
+<p>SlugGenerationError now raise when a blank value is passed to 
+strip_diacritics</p>
+</li></ul>
+
+<h2 id="label-2.2.2+%282009-10-26%29">2.2.2 (2009-10-26)<span><a href="#label-2.2.2+%282009-10-26%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed Rake tasks creating duplicate slugs and not properly clearing cached 
+slugs (closes GH issues #14 and #15)</p>
+</li></ul>
+
+<h2 id="label-2.2.1+%282009-10-23%29">2.2.1 (2009-10-23)<span><a href="#label-2.2.1+%282009-10-23%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>slug cache now properly caches the slug sequence (closes GH issue #10)</p>
+</li><li>
+<p>attr_protected is now only invoked on the cached_slug column if 
+attr_accessible has not already been invoked. (closes GH issue #11)</p>
+</li></ul>
+
+<h2 id="label-2.2.0+%282009-10-19%29">2.2.0 (2009-10-19)<span><a href="#label-2.2.0+%282009-10-19%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Added slug caching, offers huge performance boost (Bruno Michel)</p>
+</li><li>
+<p>Handle Unicode string length correctly (Mikhail Shirkov)</p>
+</li><li>
+<p>Remove alias_method_chain in favor of super (Diego Carrion)</p>
+</li></ul>
+
+<h2 id="label-2.1.4+%282009-09-01%29">2.1.4 (2009-09-01)<span><a href="#label-2.1.4+%282009-09-01%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed upgrade generator not installing rake tasks (Harry Love)</p>
+</li><li>
+<p>Fixed handling of very large id&#39;s (Nathan Phelps)</p>
+</li><li>
+<p>Fixed long index name on migration (Rob Ingram)</p>
+</li></ul>
+
+<h2 id="label-2.1.3+%282009-06-03%29">2.1.3 (2009-06-03)<span><a href="#label-2.1.3+%282009-06-03%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Always call to_s on slug_text to allow objects such as DateTimes to be used
+for the friendly_id text. (reported by Jon Ng)</p>
+</li></ul>
+
+<h2 id="label-2.1.2+%282009-05-21%29">2.1.2 (2009-05-21)<span><a href="#label-2.1.2+%282009-05-21%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Non-slugged models now validate the friendly_id on save as well as create 
+(Joe Van Dyk).</p>
+</li><li>
+<p>Replaced Shoulda with Contest.</p>
+</li></ul>
+
+<h2 id="label-2.1.1+%282009-03-25%29">2.1.1 (2009-03-25)<span><a href="#label-2.1.1+%282009-03-25%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed bug with find_some; if a record has old slugs, find_some will no 
+longer return multiple copies of that record when finding by numerical ID. 
+(Steve Luscher)</p>
+</li><li>
+<p>Fixed bug with find_some: you can now find_some with an array of numerical 
+IDs without an error being thrown. (Steve Luscher)</p>
+</li></ul>
+
+<h2 id="label-2.1.0+%282009-03-25%29">2.1.0 (2009-03-25)<span><a href="#label-2.1.0+%282009-03-25%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Ruby 1.9 compatibility.</p>
+</li><li>
+<p>Removed dependency on ancient Unicode gem.</p>
+</li></ul>
+
+<h2 id="label-2.0.4+%282009-02-12%29">2.0.4 (2009-02-12)<span><a href="#label-2.0.4+%282009-02-12%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>You can now pass in your own custom slug generation blocks while setting up
+friendly_id.</p>
+</li></ul>
+
+<h2 id="label-2.0.3+%282009-02-11%29">2.0.3 (2009-02-11)<span><a href="#label-2.0.3+%282009-02-11%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed to_param returning an empty string for non-slugged models with a null
+friendly_id.</p>
+</li></ul>
+
+<h2 id="label-2.0.2+%282009-02-09%29">2.0.2 (2009-02-09)<span><a href="#label-2.0.2+%282009-02-09%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Made <a href="FriendlyId.html">FriendlyId</a> depend only on ActiveRecord.
+It should now be possible to  use <a href="FriendlyId.html">FriendlyId</a>
+with Camping or any other codebase that uses AR.</p>
+</li><li>
+<p>Overhauled creaky testing setup and switched to Shoulda.</p>
+</li><li>
+<p>Made reserved words work for non-slugged models.</p>
+</li></ul>
+
+<h2 id="label-2.0.1+%282009-01-19%29">2.0.1 (2009-01-19)<span><a href="#label-2.0.1+%282009-01-19%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fix infinite redirect bug when using .has_better_id? in your controllers 
+(Sean Abrahams)</p>
+</li></ul>
+
+<h2 id="label-2.0.0+%282009-01-03%29">2.0.0 (2009-01-03)<span><a href="#label-2.0.0+%282009-01-03%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Support for scoped slugs (Norman Clarke)</p>
+</li><li>
+<p>Support for UTF-8 friendly_ids (Norman Clarke)</p>
+</li><li>
+<p>Can now be installed via Ruby Gems, or as a Rails plugin (Norman Clarke)</p>
+</li><li>
+<p>Improved handling of non-unique slugs (Norman Clarke and Adrian Mugnolo)</p>
+</li><li>
+<p>Shoulda macro (Josh Nichols)</p>
+</li><li>
+<p>Various small bugfixes, cleanups and refactorings</p>
+</li></ul>
+
+<h2 id="label-1.0+%282008-12-11%29">1.0 (2008-12-11)<span><a href="#label-1.0+%282008-12-11%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed bug that may return invalid records having similar id/names and using
+MySQL. (Emilio Tagua)</p>
+</li><li>
+<p>Fixed slug generation to increment only numeric extension without modifying
+the name on duplicated slugs. (Emilio Tagua)</p>
+</li></ul>
+
+<h2 id="label-2008-10-31">2008-10-31<span><a href="#label-2008-10-31">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Fixed compatibility with Rails 2.0.x. (Norman Clarke)</p>
+</li><li>
+<p>friendly_id::make_slugs update records in chunks of 1000 to avoid running 
+out of memory with large datasets. (Tim Kadom)</p>
+</li><li>
+<p>Fixed logic error with slug name collisions. Thanks to Tim Kadom for 
+reporting this bug.</p>
+</li></ul>
+
+<h2 id="label-2008-10-22">2008-10-22<span><a href="#label-2008-10-22">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Reverted use of UTF8Handler - was causing errors for some people (Bence
+Nagy)</p>
+</li><li>
+<p>Corrected find in case if a friendly_id begins with number (Bence Nagy)</p>
+</li><li>
+<p>Added ability to reserve words from slugs (Adam Cigánek)</p>
+</li></ul>
+
+<h2 id="label-2008-10-09">2008-10-09<span><a href="#label-2008-10-09">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Moved “require”“ for iconv to init.rb (Florian Aßmann)</p>
+</li><li>
+<p>Removed “require” for Unicode, use Rails&#39; handler instead (Florian
+Aßmann)</p>
+</li><li>
+<p>Replaced some magic numbers with constants (Florian Aßmann)</p>
+</li><li>
+<p>Don&#39;t overwrite find, alias_method_chain find_one and find_some instead
+(Florian Aßmann)</p>
+</li><li>
+<p>Slugs behave more like ids now (Florian Aßmann)</p>
+</li><li>
+<p>Can find by mixture of ids and slugs (Florian Aßmann)</p>
+</li><li>
+<p>Reformatted code and comments (Florian Aßmann)</p>
+</li><li>
+<p>Added support for Edge Rails&#39; Inflector::parameterize (Norman Clarke)</p>
+</li></ul>
+
+<h2 id="label-0.5+%282008-08-25%29">0.5 (2008-08-25)<span><a href="#label-0.5+%282008-08-25%29">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Moved strip_diacritics into <a href="Slug.html">Slug</a> for easier
+reuse/better organization.</p>
+</li><li>
+<p>Put class methods inside class &lt;&lt; self block. (Norman Clarke)</p>
+</li><li>
+<p>Small change to allow friendly_id to work better with STI. (David Ramalho)</p>
+</li></ul>
+
+<h2 id="label-2008-07-14">2008-07-14<span><a href="#label-2008-07-14">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Improved slug generation for friendly id&#39;s with apostrophes. (Alistair
+Holt)</p>
+</li><li>
+<p>Added support for namespaced models in <a
+href="Rakefile.html">Rakefile</a>. (David Ramalho)</p>
+</li></ul>
+
+<h2 id="label-2008-06-23">2008-06-23<span><a href="#label-2008-06-23">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Cached most recent slug to improve performance (Emilio Tagua).</p>
+</li></ul>
+
+<h2 id="label-2008-06-10">2008-06-10<span><a href="#label-2008-06-10">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Added ability to find friendly_ids by array (Emilio Tagua)</p>
+</li></ul>
+
+<h2 id="label-2008-05-15">2008-05-15<span><a href="#label-2008-05-15">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Made friendly_id raise an error if slug method returns a blank value.</p>
+</li></ul>
+
+<h2 id="label-2008-05-12">2008-05-12<span><a href="#label-2008-05-12">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Added experimental Github gemspec.</p>
+</li></ul>
+
+<h2 id="label-2008-04-18">2008-04-18<span><a href="#label-2008-04-18">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Improved slug name collision avoidance.</p>
+</li></ul>
+
+<h2 id="label-2008-03-13">2008-03-13<span><a href="#label-2008-03-13">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Added :dependent =&gt; :destroy to slug relation, as suggested by Emilio
+Tagua.</p>
+</li><li>
+<p>Fixed error when renaming a slugged item back to a previously used name.</p>
+</li><li>
+<p>Incorporated documentation changes suggested by Jesse Crouch and Chris
+Nolan.</p>
+</li></ul>
+
+<h2 id="label-2008-02-07">2008-02-07<span><a href="#label-2008-02-07">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p>Applied patches from blog commenter “suntzu” to fix problem with model 
+values were being overwritten.</p>
+</li><li>
+<p>Applied patch from Dan Blue to make friendly_id no longer ignore options on
+ActiveRecordBase#find.</p>
+</li><li>
+<p>Added call to options.assert_valid_keys in has_friendly_id. Thanks to W. 
+Andrew Loe III for pointing out that this was missing.</p>
+</li></ul>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

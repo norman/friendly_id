@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>README - RDoc Documentation</title>
+
+<link href="./fonts.css" rel="stylesheet">
+<link href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/search_index.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/searcher.js"></script>
+<script src="./js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-FriendlyId">FriendlyId</a>
+    <li><a href="#label-FriendlyId+Features">FriendlyId Features</a>
+    <li><a href="#label-Rails+Quickstart">Rails Quickstart</a>
+    <li><a href="#label-Docs%2C+Info+and+Support">Docs, Info and Support</a>
+    <li><a href="#label-Bugs%3A">Bugs:</a>
+    <li><a href="#label-Credits%3A">Credits:</a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    <div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Changelog_md.html">Changelog</a>
+  
+    <li><a href="./Contributors_md.html">Contributors</a>
+  
+    <li><a href="./Gemfile.html">Gemfile</a>
+  
+    <li><a href="./Guide_md.html">Guide</a>
+  
+    <li><a href="./LICENSE.html">LICENSE</a>
+  
+    <li><a href="./README_md.html">README</a>
+  
+    <li><a href="./Rakefile.html">Rakefile</a>
+  
+    <li><a href="./extras/README_txt.html">README</a>
+  
+    <li><a href="./friendly_id_gemspec.html">friendly_id.gemspec</a>
+  
+    <li><a href="./lib/friendly_id/active_record2/tasks/friendly_id_rake.html">friendly_id.rake</a>
+  
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page README.md">
+
+<h1 id="label-FriendlyId"><a href="FriendlyId.html">FriendlyId</a><span><a href="#label-FriendlyId">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+
+<p><a href="FriendlyId.html">FriendlyId</a> is the “Swiss Army bulldozer” of
+slugging and permalink plugins for Ruby on Rails. It allows you to create
+pretty URL&#39;s and work with human-friendly strings as if they were
+numeric ids for ActiveRecord models.</p>
+
+<p>Using <a href="FriendlyId.html">FriendlyId</a>, it&#39;s easy to make your
+application use URL&#39;s like:</p>
+
+<pre>http://example.com/states/washington</pre>
+
+<p>instead of:</p>
+
+<pre>http://example.com/states/4323454</pre>
+
+<h2 id="label-FriendlyId+Features"><a href="FriendlyId.html">FriendlyId</a> Features<span><a href="#label-FriendlyId+Features">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> offers many advanced features,
+including: slug history and versioning, scoped slugs, reserved words,
+custom slug generators, and excellent Unicode support. For complete
+information on using <a href="FriendlyId.html">FriendlyId</a>, please see
+the {<a
+href="http://norman.github.com/friendly_id/file.Guide.html">norman.github.com/friendly_id/file.Guide.html</a>
+<a href="FriendlyId.html">FriendlyId</a> Guide}.</p>
+
+<h2 id="label-Rails+Quickstart">Rails Quickstart<span><a href="#label-Rails+Quickstart">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<pre class="ruby"><span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">friendly_id</span>
+
+<span class="ruby-identifier">rails</span> <span class="ruby-identifier">my_app</span>
+
+<span class="ruby-identifier">cd</span> <span class="ruby-identifier">my_app</span>
+
+<span class="ruby-comment"># add to config/environment.rb</span>
+<span class="ruby-identifier">config</span>.<span class="ruby-identifier">gem</span> <span class="ruby-string">&quot;friendly_id&quot;</span>, :<span class="ruby-identifier">version</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;&gt;= 2.3.0&quot;</span>
+
+.<span class="ruby-operator">/</span><span class="ruby-identifier">script</span><span class="ruby-operator">/</span><span class="ruby-identifier">generate</span> <span class="ruby-identifier">friendly_id</span>
+.<span class="ruby-operator">/</span><span class="ruby-identifier">script</span><span class="ruby-operator">/</span><span class="ruby-identifier">generate</span> <span class="ruby-identifier">scaffold</span> <span class="ruby-identifier">user</span> <span class="ruby-identifier">name</span>:<span class="ruby-identifier">string</span> <span class="ruby-identifier">cached_slug</span><span class="ruby-operator">:</span><span class="ruby-identifier">string</span>
+
+<span class="ruby-identifier">rake</span> <span class="ruby-identifier">db</span>:<span class="ruby-identifier">migrate</span>
+
+<span class="ruby-comment"># edit app/models/user.rb</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">User</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>
+  <span class="ruby-identifier">has_friendly_id</span> :<span class="ruby-identifier">name</span>, :<span class="ruby-identifier">use_slug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-constant">User</span>.<span class="ruby-identifier">create!</span> :<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;Joe Schmoe&quot;</span>
+
+.<span class="ruby-operator">/</span><span class="ruby-identifier">script</span><span class="ruby-operator">/</span><span class="ruby-identifier">server</span>
+
+<span class="ruby-constant">GET</span> <span class="ruby-identifier">http</span>:<span class="ruby-operator">/</span><span class="ruby-regexp">/0.0.0.0:3000/use</span><span class="ruby-identifier">rs</span><span class="ruby-operator">/</span><span class="ruby-identifier">joe</span><span class="ruby-operator">-</span><span class="ruby-identifier">schmoe</span>
+</pre>
+
+<h2 id="label-Docs%2C+Info+and+Support">Docs, Info and Support<span><a href="#label-Docs%2C+Info+and+Support">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<ul><li>
+<p><a href="http://norman.github.com/friendly_id/file.Guide.html">FriendlyId
+Guide</a></p>
+</li><li>
+<p><a href="http://norman.github.com/friendly_id">API Docs</a></p>
+</li><li>
+<p><a href="http://groups.google.com/group/friendly_id">Google Group</a></p>
+</li><li>
+<p><a href="http://github.com/norman/friendly_id/">Source Code</a></p>
+</li><li>
+<p><a href="http://github.com/norman/friendly_id/issues">Issue Tracker</a></p>
+</li></ul>
+
+<h2 id="label-Bugs%3A">Bugs:<span><a href="#label-Bugs%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p>Please report them on the <a
+href="http://github.com/norman/friendly_id/issues">Github issue tracker</a>
+for this project.</p>
+
+<p>If you have a bug to report, please include the following information:</p>
+<ul><li>
+<p>Stack trace and error message.</p>
+</li><li>
+<p>Version information for <a href="FriendlyId.html">FriendlyId</a>, Rails and
+Ruby.</p>
+</li><li>
+<p>Any snippets of relevant model, view or controller code that shows how your
+are using <a href="FriendlyId.html">FriendlyId</a>.</p>
+</li></ul>
+
+<p>If you are able to, it helps even more if you can fork <a
+href="FriendlyId.html">FriendlyId</a> on Github, and add a test that
+reproduces the error you are experiencing.</p>
+
+<h2 id="label-Credits%3A">Credits:<span><a href="#label-Credits%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+
+<p><a href="FriendlyId.html">FriendlyId</a> was created by Norman Clarke,
+Adrian Mugnolo, and Emilio Tagua.</p>
+
+<p>Copyright © 2008-2010, released under the MIT license.</p>
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
