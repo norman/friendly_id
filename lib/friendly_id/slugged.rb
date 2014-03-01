@@ -301,8 +301,8 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
 
     def set_slug_to_blank
       if send(friendly_id_config.base).blank?
-	      send "#{friendly_id_config.slug_column}=", nil
-			end
+        send "#{friendly_id_config.slug_column}=", nil
+      end
     end
 
     private :set_slug_to_blank
