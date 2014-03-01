@@ -234,7 +234,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
         defaults[:sequence_separator] ||= '-'
       end
       model_class.before_validation :set_slug
-      model_class.before_save :set_slug_to_blank, :if => ->(obj){ obj.send("#{  model_class.friendly_id_config.base }").blank? }
+      model_class.before_save :set_slug_to_blank
     end
 
     # Process the given value to make it suitable for use as a slug.
@@ -300,7 +300,9 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     private :set_slug
 
     def set_slug_to_blank
-      send "#{friendly_id_config.slug_column}=", nil
+      if send(friendly_id_config.base).blank?
+	      send "#{friendly_id_config.slug_column}=", nil
+			end
     end
 
     private :set_slug_to_blank
