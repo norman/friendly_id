@@ -123,13 +123,13 @@ an example of one way to set this up:
 
     def scope_for_slug_generator
       relation = self.class.unscoped.friendly
+      primary_key_name = self.class.primary_key
+
       friendly_id_config.scope_columns.each do |column|
         relation = relation.where(column => send(column))
       end
-      if changed.include?(friendly_id_config.slug_column)
-        primary_key_name = self.class.primary_key
-        relation = relation.where.not(primary_key_name => send(primary_key_name))
-      end
+      relation = relation.where.not(primary_key_name => send(primary_key_name))
+
       relation
     end
     private :scope_for_slug_generator
