@@ -3,6 +3,10 @@ require "helper"
 class Journalist < ActiveRecord::Base
   extend FriendlyId
   friendly_id :name, :use => :slugged
+
+  def should_generate_new_friendly_id?
+    name_changed? || super
+  end
 end
 
 class Article < ActiveRecord::Base
@@ -73,6 +77,15 @@ class SluggedTest < MiniTest::Unit::TestCase
     with_instance_of(model_class) do |record|
       old_id = record.friendly_id
       record.slug = nil
+      record.save!
+      assert_equal old_id, record.friendly_id
+    end
+  end
+
+  test 'should allow record to reuse slug when other attr changed' do
+    with_instance_of(model_class) do |record|
+      old_id = record.friendly_id
+      record.name = "A-B-C"
       record.save!
       assert_equal old_id, record.friendly_id
     end
