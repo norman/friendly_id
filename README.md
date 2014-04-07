@@ -166,13 +166,7 @@ gem 'friendly_id', '~> 5.0.0' # Note: You MUST use 5.0.0 or greater for Rails 4.
 ```
 ```shell
 rails generate friendly_id
-rails generate scaffold user name:string slug:string
-```
-```ruby
-# edit db/migrate/*_create_users.rb
-add_index :users, :slug, unique: true
-```
-```shell
+rails generate scaffold user name:string slug:string:uniq
 rake db:migrate
 ```
 ```ruby
