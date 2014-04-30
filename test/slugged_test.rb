@@ -241,7 +241,7 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
   end
 end
 
-class StringAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
+class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
   include FriendlyId::Test
 
   class MenuItem < ActiveRecord::Base
@@ -250,12 +250,17 @@ class StringAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
     before_create :init_primary_key
 
     def self.primary_key
-      "string_key"
+      "uuid_key"
+    end
+
+    # Overwrite the method added by FriendlyId
+    def self.primary_key_type
+      :uuid
     end
 
     private
     def init_primary_key
-      self.string_key = SecureRandom.uuid
+      self.uuid_key = SecureRandom.uuid
     end
   end
 
@@ -263,14 +268,23 @@ class StringAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
     MenuItem
   end
 
-  test "should have a string as a primary key" do
-    assert_equal model_class.primary_key, "string_key"
-    assert_equal model_class.columns.find(&:primary).name, "string_key"
+  test "should have a uuid_key as a primary key" do
+    assert_equal model_class.primary_key, "uuid_key"
+    assert_equal model_class.columns.find(&:primary).name, "uuid_key"
+    assert_equal model_class.primary_key_type, :uuid
   end
 
-  test "should be findable by the string primary key" do
+  test "should be findable by the UUID primary key" do
     with_instance_of(model_class) do |record|
       assert model_class.friendly.find record.id
+    end
+  end
+
+  test "should handle a string that simply contains a UUID correctly" do
+    with_instance_of(model_class) do |record|
+      assert_raises(ActiveRecord::RecordNotFound) do
+        model_class.friendly.find "test-#{SecureRandom.uuid}"
+      end
     end
   end
 end
