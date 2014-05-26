@@ -285,7 +285,7 @@ class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
 
   test "should have a uuid_key as a primary key" do
     assert_equal model_class.primary_key, "uuid_key"
-    assert_equal model_class.columns.find(&:primary).name, "uuid_key"
+    assert_equal model_class.columns.find { |c| c.name == model_class.primary_key}.name, "uuid_key"
     assert_equal model_class.primary_key_type, :uuid
   end
 
