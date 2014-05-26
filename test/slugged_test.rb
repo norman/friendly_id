@@ -265,7 +265,7 @@ class StringAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
 
   test "should have a string as a primary key" do
     assert_equal model_class.primary_key, "string_key"
-    assert_equal model_class.columns.find(&:primary).name, "string_key"
+    assert_equal model_class.columns.find { |c| c.name == model_class.primary_key}.name, "string_key"
   end
 
   test "should be findable by the string primary key" do
