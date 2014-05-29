@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/norman/friendly_id.png)](https://travis-ci.org/norman/friendly_id)
+[![Code Climate](https://codeclimate.com/github/norman/friendly_id.png)](https://codeclimate.com/github/norman/friendly_id)
 
 **GETTING HELP**
 
