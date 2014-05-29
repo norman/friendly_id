@@ -77,6 +77,21 @@ class SluggedTest < MiniTest::Unit::TestCase
       assert_equal old_id, record.friendly_id
     end
   end
+
+  test "should not update matching slug" do
+    with_instance_of(model_class) do |record|
+      class << record
+        def should_generate_new_friendly_id?
+          name_changed?
+        end
+      end
+      old_id = record.friendly_id
+      record.name += " "
+      record.save!
+      assert_equal old_id, record.friendly_id
+    end
+  end
+
 end
 
 class SlugGeneratorTest < MiniTest::Unit::TestCase
