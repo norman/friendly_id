@@ -6,7 +6,7 @@
 <title>
   File: Changelog
   
-    &mdash; Documentation by YARD 0.8.7.3
+    &mdash; Documentation by YARD 0.8.7.4
   
 </title>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '';
-  framesUrl = "frames.html#!" + escape(window.location.href);
+  framesUrl = "frames.html#!file.Changelog.html";
 </script>
 
 
@@ -65,6 +65,15 @@
 
 <p>We would like to think our many <a href="file.Contributors.html" title="contributors">contributors</a> for
 suggestions, ideas and improvements to FriendlyId.</p>
+
+<h2>5.0.4 (2014-05-29)</h2>
+
+<ul>
+<li>Bug fix for call to removed <code>primary</code> method on Edge Rails. (<a href="https://github.com/norman/friendly_id/pull/557">#557</a>).</li>
+<li>Bug for for unwanted slug regeneration when the slug source was not changed, but not the actual generated slug (<a href="https://github.com/norman/friendly_id/pull/562">#563</a>).</li>
+<li>Big fix to look for UUIDs only at the end of slugs (<a href="https://github.com/norman/friendly_id/pull/548">#548</a>).</li>
+<li>Various documentation and test setup improvements.</li>
+</ul>
 
 <h2>5.0.3 (2013-02-14)</h2>
 
@@ -272,9 +281,9 @@ as the primary way of handling slugging.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Fri Feb 28 10:07:01 2014 by
+  Generated on Thu May 29 10:10:20 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.1.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

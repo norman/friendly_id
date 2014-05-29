@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Scoped
   
-    &mdash; Documentation by YARD 0.8.7.3
+    &mdash; Documentation by YARD 0.8.7.4
   
 </title>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '../';
-  framesUrl = "../frames.html#!" + escape(window.location.href);
+  framesUrl = "../frames.html#!FriendlyId/Scoped.html";
 </script>
 
 
@@ -463,10 +463,7 @@ loading dependent modules prior to overriding them when necessary.</p>
 128
 129
 130
-131
-132
-133
-134</pre>
+131</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 124</span>
@@ -476,11 +473,8 @@ loading dependent modules prior to overriding them when necessary.</p>
   <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_scope_columns'>scope_columns</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
     <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_changed'>changed</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_slug_column'>slug_column</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-    <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='period'>.</span><span class='id identifier rubyid_not'>not</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-  <span class='id identifier rubyid_relation'>relation</span>
+  <span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
+  <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='period'>.</span><span class='id identifier rubyid_not'>not</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -532,12 +526,12 @@ loading dependent modules prior to overriding them when necessary.</p>
       <pre class="lines">
 
 
-137
-138
-139</pre>
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 137</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_slug_generator'>slug_generator</span>
   <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_slug_generator_class'>slug_generator_class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_scope_for_slug_generator'>scope_for_slug_generator</span><span class='rparen'>)</span>
@@ -552,9 +546,9 @@ loading dependent modules prior to overriding them when necessary.</p>
 </div>
 
     <div id="footer">
-  Generated on Fri Feb 28 10:07:01 2014 by
+  Generated on Thu May 29 10:10:20 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.1.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

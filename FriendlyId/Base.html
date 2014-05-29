@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Base
   
-    &mdash; Documentation by YARD 0.8.7.3
+    &mdash; Documentation by YARD 0.8.7.4
   
 </title>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '../';
-  framesUrl = "../frames.html#!" + escape(window.location.href);
+  framesUrl = "../frames.html#!FriendlyId/Base.html";
 </script>
 
 
@@ -709,7 +709,7 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
       <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primary_key_type'>primary_key_type</span>
-  <span class='ivar'>@primary_key_type</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:primary</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@primary_key_type</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_primary_key'>primary_key</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -721,9 +721,9 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
 </div>
 
     <div id="footer">
-  Generated on Fri Feb 28 10:07:01 2014 by
+  Generated on Thu May 29 10:10:20 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.1.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

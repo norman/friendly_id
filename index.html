@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.8.7.3
+    &mdash; Documentation by YARD 0.8.7.4
   
 </title>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '';
-  framesUrl = "frames.html#!" + escape(window.location.href);
+  framesUrl = "frames.html#!file.README.html";
 </script>
 
 
@@ -119,65 +119,71 @@ infer from the version number, 5.0 introduces changes incompatible with 4.0.</p>
 <p>The most important changes are:</p>
 
 <ul>
-<li><p>Finders are no longer overridden by default. If you want to do friendly finds,
+<li>Finders are no longer overridden by default. If you want to do friendly finds,
 you must do <code>Model.friendly.find</code> rather than <code>Model.find</code>. You can however
-restore FriendlyId 4-style finders by using the <code>:finders</code> addon:</p>
+restore FriendlyId 4-style finders by using the <code>:finders</code> addon:</li>
+</ul>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span> <span class='comment'># you must do MyClass.friendly.find(&#39;bar&#39;)
-</span><span class='comment'># or...
-</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:finders</span><span class='rbracket'>]</span> <span class='comment'># you can now do MyClass.find(&#39;bar&#39;)
-</span></code></pre></li>
-<li><p>A new &quot;candidates&quot; functionality which makes it easy to set up a list of
+<pre class="code ruby"><code class="ruby">  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span> <span class='comment'># you must do MyClass.friendly.find(&#39;bar&#39;)
+</span>  <span class='comment'># or...
+</span>  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:foo</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:finders</span><span class='rbracket'>]</span> <span class='comment'># you can now do MyClass.find(&#39;bar&#39;)
+</span></code></pre>
+
+<ul>
+<li>A new &quot;candidates&quot; functionality which makes it easy to set up a list of
 alternate slugs that can be used to uniquely distinguish records, rather than
-appending a sequence. For example:</p>
+appending a sequence. For example:</li>
+</ul>
 
-<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
-<span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
-<span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:slug_candidates</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
+<pre class="code ruby"><code class="ruby">  <span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+    <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+    <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:slug_candidates</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
 
-<span class='comment'># Try building a slug based on the following fields in
-</span><span class='comment'># increasing order of specificity.
-</span><span class='kw'>def</span> <span class='id identifier rubyid_slug_candidates'>slug_candidates</span>
-  <span class='lbracket'>[</span>
-    <span class='symbol'>:name</span><span class='comma'>,</span>
-    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
-    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
-    <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street_number</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span>
-  <span class='rbracket'>]</span>
-<span class='kw'>end</span>
-<span class='kw'>end</span>
-</code></pre></li>
-<li><p>Now that candidates have been added, FriendlyId no longer uses a numeric
+    <span class='comment'># Try building a slug based on the following fields in
+</span>    <span class='comment'># increasing order of specificity.
+</span>    <span class='kw'>def</span> <span class='id identifier rubyid_slug_candidates'>slug_candidates</span>
+      <span class='lbracket'>[</span>
+        <span class='symbol'>:name</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+        <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street_number</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span>
+      <span class='rbracket'>]</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+</code></pre>
+
+<ul>
+<li>Now that candidates have been added, FriendlyId no longer uses a numeric
 sequence to differentiate conflicting slug, but rather a UUID (e.g. something
 like <code>2bc08962-b3dd-4f29-b2e6-244710c86106</code>). This makes the
 codebase simpler and more reliable when running concurrently, at the expense
-of uglier ids being generated when there are conflicts.</p></li>
-<li><p>The default sequence separator has been changed from two dashes to one dash.</p></li>
-<li><p>Slugs are no longer regenerated when a record is saved. If you want to regenerate
-a slug, you must explicitly set the slug column to nil:</p>
+of uglier ids being generated when there are conflicts.</li>
+<li>The default sequence separator has been changed from two dashes to one dash.</li>
+<li>Slugs are no longer regenerated when a record is saved. If you want to regenerate
+a slug, you must explicitly set the slug column to nil:</li>
+</ul>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
-</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Plaza Diner</span><span class='tstring_end'>&quot;</span></span>
-<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
-<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
-</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span>
-<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
-<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># the-plaza-diner
+<pre class="code ruby"><code class="ruby">  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span>  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Plaza Diner</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span>  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+  <span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># the-plaza-diner
 </span></code></pre>
 
 <p>You can restore some of the old behavior by overriding the
-<code>should_generate_new_friendly_id?</code> method.</p></li>
-<li><p>The <code>friendly_id</code> Rails generator now generates an initializer showing you
-how to do some common global configuration.</p></li>
-<li><p>The Globalize plugin has moved to a separate gem (currently in alpha).</p></li>
-<li><p>The <code>:reserved</code> module no longer includes any default reserved words.
-Previously it blocked &quot;edit&quot; and &quot;new&quot; everywhere. The default word list has
-been moved to <code>config/initializers/friendly_id.rb</code> and now includes many more
-words.</p></li>
-<li><p>The <code>:history</code> and <code>:scoped</code> addons can now be used together.</p></li>
-<li><p>Since it now requires Rails 4, FriendlyId also now requires Ruby 1.9.3 or
-higher.</p></li>
-</ul>
+  <code>should_generate_new_friendly_id?</code> method.
+* The <code>friendly_id</code> Rails generator now generates an initializer showing you
+  how to do some common global configuration.
+* The Globalize plugin has moved to a separate gem (currently in alpha).
+* The <code>:reserved</code> module no longer includes any default reserved words.
+  Previously it blocked &quot;edit&quot; and &quot;new&quot; everywhere. The default word list has
+  been moved to <code>config/initializers/friendly_id.rb</code> and now includes many more
+  words.
+* The <code>:history</code> and <code>:scoped</code> addons can now be used together.
+* Since it now requires Rails 4, FriendlyId also now requires Ruby 1.9.3 or
+  higher.</p>
 
 <h4>Upgrading from FriendlyId 4.0</h4>
 
@@ -208,6 +214,7 @@ the new <code>:scope</code> column.</p>
 <ul>
 <li><a href="http://norman.github.io/friendly_id/4.0/">4.0</a></li>
 <li><a href="http://norman.github.io/friendly_id/3.3/">3.3</a></li>
+<li><a href="http://norman.github.io/friendly_id/2.3/">2.3</a></li>
 </ul>
 
 <p>The best place to start is with the
@@ -228,14 +235,8 @@ cd my_app
 </span></code></pre>
 
 <pre class="code shell"><code class="shell">rails generate friendly_id
-rails generate scaffold user name:string slug:string
-</code></pre>
-
-<pre class="code ruby"><code class="ruby"><span class='comment'># edit db/migrate/*_create_users.rb
-</span><span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:users</span><span class='comma'>,</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='label'>unique:</span> <span class='kw'>true</span>
-</code></pre>
-
-<pre class="code shell"><code class="shell">rake db:migrate
+rails generate scaffold user name:string slug:string:uniq
+rake db:migrate
 </code></pre>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># edit app/models/user.rb
@@ -297,7 +298,7 @@ volunteers</a>.</p>
 
 <h2>License</h2>
 
-<p>Copyright (c) 2008-2013 Norman Clarke and contributors, released under the MIT
+<p>Copyright (c) 2008-2014 Norman Clarke and contributors, released under the MIT
 license.</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -320,9 +321,9 @@ SOFTWARE.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Fri Feb 28 10:07:01 2014 by
+  Generated on Thu May 29 10:10:20 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.1.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::FinderMethods
   
-    &mdash; Documentation by YARD 0.8.7.3
+    &mdash; Documentation by YARD 0.8.7.4
   
 </title>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '../';
-  framesUrl = "../frames.html#!" + escape(window.location.href);
+  framesUrl = "../frames.html#!FriendlyId/FinderMethods.html";
 </script>
 
 
@@ -574,7 +574,7 @@ method.</p>
   <span class='kw'>when</span> <span class='symbol'>:integer</span>
     <span class='const'>Integer</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='int'>10</span><span class='rparen'>)</span> <span class='kw'>rescue</span> <span class='kw'>false</span>
   <span class='kw'>when</span> <span class='symbol'>:uuid</span>
-    <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}</span><span class='regexp_end'>/</span></span>
+    <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z</span><span class='regexp_end'>/</span></span>
   <span class='kw'>else</span>
     <span class='kw'>true</span>
   <span class='kw'>end</span>
@@ -589,9 +589,9 @@ method.</p>
 </div>
 
     <div id="footer">
-  Generated on Fri Feb 28 10:07:02 2014 by
+  Generated on Thu May 29 10:10:21 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.1.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>
