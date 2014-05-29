@@ -246,6 +246,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
         defaults[:sequence_separator] ||= '-'
       end
       model_class.before_validation :set_slug
+      model_class.before_save :set_slug_to_blank
     end
 
     # Process the given value to make it suitable for use as a slug.
@@ -300,6 +301,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     end
 
     # Sets the slug.
+
     def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
@@ -308,6 +310,14 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       end
     end
     private :set_slug
+
+    def set_slug_to_blank
+      if send(friendly_id_config.base).blank?
+        send "#{friendly_id_config.slug_column}=", nil
+      end
+    end
+
+    private :set_slug_to_blank
 
     def scope_for_slug_generator
       scope = self.class.base_class.unscoped
