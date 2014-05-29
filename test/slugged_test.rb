@@ -313,10 +313,12 @@ class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
 
   test "should not create duplicate slugs" do
     3.times do
-      begin
-        assert Manual.create! :name => "foo"
-      rescue
-        flunk "Tried to insert duplicate slug"
+      transaction do
+        begin
+          assert Manual.create! :name => "foo"
+        rescue
+          flunk "Tried to insert duplicate slug"
+        end
       end
     end
   end
