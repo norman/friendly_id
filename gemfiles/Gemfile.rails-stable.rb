@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
-gem 'rails', github: 'rails/rails', branch: '4-0-stable' do
+gem 'rails', github: 'rails/rails', branch: '4-1-stable' do
   gem 'activerecord'
   gem 'railties'
 end
