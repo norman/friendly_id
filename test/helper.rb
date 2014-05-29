@@ -18,6 +18,8 @@ if ENV["COVERAGE"]
   end
 end
 
+I18n.enforce_available_locales = false
+
 require "friendly_id"
 
 # If you want to see the ActiveRecord log, invoke the tests using `rake test LOG=true`
