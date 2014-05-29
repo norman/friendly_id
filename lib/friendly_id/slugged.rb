@@ -186,6 +186,18 @@ control exactly when new friendly ids are set:
       end
     end
 
+If you want to extend the default behavior but, adding your own conditions,
+don't forget to invoke `super` from your implementation:
+
+    class Category < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :name, :use => :slugged
+
+      def should_generate_new_friendly_id?
+        name_changed? || super
+      end
+    end
+
 #### Locale-specific Transliterations
 
 Active Support's `parameterize` uses
