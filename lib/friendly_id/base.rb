@@ -222,7 +222,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     end
 
     def primary_key_type
-      @primary_key_type ||= columns.find { |c| c.name == primary_key}.type
+      @primary_key_type ||= columns_hash[primary_key].type
     end
   end
 
