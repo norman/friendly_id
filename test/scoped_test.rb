@@ -12,7 +12,7 @@ class Novel < ActiveRecord::Base
   friendly_id :name, :use => :scoped, :scope => [:publisher, :novelist]
 
   def should_generate_new_friendly_id?
-    new_record? || super
+    name_changed? || new_record? || super
   end
 end
 
@@ -108,6 +108,15 @@ class ScopedTest < MiniTest::Unit::TestCase
     with_instance_of(model_class) do |record|
       old_id = record.friendly_id
       record.slug = nil
+      record.save!
+      assert_equal old_id, record.friendly_id
+    end
+  end
+
+  test 'should allow a record to reuse its own slug when other attr changed' do
+    with_instance_of(model_class) do |record|
+      old_id = record.friendly_id
+      record.name = "A-B-C"
       record.save!
       assert_equal old_id, record.friendly_id
     end

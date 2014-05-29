@@ -310,13 +310,12 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     private :set_slug
 
     def scope_for_slug_generator
+      primary_key_name = self.class.primary_key
+
       scope = self.class.base_class.unscoped
       scope = scope.friendly unless scope.respond_to?(:exists_by_friendly_id?)
+      scope = scope.where.not(primary_key_name => send(primary_key_name))
 
-      if changed.include?(friendly_id_config.slug_column)
-        primary_key_name = self.class.primary_key
-        scope = scope.where.not(primary_key_name => send(primary_key_name))
-      end
       scope
     end
     private :scope_for_slug_generator
