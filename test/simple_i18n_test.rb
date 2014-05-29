@@ -9,6 +9,7 @@ class SimpleI18nTest < MiniTest::Unit::TestCase
   end
 
   def setup
+    I18n.enforce_available_locales = false
     I18n.locale = :en
   end
 
