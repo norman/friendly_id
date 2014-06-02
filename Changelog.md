@@ -6,10 +6,9 @@ suggestions, ideas and improvements to FriendlyId.
 ## 5.0.4 (2014-05-29)
 
 * Bug fix for call to removed `primary` method on Edge Rails. ([#557](https://github.com/norman/friendly_id/pull/557)).
-* Bug for for unwanted slug regeneration when the slug source was not changed, but not the actual generated slug ([#563](https://github.com/norman/friendly_id/pull/562)).
+* Bug fix for unwanted slug regeneration when the slug source was changed, but not the actual generated slug ([#563](https://github.com/norman/friendly_id/pull/562)).
 * Big fix to look for UUIDs only at the end of slugs ([#548](https://github.com/norman/friendly_id/pull/548)).
 * Various documentation and test setup improvements.
-
 
 ## 5.0.3 (2013-02-14)
 
