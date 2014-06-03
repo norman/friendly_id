@@ -156,35 +156,6 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
-  test "should not allow duplicate slugs after regeneration for persisted record" do
-    transaction do
-      model1 = model_class.create! :name => "a"
-      model2 = model_class.new :name => "a"
-      model2.save!
-
-      model2.send(:set_slug)
-      first_generated_friendly_id = model2.friendly_id
-      model2.send(:set_slug)
-      second_generated_friendly_id = model2.friendly_id
-
-      assert model1.friendly_id != model2.friendly_id
-    end
-  end
-
-  test "should not allow duplicate slugs after regeneration for new record" do
-    transaction do
-      model1 = model_class.create! :name => "a"
-      model2 = model_class.new :name => "a"
-
-      model2.send(:set_slug)
-      first_generated_friendly_id = model2.friendly_id
-      model2.send(:set_slug)
-      second_generated_friendly_id = model2.friendly_id
-
-      assert model1.friendly_id != model2.friendly_id
-    end
-  end
-
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
