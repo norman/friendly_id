@@ -1,22 +1,21 @@
 require "bundler/setup"
-if ENV['COVERAGE']
-  require 'coveralls'
-  Coveralls.wear!
+
+if ENV['COVERALLS'] || ENV['COVERAGE']
+  require 'simplecov'
+  if ENV['COVERALLS']
+    require 'coveralls'
+    SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  end
+  SimpleCov.start do
+    add_filter 'test'
+    add_filter 'friendly_id/migration'
+  end
 end
 
 require "minitest/unit"
 require "mocha/setup"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
-
-
-if ENV["COVERAGE"]
-  require 'simplecov'
-  SimpleCov.start do
-    add_filter "test/"
-    add_filter "friendly_id/migration"
-  end
-end
 
 I18n.enforce_available_locales = false
 
