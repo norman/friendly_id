@@ -201,6 +201,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       assert_match(/\Apeugeot-206-([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
     end
   end
+
 end
 
 class DefaultScopeTest < MiniTest::Unit::TestCase
@@ -225,9 +226,11 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
       assert Journalist.create :name => "a", :active => true
     end
   end
+
 end
 
 class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class MenuItem < ActiveRecord::Base
@@ -272,9 +275,11 @@ class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
       end
     end
   end
+
 end
 
 class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class Manual < ActiveRecord::Base
@@ -298,6 +303,7 @@ end
 
 # https://github.com/norman/friendly_id/issues/148
 class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
@@ -318,4 +324,5 @@ class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
       assert_equal "joseph-pulitzer", journalist.to_param
     end
   end
+
 end
