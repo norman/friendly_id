@@ -100,11 +100,11 @@ FriendlyId refers to this internally as the "base" method.
 When you try to insert a record that would generate a duplicate friendly id,
 FriendlyId will append a UUID to the generated slug to ensure uniqueness:
 
-    car = Car.create :title => "Peugot 206"
-    car2 = Car.create :title => "Peugot 206"
+    car = Car.create :title => "Peugeot 206"
+    car2 = Car.create :title => "Peugeot 206"
 
-    car.friendly_id #=> "peugot-206"
-    car2.friendly_id #=> "peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
+    car.friendly_id #=> "peugeot-206"
+    car2.friendly_id #=> "peugeot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
 
 Previous versions of FriendlyId appended a numeric sequence to make slugs
 unique, but this was removed to simplify using FriendlyId in concurrent code.
