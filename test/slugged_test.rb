@@ -156,35 +156,6 @@ class SlugGeneratorTest < MiniTest::Unit::TestCase
     end
   end
 
-  test "should not allow duplicate slugs after regeneration for persisted record" do
-    transaction do
-      model1 = model_class.create! :name => "a"
-      model2 = model_class.new :name => "a"
-      model2.save!
-
-      model2.send(:set_slug)
-      first_generated_friendly_id = model2.friendly_id
-      model2.send(:set_slug)
-      second_generated_friendly_id = model2.friendly_id
-
-      assert model1.friendly_id != model2.friendly_id
-    end
-  end
-
-  test "should not allow duplicate slugs after regeneration for new record" do
-    transaction do
-      model1 = model_class.create! :name => "a"
-      model2 = model_class.new :name => "a"
-
-      model2.send(:set_slug)
-      first_generated_friendly_id = model2.friendly_id
-      model2.send(:set_slug)
-      second_generated_friendly_id = model2.friendly_id
-
-      assert model1.friendly_id != model2.friendly_id
-    end
-  end
-
 end
 
 class SlugSeparatorTest < MiniTest::Unit::TestCase
@@ -230,6 +201,7 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       assert_match(/\Apeugeot-206-([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
     end
   end
+
 end
 
 class DefaultScopeTest < MiniTest::Unit::TestCase
@@ -254,9 +226,11 @@ class DefaultScopeTest < MiniTest::Unit::TestCase
       assert Journalist.create :name => "a", :active => true
     end
   end
+
 end
 
 class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class MenuItem < ActiveRecord::Base
@@ -301,9 +275,11 @@ class UuidAsPrimaryKeyFindTest < MiniTest::Unit::TestCase
       end
     end
   end
+
 end
 
 class UnderscoreAsSequenceSeparatorRegressionTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class Manual < ActiveRecord::Base
@@ -327,6 +303,7 @@ end
 
 # https://github.com/norman/friendly_id/issues/148
 class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
+
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
@@ -347,4 +324,5 @@ class FailedValidationAfterUpdateRegressionTest < MiniTest::Unit::TestCase
       assert_equal "joseph-pulitzer", journalist.to_param
     end
   end
+
 end

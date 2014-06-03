@@ -58,46 +58,14 @@ class ScopedTest < MiniTest::Unit::TestCase
     end
   end
 
-  test "should not allow duplicate slugs inside scope after regeneration for persisted record" do
-    with_instance_of Novelist do |novelist|
-      novel1 = Novel.create! :name => "a", :novelist => novelist
-      novel2 = Novel.new :name => "a", :novelist => novelist
-      novel2.save!
-
-      novel2.send(:set_slug)
-      first_generated_friendly_id = novel2.friendly_id
-      novel2.send(:set_slug)
-      second_generated_friendly_id = novel2.friendly_id
-
-      assert novel1.friendly_id != novel2.friendly_id
-    end
-  end
-
-  test "should not allow duplicate slugs inside scope after regeneration for new record" do
-    with_instance_of Novelist do |novelist|
-      novel1 = Novel.create! :name => "a", :novelist => novelist
-      novel2 = Novel.new :name => "a", :novelist => novelist
-
-      novel2.send(:set_slug)
-      first_generated_friendly_id = novel2.friendly_id
-      novel2.send(:set_slug)
-      second_generated_friendly_id = novel2.friendly_id
-      novel2.save!
-
-      assert novel1.friendly_id != novel2.friendly_id
-    end
-  end
-
   test "should apply scope with multiple columns" do
     transaction do
       novelist = Novelist.create! :name => "a"
       publisher = Publisher.create! :name => "b"
-
       novel1 = Novel.create! :name => "c", :novelist => novelist, :publisher => publisher
       novel2 = Novel.create! :name => "c", :novelist => novelist, :publisher => Publisher.create(:name => "d")
       novel3 = Novel.create! :name => "c", :novelist => Novelist.create(:name => "e"), :publisher => publisher
       novel4 = Novel.create! :name => "c", :novelist => novelist, :publisher => publisher
-
       assert_equal novel1.friendly_id, novel2.friendly_id
       assert_equal novel2.friendly_id, novel3.friendly_id
       assert novel3.friendly_id != novel4.friendly_id
@@ -112,4 +80,5 @@ class ScopedTest < MiniTest::Unit::TestCase
       assert_equal old_id, record.friendly_id
     end
   end
+
 end
