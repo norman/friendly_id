@@ -79,12 +79,12 @@ class SluggedTest < MiniTest::Unit::TestCase
   end
 
   test "should not update matching slug" do
-    with_instance_of(model_class) do |record|
-      class << record
-        def should_generate_new_friendly_id?
-          name_changed?
-        end
+    klass = Class.new model_class do
+      def should_generate_new_friendly_id?
+        name_changed?
       end
+    end
+    with_instance_of klass do |record|
       old_id = record.friendly_id
       record.name += " "
       record.save!
