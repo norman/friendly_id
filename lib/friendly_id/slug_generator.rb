@@ -1,6 +1,6 @@
 module FriendlyId
-  # The default slug generator offers functionality to check slug strings for
-  # uniqueness.
+  # The default slug generator offers functionality to check slug candidates for
+  # availability.
   class SlugGenerator
 
     def initialize(scope)

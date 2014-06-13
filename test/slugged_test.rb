@@ -202,6 +202,12 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
     end
   end
 
+  test "should sequence blank slugs without a separator" do
+    with_instance_of model_class, :name => "" do |record|
+      assert_match(/\A([a-z0-9]+\-){4}[a-z0-9]+\z/, record.slug)
+    end
+  end
+
 end
 
 class DefaultScopeTest < MiniTest::Unit::TestCase
