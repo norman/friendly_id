@@ -7,7 +7,7 @@ class JournalistWithFriendlyFinders < ActiveRecord::Base
   friendly_id :name, use: [:slugged, :finders]
 end
 
-class Finders < MiniTest::Unit::TestCase
+class Finders < Minitest::Test
 
   include FriendlyId::Test
 

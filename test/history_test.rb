@@ -5,7 +5,7 @@ class Manual < ActiveRecord::Base
   friendly_id :name, :use => [:slugged, :history]
 end
 
-class HistoryTest < MiniTest::Unit::TestCase
+class HistoryTest < Minitest::Test
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
@@ -214,7 +214,7 @@ class Restaurant < ActiveRecord::Base
   friendly_id :name, :use => [:history, :scoped], :scope => :city
 end
 
-class ScopedHistoryTest < MiniTest::Unit::TestCase
+class ScopedHistoryTest < Minitest::Test
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
 

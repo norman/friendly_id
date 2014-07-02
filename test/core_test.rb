@@ -11,7 +11,7 @@ class Author < ActiveRecord::Base
   has_many :books
 end
 
-class CoreTest < MiniTest::Unit::TestCase
+class CoreTest < Minitest::Test
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core

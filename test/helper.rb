@@ -12,7 +12,7 @@ if ENV['COVERALLS'] || ENV['COVERAGE']
   end
 end
 
-require "minitest/unit"
+require 'minitest'
 require "mocha/setup"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
@@ -31,7 +31,7 @@ module FriendlyId
   module Test
 
     def self.included(base)
-      MiniTest::Unit.autorun
+      Minitest.autorun
     end
 
     def transaction
