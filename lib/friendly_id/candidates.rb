@@ -13,11 +13,12 @@ module FriendlyId
       @candidates = to_candidate_array(object, array.flatten(1))
     end
 
-
-    # Visits each slug candidate, calls it, passes it to `normalize_friendly_id` and yields the result.
+    # Visits each candidate, calls it, passes it to `normalize_friendly_id` and
+    # yields the wanted slug candidates.
     def each(*args, &block)
-      @candidates.each(*args) do |candidate|
-        yield @object.normalize_friendly_id(candidate.map(&:call).join(' '))
+      @candidates.map do |candidate|
+        slug = @object.normalize_friendly_id(candidate.map(&:call).join(' '))
+        yield slug if wanted?(slug)
       end
     end
 
@@ -40,6 +41,10 @@ module FriendlyId
           end
         end
       end
+    end
+
+    def wanted?(slug)
+      !slug.blank?
     end
   end
 end

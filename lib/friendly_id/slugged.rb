@@ -296,7 +296,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     end
 
     def resolve_friendly_id_conflict(candidates)
-      candidates.first + friendly_id_config.sequence_separator + SecureRandom.uuid
+      [candidates.first, SecureRandom.uuid].compact.join(friendly_id_config.sequence_separator)
     end
 
     # Sets the slug.

@@ -79,12 +79,12 @@ class SluggedTest < MiniTest::Unit::TestCase
   end
 
   test "should not update matching slug" do
-    with_instance_of(model_class) do |record|
-      class << record
-        def should_generate_new_friendly_id?
-          name_changed?
-        end
+    klass = Class.new model_class do
+      def should_generate_new_friendly_id?
+        name_changed?
       end
+    end
+    with_instance_of klass do |record|
       old_id = record.friendly_id
       record.name += " "
       record.save!
@@ -199,6 +199,12 @@ class SlugSeparatorTest < MiniTest::Unit::TestCase
       assert_equal "peugeot-206", record1.slug
       record2 = model_class.create! :name => "Peugeot 206"
       assert_match(/\Apeugeot-206-([a-z0-9]+\-){4}[a-z0-9]+\z/, record2.slug)
+    end
+  end
+
+  test "should sequence blank slugs without a separator" do
+    with_instance_of model_class, :name => "" do |record|
+      assert_match(/\A([a-z0-9]+\-){4}[a-z0-9]+\z/, record.slug)
     end
   end
 
