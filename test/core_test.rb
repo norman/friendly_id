@@ -33,16 +33,4 @@ class CoreTest < Minitest::Test
   test "instances should have a friendly id" do
     with_instance_of(model_class) {|record| assert record.friendly_id}
   end
-
-  test "instances can be marshaled when a relationship is used" do
-    transaction do
-      author = Author.create :name => 'Philip'
-      author.books.create :name => 'my book'
-      begin
-        assert Marshal.load(Marshal.dump(author))
-      rescue TypeError => e
-        flunk(e.to_s)
-      end
-    end
-  end
 end
