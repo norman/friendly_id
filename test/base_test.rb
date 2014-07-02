@@ -1,6 +1,6 @@
 require "helper"
 
-class CoreTest < MiniTest::Unit::TestCase
+class CoreTest < Minitest::Test
   include FriendlyId::Test
 
   test "friendly_id can be added using 'extend'" do
