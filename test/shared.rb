@@ -179,4 +179,3 @@ module FriendlyId
     end
   end
 end
-

@@ -64,13 +64,16 @@ module FriendlyId
           # Used to test :scoped and :history together
           add_column :restaurants, :city_id, :integer
 
+          # Used to test candidates
+          add_column :cities, :code, :string, :limit => 3
+
           @done = true
         end
 
         private
 
         def slugged_tables
-          %w[journalists articles novelists novels manuals]
+          %w[journalists articles novelists novels manuals cities]
         end
 
         def tables_with_uuid_primary_key
@@ -82,7 +85,7 @@ module FriendlyId
         end
 
         def simple_tables
-          %w[authors books publishers cities]
+          %w[authors books publishers]
         end
 
         def tables
