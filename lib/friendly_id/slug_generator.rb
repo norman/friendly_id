@@ -11,8 +11,8 @@ module FriendlyId
       !@scope.exists_by_friendly_id?(slug)
     end
 
-    def generate(candidates)
-      candidates.each {|c| return c if available?(c)}
+    def generate(candidates, reserved_words=[])
+      candidates.each { |c| return c if !reserved_words.include?(c) && available?(c) }
       nil
     end
 

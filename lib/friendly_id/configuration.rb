@@ -18,11 +18,15 @@ module FriendlyId
     # The module to use for finders
     attr_accessor :finder_methods
 
+    # The list of reserved words to exclude from use as FriendlyId slugs.
+    attr_accessor :reserved_words
+
     def initialize(model_class, values = nil)
       @model_class    = model_class
       @defaults       = {}
       @modules        = []
       @finder_methods = FriendlyId::FinderMethods
+      @reserved_words = []
       set values
     end
 

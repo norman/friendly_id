@@ -303,7 +303,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
-        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        slug = slug_generator.generate(candidates, friendly_id_config.reserved_words) || resolve_friendly_id_conflict(candidates)
         send "#{friendly_id_config.slug_column}=", slug
       end
     end

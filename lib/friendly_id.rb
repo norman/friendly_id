@@ -45,7 +45,6 @@ module FriendlyId
   autoload :History,    "friendly_id/history"
   autoload :Slug,       "friendly_id/slug"
   autoload :SimpleI18n, "friendly_id/simple_i18n"
-  autoload :Reserved,   "friendly_id/reserved"
   autoload :Scoped,     "friendly_id/scoped"
   autoload :Slugged,    "friendly_id/slugged"
   autoload :Finders,    "friendly_id/finders"
@@ -105,8 +104,6 @@ module FriendlyId
 
   # Set global defaults for all models using FriendlyId.
   #
-  # The default defaults are to use the `:reserved` module and nothing else.
-  #
   # @example
   #   FriendlyId.defaults do |config|
   #     config.base :name
@@ -114,7 +111,7 @@ module FriendlyId
   #   end
   def self.defaults(&block)
     @defaults = block if block_given?
-    @defaults ||= ->(config) {config.use :reserved}
+    @defaults ||= ->(config) { }
   end
 
   # Set the ActiveRecord table name prefix to friendly_id_

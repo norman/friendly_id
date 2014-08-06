@@ -10,7 +10,7 @@ end
 
 File.open(File.expand_path('../Guide.md', __FILE__), 'w:utf-8') do |guide|
   ['../friendly_id.rb', 'base.rb', 'finders.rb', 'slugged.rb', 'history.rb',
-  'scoped.rb', 'simple_i18n.rb', 'reserved.rb'].each do |file|
+  'scoped.rb', 'simple_i18n.rb'].each do |file|
     guide.write comments_from file
     guide.write "\n"
   end
