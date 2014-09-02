@@ -109,7 +109,7 @@ The most important changes are:
   `should_generate_new_friendly_id?` method.
 * The `friendly_id` Rails generator now generates an initializer showing you
   how to do some common global configuration.
-* The Globalize plugin has moved to a separate gem (currently in alpha).
+* The Globalize plugin has moved to a [separate gem](https://github.com/norman/friendly_id-globalize) (currently in alpha).
 * The `:reserved` module no longer includes any default reserved words.
   Previously it blocked "edit" and "new" everywhere. The default word list has
   been moved to `config/initializers/friendly_id.rb` and now includes many more
