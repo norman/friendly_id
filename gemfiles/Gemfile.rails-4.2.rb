@@ -2,10 +2,12 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
-gem 'rails', github: 'rails/rails', branch: '4-1-stable' do
+gem 'rails', github: 'rails/rails', tag: 'v4.2.0.beta2' do
   gem 'activerecord'
   gem 'railties'
 end
+
+gem 'i18n', '0.7.0.beta1'
 
 # Database Configuration
 group :development, :test do

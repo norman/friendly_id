@@ -195,9 +195,9 @@ class HistoryTestWithFriendlyFinders < HistoryTest
         record.save!
         begin
           assert model_class.find(old_friendly_id)
-          assert model_class.exists?(old_friendly_id), "should exist? by old id"
-        rescue ActiveRecord::RecordNotFound
-          flunk "Could not find record by old id"
+          assert model_class.exists?(old_friendly_id), "should exist? by old id for #{model_class.name}"
+        rescue ActiveRecord::RecordNotFound => e
+          flunk "Could not find record by old id for #{model_class.name}"
         end
       end
     end

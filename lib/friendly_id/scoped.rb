@@ -163,7 +163,8 @@ an example of one way to set this up:
       private
 
       def reflection_foreign_key(scope)
-        model_class.reflections[scope].try(:foreign_key)
+        reflection = model_class.reflections[scope] || model_class.reflections[scope.to_s]
+        reflection.try(:foreign_key)
       end
     end
   end
