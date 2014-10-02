@@ -9,19 +9,11 @@ env:
   - DB=mysql
 gemfile:
   - gemfiles/Gemfile.rails-4.0.rb
-  - gemfiles/Gemfile.rails-stable.rb
   - gemfiles/Gemfile.rails-4.1.rb
+  - gemfiles/Gemfile.rails-4.2.rb
 
 before_script: 'bundle exec rake db:create db:up'
 script: 'COVERALLS=true bundle exec rake test'
 matrix:
   allow_failures:
-    - rvm: jruby-19mode
-      gemfile: gemfiles/Gemfile.rails-4.1.rb
-      env: DB=postgres
-    - rvm: jruby-19mode
-      gemfile: gemfiles/Gemfile.rails-4.1.rb
-      env: DB=mysql
-    - rvm: jruby-19mode
-      gemfile: gemfiles/Gemfile.rails-4.1.rb
-      env: DB=sqlite3
+    - gemfile: gemfiles/Gemfile.rails-4.2.rb
