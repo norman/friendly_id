@@ -12,7 +12,7 @@ some text processing.
 
 For example, blog applications typically use a post title to provide the basis
 of a search engine friendly URL. Such identifiers typically lack uppercase
-characters, use ASCII to approximate UTF-8 character, and strip out other
+characters, use ASCII to approximate UTF-8 characters, and strip out other
 characters which may make them aesthetically unappealing or error-prone when
 used in a URL.
 
