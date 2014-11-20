@@ -28,7 +28,7 @@ The concept of *slugs* is at the heart of FriendlyId.
 
 A slug is the part of a URL which identifies a page using human-readable
 keywords, rather than an opaque identifier such as a numeric id. This can make
-your application more friendly both for users and search engine.
+your application more friendly both for users and search engines.
 
 #### Finders: Slugs Act Like Numeric IDs
 
