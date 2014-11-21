@@ -17,3 +17,6 @@ script: 'COVERALLS=true bundle exec rake test'
 matrix:
   allow_failures:
     - gemfile: gemfiles/Gemfile.rails-4.2.rb
+# Per https://github.com/travis-ci/travis-ci/issues/2821
+install:
+  - bundle install --retry=3
