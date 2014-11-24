@@ -204,6 +204,44 @@ class HistoryTestWithFriendlyFinders < HistoryTest
   end
 end
 
+class HistoryTestWithSlugScopeAutomaticRegen < HistoryTest
+
+  class Restaurant < ActiveRecord::Base
+    extend FriendlyId
+    belongs_to :city
+    friendly_id :name, :use => [:slugged, :scoped, :history], :scope => :city
+
+    def should_generate_new_friendly_id?
+      slug.blank? or name_changed?
+    end
+  end
+
+  def model_class
+    Restaurant
+  end
+
+  test 'should allow reversion back to a previously used slug and recreation based on name when blank' do
+    city = City.create!
+    with_instance_of(model_class, name: "My #{rand(1000)} name", city_id: city.id) do |record|
+      record.name = 'bar'
+      record.save!
+      assert_equal 'bar', record.friendly_id
+      record.name = 'foo'
+      record.save!
+      assert_equal 'foo', record.friendly_id
+
+      record.slug = 'something-else'
+      record.save!
+      assert_equal 'something-else', record.friendly_id
+
+      record.name = 'whatever'
+      record.slug = nil
+      record.save!
+      assert_equal 'whatever', record.friendly_id
+    end
+  end
+end
+
 class City < ActiveRecord::Base
   has_many :restaurants
 end
