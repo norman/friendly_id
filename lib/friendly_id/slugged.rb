@@ -342,12 +342,12 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       # sequence_separator} configuration option.
       # @return String The sequence separator string. Defaults to "`-`".
       def sequence_separator
-        @sequence_separator or defaults[:sequence_separator]
+        @sequence_separator ||= defaults[:sequence_separator]
       end
 
       # The column that will be used to store the generated slug.
       def slug_column
-        @slug_column or defaults[:slug_column]
+        @slug_column ||= defaults[:slug_column]
       end
     end
   end
