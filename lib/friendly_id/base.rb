@@ -14,7 +14,7 @@ options:
     end
 
 The most important option is `:use`, which you use to tell FriendlyId which
-addons it should use. See the documentation for this method for a list of all
+addons it should use. See the documentation for {FriendlyId::Base#friendly_id} for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.
 
