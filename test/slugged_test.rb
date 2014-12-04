@@ -92,6 +92,23 @@ class SluggedTest < Minitest::Test
     end
   end
 
+  test "should not use reserved words" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :slug_candidates, :use => :slugged, :reserved_words => %w(new edit)
+
+      def slug_candidates
+        [ :name, proc { "_#{name}" } ]
+      end
+    end
+    %w(new edit NEW Edit).each do |word|
+      record = model_class.create!(:name => word)
+      assert_equal "_#{word.downcase}", record.friendly_id
+      record.destroy
+    end
+  end
+
 end
 
 class SlugGeneratorTest < Minitest::Test
