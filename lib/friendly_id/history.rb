@@ -108,11 +108,14 @@ method.
     def scope_for_slug_generator
       relation = super
       return relation if new_record?
-      relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+
+      # joins(:slugs) is needed but will be added to the relation by `exists_by_friendly_id?`
+      sw = Slug.where('sluggable_id <> ?', id)
       if friendly_id_config.uses?(:scoped)
-        relation = relation.where(:scope => serialized_scope)
+        # scope is in Slug not in the model table
+        sw = sw.where(:scope => serialized_scope)
       end
-      relation
+      relation.merge(sw)
     end
 
     def create_slug
