@@ -211,7 +211,7 @@ end
 class Restaurant < ActiveRecord::Base
   extend FriendlyId
   belongs_to :city
-  friendly_id :name, :use => [:history, :scoped], :scope => :city
+  friendly_id :name, :use => [:scoped, :history], :scope => :city
 end
 
 class ScopedHistoryTest < Minitest::Test
