@@ -124,8 +124,10 @@ module FriendlyId
           with_instance_of(model_class) {|record| assert_equal record.friendly_id, record.to_param}
         end
 
-        test "should be findable by themselves" do
-          with_instance_of(model_class) {|record| assert_equal record, model_class.friendly.find(record)}
+        if ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR < 2
+          test "should be findable by themselves" do
+            with_instance_of(model_class) {|record| assert_equal record, model_class.friendly.find(record)}
+          end
         end
 
         test "updating record's other values should not change the friendly_id" do
