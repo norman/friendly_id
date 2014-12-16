@@ -14,12 +14,16 @@ module FriendlyId
     end
 
     # Visits each candidate, calls it, passes it to `normalize_friendly_id` and
-    # yields the wanted slug candidates.
+    # yields any wanted and unreserved slug candidates.
     def each(*args, &block)
-      @candidates.map do |candidate|
-        slug = @object.normalize_friendly_id(candidate.map(&:call).join(' '))
-        yield slug if wanted?(slug)
+      pre_candidates = @candidates.map do |candidate|
+        @object.normalize_friendly_id(candidate.map(&:call).join(' '))
+      end.select {|x| wanted?(x)}
+
+      unless pre_candidates.all? {|x| reserved?(x)}
+        pre_candidates.reject! {|x| reserved?(x)}
       end
+      pre_candidates.each {|x| yield x}
     end
 
     private
@@ -44,7 +48,16 @@ module FriendlyId
     end
 
     def wanted?(slug)
-      !slug.blank?
+      slug.present?
+    end
+
+    private
+
+    def reserved?(slug)
+      config = @object.friendly_id_config
+      return false unless config.uses? ::FriendlyId::Reserved
+      return false unless config.reserved_words
+      config.reserved_words.include?(slug)
     end
   end
 end

@@ -69,7 +69,6 @@ module FriendlyId
             assert_equal record.to_param, record.friendly_id
           end
         end
-
       end
 
       module Core

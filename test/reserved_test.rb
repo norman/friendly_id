@@ -6,12 +6,16 @@ class ReservedTest < Minitest::Test
 
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :name, :use => [:slugged, :reserved], :reserved_words => %w(new edit)
+    friendly_id :slug_candidates, :use => [:slugged, :reserved], :reserved_words => %w(new edit)
 
     after_validation :move_friendly_id_error_to_name
 
     def move_friendly_id_error_to_name
       errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
+    end
+
+    def slug_candidates
+      name
     end
   end
 
@@ -34,6 +38,27 @@ class ReservedTest < Minitest::Test
       record.move_friendly_id_error_to_name
       assert record.errors[:name].present? && record.errors[:friendly_id].blank?
       assert_equal 2, record.errors.count
+    end
+  end
+
+  test "should reject reserved candidates" do
+    transaction do
+      record = model_class.new(:name => 'new')
+      def record.slug_candidates
+        [:name, "foo"]
+      end
+      record.save!
+      assert_equal "foo", record.friendly_id
+    end
+  end
+
+  test "should be invalid if all candidates are reserved" do
+    transaction do
+      record = model_class.new(:name => 'new')
+      def record.slug_candidates
+        ["edit", "new"]
+      end
+      assert_raises(ActiveRecord::RecordInvalid) {record.save!}
     end
   end
 
