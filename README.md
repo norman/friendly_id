@@ -14,19 +14,6 @@ Please only post issues in Github issues for actual bugs.
 I am asking people to do this because the same questions keep getting asked
 over and over and over again in the issues.
 
-**VERSION NOTE**
-
-**Rails 4**:
-
-The master branch of this repository contains FriendlyId 5, the current stable version.
-5.x is the only version that is compatible with Rails 4.
-
-**Rails 3**:
-
-If you wish to use this gem with Rails 3.1 or 3.2 you must use FriendlyId 4,
-which is the previous stable release. Please see the [4.0-stable
-branch](https://github.com/norman/friendly_id/tree/4.0-stable).
-
 # FriendlyId
 
 <em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://norman.github.io/friendly_id/file.Guide.html).</em>
@@ -48,6 +35,18 @@ instead of:
 
 FriendlyId offers many advanced features, including: slug history and
 versioning, i18n, scoped slugs, reserved words, and custom slug generators.
+
+### What Changed in Version 5.1
+
+_NOTE: 5.1 is the latest beta version and will be released soon._
+
+5.1 is a bugfix release, but bumps the minor version because some applications may be dependent
+on the previously buggy behavior. The changes include:
+
+* Blank strings can no longer be used as slugs.
+* When the first slug candidate is rejected because it is reserved, additional candidates will
+  now be considered before marking the record as invalid.
+* The `:finders` module is now compatible with Rails 4.2.
 
 ### What Changed in Version 5.0
 
@@ -145,6 +144,7 @@ The most current docs from the master branch can always be found
 
 Docs for older versions are also available:
 
+* [5.0](http://norman.github.io/friendly_id/5.0/)
 * [4.0](http://norman.github.io/friendly_id/4.0/)
 * [3.3](http://norman.github.io/friendly_id/3.3/)
 * [2.3](http://norman.github.io/friendly_id/2.3/)
@@ -164,7 +164,7 @@ cd my_app
 ```
 ```ruby
 # Gemfile
-gem 'friendly_id', '~> 5.0.0' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
+gem 'friendly_id', '~> 5.1.0' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 ```
 ```shell
 rails generate friendly_id
