@@ -11,6 +11,16 @@ task :master => '.friendly_id' do
   end
 end
 
+task '5.0-stable' => '.friendly_id' do
+  Dir.chdir '.friendly_id' do
+    sh %{git clean -f}
+    sh %{git checkout 5.0-stable}
+    sh %{git pull}
+    sh %{yard -o ../5.0}
+  end
+end
+
+
 task '4.0-stable' => '.friendly_id' do
   Dir.chdir '.friendly_id' do
     sh %{git clean -f}
@@ -37,7 +47,7 @@ task '2.3' => '.friendly_id' do
   end
 end
 
-task 'doc' => [:master, '4.0-stable', '3.3', '2.3'] do
+task 'doc' => [:master, '5.0-stable', '4.0-stable', '3.3', '2.3'] do
   sh %{git add .}
   sh %{git commit -m 'Regenerated docs'}
   sh %{git push}
