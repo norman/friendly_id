@@ -2,8 +2,11 @@ source 'https://rubygems.org'
 
 gemspec
 
-# Database Configuration
 group :development, :test do
+  platforms :ruby do
+    gem 'byebug'
+  end
+
   platforms :jruby do
     gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta2'
     gem 'kramdown'
