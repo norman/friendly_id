@@ -60,6 +60,9 @@ method.
         friendly_id_config.finder_methods = FriendlyId::History::FinderMethods
         if friendly_id_config.uses? :finders
           relation.class.send(:include, friendly_id_config.finder_methods)
+          if ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 2
+            model_class.send(:extend, friendly_id_config.finder_methods)
+          end
         end
       end
     end
