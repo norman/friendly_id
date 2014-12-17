@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Finders
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -250,18 +250,18 @@ for models that use FriendlyId with something similar to the following:</p>
       <pre class="lines">
 
 
-82
-83
-84
 85
 86
 87
 88
 89
-90</pre>
+90
+91
+92
+93</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 82</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 85</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span><span class='lparen'>(</span><span class='const'>ClassMethods</span><span class='rparen'>)</span>
@@ -296,7 +296,10 @@ for models that use FriendlyId with something similar to the following:</p>
 77
 78
 79
-80</pre>
+80
+81
+82
+83</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/finders.rb', line 76</span>
@@ -304,6 +307,9 @@ for models that use FriendlyId with something similar to the following:</p>
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_setup'>setup</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_instance_eval'>instance_eval</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>VERSION</span><span class='op'>::</span><span class='const'>MAJOR</span> <span class='op'>==</span> <span class='int'>4</span> <span class='op'>&amp;&amp;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>VERSION</span><span class='op'>::</span><span class='const'>MINOR</span> <span class='op'>==</span> <span class='int'>2</span>
+      <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:extend</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -316,9 +322,9 @@ for models that use FriendlyId with something similar to the following:</p>
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:21 2014 by
+  Generated on Wed Dec 17 14:41:32 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

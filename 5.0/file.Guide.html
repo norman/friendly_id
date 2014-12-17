@@ -1,0 +1,714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: Guide
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!file.Guide.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: Guide</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h2>About FriendlyId</h2>
+
+<p>FriendlyId is an add-on to Ruby&#39;s Active Record that allows you to replace ids
+in your URLs with strings:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># without FriendlyId
+</span><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='int'>4323454</span>
+
+<span class='comment'># with FriendlyId
+</span><span class='id identifier rubyid_http'>http</span><span class='symbol'>:/</span><span class='op'>/</span><span class='id identifier rubyid_example'>example</span><span class='period'>.</span><span class='id identifier rubyid_com'>com</span><span class='op'>/</span><span class='id identifier rubyid_states'>states</span><span class='op'>/</span><span class='id identifier rubyid_washington'>washington</span>
+</code></pre>
+
+<p>It requires few changes to your application code and offers flexibility,
+performance and a well-documented codebase.</p>
+
+<h3>Core Concepts</h3>
+
+<h4>Slugs</h4>
+
+<p>The concept of <em>slugs</em> is at the heart of FriendlyId.</p>
+
+<p>A slug is the part of a URL which identifies a page using human-readable
+keywords, rather than an opaque identifier such as a numeric id. This can make
+your application more friendly both for users and search engine.</p>
+
+<h4>Finders: Slugs Act Like Numeric IDs</h4>
+
+<p>To the extent possible, FriendlyId lets you treat text-based identifiers like
+normal IDs. This means that you can perform finds with slugs just like you do
+with numeric ids:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='int'>82542335</span><span class='rparen'>)</span>
+<span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<h2>Setting Up FriendlyId in Your Model</h2>
+
+<p>To use FriendlyId in your ActiveRecord models, you must first either extend or
+include the FriendlyId module (it makes no difference), then invoke the
+<span class='object_link'><a href="FriendlyId/Base.html#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">friendly_id</a></span> method to configure your desired
+options:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Foo</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_include'>include</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:bar</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:simple_i18n</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>The most important option is <code>:use</code>, which you use to tell FriendlyId which
+addons it should use. See the documentation for this method for a list of all
+available addons, or skim through the rest of the docs to get a high-level
+overview.</p>
+
+<p><em>A note about single table inheritance (STI): you must extend FriendlyId in
+all classes that participate in STI, both your parent classes and their
+children.</em></p>
+
+<h3>The Default Setup: Simple Models</h3>
+
+<p>The simplest way to use FriendlyId is with a model that has a uniquely indexed
+column with no spaces or special characters, and that is seldom or never
+updated. The most common example of this is a user name:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>User</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:login</span>
+  <span class='id identifier rubyid_validates_format_of'>validates_format_of</span> <span class='symbol'>:login</span><span class='comma'>,</span> <span class='symbol'>:with</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A[a-z0-9]+\z</span><span class='regexp_end'>/i</span></span>
+<span class='kw'>end</span>
+
+<span class='ivar'>@user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joe</span><span class='tstring_end'>&quot;</span></span>   <span class='comment'># the old User.find(1) still works, too
+</span><span class='ivar'>@user</span><span class='period'>.</span><span class='id identifier rubyid_to_param'>to_param</span>                     <span class='comment'># returns &quot;joe&quot;
+</span><span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@user</span>                  <span class='comment'># the URL will be /users/joe
+</span></code></pre>
+
+<p>In this case, FriendlyId assumes you want to use the column as-is; it will never
+modify the value of the column, and your application should ensure that the
+value is unique and admissible in a URL:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span>
+<span class='kw'>end</span>
+
+<span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Viña del Mar</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@city</span> <span class='comment'># the URL will be /cities/Viña%20del%20Mar
+</span></code></pre>
+
+<p>Writing the code to process an arbitrary string into a good identifier for use
+in a URL can be repetitive and surprisingly tricky, so for this reason it&#39;s
+often better and easier to use <span class='object_link'><a href="FriendlyId/Slugged.html" title="FriendlyId::Slugged (module)">slugs</a></span>.</p>
+
+<h2>Performing Finds with FriendlyId</h2>
+
+<p>FriendlyId offers enhanced finders which will search for your record by
+friendly id, and fall back to the numeric id if necessary. This makes it easy
+to add FriendlyId to an existing application with minimal code modification.</p>
+
+<p>By default, these methods are available only on the <code>friendly</code> scope:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; works
+</span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='int'>23</span><span class='rparen'>)</span>            <span class='comment'>#=&gt; also works
+</span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='int'>23</span><span class='rparen'>)</span>                     <span class='comment'>#=&gt; still works
+</span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>          <span class='comment'>#=&gt; will not work
+</span></code></pre>
+
+<h3>Restoring FriendlyId 4.0-style finders</h3>
+
+<p>Prior to version 5.0, FriendlyId overrode the default finder methods to perform
+friendly finds all the time. This required modifying parts of Rails that did
+not have a public API, which was harder to maintain and at times caused
+compatiblity problems. In 5.0 we decided to change the library&#39;s defaults and add
+the friendly finder methods only to the <code>friendly</code> scope in order to boost
+compatiblity. However, you can still opt-in to original functionality very
+easily by using the <code>:finders</code> addon:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+
+  <span class='id identifier rubyid_scope'>scope</span> <span class='symbol'>:active</span><span class='comma'>,</span> <span class='tlambda'>-&gt;</span> <span class='tlambeg'>{</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:active</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:slugged</span><span class='comma'>,</span> <span class='symbol'>:finders</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+
+<span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='comment'>#=&gt; works
+</span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>          <span class='comment'>#=&gt; now also works
+</span><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_active'>active</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>plaza-diner</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>   <span class='comment'>#=&gt; now also works
+</span></code></pre>
+
+<h3>Updating your application to use FriendlyId&#39;s finders</h3>
+
+<p>Unless you&#39;ve chosen to use the <code>:finders</code> addon, be sure to modify the finders
+in your controllers to use the <code>friendly</code> scope. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># before
+</span><span class='kw'>def</span> <span class='id identifier rubyid_set_restaurant'>set_restaurant</span>
+  <span class='ivar'>@restaurant</span> <span class='op'>=</span> <span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+
+<span class='comment'># after
+</span><span class='kw'>def</span> <span class='id identifier rubyid_set_restaurant'>set_restaurant</span>
+  <span class='ivar'>@restaurant</span> <span class='op'>=</span> <span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4>Active Admin</h4>
+
+<p>Unless you use the <code>:finders</code> addon, you should modify your admin controllers
+for models that use FriendlyId with something similar to the following:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_controller'>controller</span> <span class='kw'>do</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_find_resource'>find_resource</span>
+    <span class='id identifier rubyid_scoped_collection'>scoped_collection</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h2>Slugged Models</h2>
+
+<p>FriendlyId can use a separate column to store slugs for models which require
+some text processing.</p>
+
+<p>For example, blog applications typically use a post title to provide the basis
+of a search engine friendly URL. Such identifiers typically lack uppercase
+characters, use ASCII to approximate UTF-8 character, and strip out other
+characters which may make them aesthetically unappealing or error-prone when
+used in a URL.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='ivar'>@post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>This is the first post!</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='ivar'>@post</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span>   <span class='comment'># returns &quot;this-is-the-first-post&quot;
+</span><span class='id identifier rubyid_redirect_to'>redirect_to</span> <span class='ivar'>@post</span>   <span class='comment'># the URL will be /posts/this-is-the-first-post
+</span></code></pre>
+
+<p>In general, use slugs by default unless you know for sure you don&#39;t need them.
+To activate the slugging functionality, use the <span class='object_link'><a href="FriendlyId/Slugged.html" title="FriendlyId::Slugged (module)">FriendlyId::Slugged</a></span> module.</p>
+
+<p>FriendlyId will generate slugs from a method or column that you specify, and
+store them in a field in your model. By default, this field must be named
+<code>:slug</code>, though you may change this using the
+<span class='object_link'><a href="FriendlyId/Slugged/Configuration.html#slug_column-instance_method" title="FriendlyId::Slugged::Configuration#slug_column (method)">slug_column</a></span> configuration
+option. You should add an index to this column, and in most cases, make it
+unique. You may also wish to constrain it to NOT NULL, but this depends on your
+app&#39;s behavior and requirements.</p>
+
+<h3>Example Setup</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># your model
+</span><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+  <span class='id identifier rubyid_validates_presence_of'>validates_presence_of</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:body</span>
+<span class='kw'>end</span>
+
+<span class='comment'># a migration
+</span><span class='kw'>class</span> <span class='const'>CreatePosts</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Migration</span>
+  <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_up'>up</span>
+    <span class='id identifier rubyid_create_table'>create_table</span> <span class='symbol'>:posts</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:null</span> <span class='op'>=&gt;</span> <span class='kw'>false</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:null</span> <span class='op'>=&gt;</span> <span class='kw'>false</span>
+      <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span> <span class='symbol'>:body</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:posts</span><span class='comma'>,</span> <span class='symbol'>:slug</span><span class='comma'>,</span> <span class='symbol'>:unique</span> <span class='op'>=&gt;</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_down'>down</span>
+    <span class='id identifier rubyid_drop_table'>drop_table</span> <span class='symbol'>:posts</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3>Working With Slugs</h3>
+
+<h4>Formatting</h4>
+
+<p>By default, FriendlyId uses Active Support&#39;s
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize">paramaterize</a>
+method to create slugs. This method will intelligently replace spaces with
+dashes, and Unicode Latin characters with ASCII approximations:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_movie'>movie</span> <span class='op'>=</span> <span class='const'>Movie</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Der Preis fürs Überleben</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_movie'>movie</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='comment'>#=&gt; &quot;der-preis-furs-uberleben&quot;
+</span></code></pre>
+
+<h4>Column or Method?</h4>
+
+<p>FriendlyId always uses a method as the basis of the slug text - not a column. At
+first glance, this may sound confusing, but remember that Active Record provides
+methods for each column in a model&#39;s associated table, and that&#39;s what
+FriendlyId uses.</p>
+
+<p>Here&#39;s an example of a class that uses a custom method to generate the slug:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name_and_location</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_name_and_location'>name_and_location</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> from </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_location'>location</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_bob'>bob</span> <span class='op'>=</span> <span class='const'>Person</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='symbol'>:name</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Bob Smith</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:location</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>New York City</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_bob'>bob</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;bob-smith-from-new-york-city&quot;
+</span></code></pre>
+
+<p>FriendlyId refers to this internally as the &quot;base&quot; method.</p>
+
+<h4>Uniqueness</h4>
+
+<p>When you try to insert a record that would generate a duplicate friendly id,
+FriendlyId will append a UUID to the generated slug to ensure uniqueness:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_car'>car</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_car2'>car2</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
+
+<span class='id identifier rubyid_car'>car</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206&quot;
+</span><span class='id identifier rubyid_car2'>car2</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5&quot;
+</span></code></pre>
+
+<p>Previous versions of FriendlyId appended a numeric sequence to make slugs
+unique, but this was removed to simplify using FriendlyId in concurrent code.</p>
+
+<h4>Candidates</h4>
+
+<p>Since UUIDs are ugly, FriendlyId provides a &quot;slug candidates&quot; functionality to
+let you specify alternate slugs to use in the event the one you want to use is
+already taken. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:slug_candidates</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
+
+  <span class='comment'># Try building a slug based on the following fields in
+</span>  <span class='comment'># increasing order of specificity.
+</span>  <span class='kw'>def</span> <span class='id identifier rubyid_slug_candidates'>slug_candidates</span>
+    <span class='lbracket'>[</span>
+      <span class='symbol'>:name</span><span class='comma'>,</span>
+      <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span><span class='comma'>,</span>
+      <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:street_number</span><span class='comma'>,</span> <span class='symbol'>:street</span><span class='comma'>,</span> <span class='symbol'>:city</span><span class='rbracket'>]</span>
+    <span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Plaza Diner</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>city:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>New Paltz</span><span class='tstring_end'>&#39;</span></span>
+<span class='id identifier rubyid_r2'>r2</span> <span class='op'>=</span> <span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_create!'>create!</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Plaza Diner</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>city:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Kingston</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='id identifier rubyid_r1'>r1</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span>  <span class='comment'>#=&gt; &#39;plaza-diner&#39;
+</span><span class='id identifier rubyid_r2'>r2</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span>  <span class='comment'>#=&gt; &#39;plaza-diner-kingston&#39;
+</span></code></pre>
+
+<p>To use candidates, make your FriendlyId base method return an array. The
+method need not be named <code>slug_candidates</code>; it can be anything you want. The
+array may contain any combination of symbols, strings, procs or lambdas and
+will be evaluated lazily and in order. If you include symbols, FriendlyId will
+invoke a method on your model class with the same name. Strings will be
+interpreted literally. Procs and lambdas will be called and their return values
+used as the basis of the friendly id. If none of the candidates can generate a
+unique slug, then FriendlyId will append a UUID to the first candidate as a
+last resort.</p>
+
+<h4>Sequence Separator</h4>
+
+<p>By default, FriendlyId uses a dash to separate the slug from a sequence.</p>
+
+<p>You can change this with the <span class='object_link'><a href="FriendlyId/Slugged/Configuration.html#sequence_separator-instance_method" title="FriendlyId::Slugged::Configuration#sequence_separator (method)">sequence_separator</a></span> configuration option.</p>
+
+<h4>Providing Your Own Slug Processing Method</h4>
+
+<p>You can override <span class='object_link'><a href="FriendlyId/Slugged.html#normalize_friendly_id-instance_method" title="FriendlyId::Slugged#normalize_friendly_id (method)">FriendlyId::Slugged#normalize_friendly_id</a></span> in your model for
+total control over the slug format. It will be invoked for any generated slug,
+whether for a single slug or for slug candidates.</p>
+
+<h4>Deciding When to Generate New Slugs</h4>
+
+<p>As of FriendlyId 5.0, slugs are only generated when the <code>slug</code> field is nil. If
+you want a slug to be regenerated,set the slug field to nil:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>The Plaza Diner</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># joes-diner
+</span><span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_slug'>slug</span> <span class='op'>=</span> <span class='kw'>nil</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+<span class='id identifier rubyid_restaurant'>restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'># the-plaza-diner
+</span></code></pre>
+
+<p>You can also override the
+<span class='object_link'><a href="FriendlyId/Slugged.html#should_generate_new_friendly_id%3F-instance_method" title="FriendlyId::Slugged#should_generate_new_friendly_id? (method)">FriendlyId::Slugged#should_generate_new_friendly_id?</a></span> method, which lets you
+control exactly when new friendly ids are set:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Post</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:title</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_should_generate_new_friendly_id?'>should_generate_new_friendly_id?</span>
+    <span class='id identifier rubyid_title_changed?'>title_changed?</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>If you want to extend the default behavior but, adding your own conditions,
+don&#39;t forget to invoke <code>super</code> from your implementation:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Category</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_should_generate_new_friendly_id?'>should_generate_new_friendly_id?</span>
+    <span class='id identifier rubyid_name_changed?'>name_changed?</span> <span class='op'>||</span> <span class='kw'>super</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h4>Locale-specific Transliterations</h4>
+
+<p>Active Support&#39;s <code>parameterize</code> uses
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate">transliterate</a>,
+which in turn can use I18n&#39;s transliteration rules to consider the current
+locale when replacing Latin characters:</p>
+
+<pre class="code ruby"><code class="ruby"># config/locales/de.yml
+de:
+  i18n:
+    transliterate:
+      rule:
+        ü: &quot;ue&quot;
+        ö: &quot;oe&quot;
+        etc...
+
+movie = Movie.create! :title =&gt; &quot;Der Preis fürs Überleben&quot;
+movie.slug #=&gt; &quot;der-preis-fuers-ueberleben&quot;
+</code></pre>
+
+<p>This functionality was in fact taken from earlier versions of FriendlyId.</p>
+
+<h4>Gotchas: Common Problems</h4>
+
+<p>FriendlyId uses a before_validation callback to generate and set the slug. This
+means that if you create two model instances before saving them, it&#39;s possible
+they will generate the same slug, and the second save will fail.</p>
+
+<p>This can happen in two fairly normal cases: the first, when a model using nested
+attributes creates more than one record for a model that uses friendly_id. The
+second, in concurrent code, either in threads or multiple processes.</p>
+
+<p>To solve the nested attributes issue, I recommend simply avoiding them when
+creating more than one nested record for a model that uses FriendlyId. See <a href="https://github.com/norman/friendly_id/issues/185">this
+Github issue</a> for discussion.</p>
+
+<h2>History: Avoiding 404&#39;s When Slugs Change</h2>
+
+<p>FriendlyId&#39;s <span class='object_link'><a href="FriendlyId/History.html" title="FriendlyId::History (module)">History</a></span> module adds the ability to store a
+log of a model&#39;s slugs, so that when its friendly id changes, it&#39;s still
+possible to perform finds by the old id.</p>
+
+<p>The primary use case for this is avoiding broken URLs.</p>
+
+<h3>Setup</h3>
+
+<p>In order to use this module, you must add a table to your database schema to
+store the slug records. FriendlyId provides a generator for this purpose:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_rails'>rails</span> <span class='id identifier rubyid_generate'>generate</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
+<span class='id identifier rubyid_rake'>rake</span> <span class='label'>db:</span><span class='id identifier rubyid_migrate'>migrate</span>
+</code></pre>
+
+<p>This will add a table named <code>friendly_id_slugs</code>, used by the <span class='object_link'><a href="FriendlyId/Slug.html" title="FriendlyId::Slug (class)">FriendlyId::Slug</a></span>
+model.</p>
+
+<h3>Considerations</h3>
+
+<p>Because recording slug history requires creating additional database records,
+this module has an impact on the performance of the associated model&#39;s <code>create</code>
+method.</p>
+
+<h3>Example</h3>
+
+<pre class="code ruby"><code class="ruby">class Post &lt; ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :title, :use =&gt; :history
+end
+
+class PostsController &lt; ApplicationController
+
+  before_filter :find_post
+
+  ...
+
+  def find_post
+    @post = Post.find params[:id]
+
+    # If an old id or a numeric id was used to find the record, then
+    # the request path will not match the post_path, and we should do
+    # a 301 redirect that uses the current friendly id.
+    if request.path != post_path(@post)
+      return redirect_to @post, :status =&gt; :moved_permanently
+    end
+  end
+end
+</code></pre>
+
+<h2>Unique Slugs by Scope</h2>
+
+<p>The <span class='object_link'><a href="FriendlyId/Scoped.html" title="FriendlyId::Scoped (module)">FriendlyId::Scoped</a></span> module allows FriendlyId to generate unique slugs
+within a scope.</p>
+
+<p>This allows, for example, two restaurants in different cities to have the slug
+<code>joes-diner</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_belongs_to'>belongs_to</span> <span class='symbol'>:city</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:scoped</span><span class='comma'>,</span> <span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='symbol'>:city</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='const'>City</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>seattle</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_restaurants'>restaurants</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'>City</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>chicago</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_restaurants'>restaurants</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Without :scoped in this case, one of the restaurants would have the slug
+<code>joes-diner</code> and the other would have <code>joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5</code>.</p>
+
+<p>The value for the <code>:scope</code> option can be the name of a <code>belongs_to</code> relation, or
+a column.</p>
+
+<p>Additionally, the <code>:scope</code> option can receive an array of scope values:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Cuisine</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>City</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_has_many'>has_many</span> <span class='symbol'>:restaurants</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:slugged</span>
+<span class='kw'>end</span>
+
+<span class='kw'>class</span> <span class='const'>Restaurant</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_belongs_to'>belongs_to</span> <span class='symbol'>:city</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:use</span> <span class='op'>=&gt;</span> <span class='symbol'>:scoped</span><span class='comma'>,</span> <span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='symbol'>:city</span><span class='comma'>,</span> <span class='symbol'>:cuisine</span><span class='rbracket'>]</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>All supplied values will be used to determine scope.</p>
+
+<h3>Finding Records by Friendly ID</h3>
+
+<p>If you are using scopes your friendly ids may not be unique, so a simple find
+like:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<p>may return the wrong record. In these cases it&#39;s best to query through the
+relation:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_restaurants'>restaurants</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Alternatively, you could pass the scope value as a query parameter:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:city_id</span> <span class='op'>=&gt;</span> <span class='ivar'>@city</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_friendly'>friendly</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<h3>Finding All Records That Match a Scoped ID</h3>
+
+<p>Query the slug column directly:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Restaurant</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:slug</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>joes-diner</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<h3>Routes for Scoped Models</h3>
+
+<p>Recall that FriendlyId is a database-centric library, and does not set up any
+routes for scoped models. You must do this yourself in your application. Here&#39;s
+an example of one way to set this up:</p>
+
+<pre class="code ruby"><code class="ruby"># in routes.rb
+resources :cities do
+  resources :restaurants
+end
+
+# in views
+&lt;%= link_to &#39;Show&#39;, [@city, @restaurant] %&gt;
+
+# in controllers
+@city = City.friendly.find(params[:city_id])
+@restaurant = @city.restaurants.friendly.find(params[:id])
+
+# URLs:
+http://example.org/cities/seattle/restaurants/joes-diner
+http://example.org/cities/chicago/restaurants/joes-diner
+</code></pre>
+
+<h2>Translating Slugs Using Simple I18n</h2>
+
+<p>The <span class='object_link'><a href="FriendlyId/SimpleI18n.html" title="FriendlyId::SimpleI18n (module)">SimpleI18n</a></span> module adds very basic i18n support to
+FriendlyId.</p>
+
+<p>In order to use this module, your model must have a slug column for each locale.
+By default FriendlyId looks for columns named, for example, &quot;slug_en&quot;,
+&quot;slug_es&quot;, etc. The first part of the name can be configured by passing the
+<code>:slug_column</code> option if you choose. Note that the column for the default locale
+must also include the locale in its name.</p>
+
+<p>This module is most suitable to applications that need to support few locales.
+If you need to support two or more locales, you may wish to use the
+friendly_id_globalize gem instead.</p>
+
+<h3>Example migration</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_up'>up</span>
+  <span class='id identifier rubyid_create_table'>create_table</span> <span class='symbol'>:posts</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_t'>t</span><span class='op'>|</span>
+    <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:title</span>
+    <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:slug_en</span>
+    <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_string'>string</span> <span class='symbol'>:slug_es</span>
+    <span class='id identifier rubyid_t'>t</span><span class='period'>.</span><span class='id identifier rubyid_text'>text</span>   <span class='symbol'>:body</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:posts</span><span class='comma'>,</span> <span class='symbol'>:slug_en</span>
+  <span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:posts</span><span class='comma'>,</span> <span class='symbol'>:slug_es</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3>Finds</h3>
+
+<p>Finds will take into consideration the current locale:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span> <span class='op'>=</span> <span class='symbol'>:es</span>
+<span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>la-guerra-de-las-galaxias</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_locale'>locale</span> <span class='op'>=</span> <span class='symbol'>:en</span>
+<span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>star-wars</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+</code></pre>
+
+<p>To find a slug by an explicit locale, perform the find inside a block
+passed to I18n&#39;s <code>with_locale</code> method:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_with_locale'>with_locale</span><span class='lparen'>(</span><span class='symbol'>:es</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>la-guerra-de-las-galaxias</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3>Creating Records</h3>
+
+<p>When new records are created, the slug is generated for the current locale only.</p>
+
+<h3>Translating Slugs</h3>
+
+<p>To translate an existing record&#39;s friendly_id, use
+<span class='object_link'><a href="FriendlyId/SimpleI18n/Model.html#set_friendly_id-instance_method" title="FriendlyId::SimpleI18n::Model#set_friendly_id (method)">FriendlyId::SimpleI18n::Model#set_friendly_id</a></span>. This will ensure that the slug
+you add is properly escaped, transliterated and sequenced:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_post'>post</span> <span class='op'>=</span> <span class='const'>Post</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:name</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Star Wars</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_set_friendly_id'>set_friendly_id</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>La guerra de las galaxias</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:es</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>If you don&#39;t pass in a locale argument, FriendlyId::SimpleI18n will just use the
+current locale:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>I18n</span><span class='period'>.</span><span class='id identifier rubyid_with_locale'>with_locale</span><span class='lparen'>(</span><span class='symbol'>:es</span><span class='rparen'>)</span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_post'>post</span><span class='period'>.</span><span class='id identifier rubyid_set_friendly_id'>set_friendly_id</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>La guerra de las galaxias</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h2>Reserved Words</h2>
+
+<p>The <span class='object_link'><a href="FriendlyId/Reserved.html" title="FriendlyId::Reserved (module)">Reserved</a></span> module adds the ability to exclude a list of
+words from use as FriendlyId slugs.</p>
+
+<p>With Ruby on Rails, FriendlyId&#39;s generator generates an initializer that
+reserves some words such as &quot;new&quot; and &quot;edit&quot; using <span class='object_link'><a href="FriendlyId.html#defaults-class_method" title="FriendlyId.defaults (method)">FriendlyId.defaults</a></span>.</p>
+
+<p>Note that the error messages for fields will appear on the field
+<code>:friendly_id</code>. If you are using Rails&#39;s scaffolded form errors display, then
+it will have no field to highlight. If you&#39;d like to change this so that
+scaffolding works as expected, one way to accomplish this is to move the error
+message to a different field. For example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Person</span> <span class='op'>&lt;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_extend'>extend</span> <span class='const'>FriendlyId</span>
+  <span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='label'>use:</span> <span class='symbol'>:slugged</span>
+
+  <span class='id identifier rubyid_after_validation'>after_validation</span> <span class='symbol'>:move_friendly_id_error_to_name</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_move_friendly_id_error_to_name'>move_friendly_id_error_to_name</span>
+    <span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span> <span class='symbol'>:name</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_errors'>errors</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:friendly_id</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_errors'>errors</span><span class='lbracket'>[</span><span class='symbol'>:friendly_id</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_present?'>present?</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+</div></div>
+
+    <div id="footer">
+  Generated on Wed Dec 17 14:41:37 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.1.3).
+</div>
+
+  </body>
+</html>

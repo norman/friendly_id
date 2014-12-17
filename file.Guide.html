@@ -6,7 +6,7 @@
 <title>
   File: Guide
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -84,7 +84,7 @@ performance and a well-documented codebase.</p>
 
 <p>A slug is the part of a URL which identifies a page using human-readable
 keywords, rather than an opaque identifier such as a numeric id. This can make
-your application more friendly both for users and search engine.</p>
+your application more friendly both for users and search engines.</p>
 
 <h4>Finders: Slugs Act Like Numeric IDs</h4>
 
@@ -110,7 +110,7 @@ options:</p>
 </code></pre>
 
 <p>The most important option is <code>:use</code>, which you use to tell FriendlyId which
-addons it should use. See the documentation for this method for a list of all
+addons it should use. See the documentation for <span class='object_link'><a href="FriendlyId/Base.html#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">FriendlyId::Base#friendly_id</a></span> for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.</p>
 
@@ -224,7 +224,7 @@ some text processing.</p>
 
 <p>For example, blog applications typically use a post title to provide the basis
 of a search engine friendly URL. Such identifiers typically lack uppercase
-characters, use ASCII to approximate UTF-8 character, and strip out other
+characters, use ASCII to approximate UTF-8 characters, and strip out other
 characters which may make them aesthetically unappealing or error-prone when
 used in a URL.</p>
 
@@ -316,11 +316,11 @@ FriendlyId uses.</p>
 <p>When you try to insert a record that would generate a duplicate friendly id,
 FriendlyId will append a UUID to the generated slug to ensure uniqueness:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_car'>car</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
-<span class='id identifier rubyid_car2'>car2</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugot 206</span><span class='tstring_end'>&quot;</span></span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_car'>car</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugeot 206</span><span class='tstring_end'>&quot;</span></span>
+<span class='id identifier rubyid_car2'>car2</span> <span class='op'>=</span> <span class='const'>Car</span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span> <span class='symbol'>:title</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Peugeot 206</span><span class='tstring_end'>&quot;</span></span>
 
-<span class='id identifier rubyid_car'>car</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206&quot;
-</span><span class='id identifier rubyid_car2'>car2</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5&quot;
+<span class='id identifier rubyid_car'>car</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugeot-206&quot;
+</span><span class='id identifier rubyid_car2'>car2</span><span class='period'>.</span><span class='id identifier rubyid_friendly_id'>friendly_id</span> <span class='comment'>#=&gt; &quot;peugeot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5&quot;
 </span></code></pre>
 
 <p>Previous versions of FriendlyId appended a numeric sequence to make slugs
@@ -705,9 +705,9 @@ message to a different field. For example:</p>
 </div></div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:20 2014 by
+  Generated on Wed Dec 17 14:41:31 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

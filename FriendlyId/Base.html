@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Base
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -100,7 +100,7 @@ options:</p>
 </code></pre>
 
 <p>The most important option is <code>:use</code>, which you use to tell FriendlyId which
-addons it should use. See the documentation for this method for a list of all
+addons it should use. See the documentation for <span class='object_link'><a href="#friendly_id-instance_method" title="FriendlyId::Base#friendly_id (method)">#friendly_id</a></span> for a list of all
 available addons, or skim through the rest of the docs to get a high-level
 overview.</p>
 
@@ -709,7 +709,7 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
       <pre class="code"><span class="info file"># File 'lib/friendly_id/base.rb', line 224</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primary_key_type'>primary_key_type</span>
-  <span class='ivar'>@primary_key_type</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_primary_key'>primary_key</span><span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
+  <span class='ivar'>@primary_key_type</span> <span class='op'>||=</span> <span class='id identifier rubyid_columns_hash'>columns_hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_primary_key'>primary_key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_type'>type</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -721,9 +721,9 @@ to invoke <span class='object_link'><a href="#friendly_id-instance_method" title
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:20 2014 by
+  Generated on Wed Dec 17 14:41:31 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

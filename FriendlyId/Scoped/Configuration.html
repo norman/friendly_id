@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Scoped::Configuration
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -279,13 +279,15 @@
 
 165
 166
-167</pre>
+167
+168</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/scoped.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_reflection_foreign_key'>reflection_foreign_key</span><span class='lparen'>(</span><span class='id identifier rubyid_scope'>scope</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_reflections'>reflections</span><span class='lbracket'>[</span><span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_try'>try</span><span class='lparen'>(</span><span class='symbol'>:foreign_key</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_reflection'>reflection</span> <span class='op'>=</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_reflections'>reflections</span><span class='lbracket'>[</span><span class='id identifier rubyid_scope'>scope</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_reflections'>reflections</span><span class='lbracket'>[</span><span class='id identifier rubyid_scope'>scope</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_reflection'>reflection</span><span class='period'>.</span><span class='id identifier rubyid_try'>try</span><span class='lparen'>(</span><span class='symbol'>:foreign_key</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -359,9 +361,9 @@ the name of column and returns it cast to a String.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:21 2014 by
+  Generated on Wed Dec 17 14:41:31 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

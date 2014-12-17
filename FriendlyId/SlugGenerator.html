@@ -6,7 +6,7 @@
 <title>
   Class: FriendlyId::SlugGenerator
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -101,8 +101,8 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>The default slug generator offers functionality to check slug strings for
-uniqueness and, if necessary, appends a sequence to guarantee it.</p>
+    <p>The default slug generator offers functionality to check slug candidates for
+availability.</p>
 
 
   </div>
@@ -124,28 +124,6 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
     </h2>
 
     <ul class="summary">
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#add-instance_method" title="#add (instance method)">- (Object) <strong>add</strong>(slug) </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
       
         <li class="public ">
   <span class="summary_signature">
@@ -270,37 +248,7 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="add-instance_method">
-  
-    - (<tt>Object</tt>) <strong>add</strong>(slug) 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-14
-15
-16</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/slug_generator.rb', line 14</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='id identifier rubyid_slug'>slug</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_slug'>slug</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="available?-instance_method">
+  <h3 class="signature first" id="available?-instance_method">
   
     - (<tt>Boolean</tt>) <strong>available?</strong>(slug) 
   
@@ -366,16 +314,16 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
       <pre class="lines">
 
 
-18
-19
-20
-21</pre>
+14
+15
+16
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/slug_generator.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/slug_generator.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_generate'>generate</span><span class='lparen'>(</span><span class='id identifier rubyid_candidates'>candidates</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_candidates'>candidates</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='kw'>return</span> <span class='id identifier rubyid_add'>add</span> <span class='id identifier rubyid_c'>c</span> <span class='kw'>if</span> <span class='id identifier rubyid_available?'>available?</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span><span class='rbrace'>}</span>
+  <span class='id identifier rubyid_candidates'>candidates</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_c'>c</span><span class='op'>|</span> <span class='kw'>return</span> <span class='id identifier rubyid_c'>c</span> <span class='kw'>if</span> <span class='id identifier rubyid_available?'>available?</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span><span class='rbrace'>}</span>
   <span class='kw'>nil</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -388,9 +336,9 @@ uniqueness and, if necessary, appends a sequence to guarantee it.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:21 2014 by
+  Generated on Wed Dec 17 14:41:32 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::History
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -302,9 +302,6 @@ end
       <pre class="lines">
 
 
-68
-69
-70
 71
 72
 73
@@ -312,10 +309,13 @@ end
 75
 76
 77
-78</pre>
+78
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_model_class'>model_class</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_class_eval'>class_eval</span> <span class='kw'>do</span>
@@ -356,7 +356,10 @@ end
 62
 63
 64
-65</pre>
+65
+66
+67
+68</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 57</span>
@@ -367,6 +370,9 @@ end
     <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span> <span class='op'>=</span> <span class='const'>FriendlyId</span><span class='op'>::</span><span class='const'>History</span><span class='op'>::</span><span class='const'>FinderMethods</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_uses?'>uses?</span> <span class='symbol'>:finders</span>
       <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:include</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>VERSION</span><span class='op'>::</span><span class='const'>MAJOR</span> <span class='op'>==</span> <span class='int'>4</span> <span class='op'>&amp;&amp;</span> <span class='const'>ActiveRecord</span><span class='op'>::</span><span class='const'>VERSION</span><span class='op'>::</span><span class='const'>MINOR</span> <span class='op'>==</span> <span class='int'>2</span>
+        <span class='id identifier rubyid_model_class'>model_class</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:extend</span><span class='comma'>,</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_finder_methods'>finder_methods</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -396,23 +402,23 @@ end
       <pre class="lines">
 
 
-114
-115
-116
-117
-118
-119
-120
 121
 122
 123
 124
 125
 126
-127</pre>
+127
+128
+129
+130
+131
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 121</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create_slug'>create_slug</span>
   <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_friendly_id'>friendly_id</span>
@@ -460,25 +466,25 @@ used slug.</p>
       <pre class="lines">
 
 
-104
-105
-106
-107
-108
-109
-110
 111
-112</pre>
+112
+113
+114
+115
+116
+117
+118
+119</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/friendly_id/history.rb', line 111</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scope_for_slug_generator'>scope_for_slug_generator</span>
   <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='kw'>super</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_relation'>relation</span> <span class='kw'>if</span> <span class='id identifier rubyid_new_record?'>new_record?</span>
   <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='const'>Slug</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sluggable_id &lt;&gt; ?</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_friendly_id_config'>friendly_id_config</span><span class='period'>.</span><span class='id identifier rubyid_uses?'>uses?</span><span class='lparen'>(</span><span class='symbol'>:scoped</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='symbol'>:scope</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_serialized_scope'>serialized_scope</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='const'>Slug</span><span class='period'>.</span><span class='id identifier rubyid_arel_table'>arel_table</span><span class='lbracket'>[</span><span class='symbol'>:scope</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_eq'>eq</span><span class='lparen'>(</span><span class='id identifier rubyid_serialized_scope'>serialized_scope</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_relation'>relation</span>
 <span class='kw'>end</span></pre>
@@ -492,9 +498,9 @@ used slug.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:21 2014 by
+  Generated on Wed Dec 17 14:41:32 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>

@@ -6,7 +6,7 @@
 <title>
   Module: FriendlyId::Scoped
   
-    &mdash; Documentation by YARD 0.8.7.4
+    &mdash; Documentation by YARD 0.8.7.6
   
 </title>
 
@@ -474,7 +474,7 @@ loading dependent modules prior to overriding them when necessary.</p>
     <span class='id identifier rubyid_relation'>relation</span> <span class='op'>=</span> <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_column'>column</span><span class='rparen'>)</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_primary_key'>primary_key</span>
-  <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='period'>.</span><span class='id identifier rubyid_not'>not</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_relation'>relation</span><span class='period'>.</span><span class='id identifier rubyid_where'>where</span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_arel_table'>arel_table</span><span class='lbracket'>[</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_not_eq'>not_eq</span><span class='lparen'>(</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_primary_key_name'>primary_key_name</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -546,9 +546,9 @@ loading dependent modules prior to overriding them when necessary.</p>
 </div>
 
     <div id="footer">
-  Generated on Thu May 29 10:10:20 2014 by
+  Generated on Wed Dec 17 14:41:31 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.4 (ruby-2.1.2).
+  0.8.7.6 (ruby-2.1.3).
 </div>
 
   </body>
