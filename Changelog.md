@@ -3,6 +3,14 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.0.5 (NOT RELEASED YET)
+
+* Support for Rails 4.2.
+* FriendlyId will no longer use blank strings as slugs.
+* FriendlyId will now try to use the first non-reserved candidate as its
+  slug and will only mark the record invalid if all candidates are reserved.
+* Fix order dependence bug between history and scoped modules.
+
 ## 5.0.4 (2014-05-29)
 
 * Bug fix for call to removed `primary` method on Edge Rails. ([#557](https://github.com/norman/friendly_id/pull/557)).
