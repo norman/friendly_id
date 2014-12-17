@@ -5,11 +5,11 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## 5.1.0 (NOT RELEASED YET)
 
-* FriendlyId will no longer use blank strings as slugs.
+* FriendlyId will no longer allow blank strings as slugs ([#571](https://github.com/norman/friendly_id/pull/571)).
 * FriendlyId will now try to use the first non-reserved candidate as its
-  slug and will only mark the record invalid if all candidates are reserved.
-* Fix order dependence bug between history and scoped modules.
-* Fix "friendly" finds on Rails 4.2.
+  slug and will only mark the record invalid if all candidates ([#536](https://github.com/norman/friendly_id/issues/536)).
+* Fix order dependence bug between history and scoped modules ([#588](https://github.com/norman/friendly_id/pull/588)).
+* Fix "friendly" finds on Rails 4.2 ([#607](https://github.com/norman/friendly_id/issues/607)).
 
 ## 5.0.4 (2014-05-29)
 
