@@ -251,9 +251,9 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     # Process the given value to make it suitable for use as a slug.
     #
     # This method is not intended to be invoked directly; FriendlyId uses it
-    # internaly to process strings into slugs.
+    # internally to process strings into slugs.
     #
-    # However, if FriendlyId's default slug generation doesn't suite your needs,
+    # However, if FriendlyId's default slug generation doesn't suit your needs,
     # you can override this method in your model class to control exactly how
     # slugs are generated.
     #
