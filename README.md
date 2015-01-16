@@ -38,8 +38,6 @@ versioning, i18n, scoped slugs, reserved words, and custom slug generators.
 
 ### What Changed in Version 5.1
 
-_NOTE: 5.1 is the latest beta version and will be released soon._
-
 5.1 is a bugfix release, but bumps the minor version because some applications may be dependent
 on the previously buggy behavior. The changes include:
 

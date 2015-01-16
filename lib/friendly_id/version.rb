@@ -1,3 +1,3 @@
 module FriendlyId
-  VERSION = "5.1.0.beta.1"
+  VERSION = "5.1.0"
 end
