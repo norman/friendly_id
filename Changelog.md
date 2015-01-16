@@ -11,6 +11,10 @@ suggestions, ideas and improvements to FriendlyId.
 * Fix order dependence bug between history and scoped modules ([#588](https://github.com/norman/friendly_id/pull/588)).
 * Fix "friendly" finds on Rails 4.2 ([#607](https://github.com/norman/friendly_id/issues/607)).
 
+## 5.0.5 (2015-01-15)
+
+* Backported bugfixes and Rails 4.2 support from 5.1.0.
+
 ## 5.0.4 (2014-05-29)
 
 * Bug fix for call to removed `primary` method on Edge Rails. ([#557](https://github.com/norman/friendly_id/pull/557)).
