@@ -3,7 +3,7 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
-## 5.1.0 (NOT RELEASED YET)
+## 5.1.0 (2015-01-15)
 
 * FriendlyId will no longer allow blank strings as slugs ([#571](https://github.com/norman/friendly_id/pull/571)).
 * FriendlyId will now try to use the first non-reserved candidate as its
