@@ -67,7 +67,7 @@ namespace :db do
     %x{#{commands[driver] || true}}
   end
 
-  desc "Create the database"
+  desc "Drop the database"
   task :drop => :load_path do
     require "helper"
     driver = FriendlyId::Test::Database.driver

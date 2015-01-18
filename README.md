@@ -7,7 +7,7 @@
 Please ask questions on [Stack
 Overflow](http://stackoverflow.com/questions/tagged/friendly-id) using the
 "friendly-id" tag. Prior to asking, search and see if your question has
-already been anwered.
+already been answered.
 
 Please only post issues in Github issues for actual bugs.
 
