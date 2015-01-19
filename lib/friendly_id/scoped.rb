@@ -140,7 +140,7 @@ an example of one way to set this up:
       else
         whereclause = self.class.base_class.arel_table[primary_key_name].not_eq(send(primary_key_name))
       end
-      scope.where(whereclause)
+      relation.where(whereclause)
     end
     private :scope_for_slug_generator
 
