@@ -1,27 +1,6 @@
 language: ruby
 
 rvm:
-  - 2.0.0
-  - 2.1.0
-  - jruby-19mode
-  - rbx-2
-
-env:
-  - DB=postgres
-  - DB=mysql
-
-gemfile:
-  - gemfiles/Gemfile.rails-4.0.rb
-  - gemfiles/Gemfile.rails-4.1.rb
-  - gemfiles/Gemfile.rails-4.2.rb
-
-sudo: false
-
-# Per https://github.com/travis-ci/travis-ci/issues/2821
-install: bundle install --retry=3
-
-before_script: 'bundle exec rake db:create db:up'
-
 script: 'COVERALLS=true bundle exec rake test'
 
 matrix:
