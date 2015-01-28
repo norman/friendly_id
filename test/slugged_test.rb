@@ -19,7 +19,7 @@ class Novelist < ActiveRecord::Base
   end
 end
 
-class SluggedTest < Minitest::Test
+class SluggedTest < TestCaseClass
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
@@ -94,7 +94,7 @@ class SluggedTest < Minitest::Test
 
 end
 
-class SlugGeneratorTest < Minitest::Test
+class SlugGeneratorTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -158,7 +158,7 @@ class SlugGeneratorTest < Minitest::Test
 
 end
 
-class SlugSeparatorTest < Minitest::Test
+class SlugSeparatorTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -210,7 +210,7 @@ class SlugSeparatorTest < Minitest::Test
 
 end
 
-class DefaultScopeTest < Minitest::Test
+class DefaultScopeTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -235,7 +235,7 @@ class DefaultScopeTest < Minitest::Test
 
 end
 
-class UuidAsPrimaryKeyFindTest < Minitest::Test
+class UuidAsPrimaryKeyFindTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -284,7 +284,7 @@ class UuidAsPrimaryKeyFindTest < Minitest::Test
 
 end
 
-class UnderscoreAsSequenceSeparatorRegressionTest < Minitest::Test
+class UnderscoreAsSequenceSeparatorRegressionTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -308,7 +308,7 @@ class UnderscoreAsSequenceSeparatorRegressionTest < Minitest::Test
 end
 
 # https://github.com/norman/friendly_id/issues/148
-class FailedValidationAfterUpdateRegressionTest < Minitest::Test
+class FailedValidationAfterUpdateRegressionTest < TestCaseClass
 
   include FriendlyId::Test
 

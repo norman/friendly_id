@@ -12,7 +12,18 @@ if ENV['COVERALLS'] || ENV['COVERAGE']
   end
 end
 
-require 'minitest'
+begin
+  require 'minitest'
+rescue LoadError
+  require 'minitest/unit'
+end
+
+begin
+  TestCaseClass = MiniTest::Test
+rescue NameError
+  TestCaseClass = MiniTest::Unit::TestCase
+end
+
 require "mocha/setup"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
@@ -31,7 +42,12 @@ module FriendlyId
   module Test
 
     def self.included(base)
-      Minitest.autorun
+      if Minitest.respond_to?(:autorun)
+        Minitest.autorun
+      else
+        require 'minitest/autorun'
+      end
+    rescue LoadError
     end
 
     def transaction

@@ -20,7 +20,7 @@ class Publisher < ActiveRecord::Base
   has_many :novels
 end
 
-class ScopedTest < Minitest::Test
+class ScopedTest < TestCaseClass
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core

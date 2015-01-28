@@ -1,7 +1,7 @@
 require "helper"
 
 
-class ObjectUtilsTest < Minitest::Test
+class ObjectUtilsTest < TestCaseClass
 
   include FriendlyId::Test
 

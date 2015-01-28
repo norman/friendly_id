@@ -1,6 +1,6 @@
 require "helper"
 
-class ConfigurationTest < Minitest::Test
+class ConfigurationTest < TestCaseClass
 
   include FriendlyId::Test
 

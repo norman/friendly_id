@@ -1,6 +1,6 @@
 require "helper"
 
-class StiTest < Minitest::Test
+class StiTest < TestCaseClass
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
@@ -76,7 +76,7 @@ class StiTestWithHistory < StiTest
 end
 
 
-class StiTestWithFinders < Minitest::Test
+class StiTestWithFinders < TestCaseClass
 
   include FriendlyId::Test
 
@@ -110,7 +110,7 @@ class StiTestWithFinders < Minitest::Test
 
 end
 
-class StiTestSubClass < Minitest::Test
+class StiTestSubClass < TestCaseClass
 
   include FriendlyId::Test
 

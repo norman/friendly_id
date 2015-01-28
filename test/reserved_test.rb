@@ -1,6 +1,6 @@
 require "helper"
 
-class ReservedTest < Minitest::Test
+class ReservedTest < TestCaseClass
 
   include FriendlyId::Test
 

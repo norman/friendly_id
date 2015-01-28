@@ -1,6 +1,6 @@
 require "helper"
 
-class SimpleI18nTest < Minitest::Test
+class SimpleI18nTest < TestCaseClass
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
@@ -88,7 +88,7 @@ class SimpleI18nTest < Minitest::Test
     end
   end
 
-  class RegressionTest < Minitest::Test
+  class RegressionTest < TestCaseClass
     include FriendlyId::Test
 
     test "should not overwrite other locale's slugs on update_attributes" do
@@ -107,7 +107,7 @@ class SimpleI18nTest < Minitest::Test
     end
   end
 
-  class ConfigurationTest < Minitest::Test
+  class ConfigurationTest < TestCaseClass
     test "should add locale to slug column for a non-default locale" do
       I18n.with_locale :es do
         assert_equal "slug_es", Journalist.friendly_id_config.slug_column
