@@ -1,6 +1,7 @@
 language: ruby
 
 rvm:
+  - 2.2.0
   - 2.0.0
   - 2.1.0
   - jruby-19mode
@@ -23,8 +24,3 @@ install: bundle install --retry=3
 before_script: 'bundle exec rake db:create db:up'
 
 script: 'COVERALLS=true bundle exec rake test'
-
-matrix:
-  allow_failures:
-    - gemfile: gemfiles/Gemfile.rails-4.2.rb
-
