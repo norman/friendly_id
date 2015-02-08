@@ -1,0 +1,87 @@
+require 'helper'
+
+class Article < ActiveRecord::Base
+  extend FriendlyId
+  friendly_id :name, :use => :sequentially_slugged
+end
+
+class SequentiallySluggedTest < TestCaseClass
+  include FriendlyId::Test
+  include FriendlyId::Test::Shared::Core
+
+  def model_class
+    Article
+  end
+
+  test "should generate numerically sequential slugs" do
+    transaction do
+      records = 12.times.map { model_class.create! :name => "Some news" }
+      assert_equal "some-news", records[0].slug
+      (1...12).each {|i| assert_equal "some-news-#{i + 1}", records[i].slug}
+    end
+  end
+
+  test "should cope when slugs are missing from the sequence" do
+    transaction do
+      record_1 = model_class.create!(:name => 'A thing')
+      record_2 = model_class.create!(:name => 'A thing')
+      record_3 = model_class.create!(:name => 'A thing')
+
+      assert_equal 'a-thing', record_1.slug
+      assert_equal 'a-thing-2', record_2.slug
+      assert_equal 'a-thing-3', record_3.slug
+
+      record_2.destroy
+
+      record_4 = model_class.create!(:name => 'A thing')
+
+      assert_equal 'a-thing-4', record_4.slug
+    end
+  end
+
+  test "should cope with strange column names" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "journalists"
+      extend FriendlyId
+      friendly_id :name, :use => :sequentially_slugged, :slug_column => "strange name"
+    end
+
+    transaction do
+      record_1 = model_class.create! name: "Julian Assange"
+      record_2 = model_class.create! name: "Julian Assange"
+
+      assert_equal 'julian-assange', record_1.attributes["strange name"]
+      assert_equal 'julian-assange-2', record_2.attributes["strange name"]
+    end
+  end
+
+  test "should correctly sequence slugs that end in a number" do
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206", record1.slug
+      record2 = model_class.create! :name => "Peugeuot 206"
+      assert_equal "peugeuot-206-2", record2.slug
+    end
+  end
+
+  test "should sequence with a custom sequence separator" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "novelists"
+      extend FriendlyId
+      friendly_id :name, :use => :sequentially_slugged, :sequence_separator => ':'
+    end
+
+    transaction do
+      record_1 = model_class.create! name: "Julian Barnes"
+      record_2 = model_class.create! name: "Julian Barnes"
+
+      assert_equal 'julian-barnes', record_1.slug
+      assert_equal 'julian-barnes:2', record_2.slug
+    end
+  end
+
+  test "should not generate a slug when the sluggable attribute is blank" do
+    record = model_class.create!(:name => '')
+    assert_nil record.slug
+  end
+end
