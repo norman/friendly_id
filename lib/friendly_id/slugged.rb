@@ -84,7 +84,9 @@ FriendlyId uses.
 Here's an example of a class that uses a custom method to generate the slug:
 
     class Person < ActiveRecord::Base
-      friendly_id :name_and_location
+      extend FriendlyId
+      friendly_id :name_and_location, use: :slugged
+      
       def name_and_location
         "#{name} from #{location}"
       end
