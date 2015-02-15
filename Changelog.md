@@ -96,7 +96,7 @@ suggestions, ideas and improvements to FriendlyId.
 * `find` no longer falls back to super unless id is fully numeric string (Norman Clarke).
 * Default sequence separator is now '-' rather than '--'.
 * Support for Globalize has been removed until Globalize supports Rails 4.
-* Removed upport for Ruby < 1.9.3 and Rails < 4.0.
+* Removed support for Ruby < 1.9.3 and Rails < 4.0.
 
 ## 4.0.10.1 (2013-08-20)
 
