@@ -17,6 +17,12 @@ gemfile:
   - gemfiles/Gemfile.rails-4.1.rb
   - gemfiles/Gemfile.rails-4.2.rb
 
+matrix:
+  allow_failures:
+    - rvm: jruby-19mode
+      gemfile: gemfiles/Gemfile.rails-4.2.rb
+      env: DB=postgres
+
 sudo: false
 
 # Per https://github.com/travis-ci/travis-ci/issues/2821
