@@ -23,6 +23,9 @@ module FriendlyId
       unless pre_candidates.all? {|x| reserved?(x)}
         pre_candidates.reject! {|x| reserved?(x)}
       end
+
+      return pre_candidates unless block_given?
+
       pre_candidates.each {|x| yield x}
     end
 
