@@ -188,7 +188,7 @@ control exactly when new friendly ids are set:
       end
     end
 
-If you want to extend the default behavior but, adding your own conditions,
+If you want to extend the default behavior but add your own conditions,
 don't forget to invoke `super` from your implementation:
 
     class Category < ActiveRecord::Base
