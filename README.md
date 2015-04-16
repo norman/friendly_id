@@ -135,6 +135,11 @@ add_index    :friendly_id_slugs, [:slug, :sluggable_type]
 add_index    :friendly_id_slugs, [:slug, :sluggable_type, :scope], unique: true
 ```
 
+## Articles
+
+[Migrating an ad-hoc URL slug system to FriendlyId](http://olivierlacan.com/posts/migrating-an-ad-hoc-url-slug-system-to-friendly-id/)
+[Pretty URLs with FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid)
+
 ## Docs
 
 The most current docs from the master branch can always be found
