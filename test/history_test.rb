@@ -117,6 +117,19 @@ class HistoryTest < TestCaseClass
     end
   end
 
+  test "should prefer product that used slug most recently" do
+    transaction do
+      first_record = model_class.create! name: "foo"
+      second_record = model_class.create! name: "bar"
+
+      first_record.update! slug: "not_foo"
+      second_record.update! slug: "foo" #now both records have used foo; second_record most recently
+      second_record.update! slug: "not_bar"
+
+      assert_equal model_class.friendly.find("foo"), second_record
+    end
+  end
+
   test 'should name table according to prefix and suffix' do
     transaction do
       begin
