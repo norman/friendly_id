@@ -95,7 +95,7 @@ method.
       end
 
       def slug_table_record(id)
-        select(quoted_table_name + '.*').joins(:slugs).where(slug_history_clause(id)).order(Slug.arel_table[:created_at].desc).first
+        select(quoted_table_name + '.*').joins(:slugs).where(slug_history_clause(id)).order(Slug.arel_table[:id].desc).first
       end
 
       def slug_history_clause(id)
