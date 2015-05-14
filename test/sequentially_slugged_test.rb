@@ -64,6 +64,15 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
+  test "should correctly sequence slugs that begin with a number" do
+    transaction do
+      record1 = model_class.create! :name => "2010 to 2015 Records"
+      assert_equal "2010-to-2015-records", record1.slug
+      record2 = model_class.create! :name => "2010 to 2015 Records"
+      assert_equal "2010-to-2015-records-2", record2.slug
+    end
+  end
+
   test "should sequence with a custom sequence separator" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "novelists"
