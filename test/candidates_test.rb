@@ -114,4 +114,30 @@ class CandidatesTest < TestCaseClass
     end
   end
 
+  test "allows to iterate through candidates without passing block" do
+    klass = Class.new model_class do
+      def slug_candidates
+        :name
+      end
+    end
+    with_instances_of klass do |_, city|
+      candidates = FriendlyId::Candidates.new(city, city.slug_candidates)
+      assert_equal candidates.each, ['new-york']
+    end
+  end
+
+  test "iterates through candidates with passed block" do
+    klass = Class.new model_class do
+      def slug_candidates
+        :name
+      end
+    end
+    with_instances_of klass do |_, city|
+      collected_candidates = []
+      candidates = FriendlyId::Candidates.new(city, city.slug_candidates)
+      candidates.each { |candidate| collected_candidates << candidate }
+      assert_equal collected_candidates, ['new-york']
+    end
+  end
+
 end
