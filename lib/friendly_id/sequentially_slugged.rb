@@ -36,7 +36,7 @@ module FriendlyId
       end
 
       def last_sequence_number
-        if match = /#{slug}#{sequence_separator}(\d+)/.match(slug_conflicts.last)
+        if match = /#{slug}#{sequence_separator}(\d+)\z/.match(slug_conflicts.last)
           match[1].to_i
         end
       end
@@ -48,17 +48,26 @@ module FriendlyId
       end
 
       def conflict_query
-        "#{slug_column} = ? OR #{slug_column} LIKE ?"
+        base = "#{slug_column} = ? OR #{slug_column} LIKE ?"
+        # Awful hack for SQLite3, which does not pick up '\' as the escape character
+        # without this.
+        base << " ESCAPE '\\'" if scope.connection.adapter_name =~ /sqlite/i
+        base
       end
 
       def sequential_slug_matcher
-        "#{slug}#{sequence_separator}%"
+        # Underscores (matching a single character) and percent signs (matching
+        # any number of characters) need to be escaped. While this looks like
+        # an excessive number of backslashes, it is correct.
+        "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + '%'
       end
 
       # Return the unnumbered (shortest) slug first, followed by the numbered ones
       # in ascending order.
       def ordering_query
-        "LENGTH(#{slug_column}) ASC, #{slug_column} ASC"
+        length_command = "LENGTH"
+        length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
+        "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
       end
     end
   end
