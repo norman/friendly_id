@@ -42,13 +42,14 @@ with numeric ids:
 =end
 module FriendlyId
 
-  autoload :History,    "friendly_id/history"
-  autoload :Slug,       "friendly_id/slug"
-  autoload :SimpleI18n, "friendly_id/simple_i18n"
-  autoload :Reserved,   "friendly_id/reserved"
-  autoload :Scoped,     "friendly_id/scoped"
-  autoload :Slugged,    "friendly_id/slugged"
-  autoload :Finders,    "friendly_id/finders"
+  autoload :History,             "friendly_id/history"
+  autoload :Slug,                "friendly_id/slug"
+  autoload :SimpleI18n,          "friendly_id/simple_i18n"
+  autoload :Reserved,            "friendly_id/reserved"
+  autoload :Scoped,              "friendly_id/scoped"
+  autoload :Slugged,             "friendly_id/slugged"
+  autoload :Finders,             "friendly_id/finders"
+  autoload :SequentiallySlugged, "friendly_id/sequentially_slugged"
 
   # Instances of these classes will never be considered a friendly id.
   # @see FriendlyId::ObjectUtils#friendly_id
