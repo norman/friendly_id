@@ -3,6 +3,10 @@
 We would like to think our many {file:Contributors contributors} for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.2.0 (NOT RELEASED YET)
+
+* Add sequential slug module for FriendlyId 4.x-style sequential slugs. ([#644](https://github.com/norman/friendly_id/pull/644)).
+
 ## 5.1.0 (2015-01-15)
 
 * FriendlyId will no longer allow blank strings as slugs ([#571](https://github.com/norman/friendly_id/pull/571)).
