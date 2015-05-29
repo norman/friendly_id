@@ -156,10 +156,11 @@ The best place to start is with the
 [Guide](http://norman.github.io/friendly_id/file.Guide.html),
 which compiles the top-level RDocs into one outlined document.
 
+For a getting started video, you may want to watch [GoRails #9](https://gorails.com/episodes/pretty-urls-with-friendly-id)
+
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
 which is now somewhat outdated but still relevant.
 
-For a more updated getting started video, you may want to watch [GoRails #9](https://gorails.com/episodes/pretty-urls-with-friendly-id)
 
 ## Rails Quickstart
 
