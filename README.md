@@ -137,7 +137,7 @@ add_index    :friendly_id_slugs, [:slug, :sluggable_type, :scope], unique: true
 
 ## Articles
 
-[Migrating an ad-hoc URL slug system to FriendlyId](http://olivierlacan.com/posts/migrating-an-ad-hoc-url-slug-system-to-friendly-id/)
+[Migrating an ad-hoc URL slug system to FriendlyId](http://olivierlacan.com/posts/migrating-an-ad-hoc-url-slug-system-to-friendly-id/)  
 [Pretty URLs with FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid)
 
 ## Docs
@@ -158,6 +158,8 @@ which compiles the top-level RDocs into one outlined document.
 
 You might also want to watch Ryan Bates's [Railscast on FriendlyId](http://railscasts.com/episodes/314-pretty-urls-with-friendlyid),
 which is now somewhat outdated but still relevant.
+
+For a more updated getting started video, you may want to watch [GoRails #9](https://gorails.com/episodes/pretty-urls-with-friendly-id)
 
 ## Rails Quickstart
 
