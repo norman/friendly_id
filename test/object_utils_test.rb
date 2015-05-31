@@ -13,9 +13,9 @@ class ObjectUtilsTest < TestCaseClass
     assert 1.unfriendly_id?
   end
 
-  test "numeric strings are neither friendly nor unfriendly" do
+  test "numeric strings are not friendly but are unfriendly" do
     assert_equal nil, "1".friendly_id?
-    assert_equal nil, "1".unfriendly_id?
+    assert_equal false, "1".unfriendly_id?
   end
 
   test "ActiveRecord::Base instances should be unfriendly_ids" do
