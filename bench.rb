@@ -1,7 +1,7 @@
 require File.expand_path("../test/helper", __FILE__)
 require "ffaker"
 
-N = 1000
+N = 10000
 
 def transaction
   ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
