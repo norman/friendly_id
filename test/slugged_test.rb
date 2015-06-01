@@ -92,6 +92,47 @@ class SluggedTest < TestCaseClass
     end
   end
 
+  test "should not set slug on create if unrelated validations fail" do
+    klass = Class.new model_class do
+      validates_presence_of :active
+      friendly_id :name, :use => :slugged
+
+      def self.name
+        "Journalist"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'foo'
+      refute instance.save
+      refute instance.valid?
+      assert_nil instance.slug
+    end
+  end
+
+  test "should not update slug on save if unrelated validations fail" do
+    klass = Class.new model_class do
+      validates_presence_of :active
+      friendly_id :name, :use => :slugged
+
+      def self.name
+        "Journalist"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'foo', :active => true
+      assert instance.save
+      assert instance.valid?
+      instance.name = 'foobar'
+      instance.slug = nil
+      instance.active = nil
+      refute instance.save
+      refute instance.valid?
+      assert_equal 'foo', instance.slug
+    end
+  end
+
 end
 
 class SlugGeneratorTest < TestCaseClass
