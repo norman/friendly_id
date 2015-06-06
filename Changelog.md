@@ -9,6 +9,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Make Candidates#each iterable without block ([#651](https://github.com/norman/friendly_id/pull/651)).
 * Ensure slug history prefers the record that most recently used the slug ([#663](https://github.com/norman/friendly_id/pull/663)).
 * Don't calculate all changes just to check if the param field has changed ([#667](https://github.com/norman/friendly_id/pull/667)).
+* Don't set or change slug when unrelated validation failures block the record from being saved ([#642](https://github.com/norman/friendly_id/issues/642)).
 
 ## 5.1.0 (2015-01-15)
 

@@ -86,7 +86,7 @@ Here's an example of a class that uses a custom method to generate the slug:
     class Person < ActiveRecord::Base
       extend FriendlyId
       friendly_id :name_and_location, use: :slugged
-      
+
       def name_and_location
         "#{name} from #{location}"
       end
@@ -248,6 +248,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
         defaults[:sequence_separator] ||= '-'
       end
       model_class.before_validation :set_slug
+      model_class.after_validation :unset_slug_if_invalid
     end
 
     # Process the given value to make it suitable for use as a slug.
@@ -323,6 +324,14 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
     end
     private :slug_generator
+
+    def unset_slug_if_invalid
+      if errors.present? && attribute_changed?(friendly_id_config.query_field)
+        diff = changes[friendly_id_config.query_field]
+        self.slug = diff.first
+      end
+    end
+    private :unset_slug_if_invalid
 
     # This module adds the `:slug_column`, and `:sequence_separator`, and
     # `:slug_generator_class` configuration options to
