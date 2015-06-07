@@ -59,6 +59,10 @@ FriendlyId.defaults do |config|
   #
   # config.sequence_separator = '-'
   #
+  # Note that you must use the :slugged addon **prior** to the line which
+  # configures the sequence separator, or else FriendlyId will raise an undefined
+  # method error.
+  #
   #  ## Tips and Tricks
   #
   #  ### Controlling when slugs are generated
