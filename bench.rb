@@ -1,7 +1,7 @@
 require File.expand_path("../test/helper", __FILE__)
 require "ffaker"
 
-N = 1000
+N = 10000
 
 def transaction
   ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
@@ -37,7 +37,7 @@ MANUALS     = []
 RESTAURANTS = []
 
 100.times do
-  name = Faker::Name.name
+  name = FFaker::Name.name
   BOOKS       << (Book.create! :name => name).id
   JOURNALISTS << (Journalist.create! :name => name).friendly_id
   MANUALS     << (Manual.create! :name => name).friendly_id
@@ -64,18 +64,18 @@ Benchmark.bmbm do |x|
   end
 
   x.report 'insert (without FriendlyId)' do
-    N.times {transaction {Book.create :name => Faker::Name.name}}
+    N.times {transaction {Book.create :name => FFaker::Name.name}}
   end
 
   x.report 'insert (in-table-slug)' do
-    N.times {transaction {Journalist.create :name => Faker::Name.name}}
+    N.times {transaction {Journalist.create :name => FFaker::Name.name}}
   end
 
   x.report 'insert (in-table-slug; using finders module)' do
-    N.times {transaction {Restaurant.create :name => Faker::Name.name}}
+    N.times {transaction {Restaurant.create :name => FFaker::Name.name}}
   end
 
   x.report 'insert (external slug)' do
-    N.times {transaction {Manual.create :name => Faker::Name.name}}
+    N.times {transaction {Manual.create :name => FFaker::Name.name}}
   end
 end

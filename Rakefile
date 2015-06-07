@@ -36,6 +36,16 @@ task :bench => :load_path do
   require File.expand_path("../bench", __FILE__)
 end
 
+desc "Run benchmarks on finders"
+task :bench_finders => :load_path do
+  require File.expand_path("../test/benchmarks/finders", __FILE__)
+end
+
+desc "Run benchmarks on ObjectUtils"
+task :bench_object_utils => :load_path do
+  require File.expand_path("../test/benchmarks/object_utils", __FILE__)
+end
+
 desc "Generate Guide.md"
 task :guide do
   load File.expand_path('../guide.rb', __FILE__)
