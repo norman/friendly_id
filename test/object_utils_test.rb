@@ -4,6 +4,7 @@ require "helper"
 class ObjectUtilsTest < TestCaseClass
 
   include FriendlyId::Test
+  using FriendlyId::ObjectUtils
 
   test "strings with letters are friendly_ids" do
     assert "a".friendly_id?
@@ -13,9 +14,9 @@ class ObjectUtilsTest < TestCaseClass
     assert 1.unfriendly_id?
   end
 
-  test "numeric strings are not friendly but are unfriendly" do
+  test "numeric strings are neither friendly nor unfriendly" do
     assert_equal nil, "1".friendly_id?
-    assert_equal false, "1".unfriendly_id?
+    assert_equal nil, "1".unfriendly_id?
   end
 
   test "ActiveRecord::Base instances should be unfriendly_ids" do

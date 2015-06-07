@@ -1,4 +1,4 @@
-module FriendlyId
+module FriendlyId::ObjectUtils
 
   # Instances of these classes will never be considered a friendly id.
   UNFRIENDLY_CLASSES = [
@@ -19,7 +19,7 @@ module FriendlyId
   # cleaner than adding a module method to {FriendlyId}. I've given the methods
   # names that unambigously refer to the library of their origin, which should
   # be sufficient to avoid conflicts with other libraries.
-  module ObjectUtils
+  refine Object do
 
     # True if the id is definitely friendly, false if definitely unfriendly,
     # else nil.
@@ -51,22 +51,16 @@ module FriendlyId
       val = friendly_id? ; !val unless val.nil?
     end
   end
-  module StringUtils
-    def unfriendly_id?
-      # Note: This now returns false even in cases where the original method returned nil
-      false
-    end
-  end
-  module UnfriendlyUtils
-    def friendly_id?
-      false
-    end
-    def unfriendly_id?
-      true
-    end
-  end
-end
 
-Object.send :include, FriendlyId::ObjectUtils
-String.send :include, FriendlyId::StringUtils
-FriendlyId::UNFRIENDLY_CLASSES.each {|klass| klass.send(:include, FriendlyId::UnfriendlyUtils)}
+  UNFRIENDLY_CLASSES.each do |klass|
+    refine klass do
+      def friendly_id?
+        false
+      end
+      def unfriendly_id?
+        true
+      end
+    end
+  end
+
+end

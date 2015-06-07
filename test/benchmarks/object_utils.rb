@@ -1,5 +1,7 @@
 require File.expand_path("../../helper", __FILE__)
 
+using FriendlyId::ObjectUtils
+
 # This benchmark compares the timings of the friendly_id? and unfriendly_id? on various objects
 #
 # integer friendly_id?            6.370000   0.000000   6.370000 (  6.380925)

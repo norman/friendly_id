@@ -2,6 +2,8 @@ module FriendlyId
 
   module FinderMethods
 
+    using ::FriendlyId::ObjectUtils
+
     # Finds a record using the given id.
     #
     # If the id is "unfriendly", it will call the original find method.
