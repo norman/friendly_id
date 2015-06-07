@@ -1,10 +1,10 @@
 require "helper"
 
+using FriendlyId::ObjectUtils
 
 class ObjectUtilsTest < TestCaseClass
 
   include FriendlyId::Test
-  using FriendlyId::ObjectUtils
 
   test "strings with letters are friendly_ids" do
     assert "a".friendly_id?

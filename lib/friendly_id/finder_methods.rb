@@ -1,8 +1,8 @@
+using FriendlyId::ObjectUtils
+
 module FriendlyId
 
   module FinderMethods
-
-    using ::FriendlyId::ObjectUtils
 
     # Finds a record using the given id.
     #
