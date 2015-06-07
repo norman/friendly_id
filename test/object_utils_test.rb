@@ -1,7 +1,5 @@
 require "helper"
 
-using FriendlyId::ObjectUtils
-
 class ObjectUtilsTest < TestCaseClass
 
   include FriendlyId::Test

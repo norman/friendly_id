@@ -1,5 +1,3 @@
-using FriendlyId::ObjectUtils
-
 module FriendlyId
 
   module FinderMethods
