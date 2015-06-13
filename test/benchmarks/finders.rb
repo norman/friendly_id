@@ -13,10 +13,6 @@ require "ffaker"
 
 N = 50000
 
-def transaction
-  ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
-end
-
 class Array
   def rand
     self[Kernel.rand(length)]
@@ -25,37 +21,52 @@ end
 
 Book = Class.new ActiveRecord::Base
 
-class Journalist < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :name, :use => :slugged
-end
-
-class Manual < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :name, :use => :history
-end
-
 class Restaurant < ActiveRecord::Base
   extend FriendlyId
   friendly_id :name, :use => :finders
 end
 
+class UnfriendlyRestaurant < ActiveRecord::Base
+  self.table_name = 'restaurants'
+end
 
 BOOKS       = []
-JOURNALISTS = []
-MANUALS     = []
 RESTAURANTS = []
 
 100.times do
   name = FFaker::Name.name
   BOOKS       << (Book.create! :name => name).id
-  JOURNALISTS << (Journalist.create! :name => name).friendly_id
-  MANUALS     << (Manual.create! :name => name).friendly_id
   RESTAURANTS << (Restaurant.create! :name => name).friendly_id
 end
+RESTAURANT_IDS = Restaurant.ids
+RESTAURANT_ID_STRINGS = Restaurant.ids.map(&:to_s)
 
-ActiveRecord::Base.connection.execute "UPDATE manuals SET slug = NULL"
+puts 'Comparing .find() with and without Finders and using integer ids, string ids, and string slugs'
+Benchmark.bmbm do |x|
 
+  x.report 'Unfriendly: find(id integer)' do
+    N.times {UnfriendlyRestaurant.find RESTAURANT_IDS.rand}
+  end
+
+  x.report 'FriendlyFinder: find(id integer)' do
+    N.times {Restaurant.find RESTAURANT_IDS.rand}
+  end
+
+  x.report 'Unfriendly: find(id string)' do
+    N.times {UnfriendlyRestaurant.find RESTAURANT_ID_STRINGS.rand}
+  end
+
+  x.report 'FriendlyFinder: find(id string)' do
+    N.times {Restaurant.find RESTAURANT_ID_STRINGS.rand}
+  end
+
+  x.report 'FriendlyFinder: find(slug string)' do
+    N.times {Restaurant.find RESTAURANTS.rand}
+  end
+
+end
+
+puts 'Comparing ActiveRecord query approaches'
 Benchmark.bmbm do |x|
   x.report 'ActiveRecord: where.first' do
     N.times {Book.where(:id=>BOOKS.rand).first}
