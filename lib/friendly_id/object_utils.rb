@@ -50,18 +50,6 @@ module FriendlyId
     def unfriendly_id?
       val = friendly_id? ; !val unless val.nil?
     end
-
-    # True unless the id is definitely unfriendly
-    def possibly_friendly_id?
-      !unfriendly_id?
-    end
-  end
-
-  module StringUtils
-    # Fast response to this check without creating an interim String
-    def possibly_friendly_id?
-      true
-    end
   end
 
   module UnfriendlyUtils
@@ -71,13 +59,9 @@ module FriendlyId
     def unfriendly_id?
       true
     end
-    def possibly_friendly_id?
-      false
-    end
   end
 
 end
 
 Object.send :include, FriendlyId::ObjectUtils
-String.send :include, FriendlyId::StringUtils
-FriendlyId::UNFRIENDLY_CLASSES.each {|klass| klass.send(:include, FriendlyId::UnfriendlyUtils)}
+FriendlyId::UNFRIENDLY_CLASSES.each { |klass| klass.send(:include, FriendlyId::UnfriendlyUtils) }

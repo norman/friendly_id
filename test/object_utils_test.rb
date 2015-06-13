@@ -6,19 +6,16 @@ class ObjectUtilsTest < TestCaseClass
 
   test "strings with letters are friendly_ids" do
     assert "a".friendly_id?
-    assert "a".possibly_friendly_id?
     refute "a".unfriendly_id?
   end
 
   test "integers should be unfriendly ids" do
     refute 1.friendly_id?
-    refute 1.possibly_friendly_id?
     assert 1.unfriendly_id?
   end
 
-  test "numeric strings are neither friendly nor unfriendly but are possibly friendly" do
+  test "numeric strings are neither friendly nor unfriendly" do
     assert_nil "1".friendly_id?
-    assert "1".possibly_friendly_id?
     assert_nil "1".unfriendly_id?
   end
 
@@ -27,7 +24,6 @@ class ObjectUtilsTest < TestCaseClass
       self.table_name = "authors"
     end
     refute model_class.new.friendly_id?
-    refute model_class.new.possibly_friendly_id?
     assert model_class.new.unfriendly_id?
   end
 
@@ -36,7 +32,6 @@ class ObjectUtilsTest < TestCaseClass
     numericish_string_object = TestClass.new(123, "123abc")
 
     assert numericish_string_object.friendly_id?
-    assert numericish_string_object.possibly_friendly_id?
     refute numericish_string_object.unfriendly_id?
   end
 
