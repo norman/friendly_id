@@ -263,6 +263,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     # ### Example
     #
     #     class Person < ActiveRecord::Base
+    #       extend FriendlyId
     #       friendly_id :name_and_location
     #
     #       def name_and_location
