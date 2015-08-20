@@ -8,8 +8,8 @@ class CreateFriendlyIdSlugs < ActiveRecord::Migration
       t.datetime :created_at
     end
     add_index :friendly_id_slugs, :sluggable_id
-    add_index :friendly_id_slugs, [:slug, :sluggable_type]
-    add_index :friendly_id_slugs, [:slug, :sluggable_type, :scope], :unique => true
+    add_index :friendly_id_slugs, [:slug, :sluggable_type], length: { name: 100, slug: 20, sluggable_type: 20 }
+    add_index :friendly_id_slugs, [:slug, :sluggable_type, :scope], length: { name: 100, slug: 20, sluggable_type: 20, scope: 20 }, unique: true
     add_index :friendly_id_slugs, :sluggable_type
   end
 end
