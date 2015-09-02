@@ -288,7 +288,18 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     # @param [#to_s] value The value used as the basis of the slug.
     # @return The candidate slug text, without a sequence.
     def normalize_friendly_id(value)
-      value.to_s.parameterize
+      strip_posessive_apostrophes(value).parameterize
+    end
+
+
+    # Removes single apostrophes indicating possesion
+    # Like "boy's", "girl's", etc
+    # BEFORE parameterizing, so we get
+    # boys, girls
+    # rather than
+    # boy-s, girls-s
+    def strip_posessive_apostrophes(value)
+      value.to_s.gsub(/'s /,'s ').gsub(/'s$/,'s')
     end
 
     # Whether to generate a new slug.

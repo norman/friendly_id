@@ -190,6 +190,17 @@ class SlugGeneratorTest < TestCaseClass
     end
   end
 
+  test "should correctly sequence slugs with single possessive apostrophes" do
+    transaction do
+      record1 = Novelist.create! :name => "bull's eye"
+      assert_equal 'bulls_eye', record1.slug
+      record2 = Novelist.create! :name => "red bull's eye"
+      assert_equal 'red_bulls_eye', record2.slug
+      record3 = Novelist.create! :name => "red bull's"
+      assert_equal 'red_bulls', record3.slug
+    end
+  end
+
   test "should correctly sequence numeric slugs" do
     transaction do
       n2 = 2.times.map {Article.create :name => '123'}.last
