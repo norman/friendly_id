@@ -41,7 +41,7 @@ method.
       ...
 
       def find_post
-        @post = Post.find params[:id]
+        @post = Post.friendly.find params[:id]
 
         # If an old id or a numeric id was used to find the record, then
         # the request path will not match the post_path, and we should do

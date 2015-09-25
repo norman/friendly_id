@@ -72,7 +72,12 @@ FriendlyId.defaults do |config|
   # behavior by overriding the `should_generate_new_friendly_id?` method that
   # FriendlyId adds to your model. The change below makes FriendlyId 5.0 behave
   # more like 4.0.
+  # Note: Use(include) Slugged module in the config if using the anonymous module.
+  # If you have `friendly_id :name, use: slugged` in the model, Slugged module
+  # is included after the anonymous module defined in the initializer, so it
+  # overrides the `should_generate_new_friendly_id?` method from the anonymous module.
   #
+  # config.use :slugged
   # config.use Module.new {
   #   def should_generate_new_friendly_id?
   #     slug.blank? || <your_column_name_here>_changed?
