@@ -36,9 +36,12 @@ module FriendlyId
       end
 
       def last_sequence_number
-        if match = /#{slug}#{sequence_separator}(\d+)\z/.match(slug_conflicts.last)
-          match[1].to_i
+        slug_conflicts.reverse_each do |conflict|
+          match = /#{slug}#{sequence_separator}(\d+)\z/.match(conflict)
+          return match[1].to_i if match
         end
+
+        nil
       end
 
       def slug_conflicts

@@ -30,6 +30,18 @@ class SequentiallySluggedTest < TestCaseClass
     slug_candidates_model_class.new.valid?
   end
 
+  test "should not raise error when generating numerical slugs with multiple candidate columns" do
+    record_1 = slug_candidates_model_class.create!(:name => "Toronto", :code => "YYZ")
+    record_2 = slug_candidates_model_class.create!(:name => "Toronto", :code => "YYZ")
+    record_3 = slug_candidates_model_class.create!(:name => "Toronto", :code => "YYZ")
+    record_4 = slug_candidates_model_class.create!(:name => "Toronto", :code => "YYZ")
+
+    assert_equal 'toronto', record_1.slug
+    assert_equal 'toronto-yyz', record_2.slug
+    assert_equal 'toronto-2', record_3.slug
+    assert_equal 'toronto-3', record_4.slug
+  end
+
   test "should generate numerically sequential slugs" do
     transaction do
       records = 12.times.map { model_class.create! :name => "Some news" }
