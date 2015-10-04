@@ -26,7 +26,7 @@ module FriendlyId
       end
 
       def next_slug
-        slug + sequence_separator + next_sequence_number.to_s
+        [slug, next_sequence_number].compact.join(sequence_separator)
       end
 
     private

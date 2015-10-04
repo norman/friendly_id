@@ -13,6 +13,23 @@ class SequentiallySluggedTest < TestCaseClass
     Article
   end
 
+  class City < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :slug_candidates, use: :sequentially_slugged
+
+    def slug_candidates
+      [name, [name, code]]
+    end
+  end
+
+  def slug_candidates_model_class
+    City
+  end
+
+  test "should not raise error when validating with nil slug candidates" do
+    slug_candidates_model_class.new.valid?
+  end
+
   test "should generate numerically sequential slugs" do
     transaction do
       records = 12.times.map { model_class.create! :name => "Some news" }
