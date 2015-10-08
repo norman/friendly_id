@@ -246,7 +246,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     def to_param
       if attribute_changed?(friendly_id_config.query_field)
         diff = changes[friendly_id_config.query_field]
-        diff.first || diff.second
+        diff.second || diff.first
       else
         friendly_id.presence.to_param || super
       end

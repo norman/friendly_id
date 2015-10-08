@@ -133,6 +133,14 @@ class SluggedTest < TestCaseClass
     end
   end
 
+  test "to_param should work with changed but unsaved slug" do
+    with_instance_of(model_class) do |record|
+      old_id = record.friendly_id
+      record.slug = 'foobar'
+      assert_equal 'foobar', record.to_param
+    end
+  end
+
 end
 
 class SlugGeneratorTest < TestCaseClass
