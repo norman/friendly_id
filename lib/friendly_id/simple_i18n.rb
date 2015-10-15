@@ -37,15 +37,15 @@ friendly_id_globalize gem instead.
 Finds will take into consideration the current locale:
 
     I18n.locale = :es
-    Post.find("la-guerra-de-las-galaxias")
+    Post.friendly.find("la-guerra-de-las-galaxias")
     I18n.locale = :en
-    Post.find("star-wars")
+    Post.friendly.find("star-wars")
 
 To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's `with_locale` method:
 
     I18n.with_locale(:es) do
-      Post.find("la-guerra-de-las-galaxias")
+      Post.friendly.find("la-guerra-de-las-galaxias")
     end
 
 ### Creating Records
