@@ -9,7 +9,7 @@ module FriendlyId
     # id matching '123' and then fall back to looking for a record with the
     # numeric id '123'.
     #
-    # Since FriendlyId 5.0, if the id is a numeric string like '123-foo' it
+    # Since FriendlyId 5.0, if the id is a nonnumeric string like '123-foo' it
     # will *only* search by friendly id and not fall back to the regular find
     # method.
     #
