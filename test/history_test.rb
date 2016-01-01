@@ -217,7 +217,7 @@ class HistoryTestWithFriendlyFinders < HistoryTest
   end
 end
 
-class HistoryTestWithFriendlyFindersModuleBeforeHistory < HistoryTest
+class HistoryTestWithFindersBeforeHistory < HistoryTest
   class Novelist < ActiveRecord::Base
     has_many :novels
   end
