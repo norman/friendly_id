@@ -79,7 +79,7 @@ method.
       include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
-        joins(:slugs).where(arel_table[friendly_id_config.query_field].eq(id)).exists? || joins(:slugs).where(slug_history_clause(id)).exists?
+        where(arel_table[friendly_id_config.query_field].eq(id)).exists? || joins(:slugs).where(slug_history_clause(id)).exists?
       end
 
       private
@@ -106,7 +106,7 @@ method.
     def scope_for_slug_generator
       relation = super
       return relation if new_record?
-      relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+      relation = relation.joins(:slugs).merge(Slug.where('sluggable_id <> ?', id))
       if friendly_id_config.uses?(:scoped)
         relation = relation.where(Slug.arel_table[:scope].eq(serialized_scope))
       end
