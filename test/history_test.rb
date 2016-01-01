@@ -217,6 +217,36 @@ class HistoryTestWithFriendlyFinders < HistoryTest
   end
 end
 
+class HistoryTestWithFriendlyFindersModuleBeforeHistory < HistoryTest
+  class Novelist < ActiveRecord::Base
+    has_many :novels
+  end
+
+  class Novel < ActiveRecord::Base
+    extend FriendlyId
+
+    belongs_to :novelist
+
+    friendly_id :name, :use => [:finders, :history]
+
+    def should_generate_new_friendly_id?
+      slug.blank? || name_changed?
+    end
+  end
+
+  test "should be findable by old slug through has_many association" do
+    transaction do
+      novelist = Novelist.create!(:name => "Stephen King")
+      novel = novelist.novels.create(:name => "Rita Hayworth and Shawshank Redemption")
+      slug = novel.slug
+      novel.name = "Shawshank Redemption"
+      novel.save!
+      assert_equal novel, Novel.find(slug)
+      assert_equal novel, novelist.novels.find(slug)
+    end
+  end
+end
+
 class City < ActiveRecord::Base
   has_many :restaurants
 end

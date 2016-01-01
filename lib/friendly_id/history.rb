@@ -58,12 +58,7 @@ method.
       model_class.instance_eval do
         friendly_id_config.use :slugged
         friendly_id_config.finder_methods = FriendlyId::History::FinderMethods
-        if friendly_id_config.uses? :finders
-          relation.class.send(:include, friendly_id_config.finder_methods)
-          if ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 2
-            model_class.send(:extend, friendly_id_config.finder_methods)
-          end
-        end
+        FriendlyId::Finders.setup(model_class) if friendly_id_config.uses? :finders
       end
     end
 
