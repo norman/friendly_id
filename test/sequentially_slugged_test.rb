@@ -89,6 +89,22 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
+  test "should not generate a slug when canidates set is empty" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "cities"
+      extend FriendlyId
+      friendly_id :slug_candidates, :use => [ :sequentially_slugged ]
+
+      def slug_candidates
+        [name, [name, code]]
+      end
+    end
+    transaction do
+      record = model_class.create!(:name => nil, :code => nil)
+      assert_nil record.slug
+    end
+  end
+
   test "should not generate a slug when the sluggable attribute is blank" do
     record = model_class.create!(:name => '')
     assert_nil record.slug
