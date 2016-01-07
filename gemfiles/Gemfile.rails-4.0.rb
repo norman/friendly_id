@@ -17,7 +17,7 @@ group :development, :test do
 
   platforms :ruby, :rbx do
     gem 'sqlite3'
-    gem 'mysql2'
+    gem 'mysql2', '~> 0.3.10'
     gem 'pg'
     gem 'redcarpet'
   end
