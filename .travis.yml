@@ -2,11 +2,11 @@ language: ruby
 cache: bundler
 
 rvm:
+  - 2.3.0
   - 2.2.0
-  - 2.0.0
   - 2.1.0
-  - jruby-19mode
-  - rbx-2
+  - 2.0.0
+  - jruby-9.0.4.0
 
 env:
   - DB=postgres
@@ -25,6 +25,7 @@ matrix:
 
 sudo: false
 
-before_script: 'bundle exec rake db:create db:up'
+before_script:
+  - bundle exec rake db:create db:up
 
 script: 'COVERALLS=true bundle exec rake test'
