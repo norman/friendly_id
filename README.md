@@ -16,7 +16,7 @@ over and over and over again in the issues.
 
 # FriendlyId
 
-<em>For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://norman.github.io/friendly_id/file.Guide.html).</em>
+**For the most complete, user-friendly documentation, see the [FriendlyId Guide](http://norman.github.io/friendly_id/file.Guide.html).**
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Active Record. It lets you create pretty URLs and work with human-friendly
