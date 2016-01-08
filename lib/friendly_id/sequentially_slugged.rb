@@ -4,13 +4,11 @@ module FriendlyId
       model_class.friendly_id_config.use :slugged
     end
 
-    def should_generate_new_friendly_id?
-      send(friendly_id_config.base).present? && super
-    end
-
     def resolve_friendly_id_conflict(candidate_slugs)
+      candidate = candidate_slugs.first
+      return if candidate.nil?
       SequentialSlugCalculator.new(scope_for_slug_generator,
-                                  candidate_slugs.first,
+                                  candidate,
                                   friendly_id_config.slug_column,
                                   friendly_id_config.sequence_separator).next_slug
     end
