@@ -1,14 +1,14 @@
 require "helper"
 
-class Manual < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :name, :use => [:slugged, :history]
-end
-
 class HistoryTest < TestCaseClass
 
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
+
+  class Manual < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:slugged, :history]
+  end
 
   def model_class
     Manual
@@ -168,6 +168,45 @@ class HistoryTestWithAutomaticSlugRegeneration < HistoryTest
       record.name = 'foo'
       record.save!
       assert_equal 'foo', record.friendly_id
+    end
+  end
+end
+
+class DependentDestroyTest < HistoryTest
+
+  include FriendlyId::Test
+
+  class FalseManual < ActiveRecord::Base
+    self.table_name = 'manuals'
+
+    extend FriendlyId
+    friendly_id :name, :use => :history, :dependent => false
+  end
+
+  class DefaultManual < ActiveRecord::Base
+    self.table_name = 'manuals'
+
+    extend FriendlyId
+    friendly_id :name, :use => :history
+  end
+
+  test 'should allow disabling of dependent destroy' do
+    transaction do
+      assert FriendlyId::Slug.find_by_slug('foo').nil?
+      l = FalseManual.create! :name => 'foo'
+      assert FriendlyId::Slug.find_by_slug('foo').present?
+      l.destroy
+      assert FriendlyId::Slug.find_by_slug('foo').present?
+    end
+  end
+
+  test 'should dependently destroy by default' do
+    transaction do
+      assert FriendlyId::Slug.find_by_slug('baz').nil?
+      l = DefaultManual.create! :name => 'baz'
+      assert FriendlyId::Slug.find_by_slug('baz').present?
+      l.destroy
+      assert FriendlyId::Slug.find_by_slug('baz').nil?
     end
   end
 end
