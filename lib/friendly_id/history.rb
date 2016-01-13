@@ -54,9 +54,16 @@ method.
 =end
   module History
 
+    module Configuration
+      def dependent_value
+        dependent.nil? ? :destroy : dependent
+      end
+    end
+
     def self.setup(model_class)
       model_class.instance_eval do
         friendly_id_config.use :slugged
+        friendly_id_config.class.send :include, History::Configuration
         friendly_id_config.finder_methods = FriendlyId::History::FinderMethods
         FriendlyId::Finders.setup(model_class) if friendly_id_config.uses? :finders
       end
@@ -67,7 +74,7 @@ method.
       model_class.class_eval do
         has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
           :as         => :sluggable,
-          :dependent  => :destroy,
+          :dependent  => @friendly_id_config.dependent_value,
           :class_name => Slug.to_s
         }
 
