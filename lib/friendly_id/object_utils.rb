@@ -29,10 +29,12 @@ module FriendlyId
     def friendly_id?
       # Considered unfriendly if this is an instance of an unfriendly class or
       # one of its descendants.
-      if FriendlyId::UNFRIENDLY_CLASSES.detect {|klass| self.class <= klass}
+      if self.is_a?(Numeric)
         false
       elsif respond_to?(:to_i) && to_i.to_s != to_s
         true
+      elsif FriendlyId::UNFRIENDLY_CLASSES.detect {|klass| self.is_a?(klass) }
+        false
       end
     end
 
