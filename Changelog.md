@@ -11,6 +11,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Don't calculate all changes just to check if the param field has changed ([#667](https://github.com/norman/friendly_id/pull/667)).
 * Don't set or change slug when unrelated validation failures block the record from being saved ([#642](https://github.com/norman/friendly_id/issues/642)).
 * Fix order dependence bug between history and finders modules ([#718](https://github.com/norman/friendly_id/pull/718))
+* Added ability to conditionally turn off :dependent => :destory on FriendlyId::Slugs([#724](https://github.com/norman/friendly_id/pull/724))
 
 ## 5.1.0 (2015-01-15)
 
