@@ -40,13 +40,7 @@ module FriendlyId
     #     "123".friendly_id?                #=> nil
     #     "abc123".friendly_id?             #=> true
     def friendly_id?
-      # Considered unfriendly if this is an instance of an unfriendly class or
-      # one of its descendants.
-      if FriendlyId::UNFRIENDLY_CLASSES.detect {|klass| self.class <= klass}
-        false
-      elsif respond_to?(:to_i) && to_i.to_s != to_s
-        true
-      end
+      true if respond_to?(:to_i) && to_i.to_s != to_s
     end
 
     # True if the id is definitely unfriendly, false if definitely friendly,
@@ -55,6 +49,21 @@ module FriendlyId
       val = friendly_id? ; !val unless val.nil?
     end
   end
+
+  module UnfriendlyUtils
+    def friendly_id?
+      false
+    end
+
+    def unfriendly_id?
+      true
+    end
+  end
 end
 
 Object.send :include, FriendlyId::ObjectUtils
+
+# Considered unfriendly if object is an instance of an unfriendly class or
+# one of its descendants.
+
+FriendlyId::UNFRIENDLY_CLASSES.each { |klass| klass.send(:include, FriendlyId::UnfriendlyUtils) }
