@@ -1,4 +1,17 @@
 module FriendlyId
+  # Instances of these classes will never be considered a friendly id.
+  # @see FriendlyId::ObjectUtils#friendly_id
+  UNFRIENDLY_CLASSES = [
+    ActiveRecord::Base,
+    Array,
+    FalseClass,
+    Hash,
+    NilClass,
+    Numeric,
+    Symbol,
+    TrueClass
+  ]
+
   # Utility methods for determining whether any object is a friendly id.
   #
   # Monkey-patching Object is a somewhat extreme measure not to be taken lightly
