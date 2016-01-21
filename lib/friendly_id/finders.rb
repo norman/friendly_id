@@ -76,7 +76,7 @@ for models that use FriendlyId with something similar to the following:
     def self.setup(model_class)
       model_class.instance_eval do
         relation.class.send(:include, friendly_id_config.finder_methods)
-        if ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 2
+        if (ActiveRecord::VERSION::MAJOR == 4 && ActiveRecord::VERSION::MINOR == 2) || ActiveRecord::VERSION::MAJOR == 5
           model_class.send(:extend, friendly_id_config.finder_methods)
         end
       end
