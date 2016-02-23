@@ -40,9 +40,12 @@ module FriendlyId
       end
 
       def slug_conflicts
-        scope.
-          where(conflict_query, slug, sequential_slug_matcher).
-          order(ordering_query).pluck(slug_column)
+        conflicts = scope.
+                      where(conflict_query, slug, sequential_slug_matcher).
+                      order(ordering_query).pluck(slug_column)
+
+        # ensures that all conflicts contain the slug, separator, and number
+        conflicts.select { |conflict| /#{slug}#{sequence_separator}\d/.match(conflict) }
       end
 
       def conflict_query
@@ -70,3 +73,4 @@ module FriendlyId
     end
   end
 end
+

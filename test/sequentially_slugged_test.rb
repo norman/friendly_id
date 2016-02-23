@@ -39,6 +39,22 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
+  test "should cope with additional conflict records due to slug being a substring" do
+    transaction do
+      record_0 = model_class.create!(:name => 'A thing that is a thing')
+      record_1 = model_class.create!(:name => 'A thing')
+      record_2 = model_class.create!(:name => 'A thing')
+
+      assert_equal 'a-thing-that-is-a-thing', record_0.slug
+      assert_equal 'a-thing', record_1.slug
+      assert_equal 'a-thing-2', record_2.slug
+
+      record_3 = model_class.create!(:name => 'A thing')
+
+      assert_equal 'a-thing-3', record_3.slug
+    end
+  end
+
   test "should cope with strange column names" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "journalists"
@@ -89,7 +105,7 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
-  test "should not generate a slug when canidates set is empty" do
+  test "should not generate a slug when candidates set is empty" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "cities"
       extend FriendlyId
@@ -110,3 +126,4 @@ class SequentiallySluggedTest < TestCaseClass
     assert_nil record.slug
   end
 end
+
