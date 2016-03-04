@@ -29,6 +29,7 @@ module FriendlyId
       @defaults       = {}
       @modules        = []
       @finder_methods = FriendlyId::FinderMethods
+      self.routes = :friendly
       set values
     end
 

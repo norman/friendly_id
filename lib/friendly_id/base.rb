@@ -196,7 +196,6 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     def friendly_id(base = nil, options = {}, &block)
       yield friendly_id_config if block_given?
       friendly_id_config.dependent = options.delete :dependent
-      # friendly_id_config.routes = (options.delete(:routes) || :friendly)
       friendly_id_config.use options.delete :use
       friendly_id_config.send :set, base ? options.merge(:base => base) : options
       include Model
