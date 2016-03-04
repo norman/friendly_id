@@ -13,6 +13,7 @@ suggestions, ideas and improvements to FriendlyId.
 * Fix order dependence bug between history and finders modules ([#718](https://github.com/norman/friendly_id/pull/718))
 * Added ability to conditionally turn off :dependent => :destory on FriendlyId::Slugs([#724](https://github.com/norman/friendly_id/pull/724))
 * Add support for Rails 5. ([#728](https://github.com/norman/friendly_id/pull/728))
+* Allow per-model conditional disabling of friendly path generation using a :routes option to friendly_id ([#735](https://github.com/norman/friendly_id/pull/735))
 
 ## 5.1.0 (2015-01-15)
 
