@@ -373,3 +373,35 @@ class FailedValidationAfterUpdateRegressionTest < TestCaseClass
   end
 
 end
+
+class ConfigurableRoutesTest < TestCaseClass
+  include FriendlyId::Test
+
+  class Article < ActiveRecord::Base
+    extend FriendlyId
+
+    friendly_id :name, :use => :slugged, :routes => :friendly
+  end
+
+  class Novel < ActiveRecord::Base
+    extend FriendlyId
+
+    friendly_id :name, :use => :slugged, :routes => :default
+  end
+
+  test "to_param should return a friendly id when the routes option is set to :friendly" do
+    transaction do
+      article = Article.create! :name => "Titanic Hits; Iceberg Sinks"
+
+      assert_equal "titanic-hits-iceberg-sinks", article.to_param
+    end
+  end
+
+  test "to_param should return the id when the routes option is set to anything but friendly" do
+    transaction do
+      novel = Novel.create! :name => "Don Quixote"
+
+      assert_equal novel.id.to_s, novel.to_param
+    end
+  end
+end
