@@ -21,6 +21,9 @@ module FriendlyId
     # The value used for the slugged association's dependent option
     attr_accessor :dependent
 
+    # Route generation preferences
+    attr_accessor :routes
+
     def initialize(model_class, values = nil)
       @model_class    = model_class
       @defaults       = {}

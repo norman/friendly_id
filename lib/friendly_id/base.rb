@@ -196,6 +196,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     def friendly_id(base = nil, options = {}, &block)
       yield friendly_id_config if block_given?
       friendly_id_config.dependent = options.delete :dependent
+      # friendly_id_config.routes = (options.delete(:routes) || :friendly)
       friendly_id_config.use options.delete :use
       friendly_id_config.send :set, base ? options.merge(:base => base) : options
       include Model
@@ -250,11 +251,15 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
-      if attribute_changed?(friendly_id_config.query_field)
-        diff = changes[friendly_id_config.query_field]
-        diff.first || diff.second
+      if friendly_id_config.routes == :friendly
+        if attribute_changed?(friendly_id_config.query_field)
+          diff = changes[friendly_id_config.query_field]
+          diff.first || diff.second
+        else
+          friendly_id.presence.to_param || super
+        end
       else
-        friendly_id.presence.to_param || super
+        super
       end
     end
 
