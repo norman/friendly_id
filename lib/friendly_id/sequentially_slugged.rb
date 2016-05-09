@@ -34,9 +34,10 @@ module FriendlyId
       end
 
       def last_sequence_number
-        if match = /#{slug}#{sequence_separator}(\d+)\z/.match(slug_conflicts.last)
-          match[1].to_i
-        end
+        regex = /#{slug}#{sequence_separator}(\d+)\z/
+        slug_conflicts.map { |slug_conflict|
+          regex.match(slug_conflict).to_a.last
+        }.compact.last.try(:to_i)
       end
 
       def slug_conflicts

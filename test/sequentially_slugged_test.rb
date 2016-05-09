@@ -109,4 +109,18 @@ class SequentiallySluggedTest < TestCaseClass
     record = model_class.create!(:name => '')
     assert_nil record.slug
   end
+
+  test "should skip slugs which are different but share same stem" do
+    transaction do
+      record_1 = model_class.create!(:name => 'A thing')
+      record_2 = model_class.create!(:name => 'A thing')
+      record_3 = model_class.create!(:name => 'A thing test')
+      record_4 = model_class.create!(:name => 'A thing')
+
+      assert_equal 'a-thing', record_1.slug
+      assert_equal 'a-thing-2', record_2.slug
+      assert_equal 'a-thing-test', record_3.slug
+      assert_equal 'a-thing-3', record_4.slug
+    end
+  end
 end
