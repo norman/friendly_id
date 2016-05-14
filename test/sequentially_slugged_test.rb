@@ -109,4 +109,47 @@ class SequentiallySluggedTest < TestCaseClass
     record = model_class.create!(:name => '')
     assert_nil record.slug
   end
+
+  test "should correctly sequence with \% character at the end" do
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot %"
+      assert_equal "peugeuot", record1.slug
+      record2 = model_class.create! :name => "Peugeuot %"
+      assert_equal "peugeuot-2", record2.slug
+    end
+  end
+
+  test "should correctly sequence with \% character at the beginning" do
+    transaction do
+      record1 = model_class.create! :name => "% Peugeuot"
+      assert_equal "peugeuot", record1.slug
+      record2 = model_class.create! :name => "% Peugeuot"
+      assert_equal "peugeuot-2", record2.slug
+    end
+  end
+
+  test "should correctly sequence with \% character in the middle" do
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot%Peugeuot"
+      assert_equal "peugeuot-peugeuot", record1.slug
+      record2 = model_class.create! :name => "Peugeuot%Peugeuot"
+      assert_equal "peugeuot-peugeuot-2", record2.slug
+    end
+  end
+
+  test "should correctly sequence with _ character" do
+    transaction do
+      record1 = model_class.create! :name => "Peugeuot"
+      assert_equal "peugeuot", record1.slug
+      record2 = model_class.create! :name => "Peugeuot"
+      assert_equal "peugeuot-2", record2.slug
+      record3 = model_class.create! :name => "Peugeuot"
+      assert_equal "peugeuot-3", record3.slug
+
+      record1a = model_class.create! :name => "Peu_euot"
+      assert_equal "peu_euot", record1a.slug
+      record2a = model_class.create! :name => "Peu_euot"
+      assert_equal "peu_euot-2", record2a.slug
+    end
+  end
 end
