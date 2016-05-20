@@ -299,6 +299,15 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       send(friendly_id_config.slug_column).nil? && !send(friendly_id_config.base).nil?
     end
 
+    # Whether to allow changing slug manually
+    #
+    # This method can be overrided in your model. By default you can not
+    # change slug through `#update_attributes`. But you can set on that by, for example,
+    # simple check `self.slug_changed?`
+    def should_manually_change_friendly_id?
+      false
+    end
+
     def resolve_friendly_id_conflict(candidates)
       [candidates.first, SecureRandom.uuid].compact.join(friendly_id_config.sequence_separator)
     end
@@ -307,6 +316,10 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
+        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        send "#{friendly_id_config.slug_column}=", slug
+      elsif should_manually_change_friendly_id?
+        candidates = FriendlyId::Candidates.new(self, self.slug)
         slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
         send "#{friendly_id_config.slug_column}=", slug
       end

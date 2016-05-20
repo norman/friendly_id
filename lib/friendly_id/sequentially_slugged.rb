@@ -7,9 +7,10 @@ module FriendlyId
     def resolve_friendly_id_conflict(candidate_slugs)
       candidate = candidate_slugs.first
       return if candidate.nil?
+      column_table = self.class.table_name
       SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
-                                  friendly_id_config.slug_column,
+                                  "#{column_table}.#{friendly_id_config.slug_column}",
                                   friendly_id_config.sequence_separator).next_slug
     end
 
@@ -19,7 +20,7 @@ module FriendlyId
       def initialize(scope, slug, slug_column, sequence_separator)
         @scope = scope
         @slug = slug
-        @slug_column = scope.connection.quote_column_name(slug_column)
+        @slug_column = slug_column #scope.connection.quote_column_name(slug_column)
         @sequence_separator = sequence_separator
       end
 
