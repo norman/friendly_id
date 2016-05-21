@@ -7,20 +7,21 @@ module FriendlyId
     def resolve_friendly_id_conflict(candidate_slugs)
       candidate = candidate_slugs.first
       return if candidate.nil?
-      column_table = self.class.table_name
       SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
-                                  "#{column_table}.#{friendly_id_config.slug_column}",
+                                  self.class.table_name,
+                                  friendly_id_config.slug_column,
                                   friendly_id_config.sequence_separator).next_slug
     end
 
     class SequentialSlugCalculator
-      attr_accessor :scope, :slug, :slug_column, :sequence_separator
+      attr_accessor :scope, :slug, :sluggable_table, :slug_column, :sequence_separator
 
-      def initialize(scope, slug, slug_column, sequence_separator)
+      def initialize(scope, slug, sluggable_table, slug_column, sequence_separator)
         @scope = scope
         @slug = slug
-        @slug_column = slug_column #scope.connection.quote_column_name(slug_column)
+        @sluggable_table = scope.connection.quote_table_name(sluggable_table)
+        @slug_column = scope.connection.quote_column_name(slug_column)
         @sequence_separator = sequence_separator
       end
 
@@ -28,7 +29,7 @@ module FriendlyId
         slug + sequence_separator + next_sequence_number.to_s
       end
 
-    private
+      private
 
       def next_sequence_number
         last_sequence_number ? last_sequence_number + 1 : 2
@@ -43,11 +44,11 @@ module FriendlyId
       def slug_conflicts
         scope.
           where(conflict_query, slug, sequential_slug_matcher).
-          order(ordering_query).pluck(slug_column)
+          order(ordering_query).pluck(full_slug_column)
       end
 
       def conflict_query
-        base = "#{slug_column} = ? OR #{slug_column} LIKE ?"
+        base = "#{full_slug_column} = ? OR #{full_slug_column} LIKE ?"
         # Awful hack for SQLite3, which does not pick up '\' as the escape character
         # without this.
         base << " ESCAPE '\\'" if scope.connection.adapter_name =~ /sqlite/i
@@ -66,7 +67,11 @@ module FriendlyId
       def ordering_query
         length_command = "LENGTH"
         length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
-        "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+        "#{length_command}(#{full_slug_column}) ASC, #{full_slug_column} ASC"
+      end
+
+      def full_slug_column
+        "#{sluggable_table}.#{slug_column}"
       end
     end
   end
