@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
-gem 'activerecord', '~> 5.0.0.beta2'
-gem 'railties', '~> 5.0.0.beta2'
+gem 'activerecord', '~> 5.0.0'
+gem 'railties', '~> 5.0.0'
 gem 'i18n', '~> 0.7.0'
 
 # Database Configuration
