@@ -10,26 +10,35 @@ module FriendlyId
 
     def initialize(object, *array)
       @object = object
-      @candidates = to_candidate_array(object, array.flatten(1))
+      @raw_candidates = to_candidate_array(object, array.flatten(1))
     end
 
-    # Visits each candidate, calls it, passes it to `normalize_friendly_id` and
-    # yields any wanted and unreserved slug candidates.
     def each(*args, &block)
-      pre_candidates = @candidates.map do |candidate|
-        @object.normalize_friendly_id(candidate.map(&:call).join(' '))
-      end.select {|x| wanted?(x)}
-
-      unless pre_candidates.all? {|x| reserved?(x)}
-        pre_candidates.reject! {|x| reserved?(x)}
-      end
-
-      return pre_candidates unless block_given?
-
-      pre_candidates.each {|x| yield x}
+      return candidates unless block_given?
+      candidates.each{ |candidate| yield candidate }
     end
 
     private
+
+    def candidates
+      @candidates ||= begin
+        candidates = normalize(@raw_candidates)
+        filter(candidates)
+      end
+    end
+
+    def normalize(candidates)
+      candidates.map do |candidate|
+        @object.normalize_friendly_id(candidate.map(&:call).join(' '))
+      end.select {|x| wanted?(x)}
+    end
+
+    def filter(candidates)
+      unless candidates.all? {|x| reserved?(x)}
+        candidates.reject! {|x| reserved?(x)}
+      end
+      candidates
+    end
 
     def to_candidate_array(object, array)
       array.map do |candidate|
