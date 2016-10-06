@@ -5,21 +5,23 @@ module FriendlyId
     end
 
     def resolve_friendly_id_conflict(candidate_slugs)
-      candidate = candidate_slugs.first
+      candidate = candidate_slugs.to_a.last
       return if candidate.nil?
       SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
                                   friendly_id_config.slug_column,
-                                  friendly_id_config.sequence_separator).next_slug
+                                  friendly_id_config.sequence_separator,
+                                  self.class.base_class).next_slug
     end
 
     class SequentialSlugCalculator
       attr_accessor :scope, :slug, :slug_column, :sequence_separator
 
-      def initialize(scope, slug, slug_column, sequence_separator)
+      def initialize(scope, slug, slug_column, sequence_separator, base_class)
         @scope = scope
         @slug = slug
-        @slug_column = scope.connection.quote_column_name(slug_column)
+        table_name = scope.connection.quote_table_name(base_class.arel_table.name)
+        @slug_column = "#{table_name}.#{scope.connection.quote_column_name(slug_column)}"
         @sequence_separator = sequence_separator
       end
 
