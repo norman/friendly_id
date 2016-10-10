@@ -5,7 +5,7 @@ module FriendlyId
     end
 
     def resolve_friendly_id_conflict(candidate_slugs)
-      candidate = candidate_slugs.to_a.last
+      candidate = candidate_slugs.first
       return if candidate.nil?
       SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
@@ -36,9 +36,11 @@ module FriendlyId
       end
 
       def last_sequence_number
-        if match = /#{slug}#{sequence_separator}(\d+)\z/.match(slug_conflicts.last)
-          match[1].to_i
-        end
+        # Reject slug_conflicts that doesn't come from the first_candidate
+        # Map all sequence numbers and take the maximum
+        slug_conflicts.reject{ |slug_conflict| !regexp.match(slug_conflict) }.map do |slug_conflict|
+          regexp.match(slug_conflict)[1].to_i
+        end.max
       end
 
       def slug_conflicts
