@@ -36,6 +36,7 @@ module FriendlyId
       end
 
       def last_sequence_number
+        regexp = /#{slug}#{sequence_separator}(\d+)\z/
         # Reject slug_conflicts that doesn't come from the first_candidate
         # Map all sequence numbers and take the maximum
         slug_conflicts.reject{ |slug_conflict| !regexp.match(slug_conflict) }.map do |slug_conflict|
