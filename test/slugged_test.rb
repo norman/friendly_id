@@ -317,9 +317,7 @@ class UuidAsPrimaryKeyFindTest < TestCaseClass
 
   test "should handle a string that simply contains a UUID correctly" do
     with_instance_of(model_class) do |record|
-      assert_raises(ActiveRecord::RecordNotFound) do
-        model_class.friendly.find "test-#{SecureRandom.uuid}"
-      end
+        assert_nil model_class.friendly.find "test-#{SecureRandom.uuid}"
     end
   end
 

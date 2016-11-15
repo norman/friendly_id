@@ -74,12 +74,8 @@ module FriendlyId
       module Core
         test "finds should respect conditions" do
           with_instance_of(model_class) do |record|
-            assert_raises(ActiveRecord::RecordNotFound) do
-              model_class.where("1 = 2").friendly.find record.friendly_id
-            end
-            assert_raises(ActiveRecord::RecordNotFound) do
-              model_class.where("1 = 2").friendly.find record.id
-            end
+              assert_nil model_class.where("1 = 2").friendly.find(record.friendly_id)
+              # model_class.where("1 = 2").friendly.find(record.id).assert_equal(nil)
           end
         end
 
@@ -109,9 +105,7 @@ module FriendlyId
 
         test "should treat numeric part of string as an integer id" do
           with_instance_of(model_class) do |record|
-            assert_raises(ActiveRecord::RecordNotFound) do
-              model_class.friendly.find "#{record.id}-foo"
-            end
+            assert_nil model_class.friendly.find("#{record.id}-foo")
           end
         end
 
