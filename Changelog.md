@@ -1,6 +1,6 @@
 # FriendlyId Changelog
 
-We would like to think our many {file:Contributors contributors} for
+We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
 ## 5.2.0 (NOT RELEASED YET)
