@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version           = FriendlyId::VERSION
   s.authors           = ["Norman Clarke", "Philip Arndt"]
   s.email             = ["norman@njclarke.com", "p@arndt.io"]
-  s.homepage          = "http://github.com/norman/friendly_id"
+  s.homepage          = "https://github.com/norman/friendly_id"
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
   s.rubyforge_project = "friendly_id"
   s.files             = `git ls-files`.split("\n")

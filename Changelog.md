@@ -3,7 +3,7 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
-## 5.2.0 (NOT RELEASED YET)
+## 5.2.0 (2016-12-01)
 
 * Add sequential slug module for FriendlyId 4.x-style sequential slugs. ([#644](https://github.com/norman/friendly_id/pull/644)).
 * Make Candidates#each iterable without block ([#651](https://github.com/norman/friendly_id/pull/651)).
