@@ -110,6 +110,26 @@ class SluggedTest < TestCaseClass
     end
   end
 
+  test "should not set slug on create if unrelated validations fail with custom slug_column" do
+    klass = Class.new(ActiveRecord::Base) do
+      self.table_name = 'authors'
+      extend FriendlyId
+      validates_presence_of :active
+      friendly_id :name, :use => :slugged, :slug_column => :subdomain
+
+      def self.name
+        "Author"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'foo'
+      refute instance.save
+      refute instance.valid?
+      assert_nil instance.subdomain
+    end
+  end
+
   test "should not update slug on save if unrelated validations fail" do
     klass = Class.new model_class do
       validates_presence_of :active

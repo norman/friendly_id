@@ -67,6 +67,9 @@ module FriendlyId
           # Used to test candidates
           add_column :cities, :code, :string, :limit => 3
 
+          # Used as a non-default slug_column
+          add_column :authors, :subdomain, :string
+
           @done = true
         end
 
