@@ -179,7 +179,7 @@ rake db:migrate
 ```
 ```ruby
 # edit app/models/user.rb
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 end
