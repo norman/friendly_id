@@ -110,3 +110,31 @@ class SequentiallySluggedTest < TestCaseClass
     assert_nil record.slug
   end
 end
+
+class SequentiallySluggedTestWithHistory < TestCaseClass
+  include FriendlyId::Test
+  include FriendlyId::Test::Shared::Core
+
+  class Article < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => [:sequentially_slugged, :history]
+  end
+
+  def model_class
+    Article
+  end
+
+  test "should work with regeneration with history when slug already exists" do
+    transaction do
+      record1 = model_class.create! :name => "Test name"
+      record2 = model_class.create! :name => "Another test name"
+      assert_equal 'test-name', record1.slug
+      assert_equal 'another-test-name', record2.slug
+
+      record2.name = "Test name"
+      record2.slug = nil
+      record2.save!
+      assert_equal 'test-name-2', record2.slug
+    end
+  end
+end
