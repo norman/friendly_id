@@ -75,7 +75,6 @@ module FriendlyId
         test "finds should respect conditions" do
           with_instance_of(model_class) do |record|
               assert_nil model_class.where("1 = 2").friendly.find(record.friendly_id)
-              # model_class.where("1 = 2").friendly.find(record.id).assert_equal(nil)
           end
         end
 
