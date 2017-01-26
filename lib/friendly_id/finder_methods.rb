@@ -46,12 +46,12 @@ module FriendlyId
 
     def potential_primary_key?(id)
       case primary_key_type
-       when :integer
-         Integer(id, 10) rescue false
-       when :uuid
-         id.match /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
-       else
-         true
+      when :integer
+        Integer(id, 10) rescue false
+      when :uuid
+        id.match /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
+      else
+        true
       end
     end
 
