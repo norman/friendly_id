@@ -20,7 +20,7 @@ module FriendlyId
       return super if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap {|result| return result unless result.nil?}
       return super if potential_primary_key?(id)
-      raise ActiveRecord::RecordNotFound, "can't find record with friendly id: #{id.inspect}"
+      raise ActiveRecord::RecordNotFound, "can't find record with friendly id: #{id.inspect}#{similar_id(id)}"
     end
 
     # Returns true if a record with the given id exists.
@@ -55,6 +55,15 @@ module FriendlyId
 
     def first_by_friendly_id(id)
       find_by(friendly_id_config.query_field => id)
+    end
+
+    def similar_id(id)
+      slug_column = friendly_id_config.query_field
+      results = where("#{slug_column} LIKE '%#{id}%'")
+      if results.any?
+        results_str = results.map {|result| result[slug_column].inspect }.join(', ')
+        return "\nDo you mean? #{results_str}"
+      end
     end
 
   end
