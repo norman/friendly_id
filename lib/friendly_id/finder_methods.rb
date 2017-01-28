@@ -54,7 +54,7 @@ module FriendlyId
     end
 
     def first_by_friendly_id(id)
-      find_by(friendly_id_config.query_field => id)
+      find_by(friendly_id_config.query_field => id.downcase)
     end
 
   end
