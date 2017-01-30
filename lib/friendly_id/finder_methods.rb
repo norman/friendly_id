@@ -33,7 +33,7 @@ module FriendlyId
     # `find`.
     # @raise ActiveRecord::RecordNotFound
     def find_by_friendly_id(id)
-      first_by_friendly_id(id) or raise ActiveRecord::RecordNotFound, "can't find record with friendly id: #{id.inspect}"
+      first_by_friendly_id(id) or raise ActiveRecord::RecordNotFound, "can't find record with friendly id: #{id.inspect}#{similar_id(id)}"
     end
 
     def exists_by_friendly_id?(id)
