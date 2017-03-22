@@ -26,4 +26,20 @@ class Finders < TestCaseClass
       assert model_class.existing.find(record.friendly_id)
     end
   end
+
+  test 'should raise an error with full information' do
+    with_instance_of(model_class) do |record|
+      assert_raises(ActiveRecord::RecordNotFound) do |e|
+        model_class.find("invalid-id-1")
+      end
+      begin
+        model_class.find("invalid-id-1")
+      rescue ActiveRecord::RecordNotFound => e
+        assert_equal %Q(can't find record with friendly id: "invalid-id-1"), e.message
+        if ActiveRecord::VERSION::MAJOR == 5
+          assert_equal "JournalistWithFriendlyFinders", e.model
+        end
+      end
+    end
+  end
 end
