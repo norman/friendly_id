@@ -178,6 +178,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #   Configures the name of the column where FriendlyId will store the slug.
     #   Defaults to `:slug`.
     #
+    # @option options [Integer] :slug_limit Available when using `:slugged`.
+    #   Configures the limit of the slug. This option has no default value.
+    #
     # @option options [Symbol] :slug_generator_class Available when using `:slugged`.
     #   Sets the class used to generate unique slugs. You should not specify this
     #   unless you're doing some extensive hacking on FriendlyId. Defaults to
