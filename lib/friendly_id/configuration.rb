@@ -47,8 +47,8 @@ module FriendlyId
     #
     # @param [#to_s,Module] modules Arguments should be Modules, or symbols or
     #   strings that correspond with the name of an addon to use with FriendlyId.
-    #   By default FriendlyId provides `:slugged`, `:history`, `:simple_i18n`,
-    #   and `:scoped`.
+    #   By default FriendlyId provides `:slugged`, `:finders`, `:history`,
+    #   `:reserved`, `:simple_i18n`, and `:scoped`.
     def use(*modules)
       modules.to_a.flatten.compact.map do |object|
         mod = get_module(object)
