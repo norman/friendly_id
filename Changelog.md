@@ -3,6 +3,13 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.2.1 (2017-04-09)
+
+* Change ActiveRecord::Base to ApplicationRecord ([#782](https://github.com/norman/friendly_id/pull/782)).
+* Refactor `Candidates#each` method. ([#773](https://github.com/norman/friendly_id/pull/773)).
+* Assign to configured slug column, not 'slug' when validation fails. ([#779](https://github.com/norman/friendly_id/pull/779)).
+* Fix sequential slugs when using History. ([#774](https://github.com/norman/friendly_id/pull/774)).
+
 ## 5.2.0 (2016-12-01)
 
 * Add sequential slug module for FriendlyId 4.x-style sequential slugs. ([#644](https://github.com/norman/friendly_id/pull/644)).
