@@ -288,7 +288,9 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     # @param [#to_s] value The value used as the basis of the slug.
     # @return The candidate slug text, without a sequence.
     def normalize_friendly_id(value)
-      value.to_s.parameterize
+      value = value.to_s.parameterize
+      value = value[0...friendly_id_config.slug_limit] if friendly_id_config.slug_limit
+      value
     end
 
     # Whether to generate a new slug.
@@ -300,7 +302,14 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     end
 
     def resolve_friendly_id_conflict(candidates)
-      [candidates.first, SecureRandom.uuid].compact.join(friendly_id_config.sequence_separator)
+      candidate = candidates.first
+      uid = SecureRandom.uuid
+      if candidate && friendly_id_config.slug_limit
+        max_candidate_size = friendly_id_config.slug_limit - uid.size - friendly_id_config.sequence_separator.size
+        max_candidate_size = [max_candidate_size, 0].max
+        candidate = candidate[0...max_candidate_size]
+      end
+      [candidate, uid].compact.join(friendly_id_config.sequence_separator)
     end
 
     # Sets the slug.
@@ -334,11 +343,11 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     end
     private :unset_slug_if_invalid
 
-    # This module adds the `:slug_column`, and `:sequence_separator`, and
-    # `:slug_generator_class` configuration options to
+    # This module adds the `:slug_column`, and `:slug_limit`, and `:sequence_separator`,
+    # and `:slug_generator_class` configuration options to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
-      attr_writer :slug_column, :sequence_separator
+      attr_writer :slug_column, :slug_limit, :sequence_separator
       attr_accessor :slug_generator_class
 
       # Makes FriendlyId use the slug column for querying.
@@ -360,6 +369,11 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       # The column that will be used to store the generated slug.
       def slug_column
         @slug_column ||= defaults[:slug_column]
+      end
+
+      # The limit that will be used for slug.
+      def slug_limit
+        @slug_limit ||= defaults[:slug_limit]
       end
     end
   end
