@@ -87,7 +87,28 @@ The most important changes are:
   sequence to differentiate conflicting slug, but rather a UUID (e.g. something
   like `2bc08962-b3dd-4f29-b2e6-244710c86106`). This makes the
   codebase simpler and more reliable when running concurrently, at the expense
-  of uglier ids being generated when there are conflicts.
+  of uglier ids being generated when there are conflicts. 
+* If you need previously used numeric sequence for some reason:
+
+    ```ruby
+    class Restaurant < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :slug_candidates, use: :slugged
+      def slug_candidates
+        [ :name ]
+      end
+      
+      def slug_candidates_with_sequence
+        2.upto(10).inject([name]) { |m, o| m << "%s %d" % [name, o] }
+      end
+      alias_method :slug_candidates, :slug_candidates_with_sequence
+    
+      def slug_candidates_with_hash
+        [name, "%s %s" % [name, SecureRandom.hex(3)]]
+      end
+    end
+    ```
+If any of your candidates are available, you'd still get the UUID-based conflict resolution functionality -- which is a good thing.
 * The default sequence separator has been changed from two dashes to one dash.
 * Slugs are no longer regenerated when a record is saved. If you want to regenerate
   a slug, you must explicitly set the slug column to nil:
