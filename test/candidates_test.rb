@@ -140,4 +140,27 @@ class CandidatesTest < TestCaseClass
     end
   end
 
+  test "should not fail when adding history to existing" do
+    name_collision = "Amsterdam"
+
+    with_instances do |city1, _|
+      assert city1.update name: name_collision, slug: nil
+      assert_equal name_collision.downcase, city1.slug
+
+      klass = Class.new city1.class do
+        friendly_id_config.model_class = city1.class
+        friendly_id_config.use(:history)
+
+        def slug_candidates
+          [:name, [:name, "-alt"]]
+        end
+      end
+      assert klass.friendly_id_config.uses? :history
+
+      city2 = klass.last
+
+      assert city2.update name: name_collision, slug: nil
+      assert_equal "#{name_collision.downcase}-alt", city2.slug
+    end
+  end
 end
