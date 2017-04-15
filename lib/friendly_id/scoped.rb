@@ -14,12 +14,16 @@ This allows, for example, two restaurants in different cities to have the slug
 
     class Restaurant < ActiveRecord::Base
       extend FriendlyId
+      include FriendlyId::Scoped
+      
       belongs_to :city
       friendly_id :name, :use => :scoped, :scope => :city
     end
 
     class City < ActiveRecord::Base
       extend FriendlyId
+      include FriendlyId::Scoped
+      
       has_many :restaurants
       friendly_id :name, :use => :slugged
     end
@@ -37,18 +41,24 @@ Additionally, the `:scope` option can receive an array of scope values:
 
     class Cuisine < ActiveRecord::Base
       extend FriendlyId
+      include FriendlyId::Scoped
+      
       has_many :restaurants
       friendly_id :name, :use => :slugged
     end
 
     class City < ActiveRecord::Base
       extend FriendlyId
+      include FriendlyId::Scoped
+      
       has_many :restaurants
       friendly_id :name, :use => :slugged
     end
 
     class Restaurant < ActiveRecord::Base
       extend FriendlyId
+      include FriendlyId::Scoped
+      
       belongs_to :city
       friendly_id :name, :use => :scoped, :scope => [:city, :cuisine]
     end
