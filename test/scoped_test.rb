@@ -81,4 +81,12 @@ class ScopedTest < TestCaseClass
     end
   end
 
+  test 'should generate slug before validation' do
+    transaction do
+      n = Novel.new(:name => 'Crime and Punishment')
+      assert n.valid?
+      assert_equal 'crime-and-punishment', n.slug
+    end
+  end
+
 end
