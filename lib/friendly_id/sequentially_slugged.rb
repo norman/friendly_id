@@ -26,6 +26,7 @@ module FriendlyId
       end
 
       def next_slug
+        return nil unless slug.present?
         slug + sequence_separator + next_sequence_number.to_s
       end
 

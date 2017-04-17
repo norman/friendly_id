@@ -109,6 +109,11 @@ class SequentiallySluggedTest < TestCaseClass
     record = model_class.create!(:name => '')
     assert_nil record.slug
   end
+
+  test "should not generate a slug when the sluggable attribute is nil" do
+    record = model_class.create!(:name => nil)
+    assert_nil record.slug
+  end
 end
 
 class SequentiallySluggedTestWithHistory < TestCaseClass
