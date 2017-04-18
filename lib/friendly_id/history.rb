@@ -106,7 +106,7 @@ module FriendlyId
     # to be conflicts. This will allow a record to revert to a previously
     # used slug.
     def scope_for_slug_generator
-      relation = super.joins(:slugs)
+      relation = super.includes(:slugs)
       unless new_record?
         relation = relation.merge(Slug.where("sluggable_id <> ?", id))
       end
