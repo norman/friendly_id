@@ -81,7 +81,7 @@ module FriendlyId
     end
     model_class.class_eval do
       extend Base
-      @friendly_id_config = Class.new(Configuration).new(self)
+      @friendly_id_config ||= Class.new(Configuration).new(self)
       FriendlyId.defaults.call @friendly_id_config
       include Model
     end
