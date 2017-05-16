@@ -9,8 +9,8 @@ gem 'i18n', '~> 0.7.0'
 # Database Configuration
 group :development, :test do
   platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', '~> 1.3.14'
-    gem 'activerecord-jdbcpostgresql-adapter', '~> 1.3.14'
+    gem 'activerecord-jdbcmysql-adapter', git: 'https://github.com/jruby/activerecord-jdbc-adapter.git', branch: 'rails-5'
+    gem 'activerecord-jdbcpostgresql-adapter', git: 'https://github.com/jruby/activerecord-jdbc-adapter.git', branch: 'rails-5'
     gem 'kramdown'
   end
 

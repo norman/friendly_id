@@ -2,10 +2,10 @@ language: ruby
 cache: bundler
 
 rvm:
+  - 2.4.0
   - 2.3.0
   - 2.2.0
   - 2.1.0
-  - 2.0.0
   - jruby-9.0.4.0
 
 env:
@@ -19,19 +19,15 @@ gemfile:
   - gemfiles/Gemfile.rails-5.0.rb
 
 matrix:
-  allow_failures:
-    - rvm: jruby-19mode
-      gemfile: gemfiles/Gemfile.rails-4.2.rb
-      env: DB=postgres
-    - rvm: jruby-9.0.4.0
-      gemfile: gemfiles/Gemfile.rails-5.0.rb
   exclude:
-    - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.rails-5.0.rb
     - rvm: 2.1.0
       gemfile: gemfiles/Gemfile.rails-5.0.rb
     - rvm: 2.2.0
       gemfile: gemfiles/Gemfile.rails-5.0.rb
+    - rvm: 2.4.0
+      gemfile: gemfiles/Gemfile.rails-4.0.rb
+    - rvm: 2.4.0
+      gemfile: gemfiles/Gemfile.rails-4.1.rb
 
 sudo: false
 

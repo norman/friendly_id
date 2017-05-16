@@ -34,7 +34,7 @@ module FriendlyId
 
           slugged_tables.each do |table_name|
             add_column table_name, :slug, :string
-            add_index  table_name, :slug, :unique => true
+            add_index  table_name, :slug, :unique => true if 'novels' != table_name
           end
 
           scoped_tables.each do |table_name|
@@ -44,7 +44,6 @@ module FriendlyId
           # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
           add_column :novels, :publisher_id, :integer
-          remove_index :novels, :slug
           add_index :novels, [:slug, :publisher_id, :novelist_id], :unique => true
 
           # This will be used to test column name quoting
