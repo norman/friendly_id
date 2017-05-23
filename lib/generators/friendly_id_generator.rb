@@ -16,11 +16,17 @@ class FriendlyIdGenerator < ActiveRecord::Generators::Base
   # Copies the migration template to db/migrate.
   def copy_files
     return if options['skip-migration']
-    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb'
+    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb', rails_migration_version: rails_migration_version
   end
 
   def create_initializer
     return if options['skip-initializer']
     copy_file 'initializer.rb', 'config/initializers/friendly_id.rb'
+  end
+
+  def rails_migration_version
+    if Rails.version.start_with? "5"
+      "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+    end
   end
 end
