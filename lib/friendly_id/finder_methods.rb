@@ -43,7 +43,10 @@ module FriendlyId
     private
 
     def potential_primary_key?(id)
-      case primary_key_type
+      key_type = primary_key_type
+      # Hook for "ActiveModel::Type::Integer" instance.
+      key_type = key_type.type if key_type.respond_to?(:type)
+      case key_type
       when :integer
         Integer(id, 10) rescue false
       when :uuid
