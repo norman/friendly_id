@@ -301,16 +301,55 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       send(friendly_id_config.slug_column).nil? && !send(friendly_id_config.base).nil?
     end
 
+    # Public: Resolve conflicts.
+    #
+    # This method adds UUID to first candidate and truncates (if `slug_limit` is set).
+    #
+    # Examples:
+    #
+    #   resolve_friendly_id_conflict(['12345'])
+    #   # => '12345-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+    #
+    #   FriendlyId.defaults { |config| config.slug_limit = 40 }
+    #   resolve_friendly_id_conflict(['12345'])
+    #   # => '123-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+    #
+    # candidates - the Array with candidates.
+    #
+    # Returns the String with new slug.
     def resolve_friendly_id_conflict(candidates)
-      candidate = candidates.first
-      uid = SecureRandom.uuid
-      if candidate && friendly_id_config.slug_limit
-        max_candidate_size = friendly_id_config.slug_limit - uid.size - friendly_id_config.sequence_separator.size
-        max_candidate_size = [max_candidate_size, 0].max
-        candidate = candidate[0...max_candidate_size]
-      end
-      [candidate, uid].compact.join(friendly_id_config.sequence_separator)
+      uuid = SecureRandom.uuid
+      [
+        apply_slug_limit(candidates.first, uuid),
+        uuid
+      ].compact.join(friendly_id_config.sequence_separator)
     end
+
+    # Private: Apply slug limit to candidate.
+    #
+    # candidate - the String with candidate.
+    # uuid      - the String with UUID.
+    #
+    # Return the String with truncated candidate.
+    def apply_slug_limit(candidate, uuid)
+      return candidate unless candidate && friendly_id_config.slug_limit
+
+      candidate[0...candidate_limit(uuid)]
+    end
+    private :apply_slug_limit
+
+    # Private: Get max length of candidate.
+    #
+    # uuid - the String with UUID.
+    #
+    # Returns the Integer with max length.
+    def candidate_limit(uuid)
+      [
+        friendly_id_config.slug_limit - uuid.size - friendly_id_config.sequence_separator.size,
+        0
+      ].max
+    end
+    private :candidate_limit
 
     # Sets the slug.
     def set_slug(normalized_slug = nil)
