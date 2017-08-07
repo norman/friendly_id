@@ -271,6 +271,31 @@ class SlugSeparatorTest < TestCaseClass
 
 end
 
+class SlugLimitTest < TestCaseClass
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged, :slug_limit => 40
+  end
+
+  def model_class
+    Journalist
+  end
+
+  test "should limit slug size" do
+    transaction do
+      m1 = model_class.create! :name => 'a' * 50
+      assert_equal m1.slug, 'a' * 40
+      m2 = model_class.create! :name => m1.name
+      m2.save!
+      # "aaa-<uid>"
+      assert_match(/\Aa{3}\-/, m2.slug)
+    end
+  end
+end
+
 class DefaultScopeTest < TestCaseClass
 
   include FriendlyId::Test
