@@ -18,6 +18,9 @@ gemfile:
   - gemfiles/Gemfile.rails-4.2.rb
   - gemfiles/Gemfile.rails-5.0.rb
 
+before_install:
+  - gem update bundler
+
 matrix:
   exclude:
     - rvm: 2.1.0
