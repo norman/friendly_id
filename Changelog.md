@@ -3,6 +3,12 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.2.2 (2017-09-13)
+
+* Prevent warning on db:migrate in Rails 5.1 ([#826](https://github.com/norman/friendly_id/pull/826)).
+* Allow to set size limit for slug ([#809](https://github.com/norman/friendly_id/pull/809)).
+* Update specs and drop support for ruby 2.0.0 ([#824](https://github.com/norman/friendly_id/pull/824)).
+
 ## 5.2.1 (2017-04-09)
 
 * Change ActiveRecord::Base to ApplicationRecord ([#782](https://github.com/norman/friendly_id/pull/782)).
