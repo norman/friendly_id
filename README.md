@@ -177,7 +177,6 @@ rails generate friendly_id
 ```
 >Temp solution for Rails 5.1+ : Before running the migration, go into the generated migration file and specify the Rails version:  
 `class CreateFriendlyIdSlugs < ActiveRecord::Migration[5.1]`  
-```
 ```shell
 rails generate scaffold user name:string slug:string:uniq
 rake db:migrate
