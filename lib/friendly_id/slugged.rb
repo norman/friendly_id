@@ -370,7 +370,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     private :scope_for_slug_generator
 
     def slug_generator
-      friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
+      friendly_id_config.slug_generator_class.new(scope_for_slug_generator, friendly_id_config)
     end
     private :slug_generator
 

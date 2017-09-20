@@ -62,4 +62,14 @@ class ReservedTest < TestCaseClass
     end
   end
 
+  test "should optionally treat reserved words as conflict" do
+    klass = Class.new(model_class) do
+      friendly_id :slug_candidates, :use => [:slugged, :reserved], :reserved_words => %w(new edit), :treat_reserved_as_conflict => true
+    end
+
+    with_instance_of(klass, name: 'new') do |record|
+      assert_match(/new-([0-9a-z]+\-){4}[0-9a-z]+\z/, record.slug)
+    end
+  end
+
 end

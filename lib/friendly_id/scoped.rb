@@ -132,7 +132,7 @@ an example of one way to set this up:
     private :scope_for_slug_generator
 
     def slug_generator
-      friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
+      friendly_id_config.slug_generator_class.new(scope_for_slug_generator, friendly_id_config)
     end
     private :slug_generator
 
