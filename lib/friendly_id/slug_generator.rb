@@ -3,11 +3,16 @@ module FriendlyId
   # availability.
   class SlugGenerator
 
-    def initialize(scope)
+    def initialize(scope, config)
       @scope = scope
+      @config = config
     end
 
     def available?(slug)
+      if @config.uses?(::FriendlyId::Reserved) && @config.reserved_words.present? && @config.treat_reserved_as_conflict
+        return false if @config.reserved_words.include?(slug)
+      end
+
       !@scope.exists_by_friendly_id?(slug)
     end
 
