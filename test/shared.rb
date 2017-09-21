@@ -64,7 +64,7 @@ module FriendlyId
           with_instance_of my_model_class do |record|
             record.update_attributes my_model_class.friendly_id_config.slug_column => nil
             record = my_model_class.friendly.find(record.id)
-            record.class.validate Proc.new {errors[:name] = "FAIL"}
+            record.class.validate Proc.new {errors.add(:name, "FAIL")}
             record.save
             assert_equal record.to_param, record.friendly_id
           end
@@ -174,7 +174,7 @@ module FriendlyId
         end
 
         test "should return nil for to_param with a new record" do
-          assert_equal nil, model_class.new.to_param
+          assert_nil model_class.new.to_param
         end
       end
     end
