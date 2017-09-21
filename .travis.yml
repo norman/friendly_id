@@ -2,11 +2,11 @@ language: ruby
 cache: bundler
 
 rvm:
-  - 2.4.0
-  - 2.3.0
-  - 2.2.0
-  - 2.1.0
-  - jruby-9.0.4.0
+  - 2.4.2
+  - 2.3.5
+  - 2.2.8
+  - 2.1.10
+  - jruby-9.1.13.0
 
 env:
   - DB=postgres
@@ -23,13 +23,13 @@ before_install:
 
 matrix:
   exclude:
-    - rvm: 2.1.0
+    - rvm: 2.1.10
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.2.0
+    - rvm: 2.2.8
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.4.0
+    - rvm: 2.4.2
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.4.0
+    - rvm: 2.4.2
       gemfile: gemfiles/Gemfile.rails-4.1.rb
 
 sudo: false
