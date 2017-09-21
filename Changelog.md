@@ -3,6 +3,10 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.2.3 (2017-09-22)
+
+* Added option to treat reserved words as conflicts ([#831](https://github.com/norman/friendly_id/pull/831)).
+
 ## 5.2.2 (2017-09-13)
 
 * Prevent warning on db:migrate in Rails 5.1 ([#826](https://github.com/norman/friendly_id/pull/826)).
