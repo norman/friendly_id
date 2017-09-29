@@ -179,7 +179,7 @@ rails generate friendly_id
 `class CreateFriendlyIdSlugs < ActiveRecord::Migration[5.1]`  
 ```shell
 rails generate scaffold user name:string slug:string:uniq
-rake db:migrate
+rails db:migrate
 ```
 ```ruby
 # edit app/models/user.rb
