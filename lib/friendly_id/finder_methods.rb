@@ -50,7 +50,7 @@ module FriendlyId
       when :integer
         Integer(id, 10) rescue false
       when :uuid
-        id.match /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
+        id.match(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/)
       else
         true
       end

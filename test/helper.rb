@@ -38,6 +38,10 @@ if ENV["LOG"]
   ActiveRecord::Base.logger = Logger.new($stdout)
 end
 
+if ActiveSupport::VERSION::STRING >= '4.2'
+  ActiveSupport.test_order = :random
+end
+
 module FriendlyId
   module Test
 
