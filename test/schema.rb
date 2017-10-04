@@ -41,6 +41,12 @@ module FriendlyId
             add_column table_name, :slug, :string
           end
 
+          paranoid_tables.each do |table_name|
+            add_column table_name, :slug, :string
+            add_column table_name, :deleted_at, :datetime
+            add_index table_name, :deleted_at
+          end
+
           # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
           add_column :novels, :publisher_id, :integer
@@ -78,6 +84,10 @@ module FriendlyId
           %w[journalists articles novelists novels manuals cities]
         end
 
+        def paranoid_tables
+          ["paranoid_records"]
+        end
+
         def tables_with_uuid_primary_key
           ["menu_items"]
         end
@@ -91,7 +101,7 @@ module FriendlyId
         end
 
         def tables
-          simple_tables + slugged_tables + scoped_tables
+          simple_tables + slugged_tables + scoped_tables + paranoid_tables
         end
       end
     end
