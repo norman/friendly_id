@@ -211,6 +211,39 @@ class DependentDestroyTest < HistoryTest
   end
 end
 
+if ActiveRecord::VERSION::STRING >= '5.0'
+  class HistoryTestWithActsAsParanoid < HistoryTest
+    require 'acts_as_paranoid'
+    class ParanoidRecord < ActiveRecord::Base
+      acts_as_paranoid
+      extend FriendlyId
+      friendly_id :name, :use => :history, :dependent => false
+    end
+
+    def model_class
+      ParanoidRecord
+    end
+
+    test 'slug should have a sluggable even when soft deleted via acts_as_paranoid' do
+      transaction do
+        assert FriendlyId::Slug.belongs_to_required_by_default
+
+        assert FriendlyId::Slug.find_by_slug('paranoid').nil?
+        record = model_class.create(name: 'paranoid')
+        assert FriendlyId::Slug.find_by_slug('paranoid').present?
+
+        record.destroy
+
+        orphan_slug = FriendlyId::Slug.find_by_slug('paranoid')
+        assert orphan_slug.present?, 'Orphaned slug should exist'
+
+        assert orphan_slug.valid?, "Errors: #{orphan_slug.errors.full_messages}"
+        assert orphan_slug.sluggable.present?, 'Orphaned slug should still find corresponding paranoid sluggable'
+      end
+    end
+  end
+end
+
 class HistoryTestWithSti < HistoryTest
   class Journalist < ActiveRecord::Base
     extend FriendlyId
