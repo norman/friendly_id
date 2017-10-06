@@ -172,7 +172,7 @@ class HistoryTestWithAutomaticSlugRegeneration < HistoryTest
   end
 end
 
-class DependentDestroyTest < HistoryTest
+class DependentDestroyTest < TestCaseClass
 
   include FriendlyId::Test
 
