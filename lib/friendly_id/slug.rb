@@ -3,7 +3,7 @@ module FriendlyId
   #
   # @see FriendlyId::History
   class Slug < ActiveRecord::Base
-    belongs_to :sluggable, :polymorphic => true, required: true
+    belongs_to :sluggable, :polymorphic => true
 
     def sluggable
       sluggable_type.constantize.unscoped { super }
