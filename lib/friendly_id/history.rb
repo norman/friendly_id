@@ -75,7 +75,8 @@ method.
         has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
           :as         => :sluggable,
           :dependent  => @friendly_id_config.dependent_value,
-          :class_name => Slug.to_s
+          :class_name => Slug.to_s,
+          :inverse_of => :sluggable
         }
 
         after_save :create_slug
