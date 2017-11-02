@@ -75,7 +75,8 @@ method.
         has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
           :as         => :sluggable,
           :dependent  => @friendly_id_config.dependent_value,
-          :class_name => Slug.to_s
+          :class_name => Slug.to_s,
+          :inverse_of => :sluggable
         }
 
         after_save :create_slug
@@ -122,13 +123,15 @@ method.
 
     def create_slug
       return unless friendly_id
-      return if slugs.first.try(:slug) == friendly_id
-      # Allow reversion back to a previously used slug
-      relation = slugs.where(:slug => friendly_id)
-      if friendly_id_config.uses?(:scoped)
-        relation = relation.where(:scope => serialized_scope)
+      unless new_record?
+        return if slugs.first.try(:slug) == friendly_id
+        # Allow reversion back to a previously used slug
+        relation = slugs.where(:slug => friendly_id)
+        if friendly_id_config.uses?(:scoped)
+          relation = relation.where(:scope => serialized_scope)
+        end
+        relation.delete_all
       end
-      relation.delete_all
       slugs.create! do |record|
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
