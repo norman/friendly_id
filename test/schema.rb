@@ -2,7 +2,14 @@ require "friendly_id/migration"
 
 module FriendlyId
   module Test
-    class Schema < ActiveRecord::Migration
+    migration_class =
+      if ActiveRecord::VERSION::MAJOR >= 5
+        ActiveRecord::Migration[4.2]
+      else
+        ActiveRecord::Migration
+      end
+
+    class Schema < migration_class
       class << self
         def down
           CreateFriendlyIdSlugs.down
