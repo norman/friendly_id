@@ -47,7 +47,7 @@ module FriendlyId
       def slug_conflicts
         scope.
           where(conflict_query, slug, sequential_slug_matcher).
-          order(ordering_query).pluck(slug_column)
+          order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
 
       def conflict_query
