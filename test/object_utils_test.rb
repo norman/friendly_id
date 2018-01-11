@@ -19,6 +19,8 @@ class ObjectUtilsTest < TestCaseClass
   end
 
   test "ActiveRecord::Base instances should be unfriendly_ids" do
+    FriendlyId.mark_as_unfriendly(ActiveRecord::Base)
+
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "authors"
     end
