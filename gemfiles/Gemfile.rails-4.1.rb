@@ -14,10 +14,13 @@ group :development, :test do
     gem 'kramdown'
   end
 
+  platforms :jruby, :ruby, :rbx do
+    gem 'pg'
+  end
+
   platforms :ruby, :rbx do
     gem 'sqlite3'
     gem 'mysql2', '~> 0.3.13'
-    gem 'pg'
     gem 'redcarpet'
   end
 
