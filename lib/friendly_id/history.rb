@@ -86,14 +86,13 @@ method.
       include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
-        where(arel_table[friendly_id_config.query_field].eq(id)).exists? || joins(:slugs).where(slug_history_clause(id)).exists?
+        super || joins(:slugs).where(slug_history_clause(id)).exists?
       end
 
       private
 
       def first_by_friendly_id(id)
-        matching_record = where(friendly_id_config.query_field => id).first
-        matching_record || slug_table_record(id)
+        super || slug_table_record(id)
       end
 
       def slug_table_record(id)
