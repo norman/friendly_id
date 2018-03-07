@@ -8,19 +8,28 @@ class FriendlyIdGenerator < ActiveRecord::Generators::Base
   # new table name. Our generator always uses 'friendly_id_slugs', so we just set a random name here.
   argument :name, type: :string, default: 'random_name'
 
-  class_option :'skip-migration', :type => :boolean, :desc => "Don't generate a migration for the slugs table"
   class_option :'skip-initializer', :type => :boolean, :desc => "Don't generate an initializer"
+  class_option :'skip-migration', :type => :boolean, :desc => "Don't generate a migration for the slugs table"
 
   source_root File.expand_path('../../friendly_id', __FILE__)
 
   # Copies the migration template to db/migrate.
   def copy_files
     return if options['skip-migration']
-    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb'
+    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb',
+                       migration_version: migration_version
   end
 
   def create_initializer
     return if options['skip-initializer']
     copy_file 'initializer.rb', 'config/initializers/friendly_id.rb'
+  end
+
+  def migration_version
+    "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]" if rails5?
+  end
+
+  def rails5?
+    ActiveRecord::VERSION::MAJOR >= 5
   end
 end

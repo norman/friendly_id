@@ -54,9 +54,6 @@ Generate the friendly configuration file
 rails generate friendly_id
 ```
 
->Temp solution for Rails 5.1+ : Before running the migration, go into the generated migration file and specify the Rails version:  
-`class CreateFriendlyIdSlugs < ActiveRecord::Migration[5.1]`  
-
 Run the migration scripts
 
 ```shell
@@ -91,7 +88,7 @@ User.create! name: "Joe Schmoe"
 You can then access the user show page using the URL http://localhost:3000/users/joe-schmoe.
 
 
-If you're adding FriendlyId to an existing app and need to generate slugs for 
+If you're adding FriendlyId to an existing app and need to generate slugs for
 existing users, do this from the console, runner, or add a Rake task:
 
 ```ruby
