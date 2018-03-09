@@ -1,8 +1,6 @@
-require 'rails'
-
 migration_class =
-  if Rails.version.start_with? "5"
-    ActiveRecord::Migration["#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}"]
+  if ActiveRecord::VERSION::MAJOR >= 5
+    ActiveRecord::Migration["#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"]
   else
     ActiveRecord::Migration
   end
