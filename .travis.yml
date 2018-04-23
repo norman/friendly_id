@@ -43,6 +43,11 @@ matrix:
       gemfile: gemfiles/Gemfile.rails-4.0.rb
     - rvm: 2.4.0
       gemfile: gemfiles/Gemfile.rails-4.1.rb
+  allow_failures:
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-5.0.rb
 
 sudo: false
 
