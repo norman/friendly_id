@@ -3,6 +3,14 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.2.4 (2018-04-24)
+
+* Fix compatibility with Rails versions 4.0 -> 5.2. ([#863](https://github.com/norman/friendly_id/pull/863)).
+* Refactor `History::FinderMethods` to use base implementation. ([#853](https://github.com/norman/friendly_id/pull/853)).
+* Defer loading of ActiveRecord to avoid config issues. ([#852](https://github.com/norman/friendly_id/pull/852)).
+* Ensure compatibility with paranoid deletion libraries. ([#838](https://github.com/norman/friendly_id/pull/838)).
+* Add treat_reserved_as_conflict option to initializer ([#847](https://github.com/norman/friendly_id/pull/847)).
+
 ## 5.2.3 (2017-09-22)
 
 * Added option to treat reserved words as conflicts ([#831](https://github.com/norman/friendly_id/pull/831)).
