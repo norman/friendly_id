@@ -153,6 +153,33 @@ class SluggedTest < TestCaseClass
     end
   end
 
+  test "should not raise deprecation warnings when using old slug within callback" do
+    klass = Class.new model_class do
+      friendly_id :name, :use => :slugged
+
+      attr_accessor :slug_value_in_callback
+
+      after_save do
+        self.slug_value_in_callback = to_param
+      end
+
+      def self.name
+        "Journalist"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'foo'
+      assert instance.save
+      assert instance.valid?
+      instance.name = 'foobar'
+      instance.slug = nil
+      instance.save
+      assert_equal 'foobar', instance.slug
+      assert_equal 'foobar', instance.slug_value_in_callback
+    end
+  end
+  
 end
 
 class SlugGeneratorTest < TestCaseClass

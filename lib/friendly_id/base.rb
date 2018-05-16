@@ -261,8 +261,8 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
       if friendly_id_config.routes == :friendly
-        if attribute_changed?(friendly_id_config.query_field)
-          diff = changes[friendly_id_config.query_field]
+        if use_old_value_for_query_field?(friendly_id_config.query_field)
+          diff = changes_for_query_field(friendly_id_config.query_field)
           diff.first || diff.second
         else
           friendly_id.presence.to_param || super
@@ -270,6 +270,21 @@ often better and easier to use {FriendlyId::Slugged slugs}.
       else
         super
       end
+    end
+
+    def use_old_value_for_query_field?(field)
+      if respond_to?(:will_save_change_to_attribute?)
+        # Only available in Rails 5.1+
+        will_save_change_to_attribute?(field)
+      else
+        # Fallback for Rails 5.0 and below
+        attribute_changed?(field)
+      end
+    end
+
+    def changes_for_query_field(field)
+      # changes_to_save only available in Rails 5.1+
+      respond_to?(:changes_to_save) ? changes_to_save[field] : changes[field]
     end
 
     # Clears slug on duplicate records when calling `dup`.
