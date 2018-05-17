@@ -54,9 +54,6 @@ Generate the friendly configuration file
 rails generate friendly_id
 ```
 
->Temp solution for Rails 5.1+ : Before running the migration, go into the generated migration file and specify the Rails version:  
-`class CreateFriendlyIdSlugs < ActiveRecord::Migration[5.1]`  
-
 Run the migration scripts
 
 ```shell
