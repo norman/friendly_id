@@ -152,7 +152,6 @@ class SluggedTest < TestCaseClass
       assert_equal 'foo', instance.slug
     end
   end
-
 end
 
 class SlugGeneratorTest < TestCaseClass
@@ -414,6 +413,85 @@ class FailedValidationAfterUpdateRegressionTest < TestCaseClass
       journalist.slug_de = nil
       assert !journalist.valid?
       assert_equal "joseph-pulitzer", journalist.to_param
+    end
+  end
+
+end
+
+class ToParamTest < TestCaseClass
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    validates_presence_of :active
+    friendly_id :name, :use => :slugged
+
+    attr_accessor :to_param_in_callback
+
+    after_save do
+      self.to_param_in_callback = to_param
+    end
+  end
+
+  test "to_param should return nil if record is unpersisted" do
+    assert_nil Journalist.new.to_param
+  end
+
+  test "to_param should return nil if record failed validation" do
+    journalist = Journalist.new :name => 'Clark Kent', :active => nil
+    refute journalist.save
+    assert_nil journalist.to_param
+  end
+
+  test "to_param should use slugged attribute if record saved successfully" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      assert_equal 'clark-kent', journalist.to_param
+    end
+  end
+
+  test "to_param should use original slug if existing record changes but fails to save" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      journalist.name = 'Superman'
+      journalist.slug = nil
+      journalist.active = nil
+      refute journalist.save
+      assert_equal 'clark-kent', journalist.to_param
+    end
+  end
+
+  test "to_param should use new slug if existing record changes successfully" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      journalist.name = 'Superman'
+      journalist.slug = nil
+      assert journalist.save
+      assert_equal 'superman', journalist.to_param
+    end
+  end
+
+  test "to_param should use new slug within callbacks if new record is saved successfully" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      assert_equal 'clark-kent', journalist.to_param_in_callback, "value of to_param in callback should use the new slug value"
+    end
+  end
+
+  test "to_param should use new slug within callbacks if existing record changes successfully" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      assert journalist.valid?
+      journalist.name = 'Superman'
+      journalist.slug = nil
+      assert journalist.save, "save should be successful"
+      assert_equal 'superman', journalist.to_param_in_callback, "value of to_param in callback should use the new slug value"
     end
   end
 
