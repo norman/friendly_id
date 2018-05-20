@@ -8,8 +8,8 @@ gem 'railties', '~> 5.1.0'
 # Database Configuration
 group :development, :test do
   platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', git: 'https://github.com/jruby/activerecord-jdbc-adapter', branch: 'master'
-    gem 'activerecord-jdbcpostgresql-adapter', git: 'https://github.com/jruby/activerecord-jdbc-adapter', branch: 'master'
+    gem 'activerecord-jdbcmysql-adapter', '~> 50.1'
+    gem 'activerecord-jdbcpostgresql-adapter', '~> 50.1'
     gem 'kramdown'
   end
 
