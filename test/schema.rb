@@ -1,4 +1,4 @@
-require "friendly_id/migration"
+require 'migration_mock'
 
 module FriendlyId
   module Test

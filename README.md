@@ -88,7 +88,7 @@ User.create! name: "Joe Schmoe"
 You can then access the user show page using the URL http://localhost:3000/users/joe-schmoe.
 
 
-If you're adding FriendlyId to an existing app and need to generate slugs for 
+If you're adding FriendlyId to an existing app and need to generate slugs for
 existing users, do this from the console, runner, or add a Rake task:
 
 ```ruby
