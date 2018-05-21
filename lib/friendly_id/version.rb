@@ -1,3 +1,3 @@
 module FriendlyId
-  VERSION = '5.2.3'.freeze
+  VERSION = '5.2.4'.freeze
 end

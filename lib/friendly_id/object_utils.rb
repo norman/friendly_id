@@ -70,3 +70,7 @@ Object.send :include, FriendlyId::ObjectUtils
 # one of its descendants.
 
 FriendlyId::UNFRIENDLY_CLASSES.each { |klass| FriendlyId.mark_as_unfriendly(klass) }
+
+ActiveSupport.on_load(:active_record) do
+  FriendlyId.mark_as_unfriendly(ActiveRecord::Base)
+end
