@@ -23,4 +23,14 @@ class FriendlyIdGenerator < ActiveRecord::Generators::Base
     return if options['skip-initializer']
     copy_file 'initializer.rb', 'config/initializers/friendly_id.rb'
   end
+
+  private
+
+  def rails5?
+    Rails.version.start_with? '5'
+  end
+
+  def migration_version
+    "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]" if rails5?
+  end
 end
