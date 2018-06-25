@@ -1,4 +1,4 @@
-require "friendly_id/migration"
+require "friendly_id/migration.tt"
 
 module FriendlyId
   module Test
