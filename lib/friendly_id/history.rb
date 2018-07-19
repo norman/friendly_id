@@ -110,9 +110,10 @@ method.
     # to be conflicts. This will allow a record to revert to a previously
     # used slug.
     def scope_for_slug_generator
-      relation = super
-      return relation if new_record?
-      relation = relation.joins(:slugs).merge(Slug.where('sluggable_id <> ?', id))
+      relation = super.joins(:slugs)
+      unless new_record?
+        relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+      end
       if friendly_id_config.uses?(:scoped)
         relation = relation.where(Slug.arel_table[:scope].eq(serialized_scope))
       end
