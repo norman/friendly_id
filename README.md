@@ -39,7 +39,7 @@ FriendlyId offers many advanced features, including:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'friendly_id', '~> 5.1.0' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
+gem 'friendly_id', '~> 5.2.0' # Note: You MUST use 5.0.0 or greater for Rails 4.0+
 ```
 
 And then execute:
