@@ -7,17 +7,11 @@ module FriendlyId
     def resolve_friendly_id_conflict(candidate_slugs)
       candidate = candidate_slugs.first
       return if candidate.nil?
-      scope = scope_for_slug_generator
-      if friendly_id_config.uses?(:history)
-        base_class = Slug
-      else
-        base_class = self.class.base_class
-      end
-      SequentialSlugCalculator.new(scope,
+      SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
                                   friendly_id_config.slug_column,
                                   friendly_id_config.sequence_separator,
-                                  base_class).next_slug
+                                  slug_base_class).next_slug
     end
 
     class SequentialSlugCalculator
@@ -77,6 +71,16 @@ module FriendlyId
         length_command = "LENGTH"
         length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
         "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+      end
+    end
+
+    private
+
+    def slug_base_class
+      if friendly_id_config.uses?(:history)
+        Slug
+      else
+        self.class.base_class
       end
     end
   end
