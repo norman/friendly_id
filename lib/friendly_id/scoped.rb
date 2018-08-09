@@ -122,6 +122,9 @@ an example of one way to set this up:
     end
 
     def scope_for_slug_generator
+      if friendly_id_config.uses?(:History)
+        return super
+      end
       relation = self.class.base_class.unscoped.friendly
       friendly_id_config.scope_columns.each do |column|
         relation = relation.where(column => send(column))
