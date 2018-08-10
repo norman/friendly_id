@@ -139,6 +139,10 @@ an example of one way to set this up:
     end
     private :slug_generator
 
+    def should_generate_new_friendly_id?
+      (changed & friendly_id_config.scope_columns).any? || super
+    end
+
     # This module adds the `:scope` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
