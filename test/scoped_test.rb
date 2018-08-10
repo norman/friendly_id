@@ -81,4 +81,17 @@ class ScopedTest < TestCaseClass
     end
   end
 
+  test "should generate new slug when scope changes" do
+    transaction do
+      novelist = Novelist.create! :name => "a"
+      publisher = Publisher.create! :name => "b"
+      novel1 = Novel.create! :name => "c", :novelist => novelist, :publisher => publisher
+      novel2 = Novel.create! :name => "c", :novelist => novelist, :publisher => Publisher.create(:name => "d")
+      assert_equal novel1.friendly_id, novel2.friendly_id
+      novel2.publisher = publisher
+      novel2.save!
+      assert novel2.friendly_id != novel1.friendly_id
+    end
+  end
+
 end
