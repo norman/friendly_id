@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'erb'
 require 'active_record'
 require "friendly_id/base"
 require "friendly_id/object_utils"

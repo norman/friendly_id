@@ -1,5 +1,6 @@
 require 'rails/generators'
 require "rails/generators/active_record"
+require 'friendly_id/active_record_version'
 
 # This generator adds a migration for the {FriendlyId::History
 # FriendlyId::History} addon.
@@ -16,7 +17,7 @@ class FriendlyIdGenerator < ActiveRecord::Generators::Base
   # Copies the migration template to db/migrate.
   def copy_files
     return if options['skip-migration']
-    migration_template 'migration.rb', 'db/migrate/create_friendly_id_slugs.rb'
+    migration_template 'migration.erb.rb', 'db/migrate/create_friendly_id_slugs.rb'
   end
 
   def create_initializer

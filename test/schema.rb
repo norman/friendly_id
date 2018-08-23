@@ -1,15 +1,25 @@
-require "friendly_id/migration"
+require 'friendly_id/active_record_version'
+
+class CreateFriendlyIdSlugs < eval("ActiveRecord::Migration#{FriendlyId::ActiveRecordVersion.migration_version}")
+  def change
+    create_table :friendly_id_slugs do |t|
+      t.string   :slug,           :null => false
+      t.integer  :sluggable_id,   :null => false
+      t.string   :sluggable_type, :limit => 50
+      t.string   :scope
+      t.datetime :created_at
+    end
+    add_index :friendly_id_slugs, :sluggable_id
+    add_index :friendly_id_slugs, [:slug, :sluggable_type], length: { slug: 140, sluggable_type: 50 }
+    add_index :friendly_id_slugs, [:slug, :sluggable_type, :scope], length: { slug: 70, sluggable_type: 50, scope: 70 }, unique: true
+    add_index :friendly_id_slugs, :sluggable_type
+  end
+end
+
 
 module FriendlyId
   module Test
-    migration_class =
-      if ActiveRecord::VERSION::MAJOR >= 5
-        ActiveRecord::Migration[4.2]
-      else
-        ActiveRecord::Migration
-      end
-
-    class Schema < migration_class
+    class Schema < eval("ActiveRecord::Migration#{FriendlyId::ActiveRecordVersion.migration_version}")
       class << self
         def down
           CreateFriendlyIdSlugs.down
