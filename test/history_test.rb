@@ -117,19 +117,6 @@ class HistoryTest < TestCaseClass
     end
   end
 
-  test "should prefer product that used slug most recently" do
-    transaction do
-      first_record = model_class.create! name: "foo"
-      second_record = model_class.create! name: "bar"
-
-      first_record.update! slug: "not_foo"
-      second_record.update! slug: "foo" #now both records have used foo; second_record most recently
-      second_record.update! slug: "not_bar"
-
-      assert_equal model_class.friendly.find("foo"), second_record
-    end
-  end
-
   test 'should name table according to prefix and suffix' do
     transaction do
       begin
@@ -385,6 +372,29 @@ class ScopedHistoryTest < TestCaseClass
       second_record = model_class.create! :city => second_city, :name => 'x'
 
       assert_equal record.slug, second_record.slug
+    end
+  end
+end
+
+class TacoCart < ActiveRecord::Base
+  extend FriendlyId
+
+  # Note that the :scoped module is not enabled
+  friendly_id :name, :use => [:slugged, :history]
+end
+
+class UnscopedHistoryTest < TestCaseClass
+  include FriendlyId::Test
+  include FriendlyId::Test::Shared::Core
+
+  def model_class
+    TacoCart
+  end
+
+  test "should persist the sluggable_type class name on the scope column" \
+       "when the :scoped module is not present" do
+    with_instance_of(model_class) do |record|
+      assert_equal "TacoCart", record.slugs.first.scope
     end
   end
 end
