@@ -88,7 +88,7 @@ module FriendlyId
         private
 
         def slugged_tables
-          %w[journalists articles novelists novels manuals cities]
+          %w[journalists articles novelists novels manuals cities taco_carts]
         end
 
         def paranoid_tables
