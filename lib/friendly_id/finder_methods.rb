@@ -20,7 +20,8 @@ module FriendlyId
       return super if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap {|result| return result unless result.nil?}
       return super if potential_primary_key?(id)
-      raise ActiveRecord::RecordNotFound.new "can't find record with friendly id: #{id.inspect}", name, friendly_id_config.query_field, id
+      raise_not_found_exception id
+      
     end
 
     # Returns true if a record with the given id exists.
@@ -34,7 +35,7 @@ module FriendlyId
     # `find`.
     # @raise ActiveRecord::RecordNotFound
     def find_by_friendly_id(id)
-      first_by_friendly_id(id) or raise ActiveRecord::RecordNotFound.new "can't find record with friendly id: #{id.inspect}", name, friendly_id_config.query_field, id
+      first_by_friendly_id(id) or raise raise_not_found_exception(id)
     end
 
     def exists_by_friendly_id?(id)
@@ -59,6 +60,14 @@ module FriendlyId
 
     def first_by_friendly_id(id)
       find_by(friendly_id_config.query_field => id)
+    end
+
+    def raise_not_found_exception(id)
+      if ActiveRecord.version < Gem::Version.create('5.0') then 
+        raise ActiveRecord::RecordNotFound.new "can't find record with friendly id: #{id.inspect}"
+      else 
+        raise ActiveRecord::RecordNotFound.new "can't find record with friendly id: #{id.inspect}", name, friendly_id_config.query_field, id
+      end
     end
 
   end
