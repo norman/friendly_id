@@ -48,11 +48,18 @@ And then execute:
 bundle install
 ```
 
-Generate the friendly configuration file
+Add a `slug` column to the desired table (e.g. `Users`)
+```shell
+rails g migration AddSlugToUsers slug:uniq
+```
+
+Generate the friendly configuration file and a new migration
 
 ```shell
 rails generate friendly_id
 ```
+
+Note: You can delete the `CreateFriendlyIdSlugs` migration if you won't use the slug history feature. ([Read more](https://norman.github.io/friendly_id/FriendlyId/History.html))
 
 Run the migration scripts
 
