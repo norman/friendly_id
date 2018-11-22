@@ -59,7 +59,7 @@ Generate the friendly configuration file and a new migration
 rails generate friendly_id
 ```
 
-Note: You can get rid of the `CreateFriendlyIdSlugs` migration if you won't use the slug history feature. ([Read more](http://norman.github.io/friendly_id/FriendlyId/History.html))
+Note: You can delete the `CreateFriendlyIdSlugs` migration if you won't use the slug history feature. ([Read more](https://norman.github.io/friendly_id/FriendlyId/History.html))
 
 Run the migration scripts
 
