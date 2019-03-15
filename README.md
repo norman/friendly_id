@@ -117,8 +117,8 @@ If you have a bug to report, please include the following information:
 If you are able to, it helps even more if you can fork FriendlyId on Github,
 and add a test that reproduces the error you are experiencing.
 
-For more info on how to report bugs, please see [this
-article](http://yourbugreportneedsmore.info/).
+For more inspiration on how to report bugs, please see [this
+article](https://www.chiark.greenend.org.uk/~sgtatham/bugs.html).
 
 ## Thanks and Credits
 
