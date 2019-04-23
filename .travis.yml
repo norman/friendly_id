@@ -7,17 +7,20 @@ dist: trusty
 addons:
   postgresql: "9.6"
 rvm:
-  - 2.6.1
-  - 2.5.3
-  - 2.4.0
-  - 2.3.0
+  - 2.6.3
+  - 2.5.5
+  - 2.4.6
+  - 2.3.8
   - 2.2.0
   - 2.1.0
   - jruby-9.1.13.0
 
 env:
-  - DB=postgres
-  - DB=mysql
+  global:
+    - COVERALLS=true 
+  matrix:
+    - DB=postgres
+    - DB=mysql
 
 gemfile:
   - gemfiles/Gemfile.rails-4.0.rb
@@ -57,29 +60,29 @@ matrix:
       gemfile: gemfiles/Gemfile.rails-5.0.rb
     - rvm: 2.2.0
       gemfile: gemfiles/Gemfile.rails-6.0.rb
-    - rvm: 2.3.0
+    - rvm: 2.3.8
       gemfile: gemfiles/Gemfile.rails-6.0.rb
-    - rvm: 2.4.0
+    - rvm: 2.4.6
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.4.0
+    - rvm: 2.4.6
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.4.0
+    - rvm: 2.4.6
       gemfile: gemfiles/Gemfile.rails-6.0.rb
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.5.3
+    - rvm: 2.5.5
       gemfile: gemfiles/Gemfile.rails-5.1.rb
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.6.1
+    - rvm: 2.6.3
       gemfile: gemfiles/Gemfile.rails-5.1.rb
   allow_failures:
     - rvm: jruby-9.1.13.0
@@ -87,9 +90,7 @@ matrix:
     - rvm: jruby-9.1.13.0
       gemfile: gemfiles/Gemfile.rails-5.0.rb
 
-sudo: false
-
 before_script:
   - bundle exec rake db:create db:up
 
-script: 'COVERALLS=true bundle exec rake test'
+script: 'bundle exec rake test'
