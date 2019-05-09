@@ -64,7 +64,7 @@ Note: You can delete the `CreateFriendlyIdSlugs` migration if you won't use the 
 Run the migration scripts
 
 ```shell
-rails db:migrate
+rake db:migrate
 ```
 
 Edit the `app/models/user.rb` file as the following:
