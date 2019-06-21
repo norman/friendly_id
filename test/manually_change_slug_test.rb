@@ -60,7 +60,7 @@ class ManuallyChangeSlugTest < TestCaseClass
       assert_equal 'about-us-2', record2.slug
 
       record2.update_attributes(slug: 'something about us')
-      assert_equal 'something-about-us', record2.slug
+      assert_equal 'something-about-us-2', record2.slug
       assert_equal record2.slugs.count, 3
     end
   end
