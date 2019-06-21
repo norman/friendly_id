@@ -293,6 +293,15 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       value
     end
 
+    # Whether to allow changing slug manually
+    #
+    # This method can be overrided in your model. By default you can not
+    # change slug through `#update_attributes`. But you can set on that by, for example,
+    # simple check `self.slug_changed?`
+    def should_manually_change_friendly_id?
+      false
+    end
+
     # Whether to generate a new slug.
     #
     # You can override this method in your model if, for example, you only want
@@ -355,6 +364,10 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     def set_slug(normalized_slug = nil)
       if should_generate_new_friendly_id?
         candidates = FriendlyId::Candidates.new(self, normalized_slug || send(friendly_id_config.base))
+        slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
+        send "#{friendly_id_config.slug_column}=", slug
+      elsif should_manually_change_friendly_id?
+        candidates = FriendlyId::Candidates.new(self, self.slug)
         slug = slug_generator.generate(candidates) || resolve_friendly_id_conflict(candidates)
         send "#{friendly_id_config.slug_column}=", slug
       end
