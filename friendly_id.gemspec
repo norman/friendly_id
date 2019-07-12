@@ -8,7 +8,6 @@ Gem::Specification.new do |s|
   s.email             = ["norman@njclarke.com", "p@arndt.io"]
   s.homepage          = "https://github.com/norman/friendly_id"
   s.summary           = "A comprehensive slugging and pretty-URL plugin."
-  s.rubyforge_project = "friendly_id"
   s.files             = `git ls-files`.split("\n")
   s.test_files        = `git ls-files -- {test}/*`.split("\n")
   s.require_paths     = ["lib"]
