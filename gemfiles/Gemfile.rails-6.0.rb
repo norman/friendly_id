@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
-gem 'activerecord', '~> 6.0.0.rc2'
-gem 'railties', '~> 6.0.0.rc2'
+gem 'activerecord', '~> 6.0.0'
+gem 'railties', '~> 6.0.0'
 
 # Database Configuration
 group :development, :test do
