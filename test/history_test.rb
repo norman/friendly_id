@@ -377,6 +377,33 @@ class ScopedHistoryTest < TestCaseClass
     end
   end
 
+  test "should record history when scope changes" do
+    transaction do
+      city1 = City.create!
+      city2 = City.create!
+      with_instance_of(Restaurant) do |record|
+        record.name = "x"
+        record.slug = nil
+
+        record.city = city1
+        record.save!
+        assert_equal("city_id:#{city1.id}", record.slugs.reload.first.scope)
+        assert_equal("x", record.slugs.reload.first.slug)
+
+        record.city = city2
+        record.save!
+        assert_equal("city_id:#{city2.id}", record.slugs.reload.first.scope)
+
+        record.name = "y"
+        record.slug = nil
+        record.city = city1
+        record.save!
+        assert_equal("city_id:#{city1.id}", record.slugs.reload.first.scope)
+        assert_equal("y", record.slugs.reload.first.slug)
+      end
+    end
+  end
+
   test "should allow equal slugs in different scopes" do
     transaction do
       city = City.create!

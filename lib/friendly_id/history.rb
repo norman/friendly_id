@@ -122,7 +122,7 @@ method.
 
     def create_slug
       return unless friendly_id
-      return if slugs.first.try(:slug) == friendly_id
+      return if history_is_up_to_date?
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
       if friendly_id_config.uses?(:scoped)
@@ -133,6 +133,15 @@ method.
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
       end
+    end
+
+    def history_is_up_to_date?
+      latest_history = slugs.first
+      check = latest_history.try(:slug) == friendly_id
+      if friendly_id_config.uses?(:scoped)
+        check = check && latest_history.scope == serialized_scope
+      end
+      check
     end
   end
 end
