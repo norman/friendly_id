@@ -141,6 +141,7 @@ method.
       if friendly_id_config.uses?(:scoped)
         check = check && latest_history.scope == serialized_scope
       end
+      check
     end
   end
 end
