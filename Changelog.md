@@ -3,7 +3,13 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## 5.3.0 (2019-09-25)
+
+* Record history when scope changes but slug does not ([#916](https://github.com/norman/friendly_id/pull/916))
+* Add support for Rails 6 ([#897](https://github.com/norman/friendly_id/pull/897))
+
 ## 5.2.5 (2018-12-30)
+
 * Pass all possible parameters to ActiveRecord::RecordNotFound.new when raising the exception ([#890](https://github.com/norman/friendly_id/pull/890))
 * Use composite index for queries by sluggable ([#882](https://github.com/norman/friendly_id/pull/882))
 * Scoped: generate new slug if scope changed ([#878](https://github.com/norman/friendly_id/pull/878))
