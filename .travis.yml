@@ -33,27 +33,27 @@ before_install:
 
 matrix:
   exclude:
-    - rvm: 2.4.6
+    - rvm: 2.4.7
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.4.6
+    - rvm: 2.4.7
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.4.6
+    - rvm: 2.4.7
       gemfile: gemfiles/Gemfile.rails-6.0.rb
-    - rvm: 2.5.5
+    - rvm: 2.5.6
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.5.5
+    - rvm: 2.5.6
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.5.5
+    - rvm: 2.5.6
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.5.5
+    - rvm: 2.5.6
       gemfile: gemfiles/Gemfile.rails-5.1.rb
-    - rvm: 2.6.3
+    - rvm: 2.6.4
       gemfile: gemfiles/Gemfile.rails-4.0.rb
-    - rvm: 2.6.3
+    - rvm: 2.6.4
       gemfile: gemfiles/Gemfile.rails-4.1.rb
-    - rvm: 2.6.3
+    - rvm: 2.6.4
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-    - rvm: 2.6.3
+    - rvm: 2.6.4
       gemfile: gemfiles/Gemfile.rails-5.1.rb
 
 before_script:
