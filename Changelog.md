@@ -3,6 +3,10 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## Unreleased
+
+* Avoid using deprecated `update_attributes` (Philip Arndt).
+
 ## 5.3.0 (2019-09-25)
 
 * Record history when scope changes but slug does not ([#916](https://github.com/norman/friendly_id/pull/916))

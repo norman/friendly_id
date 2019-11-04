@@ -62,7 +62,7 @@ module FriendlyId
           my_model_class = Class.new(model_class)
           self.class.const_set("Foo", my_model_class)
           with_instance_of my_model_class do |record|
-            record.update_attributes my_model_class.friendly_id_config.slug_column => nil
+            record.update my_model_class.friendly_id_config.slug_column => nil
             record = my_model_class.friendly.find(record.id)
             record.class.validate Proc.new {errors.add(:name, "FAIL")}
             record.save
@@ -132,7 +132,7 @@ module FriendlyId
         test "updating record's other values should not change the friendly_id" do
           with_instance_of model_class do |record|
             old = record.friendly_id
-            record.update_attributes! :active => false
+            record.update! active: false
             assert model_class.friendly.find old
           end
         end
