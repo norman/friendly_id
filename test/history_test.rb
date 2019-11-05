@@ -65,8 +65,7 @@ class HistoryTest < TestCaseClass
   test "should not be read only when found by slug" do
     with_instance_of(model_class) do |record|
       refute model_class.friendly.find(record.friendly_id).readonly?
-      assert record.update_attribute :name, 'foo'
-      assert record.update_attributes name: 'foo'
+      assert record.update name: 'foo'
     end
   end
 
@@ -109,10 +108,10 @@ class HistoryTest < TestCaseClass
       first_record = model_class.create! :name => "foo"
       second_record = model_class.create! :name => 'another'
 
-      second_record.update_attributes :name => 'foo', :slug => nil
+      second_record.update :name => 'foo', :slug => nil
       assert_match(/foo-.*/, second_record.slug)
 
-      first_record.update_attributes :name => 'another', :slug => nil
+      first_record.update :name => 'another', :slug => nil
       assert_match(/another-.*/, first_record.slug)
     end
   end
@@ -230,7 +229,7 @@ if ActiveRecord::VERSION::STRING >= '5.0'
         record = model_class.create(name: 'paranoid')
         assert FriendlyId::Slug.find_by_slug('paranoid').present?
 
-        record.update_attribute(:deleted_at, Time.now)
+        record.update deleted_at: Time.now
 
         orphan_slug = FriendlyId::Slug.find_by_slug('paranoid')
         assert orphan_slug.present?, 'Orphaned slug should exist'
