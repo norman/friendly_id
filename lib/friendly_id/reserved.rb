@@ -46,6 +46,7 @@ message to a different field. For example:
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_accessor :reserved_words
+      attr_accessor :treat_reserved_as_conflict
     end
   end
 end

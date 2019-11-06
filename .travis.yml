@@ -1,41 +1,96 @@
 language: ruby
 cache: bundler
-
+services:
+  - postgresql
+  - mysql
+dist: trusty
+addons:
+  postgresql: "9.6"
 rvm:
-  - 2.3.0
+  - 2.6.3
+  - 2.5.5
+  - 2.4.6
+  - 2.3.8
   - 2.2.0
   - 2.1.0
-  - 2.0.0
-  - jruby-9.0.4.0
+  - jruby-9.1.13.0
 
 env:
-  - DB=postgres
-  - DB=mysql
+  global:
+    - COVERALLS=true 
+  matrix:
+    - DB=postgres
+    - DB=mysql
 
 gemfile:
   - gemfiles/Gemfile.rails-4.0.rb
   - gemfiles/Gemfile.rails-4.1.rb
   - gemfiles/Gemfile.rails-4.2.rb
   - gemfiles/Gemfile.rails-5.0.rb
+  - gemfiles/Gemfile.rails-5.1.rb
+  - gemfiles/Gemfile.rails-5.2.rb
+  - gemfiles/Gemfile.rails-6.0.rb
+
+before_install:
+  - gem update bundler
 
 matrix:
-  allow_failures:
-    - rvm: jruby-19mode
-      gemfile: gemfiles/Gemfile.rails-4.2.rb
-      env: DB=postgres
-    - rvm: jruby-9.0.4.0
-      gemfile: gemfiles/Gemfile.rails-5.0.rb
   exclude:
-    - rvm: 2.0.0
-      gemfile: gemfiles/Gemfile.rails-5.0.rb
+    - rvm: 2.1.0
+      gemfile: gemfiles/Gemfile.rails-5.2.rb
+    - rvm: 2.1.0
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: 2.2.0
+      gemfile: gemfiles/Gemfile.rails-5.2.rb
+    - rvm: 2.2.0
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-5.2.rb
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
     - rvm: 2.1.0
       gemfile: gemfiles/Gemfile.rails-5.0.rb
+    - rvm: 2.1.0
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
+    - rvm: 2.1.0
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: 2.2.0
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
     - rvm: 2.2.0
       gemfile: gemfiles/Gemfile.rails-5.0.rb
-
-sudo: false
+    - rvm: 2.2.0
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: 2.3.8
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: 2.4.6
+      gemfile: gemfiles/Gemfile.rails-4.0.rb
+    - rvm: 2.4.6
+      gemfile: gemfiles/Gemfile.rails-4.1.rb
+    - rvm: 2.4.6
+      gemfile: gemfiles/Gemfile.rails-6.0.rb
+    - rvm: 2.5.5
+      gemfile: gemfiles/Gemfile.rails-4.0.rb
+    - rvm: 2.5.5
+      gemfile: gemfiles/Gemfile.rails-4.1.rb
+    - rvm: 2.5.5
+      gemfile: gemfiles/Gemfile.rails-5.0.rb
+    - rvm: 2.5.5
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
+    - rvm: 2.6.3
+      gemfile: gemfiles/Gemfile.rails-4.0.rb
+    - rvm: 2.6.3
+      gemfile: gemfiles/Gemfile.rails-4.1.rb
+    - rvm: 2.6.3
+      gemfile: gemfiles/Gemfile.rails-5.0.rb
+    - rvm: 2.6.3
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
+  allow_failures:
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-5.1.rb
+    - rvm: jruby-9.1.13.0
+      gemfile: gemfiles/Gemfile.rails-5.0.rb
 
 before_script:
   - bundle exec rake db:create db:up
 
-script: 'COVERALLS=true bundle exec rake test'
+script: 'bundle exec rake test'

@@ -2,7 +2,6 @@ module FriendlyId
   # Instances of these classes will never be considered a friendly id.
   # @see FriendlyId::ObjectUtils#friendly_id
   UNFRIENDLY_CLASSES = [
-    ActiveRecord::Base,
     Array,
     FalseClass,
     Hash,
@@ -59,6 +58,10 @@ module FriendlyId
       true
     end
   end
+
+  def self.mark_as_unfriendly(klass)
+    klass.send(:include, FriendlyId::UnfriendlyUtils)
+  end
 end
 
 Object.send :include, FriendlyId::ObjectUtils
@@ -66,4 +69,8 @@ Object.send :include, FriendlyId::ObjectUtils
 # Considered unfriendly if object is an instance of an unfriendly class or
 # one of its descendants.
 
-FriendlyId::UNFRIENDLY_CLASSES.each { |klass| klass.send(:include, FriendlyId::UnfriendlyUtils) }
+FriendlyId::UNFRIENDLY_CLASSES.each { |klass| FriendlyId.mark_as_unfriendly(klass) }
+
+ActiveSupport.on_load(:active_record) do
+  FriendlyId.mark_as_unfriendly(ActiveRecord::Base)
+end

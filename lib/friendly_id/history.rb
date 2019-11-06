@@ -44,9 +44,9 @@ method.
         @post = Post.friendly.find params[:id]
 
         # If an old id or a numeric id was used to find the record, then
-        # the request path will not match the post_path, and we should do
-        # a 301 redirect that uses the current friendly id.
-        if request.path != post_path(@post)
+        # the request slug will not match the current slug, and we should do
+        # a 301 redirect to the new path
+        if params[:id] != @post.slug
           return redirect_to @post, :status => :moved_permanently
         end
       end
@@ -72,7 +72,7 @@ method.
     # Configures the model instance to use the History add-on.
     def self.included(model_class)
       model_class.class_eval do
-        has_many :slugs, -> {order("#{Slug.quoted_table_name}.id DESC")}, {
+        has_many :slugs, -> {order(id: :desc)}, {
           :as         => :sluggable,
           :dependent  => @friendly_id_config.dependent_value,
           :class_name => Slug.to_s
@@ -86,14 +86,13 @@ method.
       include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
-        where(arel_table[friendly_id_config.query_field].eq(id)).exists? || joins(:slugs).where(slug_history_clause(id)).exists?
+        super || joins(:slugs).where(slug_history_clause(id)).exists?
       end
 
       private
 
       def first_by_friendly_id(id)
-        matching_record = where(friendly_id_config.query_field => id).first
-        matching_record || slug_table_record(id)
+        super || slug_table_record(id)
       end
 
       def slug_table_record(id)
@@ -111,9 +110,10 @@ method.
     # to be conflicts. This will allow a record to revert to a previously
     # used slug.
     def scope_for_slug_generator
-      relation = super
-      return relation if new_record?
-      relation = relation.joins(:slugs).merge(Slug.where('sluggable_id <> ?', id))
+      relation = super.joins(:slugs)
+      unless new_record?
+        relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+      end
       if friendly_id_config.uses?(:scoped)
         relation = relation.where(Slug.arel_table[:scope].eq(serialized_scope))
       end
@@ -122,7 +122,7 @@ method.
 
     def create_slug
       return unless friendly_id
-      return if slugs.first.try(:slug) == friendly_id
+      return if history_is_up_to_date?
       # Allow reversion back to a previously used slug
       relation = slugs.where(:slug => friendly_id)
       if friendly_id_config.uses?(:scoped)
@@ -133,6 +133,15 @@ method.
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
       end
+    end
+
+    def history_is_up_to_date?
+      latest_history = slugs.first
+      check = latest_history.try(:slug) == friendly_id
+      if friendly_id_config.uses?(:scoped)
+        check = check && latest_history.scope == serialized_scope
+      end
+      check
     end
   end
 end

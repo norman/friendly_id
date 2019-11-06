@@ -25,6 +25,7 @@ module FriendlyId
     attr_accessor :routes
 
     def initialize(model_class, values = nil)
+      @base           = nil
       @model_class    = model_class
       @defaults       = {}
       @modules        = []

@@ -137,4 +137,63 @@ class SequentiallySluggedTestWithHistory < TestCaseClass
       assert_equal 'test-name-2', record2.slug
     end
   end
+
+  test "should work with regeneration with history when 2 slugs already exists and the second is changed" do
+    transaction do
+      record1 = model_class.create! :name => "Test name"
+      record2 = model_class.create! :name => "Test name"
+      record3 = model_class.create! :name => "Another test name"
+      assert_equal 'test-name', record1.slug
+      assert_equal 'test-name-2', record2.slug
+      assert_equal 'another-test-name', record3.slug
+
+      record2.name = "One more test name"
+      record2.slug = nil
+      record2.save!
+      assert_equal 'one-more-test-name', record2.slug
+
+      record3.name = "Test name"
+      record3.slug = nil
+      record3.save!
+      assert_equal 'test-name-3', record3.slug
+    end
+  end
+end
+
+class City < ActiveRecord::Base
+  has_many :restaurants
+end
+
+class Restaurant < ActiveRecord::Base
+  extend FriendlyId
+  belongs_to :city
+  friendly_id :name, :use => [:sequentially_slugged, :scoped, :history], :scope => :city
+end
+
+class SequentiallySluggedTestWithScopedHistory < TestCaseClass
+  include FriendlyId::Test
+  include FriendlyId::Test::Shared::Core
+
+  def model_class
+    Restaurant
+  end
+
+  test "should work with regeneration with scoped history" do
+    transaction do
+      city1 = City.create!
+      city2 = City.create!
+      record1 = model_class.create! :name => "Test name", :city => city1
+      record2 = model_class.create! :name => "Test name", :city => city1
+
+      assert_equal 'test-name', record1.slug
+      assert_equal 'test-name-2', record2.slug
+
+      record2.name = 'Another test name'
+      record2.slug = nil
+      record2.save!
+
+      record3 = model_class.create! :name => "Test name", :city => city1
+      assert_equal 'test-name-3', record3.slug
+    end
+  end
 end

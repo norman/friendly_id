@@ -178,6 +178,9 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #   Configures the name of the column where FriendlyId will store the slug.
     #   Defaults to `:slug`.
     #
+    # @option options [Integer] :slug_limit Available when using `:slugged`.
+    #   Configures the limit of the slug. This option has no default value.
+    #
     # @option options [Symbol] :slug_generator_class Available when using `:slugged`.
     #   Sets the class used to generate unique slugs. You should not specify this
     #   unless you're doing some extensive hacking on FriendlyId. Defaults to
@@ -258,12 +261,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
       if friendly_id_config.routes == :friendly
-        if attribute_changed?(friendly_id_config.query_field)
-          diff = changes[friendly_id_config.query_field]
-          diff.first || diff.second
-        else
-          friendly_id.presence.to_param || super
-        end
+        friendly_id.presence.to_param || super
       else
         super
       end

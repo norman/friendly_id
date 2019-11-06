@@ -38,6 +38,10 @@ if ENV["LOG"]
   ActiveRecord::Base.logger = Logger.new($stdout)
 end
 
+if ActiveSupport::VERSION::STRING >= '4.2'
+  ActiveSupport.test_order = :random
+end
+
 module FriendlyId
   module Test
 
@@ -65,7 +69,6 @@ module FriendlyId
 
       def connect
         version = ActiveRecord::VERSION::STRING
-        driver  = FriendlyId::Test::Database.driver
         engine  = RUBY_ENGINE rescue "ruby"
 
         ActiveRecord::Base.establish_connection config[driver]
@@ -86,7 +89,9 @@ module FriendlyId
       end
 
       def driver
-        (ENV["DB"] or "sqlite3").downcase
+        _driver = ENV.fetch('DB', 'sqlite3').downcase
+        _driver = "postgres" if %w(postgresql pg).include?(_driver)
+        _driver
       end
 
       def in_memory?

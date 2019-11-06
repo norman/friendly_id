@@ -91,14 +91,14 @@ class SimpleI18nTest < TestCaseClass
   class RegressionTest < TestCaseClass
     include FriendlyId::Test
 
-    test "should not overwrite other locale's slugs on update_attributes" do
+    test "should not overwrite other locale's slugs on update" do
       transaction do
         journalist = Journalist.create!(:name => "John Smith")
         journalist.set_friendly_id("Juan Fulano", :es)
         journalist.save!
         assert_equal "john-smith", journalist.to_param
         journalist.slug = nil
-        journalist.update_attributes :name => "Johnny Smith"
+        journalist.update :name => "Johnny Smith"
         assert_equal "johnny-smith", journalist.to_param
         I18n.with_locale(:es) do
           assert_equal "juan-fulano", journalist.to_param

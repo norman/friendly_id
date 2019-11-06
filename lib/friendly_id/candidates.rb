@@ -63,8 +63,6 @@ module FriendlyId
       slug.present?
     end
 
-    private
-
     def reserved?(slug)
       config = @object.friendly_id_config
       return false unless config.uses? ::FriendlyId::Reserved

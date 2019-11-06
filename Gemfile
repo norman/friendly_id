@@ -5,6 +5,7 @@ gemspec
 group :development, :test do
   platforms :ruby do
     gem 'byebug'
+    gem 'pry'
   end
 
   platforms :jruby do

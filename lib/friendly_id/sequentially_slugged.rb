@@ -11,7 +11,7 @@ module FriendlyId
                                   candidate,
                                   friendly_id_config.slug_column,
                                   friendly_id_config.sequence_separator,
-                                  self.class.base_class).next_slug
+                                  slug_base_class).next_slug
     end
 
     class SequentialSlugCalculator
@@ -47,7 +47,7 @@ module FriendlyId
       def slug_conflicts
         scope.
           where(conflict_query, slug, sequential_slug_matcher).
-          order(ordering_query).pluck(slug_column)
+          order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
 
       def conflict_query
@@ -71,6 +71,16 @@ module FriendlyId
         length_command = "LENGTH"
         length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
         "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+      end
+    end
+
+    private
+
+    def slug_base_class
+      if friendly_id_config.uses?(:history)
+        Slug
+      else
+        self.class.base_class
       end
     end
   end

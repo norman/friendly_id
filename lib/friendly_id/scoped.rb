@@ -122,7 +122,10 @@ an example of one way to set this up:
     end
 
     def scope_for_slug_generator
-      relation = self.class.unscoped.friendly
+      if friendly_id_config.uses?(:History)
+        return super
+      end
+      relation = self.class.base_class.unscoped.friendly
       friendly_id_config.scope_columns.each do |column|
         relation = relation.where(column => send(column))
       end
@@ -132,9 +135,13 @@ an example of one way to set this up:
     private :scope_for_slug_generator
 
     def slug_generator
-      friendly_id_config.slug_generator_class.new(scope_for_slug_generator)
+      friendly_id_config.slug_generator_class.new(scope_for_slug_generator, friendly_id_config)
     end
     private :slug_generator
+
+    def should_generate_new_friendly_id?
+      (changed & friendly_id_config.scope_columns).any? || super
+    end
 
     # This module adds the `:scope` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.

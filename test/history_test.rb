@@ -65,8 +65,7 @@ class HistoryTest < TestCaseClass
   test "should not be read only when found by slug" do
     with_instance_of(model_class) do |record|
       refute model_class.friendly.find(record.friendly_id).readonly?
-      assert record.update_attribute :name, 'foo'
-      assert record.update_attributes name: 'foo'
+      assert record.update name: 'foo'
     end
   end
 
@@ -109,10 +108,10 @@ class HistoryTest < TestCaseClass
       first_record = model_class.create! :name => "foo"
       second_record = model_class.create! :name => 'another'
 
-      second_record.update_attributes :name => 'foo', :slug => nil
+      second_record.update :name => 'foo', :slug => nil
       assert_match(/foo-.*/, second_record.slug)
 
-      first_record.update_attributes :name => 'another', :slug => nil
+      first_record.update :name => 'another', :slug => nil
       assert_match(/another-.*/, first_record.slug)
     end
   end
@@ -172,7 +171,7 @@ class HistoryTestWithAutomaticSlugRegeneration < HistoryTest
   end
 end
 
-class DependentDestroyTest < HistoryTest
+class DependentDestroyTest < TestCaseClass
 
   include FriendlyId::Test
 
@@ -207,6 +206,37 @@ class DependentDestroyTest < HistoryTest
       assert FriendlyId::Slug.find_by_slug('baz').present?
       l.destroy
       assert FriendlyId::Slug.find_by_slug('baz').nil?
+    end
+  end
+end
+
+if ActiveRecord::VERSION::STRING >= '5.0'
+  class HistoryTestWithParanoidDeletes < HistoryTest
+    class ParanoidRecord < ActiveRecord::Base
+      extend FriendlyId
+      friendly_id :name, :use => :history, :dependent => false
+
+      default_scope { where(deleted_at: nil) }
+    end
+
+    def model_class
+      ParanoidRecord
+    end
+
+    test 'slug should have a sluggable even when soft deleted by a library' do
+      transaction do
+        assert FriendlyId::Slug.find_by_slug('paranoid').nil?
+        record = model_class.create(name: 'paranoid')
+        assert FriendlyId::Slug.find_by_slug('paranoid').present?
+
+        record.update deleted_at: Time.now
+
+        orphan_slug = FriendlyId::Slug.find_by_slug('paranoid')
+        assert orphan_slug.present?, 'Orphaned slug should exist'
+
+        assert orphan_slug.valid?, "Errors: #{orphan_slug.errors.full_messages}"
+        assert orphan_slug.sluggable.present?, 'Orphaned slug should still find corresponding paranoid sluggable'
+      end
     end
   end
 end
@@ -248,7 +278,7 @@ class HistoryTestWithFriendlyFinders < HistoryTest
         begin
           assert model_class.find(old_friendly_id)
           assert model_class.exists?(old_friendly_id), "should exist? by old id for #{model_class.name}"
-        rescue ActiveRecord::RecordNotFound => e
+        rescue ActiveRecord::RecordNotFound
           flunk "Could not find record by old id for #{model_class.name}"
         end
       end
@@ -342,6 +372,33 @@ class ScopedHistoryTest < TestCaseClass
 
         third_record = model_class.create! :city => city, :name => 'y'
         assert_match(/y-.+/, third_record.friendly_id)
+      end
+    end
+  end
+
+  test "should record history when scope changes" do
+    transaction do
+      city1 = City.create!
+      city2 = City.create!
+      with_instance_of(Restaurant) do |record|
+        record.name = "x"
+        record.slug = nil
+
+        record.city = city1
+        record.save!
+        assert_equal("city_id:#{city1.id}", record.slugs.reload.first.scope)
+        assert_equal("x", record.slugs.reload.first.slug)
+
+        record.city = city2
+        record.save!
+        assert_equal("city_id:#{city2.id}", record.slugs.reload.first.scope)
+
+        record.name = "y"
+        record.slug = nil
+        record.city = city1
+        record.save!
+        assert_equal("city_id:#{city1.id}", record.slugs.reload.first.scope)
+        assert_equal("y", record.slugs.reload.first.slug)
       end
     end
   end
