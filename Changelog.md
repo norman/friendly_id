@@ -5,7 +5,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
-* Avoid using deprecated `update_attributes` (Philip Arndt).
+* Avoid using deprecated `update_attributes`. ([#922](https://github.com/norman/friendly_id/pull/922))
 
 ## 5.3.0 (2019-09-25)
 
