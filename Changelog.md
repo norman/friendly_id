@@ -3,6 +3,10 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## Unreleased
+
+Make `first_by_friendly_id` use case insensitive slug search using `downcase`. ([#787](https://github.com/norman/friendly_id/pull/787))
+
 ## 5.2.0 (2016-12-01)
 
 * Add sequential slug module for FriendlyId 4.x-style sequential slugs. ([#644](https://github.com/norman/friendly_id/pull/644)).
