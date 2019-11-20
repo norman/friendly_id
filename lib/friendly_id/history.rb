@@ -1,4 +1,3 @@
-
 module FriendlyId
 
 =begin
