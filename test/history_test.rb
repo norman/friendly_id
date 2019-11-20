@@ -92,6 +92,28 @@ class HistoryTest < TestCaseClass
     end
   end
 
+  test 'should maintain history even if current slug is not the most recent one' do
+    with_instance_of(model_class) do |record|
+      record.name = 'current'
+      assert record.save
+
+      # this feels like a hack. only thing i can get to work with the HistoryTestWithSti
+      # test cases. (Editorialist vs Journalist.)
+      sluggable_type = FriendlyId::Slug.first.sluggable_type
+      # create several slugs for record
+      # current slug does not have max id
+      FriendlyId::Slug.delete_all
+      FriendlyId::Slug.create(sluggable_type: sluggable_type, sluggable_id: record.id, slug: 'current')
+      FriendlyId::Slug.create(sluggable_type: sluggable_type, sluggable_id: record.id, slug: 'outdated')
+
+      record.reload
+      record.slug = nil
+      assert record.save
+
+      assert_equal 2, FriendlyId::Slug.count
+    end
+  end
+
   test "should not create new slugs that match old slugs" do
     transaction do
       first_record = model_class.create! :name => "foo"

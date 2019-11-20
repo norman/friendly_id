@@ -5,6 +5,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Use `destroy_all` rather than `delete_all` when creating historical slugs ([#924](https://github.com/norman/friendly_id/pull/924))
 * Avoid using deprecated `update_attributes`. ([#922](https://github.com/norman/friendly_id/pull/922))
 
 ## 5.3.0 (2019-09-25)
