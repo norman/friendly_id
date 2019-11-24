@@ -288,7 +288,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
     # @param [#to_s] value The value used as the basis of the slug.
     # @return The candidate slug text, without a sequence.
     def normalize_friendly_id(value)
-      value = value.to_s.parameterize
+      value = value.to_s.parameterize(preserve_case: true)
       value = value[0...friendly_id_config.slug_limit] if friendly_id_config.slug_limit
       value
     end
