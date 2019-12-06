@@ -26,4 +26,28 @@ class Finders < TestCaseClass
       assert model_class.existing.find(record.friendly_id)
     end
   end
+
+  test 'should find capitalized records with finders as class methods' do
+    with_instance_of(model_class) do |record|
+      assert model_class.find(record.friendly_id.capitalize)
+    end
+  end
+
+  test 'should find capitalized records with finders on relations' do
+    with_instance_of(model_class) do |record|
+      assert model_class.existing.find(record.friendly_id.capitalize)
+    end
+  end
+
+  test 'should find upcased records with finders as class methods' do
+    with_instance_of(model_class) do |record|
+      assert model_class.find(record.friendly_id.upcase)
+    end
+  end
+
+  test 'should find upcased records with finders on relations' do
+    with_instance_of(model_class) do |record|
+      assert model_class.existing.find(record.friendly_id.upcase)
+    end
+  end
 end
