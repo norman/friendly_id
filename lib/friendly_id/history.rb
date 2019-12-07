@@ -128,7 +128,7 @@ method.
       if friendly_id_config.uses?(:scoped)
         relation = relation.where(:scope => serialized_scope)
       end
-      relation.destroy_all
+      relation.destroy_all unless relation.empty?
       slugs.create! do |record|
         record.slug = friendly_id
         record.scope = serialized_scope if friendly_id_config.uses?(:scoped)
