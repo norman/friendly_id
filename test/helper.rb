@@ -27,6 +27,7 @@ end
 require "mocha/setup"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
+require 'erb'
 
 I18n.enforce_available_locales = false
 
@@ -85,7 +86,11 @@ module FriendlyId
       end
 
       def config
-        @config ||= YAML::load(File.open(File.expand_path("../databases.yml", __FILE__)))
+        @config ||= YAML::load(
+          ERB.new(
+            File.read(File.expand_path("../databases.yml", __FILE__))
+          ).result
+        )
       end
 
       def driver
