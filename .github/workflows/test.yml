@@ -1,0 +1,52 @@
+name: CI
+
+on: [ push ]
+jobs:
+  test:
+    strategy:
+      matrix:
+        architecture: [ x64 ]
+        database: [ mysql, postgresql ]
+        gemfile: [ '6.0', '5.2', '5.1', '5.0' ]
+        ruby: [ '2.6.x', '2.5.x' ]
+      fail-fast: false
+      max-parallel: 20
+    runs-on: ubuntu-latest
+    name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
+    steps:
+    - uses: actions/setup-ruby@v1.0.0
+      with:
+        architecture: ${{ matrix.architecture }}
+        ruby-version: ${{ matrix.ruby }}
+        version: ${{ matrix.ruby }}
+    - uses: actions/checkout@v1
+    - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev libsqlite3-dev -y
+    - id: cache-bundler
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.ruby }}-gem-${{ hashFiles(format('gemfiles/Gemfile.rails-{0}.rb', matrix.gemfile)) }}
+    - run: gem install bundler
+    - run: bundle install --path vendor/bundle
+    - run: bundle exec rake db:create db:up
+    - run: bundle exec rake test
+
+    env:
+      BUNDLE_JOBS: 4
+      BUNDLE_GEMFILE: gemfiles/Gemfile.rails-${{ matrix.gemfile }}.rb
+      BUNDLE_PATH: vendor/bundle
+      CI: true
+      COVERALLS: true
+      DB: ${{ matrix.database }}
+      MYSQL_PASSWORD: root
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      RAILS_ENV: test
+
+    services:
+      postgres:
+        image: postgres:11.5
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+

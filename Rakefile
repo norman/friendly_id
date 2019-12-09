@@ -71,7 +71,7 @@ namespace :db do
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
     commands = {
-      "mysql"    => "mysql -u #{config['username']} -e 'create database #{config["database"]};' >/dev/null",
+      "mysql"    => "mysql -u #{config['username']} --password=#{config['password']} -e 'create database #{config["database"]};' >/dev/null",
       "postgres" => "psql -c 'create database #{config['database']};' -U #{config['username']} >/dev/null"
     }
     %x{#{commands[driver] || true}}
@@ -83,7 +83,7 @@ namespace :db do
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
     commands = {
-      "mysql"    => "mysql -u #{config['username']} -e 'drop database #{config["database"]};' >/dev/null",
+      "mysql"    => "mysql -u #{config['username']} --password=#{config['password']} -e 'drop database #{config["database"]};' >/dev/null",
       "postgres" => "psql -c 'drop database #{config['database']};' -U #{config['username']} >/dev/null"
     }
     %x{#{commands[driver] || true}}
