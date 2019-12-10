@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/norman/friendly_id.svg)](https://travis-ci.org/norman/friendly_id)
+[![Build Status](https://github.com/norman/friendly_id/workflows/CI/badge.svg)](https://github.com/norman/friendly_id/actions)
 [![Code Climate](https://codeclimate.com/github/norman/friendly_id.svg)](https://codeclimate.com/github/norman/friendly_id)
 [![Inline docs](http://inch-ci.org/github/norman/friendly_id.svg?branch=master)](http://inch-ci.org/github/norman/friendly_id)
 
@@ -95,7 +95,7 @@ User.create! name: "Joe Schmoe"
 You can then access the user show page using the URL http://localhost:3000/users/joe-schmoe.
 
 
-If you're adding FriendlyId to an existing app and need to generate slugs for 
+If you're adding FriendlyId to an existing app and need to generate slugs for
 existing users, do this from the console, runner, or add a Rake task:
 
 ```ruby
