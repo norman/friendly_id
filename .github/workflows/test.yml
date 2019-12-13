@@ -1,6 +1,10 @@
 name: CI
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
 jobs:
   test:
     strategy:
@@ -10,7 +14,6 @@ jobs:
         gemfile: [ '6.0', '5.2', '5.1', '5.0' ]
         ruby: [ '2.6.x', '2.5.x' ]
       fail-fast: false
-      max-parallel: 20
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
