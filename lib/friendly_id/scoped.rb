@@ -140,6 +140,8 @@ an example of one way to set this up:
     private :slug_generator
 
     def should_generate_new_friendly_id?
+      return super if new_record?
+
       (changed & friendly_id_config.scope_columns).any? || super
     end
 
