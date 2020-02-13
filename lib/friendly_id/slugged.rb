@@ -365,6 +365,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
       scope = self.class.base_class.unscoped
       scope = scope.friendly unless scope.respond_to?(:exists_by_friendly_id?)
       primary_key_name = self.class.primary_key
+      raise ::ActiveRecord::UnknownPrimaryKey.new(self.class) unless primary_key_name
       scope.where(self.class.base_class.arel_table[primary_key_name].not_eq(send(primary_key_name)))
     end
     private :scope_for_slug_generator
