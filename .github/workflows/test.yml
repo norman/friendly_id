@@ -23,7 +23,7 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         version: ${{ matrix.ruby }}
     - uses: actions/checkout@v1
-    - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev libsqlite3-dev -y
+    - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev mysql-client libsqlite3-dev -y
     - id: cache-bundler
       uses: actions/cache@v1
       with:
@@ -52,4 +52,9 @@ jobs:
         image: postgres:11.5
         ports: ["5432:5432"]
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
+      mysql:
+        image: mysql:5.7
+        ports: ["3306:3306"]
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        env:
+          MYSQL_ROOT_PASSWORD: root

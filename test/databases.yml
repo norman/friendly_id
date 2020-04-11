@@ -3,7 +3,8 @@ mysql:
   database: friendly_id_test
   username: root
   password: <%= ENV['MYSQL_PASSWORD'] %>
-  hostname: localhost
+  host: 127.0.0.1
+  port: 3306
   encoding: utf8
 
 postgres:
