@@ -92,7 +92,7 @@ class SluggedTest < TestCaseClass
     end
   end
 
-  test "should not set slug on create if unrelated validations fail" do
+  test "should set slug on create if unrelated validations fail" do
     klass = Class.new model_class do
       validates_presence_of :active
       friendly_id :name, :use => :slugged
@@ -106,11 +106,30 @@ class SluggedTest < TestCaseClass
       instance = klass.new :name => 'foo'
       refute instance.save
       refute instance.valid?
+      assert_equal 'foo', instance.slug
+    end
+  end
+
+  test "should not set slug on create if slug validation fails" do
+    klass = Class.new model_class do
+      validates_presence_of :active
+      validates_length_of :slug, :minimum => 2
+      friendly_id :name, :use => :slugged
+
+      def self.name
+        "Journalist"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'x'
+      refute instance.save
+      refute instance.valid?
       assert_nil instance.slug
     end
   end
 
-  test "should not set slug on create if unrelated validations fail with custom slug_column" do
+  test "should set slug on create if unrelated validations fail with custom slug_column" do
     klass = Class.new(ActiveRecord::Base) do
       self.table_name = 'authors'
       extend FriendlyId
@@ -126,11 +145,31 @@ class SluggedTest < TestCaseClass
       instance = klass.new :name => 'foo'
       refute instance.save
       refute instance.valid?
+      assert_equal 'foo', instance.subdomain
+    end
+  end
+
+  test "should not set slug on create if custom slug column validations fail" do
+    klass = Class.new(ActiveRecord::Base) do
+      self.table_name = 'authors'
+      extend FriendlyId
+      validates_length_of :subdomain, :minimum => 2
+      friendly_id :name, :use => :slugged, :slug_column => :subdomain
+
+      def self.name
+        "Author"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'x'
+      refute instance.save
+      refute instance.valid?
       assert_nil instance.subdomain
     end
   end
 
-  test "should not update slug on save if unrelated validations fail" do
+  test "should keep new slug on save if unrelated validations fail" do
     klass = Class.new model_class do
       validates_presence_of :active
       friendly_id :name, :use => :slugged
@@ -149,6 +188,28 @@ class SluggedTest < TestCaseClass
       instance.active = nil
       refute instance.save
       refute instance.valid?
+      assert_equal 'foobar', instance.slug
+    end
+  end
+
+  test "should not update slug on save if slug validations fail" do
+    klass = Class.new model_class do
+      validates_length_of :slug, :minimum => 2
+      friendly_id :name, :use => :slugged
+
+      def self.name
+        "Journalist"
+      end
+    end
+
+    transaction do
+      instance = klass.new :name => 'foo', :active => true
+      assert instance.save
+      assert instance.valid?
+      instance.name = 'x'
+      instance.slug = nil
+      instance.active = nil
+      refute instance.save
       assert_equal 'foo', instance.slug
     end
   end
@@ -425,6 +486,7 @@ class ToParamTest < TestCaseClass
   class Journalist < ActiveRecord::Base
     extend FriendlyId
     validates_presence_of :active
+    validates_length_of :slug, :minimum => 2
     friendly_id :name, :use => :slugged
 
     attr_accessor :to_param_in_callback
@@ -438,8 +500,20 @@ class ToParamTest < TestCaseClass
     assert_nil Journalist.new.to_param
   end
 
-  test "to_param should return nil if record failed validation" do
+  test "to_param should return original slug if record failed validation" do
     journalist = Journalist.new :name => 'Clark Kent', :active => nil
+    refute journalist.save
+    assert_equal 'clark-kent', journalist.to_param
+  end
+
+  test "to_param should clear slug attributes if slug attribute fails validation" do
+    journalist = Journalist.new :name => 'x', :active => true
+    refute journalist.save
+    assert_nil journalist.to_param
+  end
+
+  test "to_param should clear slug attribute if slug attribute fails validation and unrelated validation fails" do
+    journalist = Journalist.new :name => 'x', :active => nil
     refute journalist.save
     assert_nil journalist.to_param
   end
@@ -452,11 +526,23 @@ class ToParamTest < TestCaseClass
     end
   end
 
-  test "to_param should use original slug if existing record changes but fails to save" do
+  test "to_param should use new slug if existing record changes but fails to save" do
     transaction do
       journalist = Journalist.new :name => 'Clark Kent', :active => true
       assert journalist.save
       journalist.name = 'Superman'
+      journalist.slug = nil
+      journalist.active = nil
+      refute journalist.save
+      assert_equal 'superman', journalist.to_param
+    end
+  end
+
+  test "to_param should use original slug if new slug attribute is not valid" do
+    transaction do
+      journalist = Journalist.new :name => 'Clark Kent', :active => true
+      assert journalist.save
+      journalist.name = 'x'
       journalist.slug = nil
       journalist.active = nil
       refute journalist.save
