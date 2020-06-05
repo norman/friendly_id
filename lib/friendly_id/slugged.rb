@@ -67,7 +67,7 @@ app's behavior and requirements.
 #### Formatting
 
 By default, FriendlyId uses Active Support's
-[paramaterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
+[parameterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
 method to create slugs. This method will intelligently replace spaces with
 dashes, and Unicode Latin characters with ASCII approximations:
 
