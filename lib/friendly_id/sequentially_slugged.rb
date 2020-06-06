@@ -7,11 +7,13 @@ module FriendlyId
     def resolve_friendly_id_conflict(candidate_slugs)
       candidate = candidate_slugs.first
       return if candidate.nil?
+
+      base_class, slug_column = slug_base_class_and_column
       SequentialSlugCalculator.new(scope_for_slug_generator,
                                   candidate,
-                                  friendly_id_config.slug_column,
+                                  slug_column,
                                   friendly_id_config.sequence_separator,
-                                  slug_base_class).next_slug
+                                  base_class).next_slug
     end
 
     class SequentialSlugCalculator
@@ -76,11 +78,11 @@ module FriendlyId
 
     private
 
-    def slug_base_class
+    def slug_base_class_and_column
       if friendly_id_config.uses?(:history)
-        Slug
+        [Slug, :slug]
       else
-        self.class.base_class
+        [self.class.base_class, friendly_id_config.slug_column]
       end
     end
   end
