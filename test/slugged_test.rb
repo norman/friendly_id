@@ -479,6 +479,37 @@ class FailedValidationAfterUpdateRegressionTest < TestCaseClass
 
 end
 
+# https://github.com/norman/friendly_id/issues/947
+class GeneratingSlugWithValidationSkippedTest < TestCaseClass
+
+  include FriendlyId::Test
+
+  class Journalist < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :name, :use => :slugged
+  end
+
+  test "should generate slug when skipping validation" do
+    transaction do
+      m1 = Journalist.new
+      m1.name = 'Bob Timesletter'
+      m1.save(validate: false)
+      assert_equal 'bob-timesletter', m1.slug
+    end
+  end
+
+  test "should generate slug when #valid? called" do
+    transaction do
+      m1 = Journalist.new
+      m1.name = 'Bob Timesletter'
+      m1.valid?
+      m1.save(validate: false)
+      assert_equal 'bob-timesletter', m1.slug
+    end
+  end
+
+end
+
 class ToParamTest < TestCaseClass
 
   include FriendlyId::Test
