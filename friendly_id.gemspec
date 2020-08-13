@@ -31,4 +31,9 @@ FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
 Active Record. It lets you create pretty URLs and work with human-friendly
 strings as if they were numeric ids.
 EOM
+
+  s.cert_chain = [File.expand_path('certs/parndt.pem', __dir__)]
+  if $PROGRAM_NAME =~ /gem\z/ && ARGV.include?('build') && ARGV.include?(__FILE__)
+    s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
+  end
 end
