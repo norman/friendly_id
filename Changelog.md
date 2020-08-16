@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Revert "Make `first_by_friendly_id` case insensitive using `downcase`" ([#951](https://github.com/norman/friendly_id/pull/951))
+
 ## 5.4.1 (2020-11-06)
 
 * Fix unexpected `:slug` error on valid, unpersisted model ([#952](https://github.com/norman/friendly_id/pull/952))
