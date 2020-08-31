@@ -11,8 +11,8 @@ jobs:
       matrix:
         architecture: [ x64 ]
         database: [ mysql, postgresql ]
-        gemfile: [ '6.0', '5.2', '5.1', '5.0' ]
-        ruby: [ '2.6.x', '2.5.x' ]
+        gemfile: [ '6.0', '5.2' ]
+        ruby: [ '2.7.x', '2.6.x', '2.5.x' ]
       fail-fast: false
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
@@ -22,10 +22,10 @@ jobs:
         architecture: ${{ matrix.architecture }}
         ruby-version: ${{ matrix.ruby }}
         version: ${{ matrix.ruby }}
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev mysql-client libsqlite3-dev -y
     - id: cache-bundler
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ matrix.ruby }}-gem-${{ hashFiles(format('gemfiles/Gemfile.rails-{0}.rb', matrix.gemfile)) }}
