@@ -5,6 +5,10 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+## 5.4.1 (2020-11-06)
+
+* Fix unexpected `:slug` error on valid, unpersisted model ([#952](https://github.com/norman/friendly_id/pull/952))
+
 ## 5.4.0 (2020-08-14)
 
 * Fix Ruby 2.7 keyword params deprecation warning ([#939](https://github.com/norman/friendly_id/pull/939))
