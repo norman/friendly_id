@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
-    - uses: actions/setup-ruby@v1.0.0
+    - uses: actions/setup-ruby@v1
       with:
         architecture: ${{ matrix.architecture }}
         ruby-version: ${{ matrix.ruby }}
