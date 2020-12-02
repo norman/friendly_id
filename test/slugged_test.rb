@@ -531,7 +531,7 @@ class ToParamTest < TestCaseClass
       journalist = Journalist.new :name => 'Clark Kent', :active => true
       assert journalist.save
       journalist.name = 'Superman'
-      journalist.slug = nil
+      journalist.slug = 'no-so-superman'
       journalist.active = nil
       refute journalist.save
       assert_equal 'superman', journalist.to_param
@@ -543,7 +543,7 @@ class ToParamTest < TestCaseClass
       journalist = Journalist.new :name => 'Clark Kent', :active => true
       assert journalist.save
       journalist.name = 'x'
-      journalist.slug = nil
+      journalist.slug = 'tots-not-clark-kent'
       journalist.active = nil
       refute journalist.save
       assert_equal 'clark-kent', journalist.to_param
