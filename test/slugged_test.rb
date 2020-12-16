@@ -530,11 +530,12 @@ class ToParamTest < TestCaseClass
     transaction do
       journalist = Journalist.new :name => 'Clark Kent', :active => true
       assert journalist.save
+      journalist.reload
       journalist.name = 'Superman'
-      journalist.slug = nil
+      journalist.slug = 'not-so-super-man' 
       journalist.active = nil
       refute journalist.save
-      assert_equal 'superman', journalist.to_param
+      assert_equal 'clark-kent', journalist.to_param
     end
   end
 
@@ -543,7 +544,7 @@ class ToParamTest < TestCaseClass
       journalist = Journalist.new :name => 'Clark Kent', :active => true
       assert journalist.save
       journalist.name = 'x'
-      journalist.slug = nil
+      journalist.slug = "no-clark" 
       journalist.active = nil
       refute journalist.save
       assert_equal 'clark-kent', journalist.to_param
