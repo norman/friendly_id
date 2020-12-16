@@ -262,7 +262,12 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     # Either the friendly_id, or the numeric id cast to a string.
     def to_param
       if friendly_id_config.routes == :friendly
-        friendly_id.presence.to_param || super
+        if attribute_changed?(friendly_id_config.query_field)
+          diff = changes[friendly_id_config.query_field]
+          diff.first || diff.second
+        else
+          friendly_id.presence.to_param || super
+        end
       else
         super
       end
