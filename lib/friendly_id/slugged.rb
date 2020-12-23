@@ -248,6 +248,7 @@ Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
         defaults[:sequence_separator] ||= '-'
       end
       model_class.before_validation :set_slug
+      model_class.before_save :set_slug
       model_class.after_validation :unset_slug_if_invalid
     end
 
