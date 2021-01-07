@@ -5,6 +5,9 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+## 5.4.2 (2021-01-07)
+
+* Fix: Set slug before save if needed ([#948](https://github.com/norman/friendly_id/pull/948))
 * Revert "Make `first_by_friendly_id` case insensitive using `downcase`" ([#951](https://github.com/norman/friendly_id/pull/951))
 
 ## 5.4.1 (2020-11-06)
