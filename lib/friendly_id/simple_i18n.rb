@@ -11,9 +11,9 @@ FriendlyId.
 
 In order to use this module, your model must have a slug column for each locale.
 By default FriendlyId looks for columns named, for example, "slug_en",
-"slug_es", etc. The first part of the name can be configured by passing the
-`:slug_column` option if you choose. Note that the column for the default locale
-must also include the locale in its name.
+"slug_es", "slug_pt_br", etc. The first part of the name can be configured by
+passing the `:slug_column` option if you choose. Note that the column for the
+default locale must also include the locale in its name.
 
 This module is most suitable to applications that need to support few locales.
 If you need to support two or more locales, you may wish to use the
@@ -26,10 +26,12 @@ friendly_id_globalize gem instead.
         t.string :title
         t.string :slug_en
         t.string :slug_es
+        t.string :slug_pt_br
         t.text   :body
       end
       add_index :posts, :slug_en
       add_index :posts, :slug_es
+      add_index :posts, :slug_pt_br
     end
 
 ### Finds
@@ -40,6 +42,8 @@ Finds will take into consideration the current locale:
     Post.friendly.find("la-guerra-de-las-galaxias")
     I18n.locale = :en
     Post.friendly.find("star-wars")
+    I18n.locale = :"pt-BR"
+    Post.friendly.find("guerra-das-estrelas")
 
 To find a slug by an explicit locale, perform the find inside a block
 passed to I18n's `with_locale` method:
@@ -98,7 +102,13 @@ current locale:
 
     module Configuration
       def slug_column
-        "#{super}_#{I18n.locale}"
+        "#{super}_#{locale_suffix}"
+      end
+
+      private
+
+      def locale_suffix
+        I18n.locale.to_s.underscore
       end
     end
   end
