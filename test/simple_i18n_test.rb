@@ -15,12 +15,16 @@ class SimpleI18nTest < TestCaseClass
   test "friendly_id should return the current locale's slug" do
     journalist = Journalist.new(:name => "John Doe")
     journalist.slug_es = "juan-fulano"
+    journalist.slug_fr_ca = "jean-dupont"
     journalist.valid?
     I18n.with_locale(I18n.default_locale) do
       assert_equal "john-doe", journalist.friendly_id
     end
     I18n.with_locale(:es) do
       assert_equal "juan-fulano", journalist.friendly_id
+    end
+    I18n.with_locale(:"fr-CA") do
+      assert_equal "jean-dupont", journalist.friendly_id
     end
   end
 
@@ -111,6 +115,12 @@ class SimpleI18nTest < TestCaseClass
     test "should add locale to slug column for a non-default locale" do
       I18n.with_locale :es do
         assert_equal "slug_es", Journalist.friendly_id_config.slug_column
+      end
+    end
+
+    test "should add locale to slug column for a locale with a region subtag" do
+      I18n.with_locale :"fr-CA" do
+        assert_equal "slug_fr_ca", Journalist.friendly_id_config.slug_column
       end
     end
 

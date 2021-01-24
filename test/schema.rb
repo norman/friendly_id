@@ -69,6 +69,7 @@ module FriendlyId
           add_column :journalists, "slug_en", :string
           add_column :journalists, "slug_es", :string
           add_column :journalists, "slug_de", :string
+          add_column :journalists, "slug_fr_ca", :string
 
           # This will be used to test relationships
           add_column :books, :author_id, :integer
