@@ -41,9 +41,7 @@ module FriendlyId
       # Return the unnumbered (shortest) slug first, followed by the numbered ones
       # in ascending order.
       def ordering_query
-        length_command = "LENGTH"
-        length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
-        "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+        "#{sql_length}(#{slug_column}) ASC, #{slug_column} ASC"
       end
 
       def regexp
@@ -61,6 +59,10 @@ module FriendlyId
         scope.
           where(conflict_query, slug, sequential_slug_matcher).
           order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
+      end
+
+      def sql_length
+        scope.connection.adapter_name =~ /sqlserver/i ? 'LEN' : 'LENGTH'
       end
     end
   end
