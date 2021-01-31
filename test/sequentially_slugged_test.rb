@@ -158,6 +158,21 @@ class SequentiallySluggedTestWithHistory < TestCaseClass
       assert_equal 'test-name-3', record3.slug
     end
   end
+
+  test "should cope with strange column names" do
+    Journalist = Class.new(ActiveRecord::Base) do
+      extend FriendlyId
+      friendly_id :name, :use => [:sequentially_slugged, :history], :slug_column => "strange name"
+    end
+
+    transaction do
+      record_1 = Journalist.create! name: "Julian Assange"
+      record_2 = Journalist.create! name: "Julian Assange"
+
+      assert_equal 'julian-assange', record_1.attributes["strange name"]
+      assert_equal 'julian-assange-2', record_2.attributes["strange name"]
+    end
+  end
 end
 
 class City < ActiveRecord::Base
