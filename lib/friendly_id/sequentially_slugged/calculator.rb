@@ -17,31 +17,37 @@ module FriendlyId
 
       private
 
-      def next_sequence_number
-        last_sequence_number ? last_sequence_number + 1 : 2
-      end
-
-      def last_sequence_number
-        regexp = /#{slug}#{sequence_separator}(\d+)\z/
-        # Reject slug_conflicts that doesn't come from the first_candidate
-        # Map all sequence numbers and take the maximum
-        slug_conflicts
-          .reject { |slug_conflict| !regexp.match(slug_conflict) }
-          .map { |slug_conflict| regexp.match(slug_conflict)[1].to_i }.max
-      end
-
-      def slug_conflicts
-        scope.
-          where(conflict_query, slug, sequential_slug_matcher).
-          order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
-      end
-
       def conflict_query
         base = "#{slug_column} = ? OR #{slug_column} LIKE ?"
         # Awful hack for SQLite3, which does not pick up '\' as the escape character
         # without this.
         base << " ESCAPE '\\'" if scope.connection.adapter_name =~ /sqlite/i
         base
+      end
+
+      def next_sequence_number
+        last_sequence_number ? last_sequence_number + 1 : 2
+      end
+
+      def last_sequence_number
+        # Reject slug_conflicts that doesn't come from the first_candidate
+        # Map all sequence numbers and take the maximum
+        slug_conflicts
+          .reject { |slug_conflict| !regexp.match(slug_conflict) }
+          .map { |slug_conflict| regexp.match(slug_conflict)[1].to_i }
+          .max
+      end
+
+      # Return the unnumbered (shortest) slug first, followed by the numbered ones
+      # in ascending order.
+      def ordering_query
+        length_command = "LENGTH"
+        length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
+        "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+      end
+
+      def regexp
+        /#{slug}#{sequence_separator}(\d+)\z/
       end
 
       def sequential_slug_matcher
@@ -51,12 +57,10 @@ module FriendlyId
         "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + '%'
       end
 
-      # Return the unnumbered (shortest) slug first, followed by the numbered ones
-      # in ascending order.
-      def ordering_query
-        length_command = "LENGTH"
-        length_command = "LEN" if scope.connection.adapter_name =~ /sqlserver/i
-        "#{length_command}(#{slug_column}) ASC, #{slug_column} ASC"
+      def slug_conflicts
+        scope.
+          where(conflict_query, slug, sequential_slug_matcher).
+          order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
     end
   end
