@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - 'master'
+      - 'pr-943'
   pull_request:
 jobs:
   test:
