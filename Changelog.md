@@ -5,6 +5,9 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* SimpleI18n: Handle regional locales ([#965](https://github.com/norman/friendly_id/pull/965))
+* Fix: "unknown column" exception ([#943](https://github.com/norman/friendly_id/pull/943))
+
 ## 5.4.2 (2021-01-07)
 
 * Fix: Set slug before save if needed ([#948](https://github.com/norman/friendly_id/pull/948))
