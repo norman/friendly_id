@@ -28,7 +28,7 @@ module FriendlyId
     def exists?(conditions = :none)
       return super if conditions.unfriendly_id?
       return true if exists_by_friendly_id?(conditions)
-      super
+      false
     end
 
     # Finds exclusively by the friendly id, completely bypassing original
