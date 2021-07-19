@@ -2,14 +2,14 @@ source 'https://rubygems.org'
 
 gemspec path: '../'
 
-gem 'activerecord', '~> 5.2.0'
-gem 'railties', '~> 5.2.0'
+gem 'activerecord', '~> 6.1.4'
+gem 'railties', '~> 6.1.4'
 
 # Database Configuration
 group :development, :test do
   platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', '~> 51.1'
-    gem 'activerecord-jdbcpostgresql-adapter', '~> 51.1'
+    gem 'activerecord-jdbcmysql-adapter', '~> 61.0'
+    gem 'activerecord-jdbcpostgresql-adapter', '~> 61.0'
     gem 'kramdown'
   end
 
