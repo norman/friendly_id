@@ -10,12 +10,12 @@ jobs:
     strategy:
       matrix:
         database: [ mysql, postgresql ]
-        gemfile: [ 6.0, 5.2 ]
-        ruby: [ 2.5, 2.6, 2.7, 3.0 ]
+        gemfile: [ '6.0', '5.2' ]
+        ruby: [ '2.5', '2.6', '2.7', '3.0' ]
         exclude:
           # excludes ruby 3 with Rails 5.2
-          - ruby: 3.0
-            gemfile: 5.2
+          - ruby: '3.0'
+            gemfile: '5.2'
       fail-fast: false
     runs-on: ubuntu-latest
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
