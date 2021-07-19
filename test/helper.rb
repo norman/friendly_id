@@ -24,7 +24,7 @@ rescue NameError
   TestCaseClass = MiniTest::Unit::TestCase
 end
 
-require "mocha/setup"
+require "mocha/minitest"
 require "active_record"
 require 'active_support/core_ext/time/conversions'
 require 'erb'
