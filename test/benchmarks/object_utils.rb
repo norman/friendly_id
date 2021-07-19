@@ -28,7 +28,7 @@ Book = Class.new ActiveRecord::Base
 
 test_integer = 123
 test_active_record_object = Book.new
-test_hash = {:name=>'joe'}
+test_hash = {name: "joe"}
 test_nil = nil
 test_numeric_string = "123"
 test_string = "abc123"
@@ -36,21 +36,21 @@ test_string = "abc123"
 N = 5_000_000
 
 Benchmark.bmbm do |x|
-  x.report('integer friendly_id?') { N.times {test_integer.friendly_id?} }
-  x.report('integer unfriendly_id?') { N.times {test_integer.unfriendly_id?} }
+  x.report("integer friendly_id?") { N.times { test_integer.friendly_id? } }
+  x.report("integer unfriendly_id?") { N.times { test_integer.unfriendly_id? } }
 
-  x.report('AR::Base friendly_id?') { N.times {test_active_record_object.friendly_id?} }
-  x.report('AR::Base unfriendly_id?') { N.times {test_active_record_object.unfriendly_id?} }
+  x.report("AR::Base friendly_id?") { N.times { test_active_record_object.friendly_id? } }
+  x.report("AR::Base unfriendly_id?") { N.times { test_active_record_object.unfriendly_id? } }
 
-  x.report('hash friendly_id?') { N.times {test_hash.friendly_id?} }
-  x.report('hash unfriendly_id?') { N.times {test_hash.unfriendly_id?} }
+  x.report("hash friendly_id?") { N.times { test_hash.friendly_id? } }
+  x.report("hash unfriendly_id?") { N.times { test_hash.unfriendly_id? } }
 
-  x.report('nil friendly_id?') { N.times {test_nil.friendly_id?} }
-  x.report('nil unfriendly_id?') { N.times {test_nil.unfriendly_id?} }
+  x.report("nil friendly_id?") { N.times { test_nil.friendly_id? } }
+  x.report("nil unfriendly_id?") { N.times { test_nil.unfriendly_id? } }
 
-  x.report('numeric string friendly_id?') { N.times {test_numeric_string.friendly_id?} }
-  x.report('numeric string unfriendly_id?') { N.times {test_numeric_string.unfriendly_id?} }
+  x.report("numeric string friendly_id?") { N.times { test_numeric_string.friendly_id? } }
+  x.report("numeric string unfriendly_id?") { N.times { test_numeric_string.unfriendly_id? } }
 
-  x.report('test_string friendly_id?') { N.times {test_string.friendly_id?} }
-  x.report('test_string unfriendly_id?') { N.times {test_string.unfriendly_id?} }
+  x.report("test_string friendly_id?") { N.times { test_string.friendly_id? } }
+  x.report("test_string unfriendly_id?") { N.times { test_string.unfriendly_id? } }
 end

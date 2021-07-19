@@ -14,7 +14,11 @@ require "ffaker"
 N = 50000
 
 def transaction
-  ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
+  ActiveRecord::Base.transaction do
+    yield
+
+    raise ActiveRecord::Rollback
+  end
 end
 
 class Array
@@ -27,62 +31,60 @@ Book = Class.new ActiveRecord::Base
 
 class Journalist < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :slugged
+  friendly_id :name, use: :slugged
 end
 
 class Manual < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :history
+  friendly_id :name, use: :history
 end
 
 class Restaurant < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :finders
+  friendly_id :name, use: :finders
 end
 
-
-BOOKS       = []
+BOOKS = []
 JOURNALISTS = []
-MANUALS     = []
+MANUALS = []
 RESTAURANTS = []
 
 100.times do
   name = FFaker::Name.name
-  BOOKS       << (Book.create! :name => name).id
-  JOURNALISTS << (Journalist.create! :name => name).friendly_id
-  MANUALS     << (Manual.create! :name => name).friendly_id
-  RESTAURANTS << (Restaurant.create! :name => name).friendly_id
+  BOOKS << (Book.create! name: name).id
+  JOURNALISTS << (Journalist.create! name: name).friendly_id
+  MANUALS << (Manual.create! name: name).friendly_id
+  RESTAURANTS << (Restaurant.create! name: name).friendly_id
 end
 
 ActiveRecord::Base.connection.execute "UPDATE manuals SET slug = NULL"
 
 Benchmark.bmbm do |x|
-  x.report 'ActiveRecord: where.first' do
-    N.times {Book.where(:id=>BOOKS.rand).first}
+  x.report "ActiveRecord: where.first" do
+    N.times { Book.where(id: BOOKS.rand).first }
   end
 
-  x.report 'ActiveRecord: where.take' do
-    N.times {Book.where(:id=>BOOKS.rand).take}
+  x.report "ActiveRecord: where.take" do
+    N.times { Book.where(id: BOOKS.rand).take }
   end
 
-  x.report 'ActiveRecord: find' do
-    N.times {Book.find BOOKS.rand}
+  x.report "ActiveRecord: find" do
+    N.times { Book.find BOOKS.rand }
   end
 
-  x.report 'ActiveRecord: find_by(:id)' do
-    N.times {Book.find_by(:id=>BOOKS.rand)}
+  x.report "ActiveRecord: find_by(:id)" do
+    N.times { Book.find_by(id: BOOKS.rand) }
   end
 
-  x.report 'ActiveRecord: find_by(:slug)' do
-    N.times {Restaurant.find_by(:slug=>RESTAURANTS.rand)}
+  x.report "ActiveRecord: find_by(:slug)" do
+    N.times { Restaurant.find_by(slug: RESTAURANTS.rand) }
   end
 
-  x.report 'FriendlyId: find (in-table slug w/ finders)' do
-    N.times {Restaurant.find RESTAURANTS.rand}
+  x.report "FriendlyId: find (in-table slug w/ finders)" do
+    N.times { Restaurant.find RESTAURANTS.rand }
   end
 
-  x.report 'FriendlyId: friendly.find (in-table slug)' do
-    N.times {Restaurant.friendly.find RESTAURANTS.rand}
+  x.report "FriendlyId: friendly.find (in-table slug)" do
+    N.times { Restaurant.friendly.find RESTAURANTS.rand }
   end
-
 end

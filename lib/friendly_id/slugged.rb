@@ -1,251 +1,247 @@
-# encoding: utf-8
 require "friendly_id/slug_generator"
 require "friendly_id/candidates"
 
 module FriendlyId
-=begin
-
-## Slugged Models
-
-FriendlyId can use a separate column to store slugs for models which require
-some text processing.
-
-For example, blog applications typically use a post title to provide the basis
-of a search engine friendly URL. Such identifiers typically lack uppercase
-characters, use ASCII to approximate UTF-8 characters, and strip out other
-characters which may make them aesthetically unappealing or error-prone when
-used in a URL.
-
-    class Post < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :title, :use => :slugged
-    end
-
-    @post = Post.create(:title => "This is the first post!")
-    @post.friendly_id   # returns "this-is-the-first-post"
-    redirect_to @post   # the URL will be /posts/this-is-the-first-post
-
-In general, use slugs by default unless you know for sure you don't need them.
-To activate the slugging functionality, use the {FriendlyId::Slugged} module.
-
-FriendlyId will generate slugs from a method or column that you specify, and
-store them in a field in your model. By default, this field must be named
-`:slug`, though you may change this using the
-{FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
-option. You should add an index to this column, and in most cases, make it
-unique. You may also wish to constrain it to NOT NULL, but this depends on your
-app's behavior and requirements.
-
-### Example Setup
-
-    # your model
-    class Post < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :title, :use => :slugged
-      validates_presence_of :title, :slug, :body
-    end
-
-    # a migration
-    class CreatePosts < ActiveRecord::Migration
-      def self.up
-        create_table :posts do |t|
-          t.string :title, :null => false
-          t.string :slug, :null => false
-          t.text :body
-        end
-
-        add_index :posts, :slug, :unique => true
-      end
-
-      def self.down
-        drop_table :posts
-      end
-    end
-
-### Working With Slugs
-
-#### Formatting
-
-By default, FriendlyId uses Active Support's
-[parameterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
-method to create slugs. This method will intelligently replace spaces with
-dashes, and Unicode Latin characters with ASCII approximations:
-
-    movie = Movie.create! :title => "Der Preis fürs Überleben"
-    movie.slug #=> "der-preis-furs-uberleben"
-
-#### Column or Method?
-
-FriendlyId always uses a method as the basis of the slug text - not a column. At
-first glance, this may sound confusing, but remember that Active Record provides
-methods for each column in a model's associated table, and that's what
-FriendlyId uses.
-
-Here's an example of a class that uses a custom method to generate the slug:
-
-    class Person < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :name_and_location, use: :slugged
-
-      def name_and_location
-        "#{name} from #{location}"
-      end
-    end
-
-    bob = Person.create! :name => "Bob Smith", :location => "New York City"
-    bob.friendly_id #=> "bob-smith-from-new-york-city"
-
-FriendlyId refers to this internally as the "base" method.
-
-#### Uniqueness
-
-When you try to insert a record that would generate a duplicate friendly id,
-FriendlyId will append a UUID to the generated slug to ensure uniqueness:
-
-    car = Car.create :title => "Peugeot 206"
-    car2 = Car.create :title => "Peugeot 206"
-
-    car.friendly_id #=> "peugeot-206"
-    car2.friendly_id #=> "peugeot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
-
-Previous versions of FriendlyId appended a numeric sequence to make slugs
-unique, but this was removed to simplify using FriendlyId in concurrent code.
-
-#### Candidates
-
-Since UUIDs are ugly, FriendlyId provides a "slug candidates" functionality to
-let you specify alternate slugs to use in the event the one you want to use is
-already taken. For example:
-
-    class Restaurant < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :slug_candidates, use: :slugged
-
-      # Try building a slug based on the following fields in
-      # increasing order of specificity.
-      def slug_candidates
-        [
-          :name,
-          [:name, :city],
-          [:name, :street, :city],
-          [:name, :street_number, :street, :city]
-        ]
-      end
-    end
-
-    r1 = Restaurant.create! name: 'Plaza Diner', city: 'New Paltz'
-    r2 = Restaurant.create! name: 'Plaza Diner', city: 'Kingston'
-
-    r1.friendly_id  #=> 'plaza-diner'
-    r2.friendly_id  #=> 'plaza-diner-kingston'
-
-To use candidates, make your FriendlyId base method return an array. The
-method need not be named `slug_candidates`; it can be anything you want. The
-array may contain any combination of symbols, strings, procs or lambdas and
-will be evaluated lazily and in order. If you include symbols, FriendlyId will
-invoke a method on your model class with the same name. Strings will be
-interpreted literally. Procs and lambdas will be called and their return values
-used as the basis of the friendly id. If none of the candidates can generate a
-unique slug, then FriendlyId will append a UUID to the first candidate as a
-last resort.
-
-#### Sequence Separator
-
-By default, FriendlyId uses a dash to separate the slug from a sequence.
-
-You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
-sequence_separator} configuration option.
-
-#### Providing Your Own Slug Processing Method
-
-You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
-total control over the slug format. It will be invoked for any generated slug,
-whether for a single slug or for slug candidates.
-
-#### Deciding When to Generate New Slugs
-
-As of FriendlyId 5.0, slugs are only generated when the `slug` field is nil. If
-you want a slug to be regenerated,set the slug field to nil:
-
-    restaurant.friendly_id # joes-diner
-    restaurant.name = "The Plaza Diner"
-    restaurant.save!
-    restaurant.friendly_id # joes-diner
-    restaurant.slug = nil
-    restaurant.save!
-    restaurant.friendly_id # the-plaza-diner
-
-You can also override the
-{FriendlyId::Slugged#should_generate_new_friendly_id?} method, which lets you
-control exactly when new friendly ids are set:
-
-    class Post < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :title, :use => :slugged
-
-      def should_generate_new_friendly_id?
-        title_changed?
-      end
-    end
-
-If you want to extend the default behavior but add your own conditions,
-don't forget to invoke `super` from your implementation:
-
-    class Category < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :name, :use => :slugged
-
-      def should_generate_new_friendly_id?
-        name_changed? || super
-      end
-    end
-
-#### Locale-specific Transliterations
-
-Active Support's `parameterize` uses
-[transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
-which in turn can use I18n's transliteration rules to consider the current
-locale when replacing Latin characters:
-
-    # config/locales/de.yml
-    de:
-      i18n:
-        transliterate:
-          rule:
-            ü: "ue"
-            ö: "oe"
-            etc...
-
-    movie = Movie.create! :title => "Der Preis fürs Überleben"
-    movie.slug #=> "der-preis-fuers-ueberleben"
-
-This functionality was in fact taken from earlier versions of FriendlyId.
-
-#### Gotchas: Common Problems
-
-FriendlyId uses a before_validation callback to generate and set the slug. This
-means that if you create two model instances before saving them, it's possible
-they will generate the same slug, and the second save will fail.
-
-This can happen in two fairly normal cases: the first, when a model using nested
-attributes creates more than one record for a model that uses friendly_id. The
-second, in concurrent code, either in threads or multiple processes.
-
-To solve the nested attributes issue, I recommend simply avoiding them when
-creating more than one nested record for a model that uses FriendlyId. See [this
-Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
-
-=end
+  #
+  ## Slugged Models
+  #
+  # FriendlyId can use a separate column to store slugs for models which require
+  # some text processing.
+  #
+  # For example, blog applications typically use a post title to provide the basis
+  # of a search engine friendly URL. Such identifiers typically lack uppercase
+  # characters, use ASCII to approximate UTF-8 characters, and strip out other
+  # characters which may make them aesthetically unappealing or error-prone when
+  # used in a URL.
+  #
+  #     class Post < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :title, :use => :slugged
+  #     end
+  #
+  #     @post = Post.create(:title => "This is the first post!")
+  #     @post.friendly_id   # returns "this-is-the-first-post"
+  #     redirect_to @post   # the URL will be /posts/this-is-the-first-post
+  #
+  # In general, use slugs by default unless you know for sure you don't need them.
+  # To activate the slugging functionality, use the {FriendlyId::Slugged} module.
+  #
+  # FriendlyId will generate slugs from a method or column that you specify, and
+  # store them in a field in your model. By default, this field must be named
+  # `:slug`, though you may change this using the
+  # {FriendlyId::Slugged::Configuration#slug_column slug_column} configuration
+  # option. You should add an index to this column, and in most cases, make it
+  # unique. You may also wish to constrain it to NOT NULL, but this depends on your
+  # app's behavior and requirements.
+  #
+  ### Example Setup
+  #
+  #     # your model
+  #     class Post < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :title, :use => :slugged
+  #       validates_presence_of :title, :slug, :body
+  #     end
+  #
+  #     # a migration
+  #     class CreatePosts < ActiveRecord::Migration
+  #       def self.up
+  #         create_table :posts do |t|
+  #           t.string :title, :null => false
+  #           t.string :slug, :null => false
+  #           t.text :body
+  #         end
+  #
+  #         add_index :posts, :slug, :unique => true
+  #       end
+  #
+  #       def self.down
+  #         drop_table :posts
+  #       end
+  #     end
+  #
+  ### Working With Slugs
+  #
+  #### Formatting
+  #
+  # By default, FriendlyId uses Active Support's
+  # [parameterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
+  # method to create slugs. This method will intelligently replace spaces with
+  # dashes, and Unicode Latin characters with ASCII approximations:
+  #
+  #     movie = Movie.create! :title => "Der Preis fürs Überleben"
+  #     movie.slug #=> "der-preis-furs-uberleben"
+  #
+  #### Column or Method?
+  #
+  # FriendlyId always uses a method as the basis of the slug text - not a column. At
+  # first glance, this may sound confusing, but remember that Active Record provides
+  # methods for each column in a model's associated table, and that's what
+  # FriendlyId uses.
+  #
+  # Here's an example of a class that uses a custom method to generate the slug:
+  #
+  #     class Person < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :name_and_location, use: :slugged
+  #
+  #       def name_and_location
+  #         "#{name} from #{location}"
+  #       end
+  #     end
+  #
+  #     bob = Person.create! :name => "Bob Smith", :location => "New York City"
+  #     bob.friendly_id #=> "bob-smith-from-new-york-city"
+  #
+  # FriendlyId refers to this internally as the "base" method.
+  #
+  #### Uniqueness
+  #
+  # When you try to insert a record that would generate a duplicate friendly id,
+  # FriendlyId will append a UUID to the generated slug to ensure uniqueness:
+  #
+  #     car = Car.create :title => "Peugeot 206"
+  #     car2 = Car.create :title => "Peugeot 206"
+  #
+  #     car.friendly_id #=> "peugeot-206"
+  #     car2.friendly_id #=> "peugeot-206-f9f3789a-daec-4156-af1d-fab81aa16ee5"
+  #
+  # Previous versions of FriendlyId appended a numeric sequence to make slugs
+  # unique, but this was removed to simplify using FriendlyId in concurrent code.
+  #
+  #### Candidates
+  #
+  # Since UUIDs are ugly, FriendlyId provides a "slug candidates" functionality to
+  # let you specify alternate slugs to use in the event the one you want to use is
+  # already taken. For example:
+  #
+  #     class Restaurant < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :slug_candidates, use: :slugged
+  #
+  #       # Try building a slug based on the following fields in
+  #       # increasing order of specificity.
+  #       def slug_candidates
+  #         [
+  #           :name,
+  #           [:name, :city],
+  #           [:name, :street, :city],
+  #           [:name, :street_number, :street, :city]
+  #         ]
+  #       end
+  #     end
+  #
+  #     r1 = Restaurant.create! name: 'Plaza Diner', city: 'New Paltz'
+  #     r2 = Restaurant.create! name: 'Plaza Diner', city: 'Kingston'
+  #
+  #     r1.friendly_id  #=> 'plaza-diner'
+  #     r2.friendly_id  #=> 'plaza-diner-kingston'
+  #
+  # To use candidates, make your FriendlyId base method return an array. The
+  # method need not be named `slug_candidates`; it can be anything you want. The
+  # array may contain any combination of symbols, strings, procs or lambdas and
+  # will be evaluated lazily and in order. If you include symbols, FriendlyId will
+  # invoke a method on your model class with the same name. Strings will be
+  # interpreted literally. Procs and lambdas will be called and their return values
+  # used as the basis of the friendly id. If none of the candidates can generate a
+  # unique slug, then FriendlyId will append a UUID to the first candidate as a
+  # last resort.
+  #
+  #### Sequence Separator
+  #
+  # By default, FriendlyId uses a dash to separate the slug from a sequence.
+  #
+  # You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
+  # sequence_separator} configuration option.
+  #
+  #### Providing Your Own Slug Processing Method
+  #
+  # You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
+  # total control over the slug format. It will be invoked for any generated slug,
+  # whether for a single slug or for slug candidates.
+  #
+  #### Deciding When to Generate New Slugs
+  #
+  # As of FriendlyId 5.0, slugs are only generated when the `slug` field is nil. If
+  # you want a slug to be regenerated,set the slug field to nil:
+  #
+  #     restaurant.friendly_id # joes-diner
+  #     restaurant.name = "The Plaza Diner"
+  #     restaurant.save!
+  #     restaurant.friendly_id # joes-diner
+  #     restaurant.slug = nil
+  #     restaurant.save!
+  #     restaurant.friendly_id # the-plaza-diner
+  #
+  # You can also override the
+  # {FriendlyId::Slugged#should_generate_new_friendly_id?} method, which lets you
+  # control exactly when new friendly ids are set:
+  #
+  #     class Post < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :title, :use => :slugged
+  #
+  #       def should_generate_new_friendly_id?
+  #         title_changed?
+  #       end
+  #     end
+  #
+  # If you want to extend the default behavior but add your own conditions,
+  # don't forget to invoke `super` from your implementation:
+  #
+  #     class Category < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :name, :use => :slugged
+  #
+  #       def should_generate_new_friendly_id?
+  #         name_changed? || super
+  #       end
+  #     end
+  #
+  #### Locale-specific Transliterations
+  #
+  # Active Support's `parameterize` uses
+  # [transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
+  # which in turn can use I18n's transliteration rules to consider the current
+  # locale when replacing Latin characters:
+  #
+  #     # config/locales/de.yml
+  #     de:
+  #       i18n:
+  #         transliterate:
+  #           rule:
+  #             ü: "ue"
+  #             ö: "oe"
+  #             etc...
+  #
+  #     movie = Movie.create! :title => "Der Preis fürs Überleben"
+  #     movie.slug #=> "der-preis-fuers-ueberleben"
+  #
+  # This functionality was in fact taken from earlier versions of FriendlyId.
+  #
+  #### Gotchas: Common Problems
+  #
+  # FriendlyId uses a before_validation callback to generate and set the slug. This
+  # means that if you create two model instances before saving them, it's possible
+  # they will generate the same slug, and the second save will fail.
+  #
+  # This can happen in two fairly normal cases: the first, when a model using nested
+  # attributes creates more than one record for a model that uses friendly_id. The
+  # second, in concurrent code, either in threads or multiple processes.
+  #
+  # To solve the nested attributes issue, I recommend simply avoiding them when
+  # creating more than one nested record for a model that uses FriendlyId. See [this
+  # Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
+  #
   module Slugged
-
     # Sets up behavior and configuration options for FriendlyId's slugging
     # feature.
     def self.included(model_class)
       model_class.friendly_id_config.instance_eval do
         self.class.send :include, Configuration
-        self.slug_generator_class     ||= SlugGenerator
-        defaults[:slug_column]        ||= 'slug'
-        defaults[:sequence_separator] ||= '-'
+        self.slug_generator_class ||= SlugGenerator
+        defaults[:slug_column] ||= "slug"
+        defaults[:sequence_separator] ||= "-"
       end
       model_class.before_validation :set_slug
       model_class.before_save :set_slug

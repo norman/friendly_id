@@ -1,12 +1,11 @@
 require "helper"
 
 class ReservedTest < TestCaseClass
-
   include FriendlyId::Test
 
   class Journalist < ActiveRecord::Base
     extend FriendlyId
-    friendly_id :slug_candidates, :use => [:slugged, :reserved], :reserved_words => %w(new edit)
+    friendly_id :slug_candidates, use: [:slugged, :reserved], reserved_words: %w[new edit]
 
     after_validation :move_friendly_id_error_to_name
 
@@ -24,9 +23,9 @@ class ReservedTest < TestCaseClass
   end
 
   test "should reserve words" do
-    %w(new edit NEW Edit).each do |word|
+    %w[new edit NEW Edit].each do |word|
       transaction do
-        assert_raises(ActiveRecord::RecordInvalid) {model_class.create! :name => word}
+        assert_raises(ActiveRecord::RecordInvalid) { model_class.create! name: word }
       end
     end
   end
@@ -43,7 +42,7 @@ class ReservedTest < TestCaseClass
 
   test "should reject reserved candidates" do
     transaction do
-      record = model_class.new(:name => 'new')
+      record = model_class.new(name: "new")
       def record.slug_candidates
         [:name, "foo"]
       end
@@ -54,22 +53,21 @@ class ReservedTest < TestCaseClass
 
   test "should be invalid if all candidates are reserved" do
     transaction do
-      record = model_class.new(:name => 'new')
+      record = model_class.new(name: "new")
       def record.slug_candidates
         ["edit", "new"]
       end
-      assert_raises(ActiveRecord::RecordInvalid) {record.save!}
+      assert_raises(ActiveRecord::RecordInvalid) { record.save! }
     end
   end
 
   test "should optionally treat reserved words as conflict" do
     klass = Class.new(model_class) do
-      friendly_id :slug_candidates, :use => [:slugged, :reserved], :reserved_words => %w(new edit), :treat_reserved_as_conflict => true
+      friendly_id :slug_candidates, use: [:slugged, :reserved], reserved_words: %w[new edit], treat_reserved_as_conflict: true
     end
 
-    with_instance_of(klass, name: 'new') do |record|
-      assert_match(/new-([0-9a-z]+\-){4}[0-9a-z]+\z/, record.slug)
+    with_instance_of(klass, name: "new") do |record|
+      assert_match(/new-([0-9a-z]+-){4}[0-9a-z]+\z/, record.slug)
     end
   end
-
 end

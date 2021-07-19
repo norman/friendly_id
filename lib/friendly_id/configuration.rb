@@ -2,7 +2,6 @@ module FriendlyId
   # The configuration parameters passed to {Base#friendly_id} will be stored in
   # this object.
   class Configuration
-
     attr_writer :base
 
     # The default configuration options.
@@ -25,10 +24,10 @@ module FriendlyId
     attr_accessor :routes
 
     def initialize(model_class, values = nil)
-      @base           = nil
-      @model_class    = model_class
-      @defaults       = {}
-      @modules        = []
+      @base = nil
+      @model_class = model_class
+      @defaults = {}
+      @modules = []
       @finder_methods = FriendlyId::FinderMethods
       self.routes = :friendly
       set values
@@ -102,11 +101,11 @@ module FriendlyId
     private
 
     def get_module(object)
-      Module === object ? object : FriendlyId.const_get(object.to_s.titleize.camelize.gsub(/\s+/, ''))
+      Module === object ? object : FriendlyId.const_get(object.to_s.titleize.camelize.gsub(/\s+/, ""))
     end
 
     def set(values)
-      values and values.each {|name, value| self.send "#{name}=", value}
+      values&.each { |name, value| send "#{name}=", value }
     end
   end
 end

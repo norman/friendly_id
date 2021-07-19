@@ -1,108 +1,104 @@
 require "friendly_id/slugged"
 
 module FriendlyId
-
-=begin
-
-## Unique Slugs by Scope
-
-The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
-within a scope.
-
-This allows, for example, two restaurants in different cities to have the slug
-`joes-diner`:
-
-    class Restaurant < ActiveRecord::Base
-      extend FriendlyId
-      belongs_to :city
-      friendly_id :name, :use => :scoped, :scope => :city
-    end
-
-    class City < ActiveRecord::Base
-      extend FriendlyId
-      has_many :restaurants
-      friendly_id :name, :use => :slugged
-    end
-
-    City.friendly.find("seattle").restaurants.friendly.find("joes-diner")
-    City.friendly.find("chicago").restaurants.friendly.find("joes-diner")
-
-Without :scoped in this case, one of the restaurants would have the slug
-`joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
-
-The value for the `:scope` option can be the name of a `belongs_to` relation, or
-a column.
-
-Additionally, the `:scope` option can receive an array of scope values:
-
-    class Cuisine < ActiveRecord::Base
-      extend FriendlyId
-      has_many :restaurants
-      friendly_id :name, :use => :slugged
-    end
-
-    class City < ActiveRecord::Base
-      extend FriendlyId
-      has_many :restaurants
-      friendly_id :name, :use => :slugged
-    end
-
-    class Restaurant < ActiveRecord::Base
-      extend FriendlyId
-      belongs_to :city
-      friendly_id :name, :use => :scoped, :scope => [:city, :cuisine]
-    end
-
-All supplied values will be used to determine scope.
-
-### Finding Records by Friendly ID
-
-If you are using scopes your friendly ids may not be unique, so a simple find
-like:
-
-    Restaurant.friendly.find("joes-diner")
-
-may return the wrong record. In these cases it's best to query through the
-relation:
-
-    @city.restaurants.friendly.find("joes-diner")
-
-Alternatively, you could pass the scope value as a query parameter:
-
-    Restaurant.where(:city_id => @city.id).friendly.find("joes-diner")
-
-
-### Finding All Records That Match a Scoped ID
-
-Query the slug column directly:
-
-    Restaurant.where(:slug => "joes-diner")
-
-### Routes for Scoped Models
-
-Recall that FriendlyId is a database-centric library, and does not set up any
-routes for scoped models. You must do this yourself in your application. Here's
-an example of one way to set this up:
-
-    # in routes.rb
-    resources :cities do
-      resources :restaurants
-    end
-
-    # in views
-    <%= link_to 'Show', [@city, @restaurant] %>
-
-    # in controllers
-    @city = City.friendly.find(params[:city_id])
-    @restaurant = @city.restaurants.friendly.find(params[:id])
-
-    # URLs:
-    http://example.org/cities/seattle/restaurants/joes-diner
-    http://example.org/cities/chicago/restaurants/joes-diner
-
-=end
+  #
+  ## Unique Slugs by Scope
+  #
+  # The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
+  # within a scope.
+  #
+  # This allows, for example, two restaurants in different cities to have the slug
+  # `joes-diner`:
+  #
+  #     class Restaurant < ActiveRecord::Base
+  #       extend FriendlyId
+  #       belongs_to :city
+  #       friendly_id :name, :use => :scoped, :scope => :city
+  #     end
+  #
+  #     class City < ActiveRecord::Base
+  #       extend FriendlyId
+  #       has_many :restaurants
+  #       friendly_id :name, :use => :slugged
+  #     end
+  #
+  #     City.friendly.find("seattle").restaurants.friendly.find("joes-diner")
+  #     City.friendly.find("chicago").restaurants.friendly.find("joes-diner")
+  #
+  # Without :scoped in this case, one of the restaurants would have the slug
+  # `joes-diner` and the other would have `joes-diner-f9f3789a-daec-4156-af1d-fab81aa16ee5`.
+  #
+  # The value for the `:scope` option can be the name of a `belongs_to` relation, or
+  # a column.
+  #
+  # Additionally, the `:scope` option can receive an array of scope values:
+  #
+  #     class Cuisine < ActiveRecord::Base
+  #       extend FriendlyId
+  #       has_many :restaurants
+  #       friendly_id :name, :use => :slugged
+  #     end
+  #
+  #     class City < ActiveRecord::Base
+  #       extend FriendlyId
+  #       has_many :restaurants
+  #       friendly_id :name, :use => :slugged
+  #     end
+  #
+  #     class Restaurant < ActiveRecord::Base
+  #       extend FriendlyId
+  #       belongs_to :city
+  #       friendly_id :name, :use => :scoped, :scope => [:city, :cuisine]
+  #     end
+  #
+  # All supplied values will be used to determine scope.
+  #
+  ### Finding Records by Friendly ID
+  #
+  # If you are using scopes your friendly ids may not be unique, so a simple find
+  # like:
+  #
+  #     Restaurant.friendly.find("joes-diner")
+  #
+  # may return the wrong record. In these cases it's best to query through the
+  # relation:
+  #
+  #     @city.restaurants.friendly.find("joes-diner")
+  #
+  # Alternatively, you could pass the scope value as a query parameter:
+  #
+  #     Restaurant.where(:city_id => @city.id).friendly.find("joes-diner")
+  #
+  #
+  ### Finding All Records That Match a Scoped ID
+  #
+  # Query the slug column directly:
+  #
+  #     Restaurant.where(:slug => "joes-diner")
+  #
+  ### Routes for Scoped Models
+  #
+  # Recall that FriendlyId is a database-centric library, and does not set up any
+  # routes for scoped models. You must do this yourself in your application. Here's
+  # an example of one way to set this up:
+  #
+  #     # in routes.rb
+  #     resources :cities do
+  #       resources :restaurants
+  #     end
+  #
+  #     # in views
+  #     <%= link_to 'Show', [@city, @restaurant] %>
+  #
+  #     # in controllers
+  #     @city = City.friendly.find(params[:city_id])
+  #     @restaurant = @city.restaurants.friendly.find(params[:id])
+  #
+  #     # URLs:
+  #     http://example.org/cities/seattle/restaurants/joes-diner
+  #     http://example.org/cities/chicago/restaurants/joes-diner
+  #
   module Scoped
-
     # FriendlyId::Config.use will invoke this method when present, to allow
     # loading dependent modules prior to overriding them when necessary.
     def self.setup(model_class)
@@ -146,7 +142,6 @@ an example of one way to set this up:
     # This module adds the `:scope` configuration option to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
-
       # Gets the scope value.
       #
       # When setting this value, the argument should be a symbol referencing a

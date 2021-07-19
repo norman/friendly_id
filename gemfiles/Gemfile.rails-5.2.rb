@@ -1,22 +1,22 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gemspec path: '../'
+gemspec path: "../"
 
-gem 'activerecord', '~> 5.2.0'
-gem 'railties', '~> 5.2.0'
+gem "activerecord", "~> 5.2.0"
+gem "railties", "~> 5.2.0"
 
 # Database Configuration
 group :development, :test do
   platforms :jruby do
-    gem 'activerecord-jdbcmysql-adapter', '~> 51.1'
-    gem 'activerecord-jdbcpostgresql-adapter', '~> 51.1'
-    gem 'kramdown'
+    gem "activerecord-jdbcmysql-adapter", "~> 51.1"
+    gem "activerecord-jdbcpostgresql-adapter", "~> 51.1"
+    gem "kramdown"
   end
 
   platforms :ruby, :rbx do
-    gem 'sqlite3'
-    gem 'mysql2'
-    gem 'pg'
-    gem 'redcarpet'
+    gem "sqlite3"
+    gem "mysql2"
+    gem "pg"
+    gem "redcarpet"
   end
 end

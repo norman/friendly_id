@@ -2,7 +2,6 @@ module FriendlyId
   # The default slug generator offers functionality to check slug candidates for
   # availability.
   class SlugGenerator
-
     def initialize(scope, config)
       @scope = scope
       @config = config
@@ -17,9 +16,8 @@ module FriendlyId
     end
 
     def generate(candidates)
-      candidates.each {|c| return c if available?(c)}
+      candidates.each { |c| return c if available?(c) }
       nil
     end
-
   end
 end

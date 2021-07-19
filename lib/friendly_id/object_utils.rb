@@ -19,7 +19,6 @@ module FriendlyId
   # names that unambigously refer to the library of their origin, which should
   # be sufficient to avoid conflicts with other libraries.
   module ObjectUtils
-
     # True if the id is definitely friendly, false if definitely unfriendly,
     # else nil.
     #
@@ -45,7 +44,8 @@ module FriendlyId
     # True if the id is definitely unfriendly, false if definitely friendly,
     # else nil.
     def unfriendly_id?
-      val = friendly_id? ; !val unless val.nil?
+      val = friendly_id?
+      !val unless val.nil?
     end
   end
 
