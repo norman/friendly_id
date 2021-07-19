@@ -9,9 +9,10 @@ mysql:
 
 postgres:
   adapter: postgresql
-  host: <%= ENV.fetch('PGHOST') { 'localhost' } %>
-  port: <%= ENV.fetch('PGPORT') { '5432' } %>
-  username: <%= ENV.fetch('PGUSER') { 'postgres' } %>
+  host: <%= ENV.fetch('PGHOST', 'localhost') %>
+  port: <%= ENV.fetch('PGPORT', '5432') %>
+  username: <%= ENV.fetch('PGUSER', 'postgres') %>
+  password: <%= ENV.fetch('PGPASSWORD', 'postgres') %>
   database: friendly_id_test
   encoding: utf8
 
