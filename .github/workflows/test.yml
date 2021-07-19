@@ -47,11 +47,12 @@ jobs:
         sudo apt-get install libpq-dev -y
         sudo systemctl start postgresql.service
         sudo -u postgres psql -c "CREATE USER runner WITH SUPERUSER PASSWORD 'runner'"
+        sudo -u postgres createdb runner
 
     - uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
         ruby-version: ${{ matrix.ruby }}
 
-    - run: bundle exec rake db:create db:up
+    - run: bundle exec rake db:{create,up}
     - run: bundle exec rake test
