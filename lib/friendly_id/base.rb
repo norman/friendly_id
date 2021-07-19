@@ -1,62 +1,59 @@
 module FriendlyId
-=begin
-
-## Setting Up FriendlyId in Your Model
-
-To use FriendlyId in your ActiveRecord models, you must first either extend or
-include the FriendlyId module (it makes no difference), then invoke the
-{FriendlyId::Base#friendly_id friendly_id} method to configure your desired
-options:
-
-    class Foo < ActiveRecord::Base
-      include FriendlyId
-      friendly_id :bar, :use => [:slugged, :simple_i18n]
-    end
-
-The most important option is `:use`, which you use to tell FriendlyId which
-addons it should use. See the documentation for {FriendlyId::Base#friendly_id} for a list of all
-available addons, or skim through the rest of the docs to get a high-level
-overview.
-
-*A note about single table inheritance (STI): you must extend FriendlyId in
-all classes that participate in STI, both your parent classes and their
-children.*
-
-### The Default Setup: Simple Models
-
-The simplest way to use FriendlyId is with a model that has a uniquely indexed
-column with no spaces or special characters, and that is seldom or never
-updated. The most common example of this is a user name:
-
-    class User < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :login
-      validates_format_of :login, :with => /\A[a-z0-9]+\z/i
-    end
-
-    @user = User.friendly.find "joe"   # the old User.find(1) still works, too
-    @user.to_param                     # returns "joe"
-    redirect_to @user                  # the URL will be /users/joe
-
-In this case, FriendlyId assumes you want to use the column as-is; it will never
-modify the value of the column, and your application should ensure that the
-value is unique and admissible in a URL:
-
-    class City < ActiveRecord::Base
-      extend FriendlyId
-      friendly_id :name
-    end
-
-    @city.friendly.find "Viña del Mar"
-    redirect_to @city # the URL will be /cities/Viña%20del%20Mar
-
-Writing the code to process an arbitrary string into a good identifier for use
-in a URL can be repetitive and surprisingly tricky, so for this reason it's
-often better and easier to use {FriendlyId::Slugged slugs}.
-
-=end
+  #
+  ## Setting Up FriendlyId in Your Model
+  #
+  # To use FriendlyId in your ActiveRecord models, you must first either extend or
+  # include the FriendlyId module (it makes no difference), then invoke the
+  # {FriendlyId::Base#friendly_id friendly_id} method to configure your desired
+  # options:
+  #
+  #     class Foo < ActiveRecord::Base
+  #       include FriendlyId
+  #       friendly_id :bar, :use => [:slugged, :simple_i18n]
+  #     end
+  #
+  # The most important option is `:use`, which you use to tell FriendlyId which
+  # addons it should use. See the documentation for {FriendlyId::Base#friendly_id} for a list of all
+  # available addons, or skim through the rest of the docs to get a high-level
+  # overview.
+  #
+  # *A note about single table inheritance (STI): you must extend FriendlyId in
+  # all classes that participate in STI, both your parent classes and their
+  # children.*
+  #
+  ### The Default Setup: Simple Models
+  #
+  # The simplest way to use FriendlyId is with a model that has a uniquely indexed
+  # column with no spaces or special characters, and that is seldom or never
+  # updated. The most common example of this is a user name:
+  #
+  #     class User < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :login
+  #       validates_format_of :login, :with => /\A[a-z0-9]+\z/i
+  #     end
+  #
+  #     @user = User.friendly.find "joe"   # the old User.find(1) still works, too
+  #     @user.to_param                     # returns "joe"
+  #     redirect_to @user                  # the URL will be /users/joe
+  #
+  # In this case, FriendlyId assumes you want to use the column as-is; it will never
+  # modify the value of the column, and your application should ensure that the
+  # value is unique and admissible in a URL:
+  #
+  #     class City < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :name
+  #     end
+  #
+  #     @city.friendly.find "Viña del Mar"
+  #     redirect_to @city # the URL will be /cities/Viña%20del%20Mar
+  #
+  # Writing the code to process an arbitrary string into a good identifier for use
+  # in a URL can be repetitive and surprisingly tricky, so for this reason it's
+  # often better and easier to use {FriendlyId::Slugged slugs}.
+  #
   module Base
-
     # Configure FriendlyId's behavior in a model.
     #
     #     class Post < ActiveRecord::Base
@@ -205,10 +202,10 @@ often better and easier to use {FriendlyId::Slugged slugs}.
     #
     # @yieldparam config The model class's {FriendlyId::Configuration friendly_id_config}.
     def friendly_id(base = nil, options = {}, &block)
-      yield friendly_id_config if block_given?
+      yield friendly_id_config if block
       friendly_id_config.dependent = options.delete :dependent
       friendly_id_config.use options.delete :use
-      friendly_id_config.send :set, base ? options.merge(:base => base) : options
+      friendly_id_config.send :set, base ? options.merge(base: base) : options
       include Model
     end
 
@@ -270,7 +267,7 @@ often better and easier to use {FriendlyId::Slugged slugs}.
 
     # Clears slug on duplicate records when calling `dup`.
     def dup
-      super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?('slug=') }
+      super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?("slug=") }
     end
   end
 end

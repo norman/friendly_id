@@ -4,7 +4,11 @@ require "ffaker"
 N = 10000
 
 def transaction
-  ActiveRecord::Base.transaction { yield ; raise ActiveRecord::Rollback }
+  ActiveRecord::Base.transaction do
+    yield
+
+    raise ActiveRecord::Rollback
+  end
 end
 
 class Array
@@ -17,65 +21,64 @@ Book = Class.new ActiveRecord::Base
 
 class Journalist < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :slugged
+  friendly_id :name, use: :slugged
 end
 
 class Manual < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :history
+  friendly_id :name, use: :history
 end
 
 class Restaurant < ActiveRecord::Base
   extend FriendlyId
-  friendly_id :name, :use => :finders
+  friendly_id :name, use: :finders
 end
 
-
-BOOKS       = []
+BOOKS = []
 JOURNALISTS = []
-MANUALS     = []
+MANUALS = []
 RESTAURANTS = []
 
 100.times do
   name = FFaker::Name.name
-  BOOKS       << (Book.create! :name => name).id
-  JOURNALISTS << (Journalist.create! :name => name).friendly_id
-  MANUALS     << (Manual.create! :name => name).friendly_id
-  RESTAURANTS << (Restaurant.create! :name => name).friendly_id
+  BOOKS << (Book.create! name: name).id
+  JOURNALISTS << (Journalist.create! name: name).friendly_id
+  MANUALS << (Manual.create! name: name).friendly_id
+  RESTAURANTS << (Restaurant.create! name: name).friendly_id
 end
 
 ActiveRecord::Base.connection.execute "UPDATE manuals SET slug = NULL"
 
 Benchmark.bmbm do |x|
-  x.report 'find (without FriendlyId)' do
-    N.times {Book.find BOOKS.rand}
+  x.report "find (without FriendlyId)" do
+    N.times { Book.find BOOKS.rand }
   end
 
-  x.report 'find (in-table slug)' do
-    N.times {Journalist.friendly.find JOURNALISTS.rand}
+  x.report "find (in-table slug)" do
+    N.times { Journalist.friendly.find JOURNALISTS.rand }
   end
 
-  x.report 'find (in-table slug; using finders module)' do
-    N.times {Restaurant.find RESTAURANTS.rand}
+  x.report "find (in-table slug; using finders module)" do
+    N.times { Restaurant.find RESTAURANTS.rand }
   end
 
-  x.report 'find (external slug)' do
-    N.times {Manual.friendly.find MANUALS.rand}
+  x.report "find (external slug)" do
+    N.times { Manual.friendly.find MANUALS.rand }
   end
 
-  x.report 'insert (without FriendlyId)' do
-    N.times {transaction {Book.create :name => FFaker::Name.name}}
+  x.report "insert (without FriendlyId)" do
+    N.times { transaction { Book.create name: FFaker::Name.name } }
   end
 
-  x.report 'insert (in-table-slug)' do
-    N.times {transaction {Journalist.create :name => FFaker::Name.name}}
+  x.report "insert (in-table-slug)" do
+    N.times { transaction { Journalist.create name: FFaker::Name.name } }
   end
 
-  x.report 'insert (in-table-slug; using finders module)' do
-    N.times {transaction {Restaurant.create :name => FFaker::Name.name}}
+  x.report "insert (in-table-slug; using finders module)" do
+    N.times { transaction { Restaurant.create name: FFaker::Name.name } }
   end
 
-  x.report 'insert (external slug)' do
-    N.times {transaction {Manual.create :name => FFaker::Name.name}}
+  x.report "insert (external slug)" do
+    N.times { transaction { Manual.create name: FFaker::Name.name } }
   end
 end

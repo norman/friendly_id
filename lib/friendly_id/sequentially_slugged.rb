@@ -1,4 +1,4 @@
-require_relative 'sequentially_slugged/calculator'
+require_relative "sequentially_slugged/calculator"
 
 module FriendlyId
   module SequentiallySlugged

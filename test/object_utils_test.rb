@@ -1,8 +1,6 @@
 require "helper"
 
-
 class ObjectUtilsTest < TestCaseClass
-
   include FriendlyId::Test
 
   test "strings with letters are friendly_ids" do

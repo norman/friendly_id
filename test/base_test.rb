@@ -21,13 +21,12 @@ class CoreTest < TestCaseClass
     klass = Class.new(ActiveRecord::Base) do
       self.abstract_class = true
       extend FriendlyId
-      friendly_id :foo, :use => :slugged, :slug_column => :bar
+      friendly_id :foo, use: :slugged, slug_column: :bar
     end
     assert klass < FriendlyId::Slugged
     assert_equal :foo, klass.friendly_id_config.base
     assert_equal :bar, klass.friendly_id_config.slug_column
   end
-
 
   test "friendly_id should accept a block" do
     klass = Class.new(ActiveRecord::Base) do
@@ -56,17 +55,15 @@ class CoreTest < TestCaseClass
   end
 
   test "should allow defaults to be set via a block" do
-    begin
-      FriendlyId.defaults do |config|
-        config.base = :foo
-      end
-      klass = Class.new(ActiveRecord::Base) do
-        self.abstract_class = true
-        extend FriendlyId
-      end
-      assert_equal :foo, klass.friendly_id_config.base
-    ensure
-      FriendlyId.instance_variable_set :@defaults, nil
+    FriendlyId.defaults do |config|
+      config.base = :foo
     end
+    klass = Class.new(ActiveRecord::Base) do
+      self.abstract_class = true
+      extend FriendlyId
+    end
+    assert_equal :foo, klass.friendly_id_config.base
+  ensure
+    FriendlyId.instance_variable_set :@defaults, nil
   end
 end

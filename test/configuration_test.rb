@@ -1,7 +1,6 @@
 require "helper"
 
 class ConfigurationTest < TestCaseClass
-
   include FriendlyId::Test
 
   def setup
@@ -16,13 +15,13 @@ class ConfigurationTest < TestCaseClass
   end
 
   test "should set options on initialization if present" do
-    config = FriendlyId::Configuration.new @model_class, :base => "hello"
+    config = FriendlyId::Configuration.new @model_class, base: "hello"
     assert_equal "hello", config.base
   end
 
   test "should raise error if passed unrecognized option" do
     assert_raises NoMethodError do
-      FriendlyId::Configuration.new @model_class, :foo => "bar"
+      FriendlyId::Configuration.new @model_class, foo: "bar"
     end
   end
 
@@ -30,7 +29,7 @@ class ConfigurationTest < TestCaseClass
     refute @model_class < FriendlyId::Slugged
     @model_class.class_eval do
       extend FriendlyId
-      friendly_id :hello, :use => :slugged
+      friendly_id :hello, use: :slugged
     end
     assert @model_class < FriendlyId::Slugged
   end
@@ -40,7 +39,7 @@ class ConfigurationTest < TestCaseClass
     refute @model_class < my_module
     @model_class.class_eval do
       extend FriendlyId
-      friendly_id :hello, :use => my_module
+      friendly_id :hello, use: my_module
     end
     assert @model_class < my_module
   end
@@ -48,17 +47,14 @@ class ConfigurationTest < TestCaseClass
   test "#base should optionally set a value" do
     config = FriendlyId::Configuration.new @model_class
     assert_nil config.base
-    config.base = 'foo'
-    assert_equal 'foo', config.base
+    config.base = "foo"
+    assert_equal "foo", config.base
   end
 
   test "#base can set the value to nil" do
     config = FriendlyId::Configuration.new @model_class
-    config.base 'foo'
+    config.base "foo"
     config.base nil
     assert_nil config.base
-
   end
-
-
 end

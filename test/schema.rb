@@ -25,7 +25,7 @@ module FriendlyId
 
           tables.each do |table_name|
             create_table table_name do |t|
-              t.string  :name
+              t.string :name
               t.boolean :active
             end
           end
@@ -41,7 +41,7 @@ module FriendlyId
 
           slugged_tables.each do |table_name|
             add_column table_name, :slug, :string
-            add_index  table_name, :slug, :unique => true if 'novels' != table_name
+            add_index table_name, :slug, unique: true if table_name != "novels"
           end
 
           scoped_tables.each do |table_name|
@@ -57,7 +57,7 @@ module FriendlyId
           # This will be used to test scopes
           add_column :novels, :novelist_id, :integer
           add_column :novels, :publisher_id, :integer
-          add_index :novels, [:slug, :publisher_id, :novelist_id], :unique => true
+          add_index :novels, [:slug, :publisher_id, :novelist_id], unique: true
 
           # This will be used to test column name quoting
           add_column :journalists, "strange name", :string
@@ -78,7 +78,7 @@ module FriendlyId
           add_column :restaurants, :city_id, :integer
 
           # Used to test candidates
-          add_column :cities, :code, :string, :limit => 3
+          add_column :cities, :code, :string, limit: 3
 
           # Used as a non-default slug_column
           add_column :authors, :subdomain, :string

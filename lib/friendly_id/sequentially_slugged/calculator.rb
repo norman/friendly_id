@@ -21,7 +21,7 @@ module FriendlyId
         base = "#{slug_column} = ? OR #{slug_column} LIKE ?"
         # Awful hack for SQLite3, which does not pick up '\' as the escape character
         # without this.
-        base << " ESCAPE '\\'" if scope.connection.adapter_name =~ /sqlite/i
+        base << " ESCAPE '\\'" if /sqlite/i.match?(scope.connection.adapter_name)
         base
       end
 
@@ -52,17 +52,17 @@ module FriendlyId
         # Underscores (matching a single character) and percent signs (matching
         # any number of characters) need to be escaped. While this looks like
         # an excessive number of backslashes, it is correct.
-        "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + '%'
+        "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + "%"
       end
 
       def slug_conflicts
-        scope.
-          where(conflict_query, slug, sequential_slug_matcher).
-          order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
+        scope
+          .where(conflict_query, slug, sequential_slug_matcher)
+          .order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
 
       def sql_length
-        scope.connection.adapter_name =~ /sqlserver/i ? 'LEN' : 'LENGTH'
+        /sqlserver/i.match?(scope.connection.adapter_name) ? "LEN" : "LENGTH"
       end
     end
   end

@@ -1,22 +1,23 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
 gemspec
 
-gem 'rake'
+gem "standard"
+gem "rake"
 
 group :development, :test do
   platforms :ruby do
-    gem 'byebug'
-    gem 'pry'
+    gem "byebug"
+    gem "pry"
   end
 
   platforms :jruby do
-    gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.beta2'
-    gem 'kramdown'
+    gem "activerecord-jdbcsqlite3-adapter", ">= 1.3.0.beta2"
+    gem "kramdown"
   end
 
   platforms :ruby, :rbx do
-    gem 'sqlite3'
-    gem 'redcarpet'
+    gem "sqlite3"
+    gem "redcarpet"
   end
 end
