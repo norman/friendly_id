@@ -19,9 +19,4 @@ group :development, :test do
     gem 'pg'
     gem 'redcarpet'
   end
-
-  platforms :rbx do
-    gem 'rubysl', '~> 2.0'
-    gem 'rubinius-developer_tools'
-  end
 end
