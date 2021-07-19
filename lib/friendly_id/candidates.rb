@@ -1,11 +1,9 @@
-require 'securerandom'
+require "securerandom"
 
 module FriendlyId
-
   # This class provides the slug candidate functionality.
   # @see FriendlyId::Slugged
   class Candidates
-
     include Enumerable
 
     def initialize(object, *array)
@@ -14,8 +12,8 @@ module FriendlyId
     end
 
     def each(*args, &block)
-      return candidates unless block_given?
-      candidates.each{ |candidate| yield candidate }
+      return candidates unless block
+      candidates.each { |candidate| yield candidate }
     end
 
     private
@@ -29,13 +27,13 @@ module FriendlyId
 
     def normalize(candidates)
       candidates.map do |candidate|
-        @object.normalize_friendly_id(candidate.map(&:call).join(' '))
-      end.select {|x| wanted?(x)}
+        @object.normalize_friendly_id(candidate.map(&:call).join(" "))
+      end.select { |x| wanted?(x) }
     end
 
     def filter(candidates)
-      unless candidates.all? {|x| reserved?(x)}
-        candidates.reject! {|x| reserved?(x)}
+      unless candidates.all? { |x| reserved?(x) }
+        candidates.reject! { |x| reserved?(x) }
       end
       candidates
     end
@@ -44,7 +42,7 @@ module FriendlyId
       array.map do |candidate|
         case candidate
         when String
-          [->{candidate}]
+          [-> { candidate }]
         when Array
           to_candidate_array(object, candidate).flatten
         when Symbol
@@ -53,7 +51,7 @@ module FriendlyId
           if candidate.respond_to?(:call)
             [candidate]
           else
-            [->{candidate.to_s}]
+            [-> { candidate.to_s }]
           end
         end
       end

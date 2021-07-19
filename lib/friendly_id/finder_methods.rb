@@ -1,7 +1,5 @@
 module FriendlyId
-
   module FinderMethods
-
     # Finds a record using the given id.
     #
     # If the id is "unfriendly", it will call the original find method.
@@ -18,7 +16,7 @@ module FriendlyId
     def find(*args)
       id = args.first
       return super if args.count != 1 || id.unfriendly_id?
-      first_by_friendly_id(id).tap {|result| return result unless result.nil?}
+      first_by_friendly_id(id).tap { |result| return result unless result.nil? }
       return super if potential_primary_key?(id)
 
       raise_not_found_exception(id)
@@ -50,7 +48,11 @@ module FriendlyId
       key_type = key_type.type if key_type.respond_to?(:type)
       case key_type
       when :integer
-        Integer(id, 10) rescue false
+        begin
+          Integer(id, 10)
+        rescue
+          false
+        end
       when :uuid
         id.match(/\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/)
       else
@@ -97,12 +99,11 @@ module FriendlyId
 
     def raise_not_found_exception(id)
       message = "can't find record with friendly id: #{id.inspect}"
-      if ActiveRecord.version < Gem::Version.create('5.0')
+      if ActiveRecord.version < Gem::Version.create("5.0")
         raise ActiveRecord::RecordNotFound.new(message)
       else
         raise ActiveRecord::RecordNotFound.new(message, name, friendly_id_config.query_field, id)
       end
     end
-
   end
 end

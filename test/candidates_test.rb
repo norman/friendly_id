@@ -1,8 +1,15 @@
 require "helper"
 
 class CandidatesTest < TestCaseClass
-
   include FriendlyId::Test
+
+  class Airport
+    def initialize(code)
+      @code = code
+    end
+    attr_reader :code
+    alias_method :to_s, :code
+  end
 
   class City < ActiveRecord::Base
     extend FriendlyId
@@ -16,8 +23,8 @@ class CandidatesTest < TestCaseClass
 
   def with_instances_of(klass = model_class, &block)
     transaction do
-      city1 = klass.create! :name => "New York", :code => "JFK"
-      city2 = klass.create! :name => "New York", :code => "EWR"
+      city1 = klass.create! name: "New York", code: "JFK"
+      city2 = klass.create! name: "New York", code: "EWR"
       yield city1, city2
     end
   end
@@ -26,7 +33,7 @@ class CandidatesTest < TestCaseClass
   test "resolves conflict with candidate" do
     with_instances do |city1, city2|
       assert_equal "new-york", city1.slug
-      assert_match(/\Anew-york-([a-z0-9]+\-){4}[a-z0-9]+\z/, city2.slug)
+      assert_match(/\Anew-york-([a-z0-9]+-){4}[a-z0-9]+\z/, city2.slug)
     end
   end
 
@@ -37,7 +44,7 @@ class CandidatesTest < TestCaseClass
       end
     end
     with_instances_of klass do |_, city|
-      assert_match(/\Anew-york-([a-z0-9]+\-){4}[a-z0-9]+\z/, city.slug)
+      assert_match(/\Anew-york-([a-z0-9]+-){4}[a-z0-9]+\z/, city.slug)
     end
   end
 
@@ -59,7 +66,7 @@ class CandidatesTest < TestCaseClass
       end
     end
     with_instances_of klass do |_, city|
-      assert_match(/\Anew-york-([a-z0-9]+\-){4}[a-z0-9]+\z/, city.slug)
+      assert_match(/\Anew-york-([a-z0-9]+-){4}[a-z0-9]+\z/, city.slug)
     end
   end
 
@@ -70,7 +77,7 @@ class CandidatesTest < TestCaseClass
       end
     end
     with_instances_of klass do |_, city|
-      assert_match(/\Anew-york-([a-z0-9]+\-){4}[a-z0-9]+\z/, city.slug)
+      assert_match(/\Anew-york-([a-z0-9]+-){4}[a-z0-9]+\z/, city.slug)
     end
   end
 
@@ -88,7 +95,7 @@ class CandidatesTest < TestCaseClass
   test "accepts candidate with lambda" do
     klass = Class.new City do
       def slug_candidates
-        [name, [name, ->{ rand 1000 }]]
+        [name, [name, -> { rand 1000 }]]
       end
     end
     with_instances_of klass do |_, city|
@@ -98,13 +105,6 @@ class CandidatesTest < TestCaseClass
 
   test "accepts candidate with object" do
     klass = Class.new City do
-      class Airport
-        def initialize(code)
-          @code = code
-        end
-        attr_reader :code
-        alias_method :to_s, :code
-      end
       def slug_candidates
         [name, [name, Airport.new(code)]]
       end
@@ -122,7 +122,7 @@ class CandidatesTest < TestCaseClass
     end
     with_instances_of klass do |_, city|
       candidates = FriendlyId::Candidates.new(city, city.slug_candidates)
-      assert_equal candidates.each, ['new-york']
+      assert_equal candidates.each, ["new-york"]
     end
   end
 
@@ -136,8 +136,7 @@ class CandidatesTest < TestCaseClass
       collected_candidates = []
       candidates = FriendlyId::Candidates.new(city, city.slug_candidates)
       candidates.each { |candidate| collected_candidates << candidate }
-      assert_equal collected_candidates, ['new-york']
+      assert_equal collected_candidates, ["new-york"]
     end
   end
-
 end

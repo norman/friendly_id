@@ -12,7 +12,6 @@ class Author < ActiveRecord::Base
 end
 
 class CoreTest < TestCaseClass
-
   include FriendlyId::Test
   include FriendlyId::Test::Shared::Core
 
@@ -31,6 +30,6 @@ class CoreTest < TestCaseClass
   end
 
   test "instances should have a friendly id" do
-    with_instance_of(model_class) {|record| assert record.friendly_id}
+    with_instance_of(model_class) { |record| assert record.friendly_id }
   end
 end

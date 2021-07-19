@@ -17,16 +17,6 @@ jobs:
             gemfile: '5.2'
       fail-fast: false
     runs-on: ubuntu-latest
-    name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
-    steps:
-    - uses: actions/checkout@v2
-    - run: sudo apt-get update && sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev mysql-client libsqlite3-dev -y
-    - uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-        ruby-version: ${{ matrix.ruby }}
-    - run: bundle exec rake db:create db:up
-    - run: bundle exec rake test
 
     env:
       BUNDLE_GEMFILE: gemfiles/Gemfile.rails-${{ matrix.gemfile }}.rb
@@ -35,18 +25,34 @@ jobs:
       DB: ${{ matrix.database }}
       MYSQL_PASSWORD: root
       PGHOST: localhost
-      PGPORT: 5432
-      PGUSER: postgres
+      PGPASSWORD: runner
+      PGUSER: runner
       RAILS_ENV: test
 
-    services:
-      postgres:
-        image: postgres:11.5
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      mysql:
-        image: mysql:5.7
-        ports: ["3306:3306"]
-        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
-        env:
-          MYSQL_ROOT_PASSWORD: root
+    name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: sudo apt-get update && sudo apt-get install libsqlite3-dev -y
+
+    - name: "Set up MySQL using VM's server"
+      if: ${{ env.DB == 'mysql' }}
+      run: |
+        sudo apt-get install libmysqlclient-dev -y
+        sudo systemctl start mysql.service
+
+    - name: "Set up PostgreSQL using VM's server"
+      if: ${{ env.DB == 'postgresql' }}
+      run: |
+        sudo apt-get install libpq-dev -y
+        sudo systemctl start postgresql.service
+        sudo -u postgres psql -c "CREATE USER runner WITH SUPERUSER PASSWORD 'runner'"
+        sudo -u postgres createdb runner
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+        ruby-version: ${{ matrix.ruby }}
+
+    - run: bundle exec rake db:{create,up}
+    - run: bundle exec rake test
