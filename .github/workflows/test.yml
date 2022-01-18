@@ -13,8 +13,6 @@ jobs:
         gemfile: [ '7.0', '6.1', '6.0' ]
         ruby: [ '2.6', '2.7', '3.0', '3.1' ]
         exclude:
-          - ruby: '3.1'
-            gemfile: '6.0'
           - ruby: '2.6'
             gemfile: '7.0'
       fail-fast: false
