@@ -83,12 +83,15 @@ class HistoryTest < TestCaseClass
       record.name = "x"
       record.slug = nil
       assert record.save
+      assert record.slug == "x"
       record.name = "y"
       record.slug = nil
       assert record.save
+      assert record.slug == "y"
       record.name = "x"
       record.slug = nil
       assert record.save
+      assert record.slug == "x"
     end
   end
 
