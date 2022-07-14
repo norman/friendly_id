@@ -27,9 +27,23 @@ module FriendlyId
     # @raise ActiveRecord::RecordNotFound
     def find(*args, allow_nil: false)
       id = args.first
-      return super(*args) if args.count != 1 || id.unfriendly_id?
+      try_primary_key_first = args.count != 1 || id.unfriendly_id?
+      try_primary_key_as_fallback = potential_primary_key?(id)
+
+      if try_primary_key_first && allow_nil
+        return super(*args) rescue nil
+      elsif try_primary_key_first
+        return super(*args)
+      end
+
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
-      return super(*args) if potential_primary_key?(id)
+
+
+      if try_primary_key_as_fallback && allow_nil
+        return super(*args) rescue nil
+      elsif try_primary_key_as_fallback
+        return super(*args)
+      end
 
       raise_not_found_exception(id) unless allow_nil
     end
