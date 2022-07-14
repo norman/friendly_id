@@ -7,19 +7,31 @@ module FriendlyId
     # id matching '123' and then fall back to looking for a record with the
     # numeric id '123'.
     #
+    # @param [Boolean] allow_nil (default: false)
+    # Use allow_nil: true if you'd like the finder to return nil instead of
+    # raising ActivRecord::RecordNotFound
+    #
+    # ### Example
+    #
+    #     MyModel.friendly.find("bad-slug")
+    #     #=> raise ActiveRecord::RecordNotFound
+    #
+    #     MyModel.friendly.find("bad-slug", allow_nil: true)
+    #     #=> nil
+    #
     # Since FriendlyId 5.0, if the id is a nonnumeric string like '123-foo' it
     # will *only* search by friendly id and not fall back to the regular find
     # method.
     #
     # If you want to search only by the friendly id, use {#find_by_friendly_id}.
     # @raise ActiveRecord::RecordNotFound
-    def find(*args)
+    def find(*args, allow_nil: false)
       id = args.first
-      return super if args.count != 1 || id.unfriendly_id?
+      return super(*args) if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
-      return super if potential_primary_key?(id)
+      return super(*args) if potential_primary_key?(id)
 
-      raise_not_found_exception(id)
+      raise_not_found_exception(id) unless allow_nil
     end
 
     # Returns true if a record with the given id exists.
