@@ -15,15 +15,14 @@ module FriendlyId
     # @raise ActiveRecord::RecordNotFound
     def find(*args, **options)
       id = args.first
-      return super if args.count != 1 || id.unfriendly_id?
+      return super(*args) if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
-      return super if potential_primary_key?(id)
+      return super(*args) if potential_primary_key?(id)
 
       options.symbolize_keys!
       allow_nil = options.fetch(:allow_nil, false)
-      raise_exception = options.fetch(:raise, !allow_nil)
 
-      raise_not_found_exception(id) if raise_exception
+      raise_not_found_exception(id) unless allow_nil
     end
 
     # Returns true if a record with the given id exists.

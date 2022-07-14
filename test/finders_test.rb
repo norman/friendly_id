@@ -26,21 +26,9 @@ class Finders < TestCaseClass
     end
   end
 
-  test "allows nil with raise: false" do
-    with_instance_of(model_class) do |record|
-      assert_nil model_class.find("foo", raise: false)
-    end
-  end
-
   test "allows nil with allow_nil: true" do
     with_instance_of(model_class) do |record|
       assert_nil model_class.find("foo", allow_nil: true)
-    end
-  end
-
-  test "allows nil on relations with raise: false" do
-    with_instance_of(model_class) do |record|
-      assert_nil model_class.existing.find("foo", raise: false)
     end
   end
 
