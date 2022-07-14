@@ -104,6 +104,27 @@ existing users, do this from the console, runner, or add a Rake task:
 User.find_each(&:save)
 ```
 
+## Options
+
+### :allow_nil
+
+You can pass `allow_nil: true` to the `friendly.find()` method if you prefer to get
+a nil instead of raising an `ActiveRecord::RecordNotFound` exception.
+
+#### Example
+
+```ruby
+MyModel.friendly.find("bad-slug") # where bad-slug is not a valid slug
+MyModel.friendly.find(123)        # where 123 is not a valid primary key ID
+MyModel.friendly.find(nil)        # when you don't know if you even have a slug or ID
+#=> raise ActiveRecord::RecordNotFound
+
+MyModel.friendly.find("bad-slug") # where bad-slug is not a valid slug
+MyModel.friendly.find(123)        # where 123 is not a valid primary key ID
+MyModel.friendly.find(nil)        # when you don't know if you even have a slug or ID
+#=> nil
+```
+
 ## Bugs
 
 Please report them on the [Github issue
