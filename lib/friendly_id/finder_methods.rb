@@ -19,10 +19,9 @@ module FriendlyId
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
       return super(*args) if potential_primary_key?(id)
 
-      options.symbolize_keys!
-      allow_nil = options.fetch(:allow_nil, false)
-
-      raise_not_found_exception(id) unless allow_nil
+      unless options.symbolize_keys.fetch(:allow_nil, false)
+        raise_not_found_exception(id)
+      end
     end
 
     # Returns true if a record with the given id exists.
