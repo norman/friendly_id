@@ -116,12 +116,12 @@ avoid raising `ActiveRecord::RecordNotFound` and accept a `nil`.
 ```ruby
 MyModel.friendly.find("bad-slug") # where bad-slug is not a valid slug
 MyModel.friendly.find(123)        # where 123 is not a valid primary key ID
-MyModel.friendly.find(nil)        # when you don't know if you even have a slug or ID
+MyModel.friendly.find(nil)        # when you have a variable/param that's possibly nil
 #=> raise ActiveRecord::RecordNotFound
 
-MyModel.friendly.find("bad-slug", allow_nil: true) # where bad-slug is not a valid slug
-MyModel.friendly.find(123, allow_nil: true)        # where 123 is not a valid primary key ID
-MyModel.friendly.find(nil, allow_nil: true)        # when you don't know if you even have a slug or ID
+MyModel.friendly.find("bad-slug", allow_nil: true)
+MyModel.friendly.find(123, allow_nil: true)
+MyModel.friendly.find(nil, allow_nil: true)
 #=> nil
 ```
 
