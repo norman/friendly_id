@@ -108,8 +108,8 @@ User.find_each(&:save)
 
 ### :allow_nil
 
-You can pass `allow_nil: true` to the `friendly.find()` method if you prefer to get
-a nil instead of raising an `ActiveRecord::RecordNotFound` exception.
+You can pass `allow_nil: true` to the `friendly.find()` method if you're want to
+avoid raising `ActiveRecord::RecordNotFound` and accept a `nil`.
 
 #### Example
 
@@ -119,9 +119,9 @@ MyModel.friendly.find(123)        # where 123 is not a valid primary key ID
 MyModel.friendly.find(nil)        # when you don't know if you even have a slug or ID
 #=> raise ActiveRecord::RecordNotFound
 
-MyModel.friendly.find("bad-slug") # where bad-slug is not a valid slug
-MyModel.friendly.find(123)        # where 123 is not a valid primary key ID
-MyModel.friendly.find(nil)        # when you don't know if you even have a slug or ID
+MyModel.friendly.find("bad-slug", allow_nil: true) # where bad-slug is not a valid slug
+MyModel.friendly.find(123, allow_nil: true)        # where 123 is not a valid primary key ID
+MyModel.friendly.find(nil, allow_nil: true)        # when you don't know if you even have a slug or ID
 #=> nil
 ```
 
