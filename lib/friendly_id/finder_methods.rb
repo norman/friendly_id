@@ -27,22 +27,13 @@ module FriendlyId
     # @raise ActiveRecord::RecordNotFound
     def find(*args, allow_nil: false)
       id = args.first
-
-      begin
-        return super(*args) if args.count != 1 || id.unfriendly_id?
-      rescue => e
-        return allow_nil ? nil : raise(e)
-      end
-
+      return super(*args) if args.count != 1 || id.unfriendly_id?
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
+      return super(*args) if potential_primary_key?(id)
 
-      begin
-        return super(*args) if potential_primary_key?(id)
-      rescue => e
-        return allow_nil ? nil : raise(e)
-      end
-
-      raise_not_found_exception(id) unless allow_nil
+      raise_not_found_exception(id)
+    rescue => e
+      allow_nil ? nil : raise(e)
     end
 
     # Returns true if a record with the given id exists.
