@@ -31,7 +31,7 @@ module FriendlyId
       begin
         return super(*args) if args.count != 1 || id.unfriendly_id?
       rescue => e
-        allow_nil ? nil : raise(e)
+        return allow_nil ? nil : raise(e)
       end
 
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
@@ -39,7 +39,7 @@ module FriendlyId
       begin
         return super(*args) if potential_primary_key?(id)
       rescue => e
-        allow_nil ? nil : raise(e)
+        return allow_nil ? nil : raise(e)
       end
 
       raise_not_found_exception(id) unless allow_nil
