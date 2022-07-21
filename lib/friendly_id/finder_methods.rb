@@ -31,9 +31,9 @@ module FriendlyId
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
       return super(*args) if potential_primary_key?(id)
 
-      raise_not_found_exception(id)
-    rescue => e
-      allow_nil ? nil : raise(e)
+      raise_not_found_exception(id) unless allow_nil
+    rescue ActiveRecord::RecordNotFound => exception
+      raise exception unless allow_nil
     end
 
     # Returns true if a record with the given id exists.
