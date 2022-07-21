@@ -47,7 +47,7 @@ module FriendlyId
     # `find`.
     # @raise ActiveRecord::RecordNotFound
     def find_by_friendly_id(id)
-      first_by_friendly_id(id) or raise raise_not_found_exception(id)
+      first_by_friendly_id(id) or raise_not_found_exception(id)
     end
 
     def exists_by_friendly_id?(id)
