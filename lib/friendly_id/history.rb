@@ -104,17 +104,15 @@ module FriendlyId
 
     def scope_for_slug_generator
       relation = super.left_joins(:slugs)
-
-      if friendly_id_config.uses?(:scoped)
-        relation.where(Slug.arel_table[:scope].eq(serialized_scope))
-      else
-        relation
-      end
+      return relation unless friendly_id_config.uses?(:scoped)
+      
+      relation.where(Slug.arel_table[:scope].eq(serialized_scope))
     end
 
     def create_slug
       return unless friendly_id
       return if history_is_up_to_date?
+
       # Allow reversion back to a previously used slug
       relation = slugs.where(slug: friendly_id)
       if friendly_id_config.uses?(:scoped)
