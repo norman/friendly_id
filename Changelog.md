@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+## 5.5.0 (2022-11-16)
+
 * SimpleI18n: Handle regional locales ([#965](https://github.com/norman/friendly_id/pull/965))
 * Fix: "unknown column" exception ([#943](https://github.com/norman/friendly_id/pull/943))
 * Add: `allow_nil: true` to the Finder ([#995](https://github.com/norman/friendly_id/pull/995) and [#997](https://github.com/norman/friendly_id/pull/997))
