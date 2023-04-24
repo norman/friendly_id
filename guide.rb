@@ -4,8 +4,12 @@
 
 def comments_from path
   path = File.expand_path("../lib/friendly_id/#{path}", __FILE__)
-  match = File.read(path).match(/\n=begin(.*)\n=end/m)[1].to_s
-  match.split("\n").reject { |x| x =~ /^@/ }.join("\n").strip
+  matches = File.read(path).match(/\n# @guide begin(.*)\n# @guide end/m)
+
+  return if matches.nil?
+
+  match = matches[1].to_s
+  match.split("\n").map { |x| x.sub(/^\s*# /, "") }.reject { |x| x =~ /^@/ }.join("\n").strip
 end
 
 File.open(File.expand_path("../Guide.md", __FILE__), "w:utf-8") do |guide|
