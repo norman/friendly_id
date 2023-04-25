@@ -4,12 +4,15 @@
 
 def comments_from path
   path = File.expand_path("../lib/friendly_id/#{path}", __FILE__)
-  matches = File.read(path).match(/\n# @guide begin(.*)\n# @guide end/m)
+  matches = File.read(path).match(/\n\s*# @guide begin\n(.*)\s*# @guide end/m)
 
   return if matches.nil?
 
   match = matches[1].to_s
-  match.split("\n").map { |x| x.sub(/^\s*# /, "") }.reject { |x| x =~ /^@/ }.join("\n").strip
+  match.split("\n")
+    .map { |x| x.sub(/^\s*#\s?/, "") } # Strip off the comment, leading whitespace, and the space after the comment
+    .reject { |x| x =~ /^@/ }         # Ignore yarddoc tags for the guide
+    .join("\n").strip
 end
 
 File.open(File.expand_path("../Guide.md", __FILE__), "w:utf-8") do |guide|
