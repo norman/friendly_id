@@ -1,4 +1,6 @@
 module FriendlyId
+  # @guide begin
+  #
   # ## Performing Finds with FriendlyId
   #
   # FriendlyId offers enhanced finders which will search for your record by
@@ -12,7 +14,7 @@ module FriendlyId
   #     Restaurant.find(23)                     #=> still works
   #     Restaurant.find('plaza-diner')          #=> will not work
   #
-  ### Restoring FriendlyId 4.0-style finders
+  # ### Restoring FriendlyId 4.0-style finders
   #
   # Prior to version 5.0, FriendlyId overrode the default finder methods to perform
   # friendly finds all the time. This required modifying parts of Rails that did
@@ -34,7 +36,7 @@ module FriendlyId
   #     Restaurant.find('plaza-diner')          #=> now also works
   #     Restaurant.active.find('plaza-diner')   #=> now also works
   #
-  ### Updating your application to use FriendlyId's finders
+  # ### Updating your application to use FriendlyId's finders
   #
   # Unless you've chosen to use the `:finders` addon, be sure to modify the finders
   # in your controllers to use the `friendly` scope. For example:
@@ -49,7 +51,7 @@ module FriendlyId
   #       @restaurant = Restaurant.friendly.find(params[:id])
   #     end
   #
-  #### Active Admin
+  # #### Active Admin
   #
   # Unless you use the `:finders` addon, you should modify your admin controllers
   # for models that use FriendlyId with something similar to the following:
@@ -60,6 +62,7 @@ module FriendlyId
   #       end
   #     end
   #
+  # @guide end
   module Finders
     module ClassMethods
       if (ActiveRecord::VERSION::MAJOR == 4) && (ActiveRecord::VERSION::MINOR == 0)
