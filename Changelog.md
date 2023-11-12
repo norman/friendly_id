@@ -5,6 +5,10 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+## 5.5.1 (2023-11-13)
+
+* Fix YARD doc generation. ([#1006](https://github.com/norman/friendly_id/pull/1006))
+
 ## 5.5.0 (2022-11-16)
 
 * SimpleI18n: Handle regional locales ([#965](https://github.com/norman/friendly_id/pull/965))
