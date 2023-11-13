@@ -19,9 +19,9 @@ rescue LoadError
 end
 
 begin
-  TestCaseClass = MiniTest::Test
+  TestCaseClass = Minitest::Test
 rescue NameError
-  TestCaseClass = MiniTest::Unit::TestCase
+  TestCaseClass = Minitest::Unit::TestCase
 end
 
 require "mocha/minitest"
