@@ -35,7 +35,7 @@ jobs:
 
     name: ${{ matrix.ruby }} ${{ matrix.database }} rails-${{ matrix.gemfile }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - run: sudo apt-get update && sudo apt-get install libsqlite3-dev -y
 
