@@ -85,13 +85,13 @@ module FriendlyId
       include ::FriendlyId::FinderMethods
 
       def exists_by_friendly_id?(id)
-        super || joins(:slugs).where(slug_history_clause(id)).exists?
+        super || joins(:slugs).where(slug_history_clause(parse_friendly_id(id))).exists?
       end
 
       private
 
       def first_by_friendly_id(id)
-        super || slug_table_record(id)
+        super || slug_table_record(parse_friendly_id(id))
       end
 
       def slug_table_record(id)
