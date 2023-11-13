@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Fix: history not using `parse_friendly_id`. ([#1020](https://github.com/norman/friendly_id/pull/1020))
+
 ## 5.5.1 (2023-11-13)
 
 * Fix YARD doc generation. ([#1006](https://github.com/norman/friendly_id/pull/1006))
