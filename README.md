@@ -108,7 +108,7 @@ User.find_each(&:save)
 
 ### `:allow_nil`
 
-You can pass `allow_nil: true` to the `friendly.find()` method if you're want to
+You can pass `allow_nil: true` to the `friendly.find()` method if you want to
 avoid raising `ActiveRecord::RecordNotFound` and accept a `nil`.
 
 #### Example
