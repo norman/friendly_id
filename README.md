@@ -39,7 +39,7 @@ FriendlyId offers many advanced features, including:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'friendly_id', '~> 5.4.0'
+gem 'friendly_id', '~> 5.5.0'
 ```
 
 Note: You MUST use 5.0.0 or greater for Rails 4.0+.
@@ -108,8 +108,8 @@ User.find_each(&:save)
 
 ### `:allow_nil`
 
-You can pass `allow_nil: true` to the `friendly.find()` method if you're want to
-avoid raising `ActiveRecord::RecordNotFound` and accept a `nil`.
+You can pass `allow_nil: true` to the `friendly.find()` method if you want to
+avoid raising `ActiveRecord::RecordNotFound` and accept `nil`.
 
 #### Example
 
