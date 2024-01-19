@@ -42,6 +42,22 @@ class SluggedTest < TestCaseClass
     refute instance.valid?
   end
 
+  test "should allow validations on the base" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "articles"
+      extend FriendlyId
+      friendly_id :name, use: :slugged
+      validates :name, presence: true
+    end
+    instance = model_class.new name: ""
+    refute instance.valid? # run Slugged validation hooks
+
+    # setting slug to UUID, e.g. "2d28c5c1-4eee-49ef-aee8-4842fddbe895",
+    # at this point is a problem.  This will be sent back to Rails form_with
+    # and inserted into the form action= url value.
+    assert(instance.slug.nil?)
+  end
+
   test "should allow nil slugs" do
     transaction do
       m1 = model_class.create!
