@@ -83,12 +83,15 @@ class HistoryTest < TestCaseClass
       record.name = "x"
       record.slug = nil
       assert record.save
+      assert record.slug == "x"
       record.name = "y"
       record.slug = nil
       assert record.save
+      assert record.slug == "y"
       record.name = "x"
       record.slug = nil
       assert record.save
+      assert record.slug == "x"
     end
   end
 
@@ -111,6 +114,20 @@ class HistoryTest < TestCaseClass
       assert record.save
 
       assert_equal 2, FriendlyId::Slug.count
+    end
+  end
+
+  test "should not get an old slug used by another" do
+    transaction do
+      record = model_class.create! :name => "Old Name"
+      assert_equal record.slug, "old-name"
+      record.update :name => "New Name", :slug => nil
+      assert_equal record.slug, "new-name"
+
+      new_record = model_class.create! :name => "Old Name"
+      assert_match(/old-name(-\w+){5}/, new_record.slug)
+
+      assert_equal model_class.friendly.find("old-name"), record
     end
   end
 
@@ -429,6 +446,53 @@ class ScopedHistoryTest < TestCaseClass
       second_record = model_class.create! city: second_city, name: "x"
 
       assert_equal record.slug, second_record.slug
+    end
+  end
+end
+
+class MigrationTest < TestCaseClass
+  include FriendlyId::Test
+
+  class City < ActiveRecord::Base
+    extend FriendlyId
+    friendly_id :slug_candidates, use: :slugged
+    alias_attribute :slug_candidates, :name
+  end
+
+  def with_migrate_scenario(city_name = "New York", &block)
+    transaction do
+      city = City.create! name: city_name
+
+      klass = Class.new City do
+        friendly_id_config.model_class = City
+        friendly_id_config.use(:history)
+
+        def slug_candidates
+          [:name, [:name, "-alt"]]
+        end
+      end
+
+      yield city, klass
+    end
+  end
+
+  test "should not fail when adding history to existing" do
+    name_collision = "Amsterdam"
+
+    with_migrate_scenario(name_collision) do |city, klass|
+      city2 = klass.create! name: "New York"
+
+      assert city2.update name: name_collision, slug: nil
+      assert_equal "#{name_collision.downcase}-alt", city2.slug
+    end
+  end
+
+  test "scope_for_slug_generator should find slugs not in Slug table" do
+    with_migrate_scenario do |city, klass|
+      assert klass.new.send(:scope_for_slug_generator).include? city
+
+      city2 = klass.create! name: city.name
+      assert city2.send(:scope_for_slug_generator).include? city
     end
   end
 end
