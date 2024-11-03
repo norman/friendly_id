@@ -374,7 +374,7 @@ module FriendlyId
     private :slug_generator
 
     def unset_slug_if_invalid
-      if (errors.present? || errors.key?(friendly_id_config.query_field)) && attribute_changed?(friendly_id_config.query_field.to_s)
+      if errors.present? && attribute_changed?(friendly_id_config.query_field.to_s)
         diff = changes[friendly_id_config.query_field]
         send "#{friendly_id_config.slug_column}=", diff.first
       end
