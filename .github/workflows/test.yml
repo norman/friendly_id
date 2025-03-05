@@ -10,13 +10,19 @@ jobs:
     strategy:
       matrix:
         database: [ mysql, postgresql ]
-        gemfile: [ '7.1', '7.0', '6.1', '6.0' ]
-        ruby: [ '2.7', '3.0', '3.1', '3.2' ]
+        gemfile: [ '8.0', '7.1', '7.0', '6.1', '6.0' ]
+        ruby: [ '2.7', '3.0', '3.1', '3.2', '3.3', '3.4' ]
         exclude:
           - ruby: '3.2'
             gemfile: '6.0'
           - ruby: '3.2'
             gemfile: '6.1'
+          - ruby: '2.7'
+            gemfile: '8.0'
+          - ruby: '3.0'
+            gemfile: '8.0'
+          - ruby: '3.1'
+            gemfile: '8.0'
       fail-fast: false
     runs-on: ubuntu-latest
 
