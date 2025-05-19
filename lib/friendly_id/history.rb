@@ -105,23 +105,17 @@ module FriendlyId
 
     private
 
-    # If we're updating, don't consider historic slugs for the same record
-    # to be conflicts. This will allow a record to revert to a previously
-    # used slug.
     def scope_for_slug_generator
-      relation = super.joins(:slugs)
-      unless new_record?
-        relation = relation.merge(Slug.where("sluggable_id <> ?", id))
-      end
-      if friendly_id_config.uses?(:scoped)
-        relation = relation.where(Slug.arel_table[:scope].eq(serialized_scope))
-      end
-      relation
+      relation = super.left_joins(:slugs)
+      return relation unless friendly_id_config.uses?(:scoped)
+      
+      relation.where(Slug.arel_table[:scope].eq(serialized_scope))
     end
 
     def create_slug
       return unless friendly_id
       return if history_is_up_to_date?
+
       # Allow reversion back to a previously used slug
       relation = slugs.where(slug: friendly_id)
       if friendly_id_config.uses?(:scoped)
