@@ -104,4 +104,16 @@ FriendlyId.defaults do |config|
   #     text.to_slug.normalize! :transliterations => [:russian, :latin]
   #   end
   # }
+  # 
+  # FriendlyId's history module adds a polymorphic `has_many :slugs, ...` association
+  # to the model. By default slugs will be destroyed when the record is destroyed.
+  # 
+  # To disable this use `false`. Other options include:
+  # - :delete
+  # - :destroy_async
+  # - :nullify
+  # - :restrict_with_exception
+  # - :restrict_with_error
+  # 
+  # config.dependent :destroy
 end

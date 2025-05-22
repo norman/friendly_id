@@ -50,6 +50,13 @@ module FriendlyId
   #         end
   #       end
   #     end
+  #     
+  # ### Dependent
+  # 
+  # This module adds a polymorphic `has_many :slugs, ...` association to the model class.
+  # By default slugs will be destroyed when the record is destroyed.
+  # You can change this behavior with the `dependent` configuration option in
+  # `initializers/friendly_id.rb`.
   #
   # @guide end
   module History
