@@ -386,7 +386,7 @@ module FriendlyId
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_writer :slug_column, :slug_limit, :sequence_separator
-      attr_accessor :slug_generator_class
+      attr_accessor :slug_generator_class, :treat_numeric_as_conflict
 
       # Makes FriendlyId use the slug column for querying.
       # @return String The slug column.
