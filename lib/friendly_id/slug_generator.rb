@@ -29,9 +29,8 @@ module FriendlyId
     def purely_numeric_slug?(slug)
       return false unless slug
       begin
-        Integer(slug, 10)
-        slug.to_s == Integer(slug, 10).to_s
-      rescue
+        Integer(slug, 10).to_s == slug.to_s
+      rescue ArgumentError, TypeError
         false
       end
     end
