@@ -3,7 +3,7 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
-## Unreleased
+## 5.6.0 (2025-11-25)
 
 * Add: `treat_numeric_as_conflict` option to prevent ambiguous numeric slugs. ([#1037](https://github.com/norman/friendly_id/pull/1037))
 * Fix: history not using `parse_friendly_id`. ([#1020](https://github.com/norman/friendly_id/pull/1020))
