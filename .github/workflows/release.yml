@@ -3,7 +3,7 @@ name: Release to rubygems.org
 on:
   push:
     tags:
-      - '*.*.*'
+      - 'v*.*.*'
 
 jobs:
   push:
