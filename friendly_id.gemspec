@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name = "friendly_id"
   s.version = FriendlyId::VERSION
   s.authors = ["Norman Clarke", "Philip Arndt"]
-  s.email = ["norman@njclarke.com", "p@arndt.io"]
+  s.email = ["norman@njclarke.com", "gems@p.arndt.io"]
   s.homepage = "https://github.com/norman/friendly_id"
   s.summary = "A comprehensive slugging and pretty-URL plugin."
   s.files = `git ls-files`.split("\n")
@@ -28,9 +28,4 @@ Gem::Specification.new do |s|
   s.description = "FriendlyId is the \"Swiss Army bulldozer\" of slugging " \
     "and permalink plugins for Active Record. It lets you create pretty URLs " \
     "and work with human-friendly strings as if they were numeric ids."
-
-  s.cert_chain = [File.expand_path("certs/parndt.pem", __dir__)]
-  if $PROGRAM_NAME.end_with?("gem") && ARGV.include?("build") && ARGV.include?(__FILE__)
-    s.signing_key = File.expand_path("~/.ssh/gem-private_key.pem")
-  end
 end
