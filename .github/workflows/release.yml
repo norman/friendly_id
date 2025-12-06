@@ -1,0 +1,29 @@
+name: Release to rubygems.org
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    environment: release
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+
+      - uses: rubygems/release-gem@v1
