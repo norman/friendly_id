@@ -22,11 +22,6 @@ task :clean do
   %x(rm -f `find . -name '*.rbc'`)
 end
 
-desc "Build the gem"
-task :gem do
-  `gem build friendly_id.gemspec`
-end
-
 desc "Build YARD documentation"
 task :yard do
   puts `bundle exec yard`
