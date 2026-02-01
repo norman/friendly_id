@@ -7,8 +7,7 @@ Gem::Specification.new do |s|
   s.email = ["norman@njclarke.com", "gems@p.arndt.io"]
   s.homepage = "https://github.com/norman/friendly_id"
   s.summary = "A comprehensive slugging and pretty-URL plugin."
-  s.files = `git ls-files`.split("\n")
-  s.test_files = `git ls-files -- {test}/*`.split("\n")
+  s.files = `git ls-files lib`.split($/) + ["Changelog.md", "MIT-LICENSE", "README.md"]
   s.require_paths = ["lib"]
   s.license = "MIT"
 
