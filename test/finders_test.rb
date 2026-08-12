@@ -44,6 +44,18 @@ class Finders < TestCaseClass
     end
   end
 
+  test "exists? does not fall back to the primary key for a non-matching, non-numeric-looking string" do
+    with_instance_of(model_class) do |record|
+      refute model_class.exists?("#{record.id}-not-a-real-slug")
+    end
+  end
+
+  test "exists? still falls back to the primary key for a genuinely numeric id with no matching slug" do
+    with_instance_of(model_class) do |record|
+      assert model_class.exists?(record.id.to_s)
+    end
+  end
+
   test "allows nil on relations with a bad primary key ID and allow_nil: true" do
     with_instance_of(model_class) do |record|
       assert_nil model_class.existing.find(0, allow_nil: true)
