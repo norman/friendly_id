@@ -115,5 +115,5 @@ FriendlyId.defaults do |config|
   # - :restrict_with_exception
   # - :restrict_with_error
   # 
-  # config.dependent :destroy
+  # config.dependent = :destroy
 end
