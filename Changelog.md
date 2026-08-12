@@ -3,6 +3,10 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
+## Unreleased
+
+* Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
+
 ## 5.6.0 (2025-12-07)
 
 * Add: `treat_numeric_as_conflict` option to prevent ambiguous numeric slugs. ([#1037](https://github.com/norman/friendly_id/pull/1037))

@@ -28,11 +28,8 @@ module FriendlyId
 
     def purely_numeric_slug?(slug)
       return false unless slug
-      begin
-        Integer(slug, 10).to_s == slug.to_s
-      rescue ArgumentError, TypeError
-        false
-      end
+
+      slug.to_s.match?(/\A[0-9]+\z/)
     end
   end
 end

@@ -2,12 +2,14 @@ require "helper"
 
 class Article < ActiveRecord::Base
   extend FriendlyId
+
   friendly_id :name, use: :slugged
 end
 
 class ArticleWithNumericPrevention < ActiveRecord::Base
   self.table_name = "articles"
   extend FriendlyId
+
   friendly_id :name, use: :slugged
   friendly_id_config.treat_numeric_as_conflict = true
 end
@@ -68,6 +70,14 @@ class NumericSlugTest < TestCaseClass
       record = ArticleWithNumericPrevention.create! name: "0"
       refute_equal "0", record.slug
       assert_match(/\A0-[0-9a-f-]{36}\z/, record.slug)
+    end
+  end
+
+  test "should handle numbers with leading zeroes as numeric when treat_numeric_as_conflict is enabled" do
+    transaction do
+      record = ArticleWithNumericPrevention.create! name: "00123"
+      refute_equal "00123", record.slug
+      assert_match(/\A00123-[0-9a-f-]{36}\z/, record.slug)
     end
   end
 
