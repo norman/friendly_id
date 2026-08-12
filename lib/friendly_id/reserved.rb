@@ -1,6 +1,7 @@
 module FriendlyId
+  # @guide begin
   #
-  ## Reserved Words
+  # ## Reserved Words
   #
   # The {FriendlyId::Reserved Reserved} module adds the ability to exclude a list of
   # words from use as FriendlyId slugs.
@@ -26,6 +27,7 @@ module FriendlyId
   #       end
   #     end
   #
+  # @guide end
   module Reserved
     # When included, this module adds configuration options to the model class's
     # friendly_id_config.

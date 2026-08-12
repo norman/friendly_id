@@ -1,8 +1,9 @@
 require "friendly_id/slugged"
 
 module FriendlyId
+  # @guide begin
   #
-  ## Unique Slugs by Scope
+  # ## Unique Slugs by Scope
   #
   # The {FriendlyId::Scoped} module allows FriendlyId to generate unique slugs
   # within a scope.
@@ -53,7 +54,7 @@ module FriendlyId
   #
   # All supplied values will be used to determine scope.
   #
-  ### Finding Records by Friendly ID
+  # ### Finding Records by Friendly ID
   #
   # If you are using scopes your friendly ids may not be unique, so a simple find
   # like:
@@ -70,13 +71,13 @@ module FriendlyId
   #     Restaurant.where(:city_id => @city.id).friendly.find("joes-diner")
   #
   #
-  ### Finding All Records That Match a Scoped ID
+  # ### Finding All Records That Match a Scoped ID
   #
   # Query the slug column directly:
   #
   #     Restaurant.where(:slug => "joes-diner")
   #
-  ### Routes for Scoped Models
+  # ### Routes for Scoped Models
   #
   # Recall that FriendlyId is a database-centric library, and does not set up any
   # routes for scoped models. You must do this yourself in your application. Here's
@@ -98,6 +99,7 @@ module FriendlyId
   #     http://example.org/cities/seattle/restaurants/joes-diner
   #     http://example.org/cities/chicago/restaurants/joes-diner
   #
+  # @guide end
   module Scoped
     # FriendlyId::Config.use will invoke this method when present, to allow
     # loading dependent modules prior to overriding them when necessary.

@@ -4,8 +4,9 @@ require "friendly_id/object_utils"
 require "friendly_id/configuration"
 require "friendly_id/finder_methods"
 
+# @guide begin
 #
-## About FriendlyId
+# ## About FriendlyId
 #
 # FriendlyId is an add-on to Ruby's Active Record that allows you to replace ids
 # in your URLs with strings:
@@ -19,9 +20,9 @@ require "friendly_id/finder_methods"
 # It requires few changes to your application code and offers flexibility,
 # performance and a well-documented codebase.
 #
-### Core Concepts
+# ### Core Concepts
 #
-#### Slugs
+# #### Slugs
 #
 # The concept of *slugs* is at the heart of FriendlyId.
 #
@@ -29,7 +30,7 @@ require "friendly_id/finder_methods"
 # keywords, rather than an opaque identifier such as a numeric id. This can make
 # your application more friendly both for users and search engines.
 #
-#### Finders: Slugs Act Like Numeric IDs
+# #### Finders: Slugs Act Like Numeric IDs
 #
 # To the extent possible, FriendlyId lets you treat text-based identifiers like
 # normal IDs. This means that you can perform finds with slugs just like you do
@@ -38,6 +39,7 @@ require "friendly_id/finder_methods"
 #     Person.find(82542335)
 #     Person.friendly.find("joe")
 #
+# @guide end
 module FriendlyId
   autoload :History, "friendly_id/history"
   autoload :Slug, "friendly_id/slug"

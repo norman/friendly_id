@@ -1,6 +1,7 @@
 module FriendlyId
+  # @guide begin
   #
-  ## Setting Up FriendlyId in Your Model
+  # ## Setting Up FriendlyId in Your Model
   #
   # To use FriendlyId in your ActiveRecord models, you must first either extend or
   # include the FriendlyId module (it makes no difference), then invoke the
@@ -21,7 +22,7 @@ module FriendlyId
   # all classes that participate in STI, both your parent classes and their
   # children.*
   #
-  ### The Default Setup: Simple Models
+  # ### The Default Setup: Simple Models
   #
   # The simplest way to use FriendlyId is with a model that has a uniquely indexed
   # column with no spaces or special characters, and that is seldom or never
@@ -53,6 +54,7 @@ module FriendlyId
   # in a URL can be repetitive and surprisingly tricky, so for this reason it's
   # often better and easier to use {FriendlyId::Slugged slugs}.
   #
+  # @guide end
   module Base
     # Configure FriendlyId's behavior in a model.
     #

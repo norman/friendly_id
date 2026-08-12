@@ -19,12 +19,18 @@ rescue LoadError
 end
 
 begin
-  TestCaseClass = MiniTest::Test
+  TestCaseClass = Minitest::Test
 rescue NameError
-  TestCaseClass = MiniTest::Unit::TestCase
+  TestCaseClass = Minitest::Unit::TestCase
 end
 
 require "mocha/minitest"
+
+# Older Rails versions assume "logger" has already been loaded by the time
+# ActiveSupport needs it, which isn't reliably true on Ruby 2.7 and causes a
+# NameError. Requiring it ourselves first avoids that.
+# See https://github.com/rails/rails/issues/54260
+require "logger"
 require "active_record"
 require "active_support/core_ext/time/conversions"
 require "erb"

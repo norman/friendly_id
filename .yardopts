@@ -1,5 +1,7 @@
 -e guide.rb
 --files=Changelog.md,Guide.md
+--tag guide
+--hide-tag guide
 --private
 --protected
 --exclude lib/friendly_id/migration

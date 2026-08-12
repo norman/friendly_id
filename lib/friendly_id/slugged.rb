@@ -2,8 +2,9 @@ require "friendly_id/slug_generator"
 require "friendly_id/candidates"
 
 module FriendlyId
+  # @guide begin
   #
-  ## Slugged Models
+  # ## Slugged Models
   #
   # FriendlyId can use a separate column to store slugs for models which require
   # some text processing.
@@ -34,7 +35,7 @@ module FriendlyId
   # unique. You may also wish to constrain it to NOT NULL, but this depends on your
   # app's behavior and requirements.
   #
-  ### Example Setup
+  # ### Example Setup
   #
   #     # your model
   #     class Post < ActiveRecord::Base
@@ -60,9 +61,9 @@ module FriendlyId
   #       end
   #     end
   #
-  ### Working With Slugs
+  # ### Working With Slugs
   #
-  #### Formatting
+  # #### Formatting
   #
   # By default, FriendlyId uses Active Support's
   # [parameterize](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-parameterize)
@@ -72,7 +73,7 @@ module FriendlyId
   #     movie = Movie.create! :title => "Der Preis fürs Überleben"
   #     movie.slug #=> "der-preis-furs-uberleben"
   #
-  #### Column or Method?
+  # #### Column or Method?
   #
   # FriendlyId always uses a method as the basis of the slug text - not a column. At
   # first glance, this may sound confusing, but remember that Active Record provides
@@ -95,7 +96,7 @@ module FriendlyId
   #
   # FriendlyId refers to this internally as the "base" method.
   #
-  #### Uniqueness
+  # #### Uniqueness
   #
   # When you try to insert a record that would generate a duplicate friendly id,
   # FriendlyId will append a UUID to the generated slug to ensure uniqueness:
@@ -109,7 +110,7 @@ module FriendlyId
   # Previous versions of FriendlyId appended a numeric sequence to make slugs
   # unique, but this was removed to simplify using FriendlyId in concurrent code.
   #
-  #### Candidates
+  # #### Candidates
   #
   # Since UUIDs are ugly, FriendlyId provides a "slug candidates" functionality to
   # let you specify alternate slugs to use in the event the one you want to use is
@@ -147,20 +148,38 @@ module FriendlyId
   # unique slug, then FriendlyId will append a UUID to the first candidate as a
   # last resort.
   #
-  #### Sequence Separator
+  # #### Sequence Separator
   #
   # By default, FriendlyId uses a dash to separate the slug from a sequence.
   #
   # You can change this with the {FriendlyId::Slugged::Configuration#sequence_separator
   # sequence_separator} configuration option.
   #
-  #### Providing Your Own Slug Processing Method
+  # #### Avoiding Numeric Slugs
+  #
+  # Purely numeric slugs like "123" can create ambiguity in Rails routing - they could
+  # be interpreted as either a friendly slug or a database ID. To prevent this, you can
+  # configure FriendlyId to treat numeric slugs as conflicts and add a UUID suffix:
+  #
+  #     class Product < ActiveRecord::Base
+  #       extend FriendlyId
+  #       friendly_id :sku, use: :slugged
+  #       friendly_id_config.treat_numeric_as_conflict = true
+  #     end
+  #
+  #     product = Product.create! sku: "123"
+  #     product.slug #=> "123-f9f3789a-daec-4156-af1d-fab81aa16ee5"
+  #
+  # This only affects purely numeric slugs. Alphanumeric slugs like "product-123"
+  # or "abc123" will work normally.
+  #
+  # #### Providing Your Own Slug Processing Method
   #
   # You can override {FriendlyId::Slugged#normalize_friendly_id} in your model for
   # total control over the slug format. It will be invoked for any generated slug,
   # whether for a single slug or for slug candidates.
   #
-  #### Deciding When to Generate New Slugs
+  # #### Deciding When to Generate New Slugs
   #
   # As of FriendlyId 5.0, slugs are only generated when the `slug` field is nil. If
   # you want a slug to be regenerated,set the slug field to nil:
@@ -198,7 +217,7 @@ module FriendlyId
   #       end
   #     end
   #
-  #### Locale-specific Transliterations
+  # #### Locale-specific Transliterations
   #
   # Active Support's `parameterize` uses
   # [transliterate](http://api.rubyonrails.org/classes/ActiveSupport/Inflector.html#method-i-transliterate),
@@ -219,7 +238,7 @@ module FriendlyId
   #
   # This functionality was in fact taken from earlier versions of FriendlyId.
   #
-  #### Gotchas: Common Problems
+  # #### Gotchas: Common Problems
   #
   # FriendlyId uses a before_validation callback to generate and set the slug. This
   # means that if you create two model instances before saving them, it's possible
@@ -233,6 +252,7 @@ module FriendlyId
   # creating more than one nested record for a model that uses FriendlyId. See [this
   # Github issue](https://github.com/norman/friendly_id/issues/185) for discussion.
   #
+  # @guide end
   module Slugged
     # Sets up behavior and configuration options for FriendlyId's slugging
     # feature.
@@ -384,7 +404,7 @@ module FriendlyId
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
       attr_writer :slug_column, :slug_limit, :sequence_separator
-      attr_accessor :slug_generator_class
+      attr_accessor :slug_generator_class, :treat_numeric_as_conflict
 
       # Makes FriendlyId use the slug column for querying.
       # @return String The slug column.

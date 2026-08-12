@@ -3,10 +3,20 @@
 We would like to think our many [contributors](https://github.com/norman/friendly_id/graphs/contributors) for
 suggestions, ideas and improvements to FriendlyId.
 
-## Unreleased
+## 5.6.0 (2025-12-07)
+
+* Add: `treat_numeric_as_conflict` option to prevent ambiguous numeric slugs. ([#1037](https://github.com/norman/friendly_id/pull/1037))
+* Fix: history not using `parse_friendly_id`. ([#1020](https://github.com/norman/friendly_id/pull/1020))
+
+## 5.5.1 (2023-11-13)
+
+* Fix YARD doc generation. ([#1006](https://github.com/norman/friendly_id/pull/1006))
+
+## 5.5.0 (2022-11-16)
 
 * SimpleI18n: Handle regional locales ([#965](https://github.com/norman/friendly_id/pull/965))
 * Fix: "unknown column" exception ([#943](https://github.com/norman/friendly_id/pull/943))
+* Add: `allow_nil: true` to the Finder ([#995](https://github.com/norman/friendly_id/pull/995) and [#997](https://github.com/norman/friendly_id/pull/997))
 
 ## 5.4.2 (2021-01-07)
 

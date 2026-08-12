@@ -1,4 +1,5 @@
 require "rubygems"
+require "bundler/gem_tasks"
 require "rake/testtask"
 
 task default: :test
@@ -19,11 +20,6 @@ desc "Remove temporary files"
 task :clean do
   `rm -rf *.gem doc pkg coverage`
   %x(rm -f `find . -name '*.rbc'`)
-end
-
-desc "Build the gem"
-task :gem do
-  `gem build friendly_id.gemspec`
 end
 
 desc "Build YARD documentation"

@@ -25,4 +25,52 @@ class Finders < TestCaseClass
       assert model_class.existing.find(record.friendly_id)
     end
   end
+
+  test "allows nil with allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.find("foo", allow_nil: true)
+    end
+  end
+
+  test "allows nil on relations with allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.existing.find("foo", allow_nil: true)
+    end
+  end
+
+  test "allows nil with a bad primary key ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.find(0, allow_nil: true)
+    end
+  end
+
+  test "allows nil on relations with a bad primary key ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.existing.find(0, allow_nil: true)
+    end
+  end
+
+  test "allows nil with a bad potential primary key ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.find("0", allow_nil: true)
+    end
+  end
+
+  test "allows nil on relations with a bad potential primary key ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.existing.find("0", allow_nil: true)
+    end
+  end
+
+  test "allows nil with nil ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.find(nil, allow_nil: true)
+    end
+  end
+
+  test "allows nil on relations with nil ID and allow_nil: true" do
+    with_instance_of(model_class) do |record|
+      assert_nil model_class.existing.find(nil, allow_nil: true)
+    end
+  end
 end
