@@ -1,5 +1,12 @@
+require "friendly_id/sequence_calculator"
+
 module FriendlyId
   module SequentiallySlugged
+    # Finds the slugs that conflict with a candidate, and defers the arithmetic
+    # of picking the next sequence number to {FriendlyId::SequenceCalculator}.
+    #
+    # Everything here is Active Record specific: quoting, the SQLite `ESCAPE`
+    # workaround and the SQL Server `LEN` spelling.
     class Calculator
       attr_accessor :scope, :slug, :slug_column, :sequence_separator
 
@@ -12,7 +19,7 @@ module FriendlyId
       end
 
       def next_slug
-        slug + sequence_separator + next_sequence_number.to_s
+        FriendlyId::SequenceCalculator.new.call(slug, slug_conflicts, separator: sequence_separator)
       end
 
       private
@@ -25,27 +32,10 @@ module FriendlyId
         base
       end
 
-      def next_sequence_number
-        last_sequence_number ? last_sequence_number + 1 : 2
-      end
-
-      def last_sequence_number
-        # Reject slug_conflicts that doesn't come from the first_candidate
-        # Map all sequence numbers and take the maximum
-        slug_conflicts
-          .reject { |slug_conflict| !regexp.match(slug_conflict) }
-          .map { |slug_conflict| regexp.match(slug_conflict)[1].to_i }
-          .max
-      end
-
       # Return the unnumbered (shortest) slug first, followed by the numbered ones
       # in ascending order.
       def ordering_query
         "#{sql_length}(#{slug_column}) ASC, #{slug_column} ASC"
-      end
-
-      def regexp
-        /#{slug}#{sequence_separator}(\d+)\z/
       end
 
       def sequential_slug_matcher

@@ -3,6 +3,7 @@ require "friendly_id/base"
 require "friendly_id/object_utils"
 require "friendly_id/configuration"
 require "friendly_id/finder_methods"
+require "friendly_id/sequence_calculator"
 
 # @guide begin
 #
