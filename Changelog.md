@@ -7,6 +7,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 * Fix: Correct the Babosa transliteration example; the option is `:transliterate`. ([#1027](https://github.com/norman/friendly_id/pull/1027))
 * Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
+* Fix: Support models with a composite primary key. ([#1018](https://github.com/norman/friendly_id/issues/1018))
 
 ## 5.6.0 (2025-12-07)
 

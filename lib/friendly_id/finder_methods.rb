@@ -57,6 +57,10 @@ module FriendlyId
     private
 
     def potential_primary_key?(id)
+      # Models with a composite primary key (Rails 7.1+) expect an Array, which
+      # is never a friendly id, so a value that reaches here can't be one.
+      return false if primary_key.is_a?(Array)
+
       key_type = primary_key_type
       # Hook for "ActiveModel::Type::Integer" instance.
       key_type = key_type.type if key_type.respond_to?(:type)

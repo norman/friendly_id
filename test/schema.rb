@@ -39,6 +39,16 @@ module FriendlyId
             add_index table_name, :slug, unique: true
           end
 
+          tables_with_composite_primary_key.each do |table_name|
+            create_table table_name, primary_key: [:shop_id, :product_ref] do |t|
+              t.integer :shop_id, null: false
+              t.integer :product_ref, null: false
+              t.string :name
+              t.string :slug
+            end
+            add_index table_name, :slug
+          end
+
           slugged_tables.each do |table_name|
             add_column table_name, :slug, :string
             add_index table_name, :slug, unique: true if table_name != "novels"
@@ -98,6 +108,13 @@ module FriendlyId
 
         def tables_with_uuid_primary_key
           ["menu_items"]
+        end
+
+        # Composite primary keys were added in Rails 7.1.
+        def tables_with_composite_primary_key
+          return [] if ActiveRecord.version < Gem::Version.create("7.1")
+
+          ["shop_products"]
         end
 
         def scoped_tables
