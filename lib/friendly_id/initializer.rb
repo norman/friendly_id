@@ -101,7 +101,15 @@ FriendlyId.defaults do |config|
   #
   # config.use Module.new {
   #   def normalize_friendly_id(text)
-  #     text.to_slug.normalize! :transliterations => [:russian, :latin]
+  #     slug = text.to_slug
+  #     slug.transliterate!(:russian, :latin)
+  #     slug.to_ascii!
+  #     slug.normalize!.to_s
   #   end
   # }
+  #
+  # Note that `to_ascii!` is what forces the result to ASCII; `normalize!` on its
+  # own preserves non-ASCII characters. Always include `:latin` in the
+  # transliterations, otherwise `to_ascii!` strips accented characters rather
+  # than folding them, turning "Café" into "caf" instead of "cafe".
 end

@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Fix: Correct the Babosa transliteration example in the docs and generated initializer. The
+  previous snippet did not produce ASCII slugs as documented.
 * Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
 
 ## 5.6.0 (2025-12-07)
