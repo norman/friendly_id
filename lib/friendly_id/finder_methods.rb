@@ -27,7 +27,7 @@ module FriendlyId
     # @raise ActiveRecord::RecordNotFound
     def find(*args, allow_nil: false)
       id = args.first
-      return super(*args) if args.count != 1 || id.unfriendly_id?
+      return super(*args) if args.count != 1 || FriendlyId.unfriendly_id?(id)
       first_by_friendly_id(id).tap { |result| return result unless result.nil? }
       return super(*args) if potential_primary_key?(id)
 
@@ -38,7 +38,7 @@ module FriendlyId
 
     # Returns true if a record with the given id exists.
     def exists?(conditions = :none)
-      return super if conditions.unfriendly_id?
+      return super if FriendlyId.unfriendly_id?(conditions)
       return true if exists_by_friendly_id?(conditions)
       super
     end

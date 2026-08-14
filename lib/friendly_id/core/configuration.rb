@@ -101,7 +101,18 @@ module FriendlyId
     private
 
     def get_module(object)
-      Module === object ? object : FriendlyId.const_get(object.to_s.titleize.camelize.gsub(/\s+/, ""))
+      Module === object ? object : FriendlyId.const_get(camelize(object))
+    end
+
+    # Turns an addon name into its constant name, e.g. `:simple_i18n` into
+    # "SimpleI18n". Replaces Active Support's `titleize.camelize` so that core
+    # carries no dependency on it.
+    #
+    # Only the first letter of each segment is upcased, rather than capitalizing
+    # the segment, so that an already-camelized name such as "SimpleI18n"
+    # survives unchanged.
+    def camelize(object)
+      object.to_s.split("_").map { |part| part.sub(/\A[a-z]/, &:upcase) }.join
     end
 
     def set(values)

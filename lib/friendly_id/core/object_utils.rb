@@ -13,11 +13,11 @@ module FriendlyId
 
   # Utility methods for determining whether any object is a friendly id.
   #
-  # Monkey-patching Object is a somewhat extreme measure not to be taken lightly
-  # by libraries, but in this case I decided to do it because to me, it feels
-  # cleaner than adding a module method to {FriendlyId}. I've given the methods
-  # names that unambigously refer to the library of their origin, which should
-  # be sufficient to avoid conflicts with other libraries.
+  # @deprecated Since 6.0, prefer {FriendlyId.friendly_id?} and
+  #   {FriendlyId.unfriendly_id?}, which do the same job without patching
+  #   `Object`. This module is still mixed into `Object` by the Active Record
+  #   adapter for backwards compatibility, and will be removed in 7.0. Core
+  #   defines it but installs nothing.
   module ObjectUtils
     # True if the id is definitely friendly, false if definitely unfriendly,
     # else nil.
@@ -62,15 +62,29 @@ module FriendlyId
   def self.mark_as_unfriendly(klass)
     klass.send(:include, FriendlyId::UnfriendlyUtils)
   end
+
+  # The supported way to ask whether a value looks like a friendly id.
+  #
+  # Note that this deliberately does not depend on {mark_as_unfriendly} having
+  # been called on the core classes: it consults {UNFRIENDLY_CLASSES} directly,
+  # so it gives the same answers whether or not an adapter has installed the
+  # deprecated `Object#friendly_id?` patch.
+  #
+  # @return true if definitely friendly, false if definitely unfriendly, else nil
+  def self.friendly_id?(value)
+    return false if value.is_a?(FriendlyId::UnfriendlyUtils)
+    return false if UNFRIENDLY_CLASSES.any? { |klass| value.is_a?(klass) }
+
+    true if value.respond_to?(:to_i) && value.to_i.to_s != value.to_s
+  end
+
+  def self.unfriendly_id?(value)
+    friendly = friendly_id?(value)
+    !friendly unless friendly.nil?
+  end
 end
 
-Object.send :include, FriendlyId::ObjectUtils
-
-# Considered unfriendly if object is an instance of an unfriendly class or
-# one of its descendants.
-
-FriendlyId::UNFRIENDLY_CLASSES.each { |klass| FriendlyId.mark_as_unfriendly(klass) }
-
-ActiveSupport.on_load(:active_record) do
-  FriendlyId.mark_as_unfriendly(ActiveRecord::Base)
-end
+# Core installs no patches. The Active Record adapter mixes {ObjectUtils} into
+# `Object` and marks {UNFRIENDLY_CLASSES} for backwards compatibility, and marks
+# `ActiveRecord::Base` unfriendly so that model instances are never mistaken for
+# ids. See `friendly_id/active_record`.

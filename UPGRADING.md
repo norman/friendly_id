@@ -15,6 +15,124 @@ Docs for older versions are also available:
 * [3.3](http://norman.github.io/friendly_id/3.3/)
 * [2.3](http://norman.github.io/friendly_id/2.3/)
 
+## What Changed in Version 6.0
+
+### Supported versions
+
+6.0 requires **Ruby >= 3.1** and **Rails >= 7.1**. Support for Rails 6.0, 6.1 and
+7.0, and for Ruby 2.7 and 3.0, is dropped.
+
+Hanami users additionally need Ruby >= 3.3, which is Hanami 3.0's own floor. The
+ROM adapter itself runs on Ruby 3.1 for plain ROM and Sequel applications.
+
+6.0 makes FriendlyId's core independent of any ORM so that it can support more
+than one, and adds an adapter for ROM, the persistence layer used by Hanami 3.0.
+
+**Existing Rails applications should need no code changes, and no slug will
+change.** The Active Record adapter still normalizes slugs with Active Support's
+`String#parameterize`, exactly as every previous version has.
+
+### FriendlyId no longer declares a runtime dependency on Active Record
+
+This is the one change that can break an install rather than an application. If
+your Gemfile relied on FriendlyId to pull in Active Record for you, name it
+yourself:
+
+```ruby
+gem "activerecord"
+gem "friendly_id", "~> 6.0"
+```
+
+Rails applications already depend on Active Record through Rails, so this affects
+almost nobody.
+
+`require "friendly_id"` still loads the Active Record adapter whenever Active
+Record is available. You can also be explicit:
+
+```ruby
+require "friendly_id/active_record"
+```
+
+### Internal files moved
+
+The ORM-agnostic classes moved into `lib/friendly_id/core/`. Constant names are
+unchanged, so `FriendlyId::Candidates`, `FriendlyId::Configuration`,
+`FriendlyId::SlugGenerator` and the addon modules such as `FriendlyId::Slugged`
+all still resolve. Only code doing `require "friendly_id/candidates"` and similar
+on internal files needs updating, to `require "friendly_id/core/candidates"`.
+
+### `Object#friendly_id?` is deprecated
+
+Use `FriendlyId.friendly_id?(value)` and `FriendlyId.unfriendly_id?(value)`
+instead, which answer identically without patching anything. FriendlyId itself
+now uses only those.
+
+On Rails the patch is still installed and still works, and is scheduled for
+removal in 7.0. What has changed in 6.0 is *who* installs it: it now comes from
+the Active Record adapter rather than from core, so applications on Hanami, ROM
+or any future adapter never get `Object#friendly_id?`, `Object#unfriendly_id?`,
+or the accompanying patches on `Array`, `Hash`, `Numeric`, `Symbol`, `NilClass`,
+`TrueClass` and `FalseClass`.
+
+This only affects you if you were calling `some_object.friendly_id?` in a
+non-Rails application, which was not previously possible, or if you
+`require "friendly_id/core"` directly and expected the patch. `FriendlyId.mark_as_unfriendly`
+is unchanged and remains available in core for marking your own classes.
+
+### New: normalizer objects
+
+`normalize_friendly_id` remains the primary and fully supported way to control
+slug generation. Alongside it there are now normalizer objects:
+
+* `FriendlyId::Normalizers::ActiveSupport` wraps `String#parameterize` and is what
+  the Active Record adapter always uses.
+* `FriendlyId::Normalizers::Babosa` wraps [babosa](https://github.com/norman/babosa),
+  which has no dependencies of its own and ships transliteration tables for many
+  non-Latin scripts. It is the default for the ROM adapter.
+
+FriendlyId never picks a normalizer based on which gems happen to be installed,
+because that would let a change in your bundle silently rewrite your URLs. Note
+that babosa is **not** a drop-in replacement for `parameterize`: it deletes "."
+where Active Support converts it to the separator, so `"3.14159"` normalizes to
+`"314159"` rather than `"3-14159"`.
+
+### New: Hanami and ROM support
+
+See the [README](README.md). The first release supports `:slugged`, `:finders`,
+`:sequentially_slugged`, `:reserved`, `:history`, `:scoped` and `:simple_i18n` --
+that is, every addon the Active Record adapter has.
+
+Three of them need a little more than their Active Record counterparts, because
+ROM has no callbacks and no model classes:
+
+* **`:history`** stores retired slugs in a `friendly_id_slugs` table. Run
+  `hanami generate friendly_id` to get the migration and the relation, then
+  `hanami db migrate`. Because the table is polymorphic, `sluggable_type`
+  defaults to the relation name (`"posts"`); set `sluggable_type: "Post"` to
+  share the table with an Active Record application. Deleting a record is
+  `delete_with_slug`, which is the counterpart of `dependent: :destroy` -- a
+  foreign key cannot do this job, since one key would constrain every row in the
+  table including rows belonging to other relations.
+* **`:scoped`** takes the column itself rather than an association name:
+  `scope: :author_id`, not `scope: :author`. Active Record infers the foreign key
+  by reflection, which ROM has no equivalent of, and naming the column is clearer
+  anyway.
+* **`:simple_i18n`** takes its locale from a configurable source, defaulting to
+  the `I18n` module. **Hanami users must pass `i18n: Hanami.app["i18n"]`**,
+  because Hanami keeps each slice's locale in a thread-local and deliberately
+  does not track the global `I18n.locale`. Without it every slug would be written
+  to the default locale's column.
+
+`update_with_slug` follows the same rule as the Active Record adapter: the slug is
+regenerated only when it is nil, so editing a title leaves the existing slug in
+place. Pass `slug: nil` to ask for a new one. Slugs are public URLs, and
+regenerating one on every title edit breaks every link to the record.
+
+### New: error classes
+
+Errors FriendlyId raises deliberately now descend from `FriendlyId::Error`, which
+descends from `StandardError` and so is caught by a plain `rescue => e`.
+
 ## What Changed in Version 5.1
 
 5.1 is a bugfix release, but bumps the minor version because some applications may be dependent

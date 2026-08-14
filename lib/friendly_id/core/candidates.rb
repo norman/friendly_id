@@ -57,13 +57,22 @@ module FriendlyId
       end
     end
 
+    # Mirrors ActiveSupport's `present?`, which treats a whitespace-only string
+    # as blank. Kept as an explicit regexp so that core carries no dependency on
+    # Active Support.
+    BLANK = /\A[[:space:]]*\z/
+
     def wanted?(slug)
-      slug.present?
+      !slug.nil? && !BLANK.match?(slug.to_s)
     end
 
+    # The reserved-words option is contributed by the `:reserved` addon, which is
+    # adapter-specific, so detect it on the configuration rather than referring
+    # to the addon module itself. Referring to it directly would make core fail
+    # to load in an application that uses a non-Active Record adapter.
     def reserved?(slug)
       config = @object.friendly_id_config
-      return false unless config.uses? ::FriendlyId::Reserved
+      return false unless config.respond_to?(:reserved_words)
       return false unless config.reserved_words
       config.reserved_words.include?(slug)
     end

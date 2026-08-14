@@ -6,6 +6,16 @@ gem "standard"
 gem "rake"
 
 group :development, :test do
+  # Active Record is no longer a runtime dependency, so the default bundle names
+  # it explicitly for the Active Record test suite.
+  gem "activerecord", ">= 7.1"
+  gem "railties", ">= 7.1"
+
+  # For the ROM adapter's test suite. Kept out of the gemspec so that Rails-only
+  # users do not install them, and out of gemfiles/Gemfile.rom.rb's reach so that
+  # suite genuinely runs without Active Record.
+  gem "rom-sql"
+
   platforms :ruby do
     gem "byebug"
     gem "pry"

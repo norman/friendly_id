@@ -1,5 +1,5 @@
-require "friendly_id/slug_generator"
-require "friendly_id/candidates"
+require "friendly_id/core/slug_generator"
+require "friendly_id/core/candidates"
 
 module FriendlyId
   # @guide begin
@@ -262,6 +262,7 @@ module FriendlyId
         self.slug_generator_class ||= SlugGenerator
         defaults[:slug_column] ||= "slug"
         defaults[:sequence_separator] ||= "-"
+        defaults[:normalizer] ||= FriendlyId::Normalizers::ActiveSupport.new
       end
       model_class.before_validation :set_slug
       model_class.before_save :set_slug
@@ -296,16 +297,33 @@ module FriendlyId
     #     bob = Person.create! :name => "Bob Smith", :location => "New York City"
     #     bob.friendly_id #=> "BOB_SMITH_FROM_NEW_YORK_CITY"
     #
-    # ### More Resources
+    # ### Configuring a normalizer instead
     #
-    # You might want to look into Babosa[https://github.com/norman/babosa],
-    # which is the slugging library used by FriendlyId prior to version 4, which
-    # offers some specialized functionality missing from Active Support.
+    # The text itself comes from {FriendlyId::Slugged::Configuration#normalizer},
+    # which defaults to {FriendlyId::Normalizers::ActiveSupport}. Swapping that
+    # changes the text without giving up the `slug_limit` handling below:
+    #
+    #     friendly_id :name, use: :slugged do |config|
+    #       config.normalizer = FriendlyId::Normalizers::Babosa.new
+    #     end
+    #
+    # {FriendlyId::Normalizers::Babosa} transliterates Cyrillic, Greek,
+    # Devanagari and Vietnamese, which Active Support cannot do without I18n
+    # rules. It is not a drop-in replacement, so read its documentation before
+    # switching an application that already has slugs.
+    #
+    # Overriding this method wins over any configured normalizer, since the
+    # method is what calls it.
     #
     # @param [#to_s] value The value used as the basis of the slug.
     # @return The candidate slug text, without a sequence.
     def normalize_friendly_id(value)
-      value = value.to_s.parameterize
+      # The normalizer is called without a `separator:`, so it uses its own
+      # default of "-". `sequence_separator` is deliberately not passed: it
+      # separates a slug from its numeric sequence, not the words within a slug,
+      # so a model configured with `sequence_separator = ":"` still produces
+      # "hello-world" and then "hello-world:2".
+      value = friendly_id_config.normalizer.call(value)
       value = value[0...friendly_id_config.slug_limit] if friendly_id_config.slug_limit
       value
     end
@@ -403,7 +421,7 @@ module FriendlyId
     # and `:slug_generator_class` configuration options to
     # {FriendlyId::Configuration FriendlyId::Configuration}.
     module Configuration
-      attr_writer :slug_column, :slug_limit, :sequence_separator
+      attr_writer :slug_column, :slug_limit, :sequence_separator, :normalizer
       attr_accessor :slug_generator_class, :treat_numeric_as_conflict
 
       # Makes FriendlyId use the slug column for querying.
@@ -430,6 +448,16 @@ module FriendlyId
       # The limit that will be used for slug.
       def slug_limit
         @slug_limit ||= defaults[:slug_limit]
+      end
+
+      # The object that turns a base value into slug text.
+      #
+      # Defaults to {FriendlyId::Normalizers::ActiveSupport}, which is
+      # `String#parameterize`. Overriding `normalize_friendly_id` in the model
+      # bypasses this entirely and remains the primary extension point.
+      # @return [#call] The normalizer. Defaults to the Active Support one.
+      def normalizer
+        @normalizer ||= defaults[:normalizer]
       end
     end
   end

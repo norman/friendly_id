@@ -11,13 +11,25 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.license = "MIT"
 
-  s.required_ruby_version = ">= 2.1.0"
+  # Verified green on 3.1. Note that Hanami 3.0 itself requires Ruby >= 3.3, so
+  # Hanami users need that; the ROM adapter works on 3.1 for plain ROM apps.
+  s.required_ruby_version = ">= 3.1.0"
 
-  s.add_dependency "activerecord", ">= 4.0.0"
-
+  # No runtime dependency on any ORM. FriendlyId ships one adapter per
+  # persistence library and you bring your own:
+  #
+  #   require "friendly_id/active_record"   # Rails
+  #   require "friendly_id/rom"             # ROM, used by Hanami
+  #
+  # Requiring "friendly_id" loads the Active Record adapter when Active Record is
+  # present, so Rails applications need no change.
+  #
+  # Active Record is deliberately not a development dependency either, so that
+  # gemfiles/Gemfile.rom.rb resolves without it and the ROM adapter is proven to
+  # work when Active Record is not installed at all. The Gemfiles that need it
+  # name it themselves.
   s.add_development_dependency "babosa"
   s.add_development_dependency "coveralls"
-  s.add_development_dependency "railties", ">= 4.0"
   s.add_development_dependency "minitest", "~> 5.3"
   s.add_development_dependency "mocha", "~> 2.1"
   s.add_development_dependency "yard"

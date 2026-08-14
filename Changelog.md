@@ -5,6 +5,32 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Add: ROM adapter, providing support for Hanami 3.0+, with every addon the
+  Active Record adapter has: `:slugged`, `:finders`, `:sequentially_slugged`,
+  `:reserved`, `:history`, `:scoped` and `:simple_i18n`.
+* Add: `hanami generate friendly_id`, which writes the `friendly_id_slugs`
+  migration and relation needed by `:history`.
+* Add: `delete_with_slug` on the ROM repository, the counterpart of Active
+  Record's `dependent: :destroy` for the slugs table.
+* Add: ORM-agnostic core in `lib/friendly_id/core/`, with no dependency on Active
+  Record or Active Support. Public constant names are unchanged.
+* Add: `FriendlyId::Normalizers::ActiveSupport` and
+  `FriendlyId::Normalizers::Babosa`. The babosa normalizer transliterates
+  Cyrillic, Greek, Vietnamese and Devanagari by default; caller-supplied
+  `transliterations:` take precedence over the defaults. Note that no
+  right-to-left script is transliterated by either normalizer.
+* Add: `FriendlyId::Error` and subclasses, all rescuable as `StandardError`.
+* Add: `FriendlyId.friendly_id?` and `FriendlyId.unfriendly_id?`, deprecating the
+  `Object#friendly_id?` monkey patch.
+* Fix: Sequential slug matching now escapes the slug and the sequence separator,
+  and anchors at the start. A `sequence_separator` containing a regexp
+  metacharacter, such as `"."`, previously acted as a wildcard and could produce
+  the wrong sequence number.
+* Change: Require Ruby >= 3.1 and Rails >= 7.1. Drops Rails 6.0, 6.1 and 7.0, and
+  Ruby 2.7 and 3.0.
+* Change: FriendlyId no longer declares a runtime dependency on Active Record.
+  Requiring `friendly_id` still loads the Active Record adapter when Active
+  Record is available. See UPGRADING.md.
 * Fix: Correct the Babosa transliteration example in the docs and generated initializer. The
   previous snippet did not produce ASCII slugs as documented.
 * Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
