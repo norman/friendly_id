@@ -11,7 +11,7 @@ jobs:
       matrix:
         database: [ mysql, postgresql ]
         gemfile: [ '8.1', '8.0', '7.2', '7.1', '7.0', '6.1', '6.0' ]
-        ruby: [ '2.7', '3.0', '3.1', '3.2', '3.3', '3.4' ]
+        ruby: [ '2.7', '3.0', '3.1', '3.2', '3.3', '3.4', '4.0' ]
         exclude:
           - gemfile: '6.0'
             ruby: '3.2'
@@ -19,24 +19,34 @@ jobs:
             ruby: '3.3'
           - gemfile: '6.0'
             ruby: '3.4'
+          - gemfile: '6.0'
+            ruby: '4.0'
           - gemfile: '6.1'
             ruby: '3.2'
           - gemfile: '6.1'
             ruby: '3.3'
           - gemfile: '6.1'
             ruby: '3.4'
+          - gemfile: '6.1'
+            ruby: '4.0'
           - gemfile: '7.0'
             ruby: '3.3'
           - gemfile: '7.0'
             ruby: '3.4'
+          - gemfile: '7.0'
+            ruby: '4.0'
           - gemfile: '7.1'
             ruby: '3.3'
           - gemfile: '7.1'
             ruby: '3.4'
+          - gemfile: '7.1'
+            ruby: '4.0'
           - gemfile: '7.2'
             ruby: '2.7'
           - gemfile: '7.2'
             ruby: '3.0'
+          - gemfile: '7.2'
+            ruby: '4.0'
           - gemfile: '8.0'
             ruby: '2.7'
           - gemfile: '8.0'
