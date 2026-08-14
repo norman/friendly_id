@@ -1,0 +1,5 @@
+Gemfile.lock
+db/*.sqlite3
+log/
+tmp/
+config/db/structure.sql

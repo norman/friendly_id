@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+# A real Hanami 3.0 application used to smoke test FriendlyId's ROM adapter.
+#
+# The ROM unit tests drive ROM directly, which is where the slug logic lives.
+# This app exists to prove the parts those tests cannot: that the relation plugin
+# survives Hanami's boot and its component registration, that Hanami::DB::Relation
+# and Hanami::DB::Repo work as the adapter assumes, and that a slug survives a
+# round trip through a booted app.
+source "https://rubygems.org"
+
+gem "hanami", "~> 3.0"
+gem "hanami-db", "~> 3.0"
+
+gem "rom-sql"
+gem "sqlite3"
+gem "babosa"
+
+# Also in the :cli group, so `hanami generate friendly_id` is available. The
+# hanami executable calls `Hanami::CLI::Bundler.require(:cli)`.
+gem "friendly_id", path: "../../", group: [:default, :cli], require: "friendly_id/hanami"
+
+gem "rake"
+
+group :test do
+  gem "minitest", "~> 5.3"
+end

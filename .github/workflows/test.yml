@@ -121,3 +121,35 @@ jobs:
     # DATABASE_URL is unset for the sqlite leg, where the helper's own default
     # of "sqlite::memory:" applies.
     - run: bundle exec rake test_rom
+
+  # Boots a real Hanami 3.0 application with FriendlyId mounted by path. The ROM
+  # unit tests drive ROM directly; this proves the adapter survives Hanami's boot
+  # and component registration, which is where integration breaks in practice.
+  #
+  # Hanami 3.0 requires Ruby >= 3.3, hence the narrower matrix.
+  hanami:
+    strategy:
+      matrix:
+        ruby: [ '3.3', '3.4' ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+
+    name: ${{ matrix.ruby }} hanami app
+    steps:
+    - uses: actions/checkout@v7
+
+    - run: sudo apt-get update && sudo apt-get install libsqlite3-dev -y
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+
+    - name: "Boot the Hanami app and run its smoke tests"
+      working-directory: test/hanami_app
+      run: |
+        bundle install
+        bundle exec ruby test/smoke_test.rb
+        bundle exec ruby test/generator_test.rb

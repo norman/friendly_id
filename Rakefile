@@ -27,8 +27,18 @@ Rake::TestTask.new(:test_rom) do |t|
   t.verbose = true
 end
 
+# Boots a real Hanami 3.0 app with FriendlyId mounted by path. Has its own
+# bundle, so it runs as a subprocess rather than in this one.
+desc "Run the Hanami application smoke tests"
+task :test_hanami do
+  dir = File.expand_path("test/hanami_app", __dir__)
+  Bundler.with_unbundled_env do
+    sh "cd #{dir} && bundle install --quiet && bundle exec ruby test/smoke_test.rb && bundle exec ruby test/generator_test.rb"
+  end
+end
+
 desc "Run every test suite"
-task test_all: [:test, :test_rom]
+task test_all: [:test, :test_rom, :test_hanami]
 
 desc "Remove temporary files"
 task :clean do
