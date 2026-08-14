@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.license = "MIT"
 
-  s.required_ruby_version = ">= 2.1.0"
+  s.required_ruby_version = ">= 2.7.0"
 
   s.add_dependency "activerecord", ">= 4.0.0"
 

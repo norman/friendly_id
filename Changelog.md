@@ -5,7 +5,9 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Require Ruby >= 2.7.0. ([#1054](https://github.com/norman/friendly_id/pull/1054))
 * Fix: Correct the Babosa transliteration example; the option is `:transliterate`. ([#1027](https://github.com/norman/friendly_id/pull/1027))
+* Fix: Sequential slugs repeating when the slug or separator holds a regexp metacharacter. ([#1054](https://github.com/norman/friendly_id/pull/1054))
 * Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
 
 ## 5.6.0 (2025-12-07)
