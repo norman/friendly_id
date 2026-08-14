@@ -5,6 +5,8 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Add: `normalizer` configuration option, defaulting to `FriendlyId::Normalizers::ActiveSupport`. ([#1052](https://github.com/norman/friendly_id/pull/1052))
+* Add: `sequence_calculator` configuration option, defaulting to `FriendlyId::SequenceCalculator`. ([#1052](https://github.com/norman/friendly_id/pull/1052))
 * Require Ruby >= 2.7.0. ([#1054](https://github.com/norman/friendly_id/pull/1054))
 * Fix: Correct the Babosa transliteration example; the option is `:transliterate`. ([#1027](https://github.com/norman/friendly_id/pull/1027))
 * Fix: Sequential slugs repeating when the slug or separator holds a regexp metacharacter. ([#1054](https://github.com/norman/friendly_id/pull/1054))
