@@ -61,3 +61,63 @@ jobs:
 
     - run: bundle exec rake db:{create,up}
     - run: bundle exec rake test
+
+  # The ROM adapter is what gives Hanami support. Its bundle deliberately
+  # contains neither Active Record nor Active Support, so a green run here is
+  # also the proof that FriendlyId's core no longer depends on them.
+  #
+  # It runs against all three databases for the same reason the Active Record
+  # job does: the slug queries use LIKE with an explicit ESCAPE clause, and
+  # uniqueness depends on the server's collation. SQLite alone would not show a
+  # collation difference, and MySQL's default collation is case-insensitive.
+  rom:
+    strategy:
+      matrix:
+        ruby: [ '3.1', '3.2', '3.3', '3.4' ]
+        database: [ sqlite, mysql, postgresql ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+
+    env:
+      BUNDLE_GEMFILE: gemfiles/Gemfile.rom.rb
+      CI: true
+      DB: ${{ matrix.database }}
+
+    name: ${{ matrix.ruby }} ${{ matrix.database }} rom
+    steps:
+    - uses: actions/checkout@v7
+
+    # The bundle carries all three client gems whichever database is selected,
+    # so all three sets of headers are needed to build it.
+    - run: sudo apt-get update && sudo apt-get install libsqlite3-dev libmysqlclient-dev libpq-dev -y
+
+    - name: "Set up MySQL using VM's server"
+      if: ${{ matrix.database == 'mysql' }}
+      run: |
+        sudo systemctl start mysql.service
+        mysql -uroot -proot -e "CREATE DATABASE friendly_id_rom_test"
+        echo "DATABASE_URL=mysql2://root:root@127.0.0.1/friendly_id_rom_test" >> $GITHUB_ENV
+
+    - name: "Set up PostgreSQL using VM's server"
+      if: ${{ matrix.database == 'postgresql' }}
+      run: |
+        sudo systemctl start postgresql.service
+        sudo -u postgres psql -c "CREATE USER runner WITH SUPERUSER PASSWORD 'runner'"
+        sudo -u postgres createdb -O runner friendly_id_rom_test
+        echo "DATABASE_URL=postgres://runner:runner@localhost/friendly_id_rom_test" >> $GITHUB_ENV
+
+    - uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+        ruby-version: ${{ matrix.ruby }}
+
+    - name: "Assert Active Record is absent from the bundle"
+      run: |
+        if bundle list | grep -iE 'activerecord|activesupport'; then
+          echo "Active Record or Active Support leaked into the ROM bundle."
+          exit 1
+        fi
+
+    # DATABASE_URL is unset for the sqlite leg, where the helper's own default
+    # of "sqlite::memory:" applies.
+    - run: bundle exec rake test_rom

@@ -10,11 +10,25 @@ task :load_path do
   end
 end
 
-Rake::TestTask.new do |t|
+desc "Run the Active Record test suite"
+Rake::TestTask.new(:test) do |t|
   t.libs << "test"
   t.test_files = FileList["test/*_test.rb"]
   t.verbose = true
 end
+
+# Runs in its own process and with its own load path, because the point of the
+# ROM adapter is that it works without Active Record and the Active Record suite
+# loads it eagerly.
+desc "Run the ROM adapter test suite"
+Rake::TestTask.new(:test_rom) do |t|
+  t.libs = ["lib", "test/rom"]
+  t.test_files = FileList["test/rom/*_test.rb"]
+  t.verbose = true
+end
+
+desc "Run every test suite"
+task test_all: [:test, :test_rom]
 
 desc "Remove temporary files"
 task :clean do
