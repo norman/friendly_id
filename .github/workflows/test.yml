@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - 'master'
+      - '6-0-dev'
   pull_request:
+  workflow_dispatch:
 jobs:
   test:
     strategy:
