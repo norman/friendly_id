@@ -5,6 +5,7 @@ suggestions, ideas and improvements to FriendlyId.
 
 ## Unreleased
 
+* Add: `FriendlyId.friendly_id?` and `FriendlyId.unfriendly_id?`. ([#1051](https://github.com/norman/friendly_id/pull/1051))
 * Fix: Treat leading-zero slugs as numeric conflicts. ([#1046](https://github.com/norman/friendly_id/pull/1046))
 
 ## 5.6.0 (2025-12-07)
