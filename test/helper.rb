@@ -1,11 +1,7 @@
 require "bundler/setup"
 
-if ENV["COVERALLS"] || ENV["COVERAGE"]
+if ENV["COVERAGE"]
   require "simplecov"
-  if ENV["COVERALLS"]
-    require "coveralls"
-    SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  end
   SimpleCov.start do
     add_filter "test"
     add_filter "friendly_id/migration"

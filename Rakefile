@@ -64,8 +64,10 @@ namespace :db do
     require "helper"
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
+    mysql = "mysql -h #{config["host"]} -P #{config["port"]} -u #{config["username"]} --password=#{config["password"]} -e 'create database #{config["database"]};' >/dev/null"
     commands = {
-      "mysql" => "mysql -h #{config["host"]} -P #{config["port"]} -u #{config["username"]} --password=#{config["password"]} -e 'create database #{config["database"]};' >/dev/null",
+      "mysql" => mysql,
+      "trilogy" => mysql,
       "postgres" => "psql -c 'create database #{config["database"]};' -U #{config["username"]} >/dev/null"
     }
     `#{commands[driver] || true}`
@@ -76,8 +78,10 @@ namespace :db do
     require "helper"
     driver = FriendlyId::Test::Database.driver
     config = FriendlyId::Test::Database.config[driver]
+    mysql = "mysql -h #{config["host"]} -P #{config["port"]} -u #{config["username"]} --password=#{config["password"]} -e 'drop database #{config["database"]};' >/dev/null"
     commands = {
-      "mysql" => "mysql -h #{config["host"]} -P #{config["port"]} -u #{config["username"]} --password=#{config["password"]} -e 'drop database #{config["database"]};' >/dev/null",
+      "mysql" => mysql,
+      "trilogy" => mysql,
       "postgres" => "psql -c 'drop database #{config["database"]};' -U #{config["username"]} >/dev/null"
     }
     `#{commands[driver] || true}`
