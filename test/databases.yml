@@ -9,6 +9,7 @@ mysql:
 
 trilogy:
   adapter: trilogy
+  ssl_mode: preferred
   database: friendly_id_test
   username: root
   password: <%= ENV['MYSQL_PASSWORD'] %>

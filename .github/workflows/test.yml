@@ -71,6 +71,7 @@ jobs:
 
     env:
       BUNDLE_GEMFILE: gemfiles/Gemfile.rails-${{ matrix.gemfile }}.rb
+      BUNDLE_BUILD__SQLITE3: "--enable-system-libraries"
       BUNDLE_JOBS: 4
       CI: true
       DB: ${{ matrix.database }}
