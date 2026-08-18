@@ -62,6 +62,31 @@ module FriendlyId
   def self.mark_as_unfriendly(klass)
     klass.send(:include, FriendlyId::UnfriendlyUtils)
   end
+
+  # True if the value can never be a friendly id: an instance of an
+  # {UNFRIENDLY_CLASSES} member, or of a class passed to {mark_as_unfriendly}.
+  #
+  # Consults {UNFRIENDLY_CLASSES} directly rather than depending on
+  # {mark_as_unfriendly} having been called for each of them.
+  def self.unfriendly_id?(value)
+    return true if value.is_a?(FriendlyId::UnfriendlyUtils)
+
+    UNFRIENDLY_CLASSES.any? { |klass| value.is_a?(klass) }
+  end
+
+  # True if the value can only be a friendly id.
+  #
+  # This and {unfriendly_id?} are not complements. A numeric string is neither:
+  # "123" may be a slug or a primary key, so both return false and the finders
+  # try the slug before falling back to the primary key.
+  #
+  # `Object#friendly_id?` answers nil for that case instead. These take a value
+  # and return true or false, so nil never escapes into a caller's conditional.
+  def self.friendly_id?(value)
+    return false if unfriendly_id?(value)
+
+    value.respond_to?(:to_i) && value.to_i.to_s != value.to_s
+  end
 end
 
 Object.send :include, FriendlyId::ObjectUtils
