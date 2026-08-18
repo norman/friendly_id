@@ -381,8 +381,7 @@ module FriendlyId
     def scope_for_slug_generator
       scope = self.class.base_class.unscoped
       scope = scope.friendly unless scope.respond_to?(:exists_by_friendly_id?)
-      primary_key_name = self.class.primary_key
-      scope.where(self.class.base_class.arel_table[primary_key_name].not_eq(send(primary_key_name)))
+      scope.where.not(primary_key_values)
     end
     private :scope_for_slug_generator
 

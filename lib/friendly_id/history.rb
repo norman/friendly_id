@@ -26,6 +26,15 @@ module FriendlyId
   # this module has an impact on the performance of the associated model's `create`
   # method.
   #
+  # This module does not support models with a composite primary key. The
+  # `friendly_id_slugs` table refers to records through a single `sluggable_id`
+  # column, which cannot hold a composite key, so generating a slug raises
+  # `ActiveRecord::CompositePrimaryKeyMismatchError`. FriendlyId's other modules,
+  # including {FriendlyId::Slugged Slugged} and {FriendlyId::Scoped Scoped}, do
+  # work with composite primary keys. If you need slug history for such a model,
+  # give it a single-column primary key and enforce uniqueness of the composite
+  # pair with a unique index instead.
+  #
   # ### Example
   #
   #     class Post < ActiveRecord::Base

@@ -278,5 +278,14 @@ module FriendlyId
     def dup
       super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?("slug=") }
     end
+
+    # The record's primary key columns and their values, as a Hash suitable for
+    # passing to `where` or `where.not`.
+    #
+    # Rails 7.1 added composite primary keys, for which `primary_key` returns an
+    # Array of column names rather than a single name, so this handles both.
+    private def primary_key_values
+      Array(self.class.primary_key).map { |column| [column, send(column)] }.to_h
+    end
   end
 end
