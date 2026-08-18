@@ -12,7 +12,7 @@ group :development, :test do
     gem "activerecord-jdbcpostgresql-adapter", "~> 61.0"
   end
 
-  gem "sqlite3", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "sqlite3"
+  gem "sqlite3", "~> 1.4", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "sqlite3"
   gem "mysql2", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "mysql"
   gem "pg", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "postgresql"
 end
