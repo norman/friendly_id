@@ -14,9 +14,10 @@ group :development, :test do
   end
 
   platforms :ruby, :rbx do
-    gem "sqlite3"
-    gem "mysql2"
-    gem "pg"
     gem "redcarpet"
   end
+
+  gem "sqlite3", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "sqlite3"
+  gem "mysql2", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "mysql"
+  gem "pg", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "postgresql"
 end
