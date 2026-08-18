@@ -1,5 +1,3 @@
-require "friendly_id/sequence_calculator"
-
 module FriendlyId
   module SequentiallySlugged
     # Finds the slugs that conflict with a candidate. Deciding which sequence

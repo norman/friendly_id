@@ -1,3 +1,4 @@
+require "friendly_id/sequence_calculator"
 require_relative "sequentially_slugged/calculator"
 
 module FriendlyId
