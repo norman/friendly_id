@@ -7,6 +7,16 @@ mysql:
   port: 3306
   encoding: utf8
 
+trilogy:
+  adapter: trilogy
+  ssl_mode: preferred
+  database: friendly_id_test
+  username: root
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+  host: 127.0.0.1
+  port: 3306
+  encoding: utf8
+
 postgres:
   adapter: postgresql
   host: <%= ENV.fetch('PGHOST', 'localhost') %>
