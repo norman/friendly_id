@@ -10,11 +10,6 @@ group :development, :test do
   platforms :jruby do
     gem "activerecord-jdbcmysql-adapter", "~> 61.0"
     gem "activerecord-jdbcpostgresql-adapter", "~> 61.0"
-    gem "kramdown"
-  end
-
-  platforms :ruby, :rbx do
-    gem "redcarpet"
   end
 
   gem "sqlite3", platforms: [:ruby, :rbx] if !ENV["CI"] || ENV["DB"] == "sqlite3"
