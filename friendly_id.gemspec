@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "activerecord", ">= 4.0.0"
 
+  s.add_development_dependency "babosa"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "railties", ">= 4.0"
   s.add_development_dependency "minitest", "~> 5.3"

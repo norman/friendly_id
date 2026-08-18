@@ -104,16 +104,22 @@ FriendlyId.defaults do |config|
   #     text.to_slug.normalize! :transliterate => [:russian, :latin]
   #   end
   # }
-  # 
+  #
+  # Babosa transliterates only the scripts named in `:transliterate`, and leaves
+  # characters that no named rule covers alone, so a slug can still come back
+  # with non-ASCII in it. Its transliterators are bulgarian, cyrillic, danish,
+  # german, greek, hindi, latin, macedonian, norwegian, romanian, russian,
+  # serbian, spanish, swedish, turkish, ukrainian and vietnamese.
+  #
   # FriendlyId's history module adds a polymorphic `has_many :slugs, ...` association
   # to the model. By default slugs will be destroyed when the record is destroyed.
-  # 
+  #
   # To disable this use `false`. Other options include:
   # - :delete
   # - :destroy_async
   # - :nullify
   # - :restrict_with_exception
   # - :restrict_with_error
-  # 
+  #
   # config.dependent = :destroy
 end
