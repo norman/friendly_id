@@ -89,6 +89,27 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
+  # A separator is interpolated into the pattern that reads the sequence back
+  # off existing slugs, so one that means something to Regexp used to stop the
+  # sequence advancing and hand out a slug that was already taken.
+  test "should sequence with a separator that is a regexp metacharacter" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "novelists"
+      extend FriendlyId
+      friendly_id :name, use: :sequentially_slugged, sequence_separator: "+"
+    end
+
+    transaction do
+      record_1 = model_class.create! name: "Julian Barnes"
+      record_2 = model_class.create! name: "Julian Barnes"
+      record_3 = model_class.create! name: "Julian Barnes"
+
+      assert_equal "julian-barnes", record_1.slug
+      assert_equal "julian-barnes+2", record_2.slug
+      assert_equal "julian-barnes+3", record_3.slug
+    end
+  end
+
   test "should not generate a slug when canidates set is empty" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "cities"
