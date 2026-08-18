@@ -155,6 +155,13 @@ module FriendlyId
     #       }
     #     end
     #
+    # Babosa transliterates only the scripts named in `:transliterate`. Its
+    # transliterators are bulgarian, cyrillic, danish, german, greek, hindi,
+    # latin, macedonian, norwegian, romanian, russian, serbian, spanish,
+    # swedish, turkish, ukrainian and vietnamese. Characters that no named rule
+    # covers are left alone, so with the rules above "Athens" in Greek stays
+    # "αθήνα" rather than becoming ASCII.
+    #
     #
     # @option options [Symbol,Module] :use The addon or name of an addon to use.
     #   By default, FriendlyId provides {FriendlyId::Slugged :slugged},
