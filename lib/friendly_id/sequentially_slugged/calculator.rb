@@ -1,9 +1,9 @@
-require "friendly_id/sequence_calculator"
-
 module FriendlyId
   module SequentiallySlugged
-    # Finds the slugs that conflict with a candidate, and defers the arithmetic
-    # of picking the next sequence number to {FriendlyId::SequenceCalculator}.
+    # Finds the slugs that conflict with a candidate. Deciding which sequence
+    # the next slug gets belongs to the configured
+    # {FriendlyId::SequentiallySlugged::Configuration#sequence_calculator
+    # sequence_calculator}, which never sees the database.
     #
     # Everything here is Active Record specific: quoting, the SQLite `ESCAPE`
     # workaround and the SQL Server `LEN` spelling.
@@ -18,8 +18,11 @@ module FriendlyId
         @sequence_separator = sequence_separator
       end
 
-      def next_slug
-        FriendlyId::SequenceCalculator.new.call(slug, slug_conflicts, separator: sequence_separator)
+      # The slugs already taken that could carry a sequence for this candidate.
+      def slug_conflicts
+        scope
+          .where(conflict_query, slug, sequential_slug_matcher)
+          .order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
 
       private
@@ -43,12 +46,6 @@ module FriendlyId
         # any number of characters) need to be escaped. While this looks like
         # an excessive number of backslashes, it is correct.
         "#{slug}#{sequence_separator}".gsub(/[_%]/, '\\\\\&') + "%"
-      end
-
-      def slug_conflicts
-        scope
-          .where(conflict_query, slug, sequential_slug_matcher)
-          .order(Arel.sql(ordering_query)).pluck(Arel.sql(slug_column))
       end
 
       def sql_length

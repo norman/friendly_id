@@ -110,6 +110,64 @@ class SequentiallySluggedTest < TestCaseClass
     end
   end
 
+  test "the default sequence calculator is FriendlyId::SequenceCalculator" do
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "novelists"
+      extend FriendlyId
+      friendly_id :name, use: :sequentially_slugged
+    end
+
+    assert_instance_of FriendlyId::SequenceCalculator,
+      model_class.friendly_id_config.sequence_calculator
+  end
+
+  test "a configured sequence calculator decides the slug" do
+    calculator = Class.new do
+      def call(slug, conflicts, separator: "-")
+        "#{slug}#{separator}#{conflicts.size + 41}"
+      end
+    end
+
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "novelists"
+      extend FriendlyId
+      friendly_id :name, use: :sequentially_slugged
+    end
+    model_class.friendly_id_config.sequence_calculator = calculator.new
+
+    transaction do
+      model_class.create! name: "Julian Barnes"
+      assert_equal "julian-barnes-42", model_class.create!(name: "Julian Barnes").slug
+    end
+  end
+
+  # The calculator is handed the conflicts rather than a scope, so it never
+  # reaches the database.
+  test "a configured sequence calculator receives the conflicting slugs" do
+    seen = []
+    calculator = Class.new do
+      define_method(:call) do |slug, conflicts, separator: "-"|
+        seen.replace(conflicts)
+        "#{slug}#{separator}9"
+      end
+    end
+
+    model_class = Class.new(ActiveRecord::Base) do
+      self.table_name = "novelists"
+      extend FriendlyId
+      friendly_id :name, use: :sequentially_slugged, sequence_separator: ":"
+    end
+    model_class.friendly_id_config.sequence_calculator = calculator.new
+
+    transaction do
+      model_class.create! name: "Julian Barnes"
+      record = model_class.create! name: "Julian Barnes"
+
+      assert_equal %w[julian-barnes], seen
+      assert_equal "julian-barnes:9", record.slug
+    end
+  end
+
   test "should not generate a slug when canidates set is empty" do
     model_class = Class.new(ActiveRecord::Base) do
       self.table_name = "cities"
