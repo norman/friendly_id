@@ -73,7 +73,6 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/Gemfile.rails-${{ matrix.gemfile }}.rb
       BUNDLE_JOBS: 4
       CI: true
-      COVERALLS: true
       DB: ${{ matrix.database }}
       MYSQL_PASSWORD: root
       PGHOST: localhost
