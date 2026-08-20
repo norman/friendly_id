@@ -40,7 +40,9 @@ module FriendlyId
     def exists?(conditions = :none)
       return super if FriendlyId.unfriendly_id?(conditions)
       return true if exists_by_friendly_id?(conditions)
-      super
+      return super if potential_primary_key?(conditions)
+
+      false
     end
 
     # Finds exclusively by the friendly id, completely bypassing original
