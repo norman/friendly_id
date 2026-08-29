@@ -49,6 +49,17 @@ class HistoryTest < TestCaseClass
     end
   end
 
+  test "should be findable by old slugs on a relation using distinct" do
+    with_instance_of(model_class) do |record|
+      old_friendly_id = record.friendly_id
+      record.name = record.name + "b"
+      record.slug = nil
+      record.save!
+
+      assert_equal record, model_class.distinct.friendly.find(old_friendly_id)
+    end
+  end
+
   test "should create slug records on each change" do
     transaction do
       model_class.create! name: "hello"
