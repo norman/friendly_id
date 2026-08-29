@@ -101,8 +101,16 @@ module FriendlyId
         super || slug_table_record(parse_friendly_id(id))
       end
 
+      # The slug id the records are ordered by is also selected, because
+      # PostgreSQL rejects a `SELECT DISTINCT` whose `ORDER BY` refers to an
+      # expression that is not part of the select list. It is aliased so that
+      # it does not overwrite the model's own id attribute.
       def slug_table_record(id)
-        select(quoted_table_name + ".*").joins(:slugs).where(slug_history_clause(id)).order(Slug.arel_table[:id].desc).first
+        select(quoted_table_name + ".*", Slug.arel_table[:id].as("friendly_id_slug_id"))
+          .joins(:slugs)
+          .where(slug_history_clause(id))
+          .order(Slug.arel_table[:id].desc)
+          .first
       end
 
       def slug_history_clause(id)
