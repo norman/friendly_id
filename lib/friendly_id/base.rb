@@ -276,7 +276,13 @@ module FriendlyId
 
     # Clears slug on duplicate records when calling `dup`.
     def dup
-      super.tap { |duplicate| duplicate.slug = nil if duplicate.respond_to?("slug=") }
+      super.tap do |duplicate|
+        slug_column = friendly_id_config.slug_column
+
+        if duplicate.respond_to?("#{slug_column}=")
+          duplicate.public_send("#{slug_column}=", nil)
+        end
+      end
     end
   end
 end
