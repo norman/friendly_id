@@ -125,6 +125,37 @@ MyModel.friendly.find(nil, allow_nil: true)
 #=> nil
 ```
 
+### `:sequentially_slugged`
+
+By default, FriendlyId resolves slug conflicts by appending a UUID (e.g.
+`john-doe--abc123`). The `:sequentially_slugged` add-on resolves conflicts with
+an incrementing number instead (e.g. `john-doe`, `john-doe-2`, `john-doe-3`).
+
+#### Example
+
+```ruby
+class User < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: :sequentially_slugged
+end
+
+User.create!(name: "John Doe") # => slug: "john-doe"
+User.create!(name: "John Doe") # => slug: "john-doe-2"
+User.create!(name: "John Doe") # => slug: "john-doe-3"
+```
+
+The separator between the base slug and the sequence number defaults to `"-"`.
+You can change it with the `sequence_separator` option:
+
+```ruby
+class User < ApplicationRecord
+  extend FriendlyId
+  friendly_id :name, use: :sequentially_slugged, sequence_separator: "--"
+end
+```
+
+`:sequentially_slugged` is compatible with `:history`.
+
 ## Bugs
 
 Please report them on the [Github issue
